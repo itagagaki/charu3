@@ -1,0 +1,58 @@
+【ソフトウェアの概要】
+Charu3 SE は、Charu3 の後継版です。キー1発で呼び出すことができて、予め設定した定型文をペーストすることができる、Windows用テキスト入力支援ツールです。 他にも様々な機能を持っています。
+
+【作者への連絡先】
+https://github.com/itagagaki/charu3-SE
+
+【取り扱い種別】
+OSS （オープンソースソフトウェア）
+
+【動作環境】
+Microsoft Windows Vista 以降
+
+【インストール方法】
+zipファイルをお好きな場所に展開してください。インストーラーはありません。
+※ https://github.com/itagagaki/charu3-SE/releases でビルド済みのバイナリーをリリースしています。
+
+【実行方法】
+展開した場所の Charu3.exe を実行してください。
+
+【アンインストール方法】
+システムのリポジトリは使用していませんので、zipファイルと展開したファイルを削除してください。
+自動的に作成されたユーザー設定ファイルも不要なら %AppData%\Charu3 フォルダーごと削除してください。
+Windows 10では %AppData% は一般的には C:\Users\(user name)\AppData\Roaming です。通常 AppData は隠しフォルダになっていますので、エクスプローラーで表示するにはエクスプローラーの「表示」タブで隠しファイルを表示する選択をしてください。
+
+【実行方法】
+展開した場所の Charu3.exe を実行してください。
+
+【使用方法】
+下記のウィキページをご覧ください。
+https://github.com/itagagaki/charu3-SE/wiki
+
+
+## Software overview
+
+Charu3 is the successor edition to Charu3. It is a text input support tool for Windows that can be called up with a keystroke and allows you to paste in pre-defined canned text. It also has a variety of other features.
+
+## Contact author at
+https://github.com/itagagaki/charu3-SE
+
+## Type
+OSS
+
+## Platform
+Microsoft Windows Vista and lator
+
+## How to install
+Extract the zip file to a location of your choice. No installer.
+*Ready-made binary releases are in https://github.com/itagagaki/charu3-SE/releases
+
+## Run
+Run Charu3.exe at the extracted location.
+
+## How to uninstall
+The system repository is not used, so please just delete the zip file and the extracted file.
+If you do not need to keep the user settings file, delete the entire %AppData%\Charu3 folder. In Windows 10, %AppData% is generally C:\Users\(user name)\AppData\Roaming. Normally AppData is a hidden folder, so to view it in Explorer, select the Show hidden files option in the View tab of Explorer.
+
+## How to use
+See https://github.com/itagagaki/charu3-SE/wiki

@@ -319,13 +319,15 @@ void COptVisual::ReadStyleFile()
 			}
 
 			strFileName = pFileDialog->GetPathName();
-			nlohmann::json j = nlohmann::json::parse(std::ifstream(strFileName));
-			theApp.m_ini.m_visual.m_nBorderColor = Color::Parse(CGeneral::getSettingString(j, "BorderColor", Color::String(theApp.m_ini.m_visual.m_nBorderColor)));
-			theApp.m_ini.m_visual.m_nBackgroundColor = Color::Parse(CGeneral::getSettingString(j, "BackColor", Color::String(theApp.m_ini.m_visual.m_nBackgroundColor)));
-			theApp.m_ini.m_visual.m_nTextColor = Color::Parse(CGeneral::getSettingString(j, "TextColor", Color::String(theApp.m_ini.m_visual.m_nTextColor)));
-			theApp.m_ini.m_visual.m_strFontName = CGeneral::getSettingCString(j, "FontName", theApp.m_ini.m_visual.m_strFontName);
-			theApp.m_ini.m_visual.m_nFontSize = static_cast<int>(CGeneral::getSettingNumber(j, "FontSize", theApp.m_ini.m_visual.m_nFontSize));
-			theApp.m_ini.m_visual.m_strResourceName = CGeneral::getSettingCString(j, "IconFile", theApp.m_ini.m_visual.m_strResourceName);
+			nlohmann::json j;
+			try { j = nlohmann::json::parse(std::ifstream(strFileName)); }
+			catch (...) {}
+			theApp.m_ini.m_visual.m_nBorderColor = Color::Parse(CGeneral::getSettingString(j, "borderColor", Color::String(theApp.m_ini.m_visual.m_nBorderColor)));
+			theApp.m_ini.m_visual.m_nBackgroundColor = Color::Parse(CGeneral::getSettingString(j, "backgroundColor", Color::String(theApp.m_ini.m_visual.m_nBackgroundColor)));
+			theApp.m_ini.m_visual.m_nTextColor = Color::Parse(CGeneral::getSettingString(j, "textColor", Color::String(theApp.m_ini.m_visual.m_nTextColor)));
+			//theApp.m_ini.m_visual.m_strFontName = CGeneral::getSettingCString(j, "fontName", theApp.m_ini.m_visual.m_strFontName);
+			//theApp.m_ini.m_visual.m_nFontSize = static_cast<int>(CGeneral::getSettingNumber(j, "fontSize", theApp.m_ini.m_visual.m_nFontSize));
+			//theApp.m_ini.m_visual.m_strResourceName = CGeneral::getSettingCString(j, "iconFile", theApp.m_ini.m_visual.m_strResourceName);
 		}
 		delete pFileDialog;
 

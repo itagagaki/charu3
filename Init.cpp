@@ -181,9 +181,9 @@ void CInit::initialize()
 	m_visual.m_nBorderColor = Color::Parse(CGeneral::getSettingString(m_settings, "treeview.style.borderColor", "#ff9900"));
 	m_visual.m_nBackgroundColor = Color::Parse(CGeneral::getSettingString(m_settings, "treeview.style.backgroundColor", "#ffffee"));
 	m_visual.m_nTextColor = Color::Parse(CGeneral::getSettingString(m_settings, "treeview.style.textColor", "#663300"));
-	m_visual.m_strFontName = CGeneral::getSettingCString(m_settings, "treeview.style.fontName", m_visual.m_strFontName);
+	m_visual.m_strFontName = CGeneral::getSettingCString(m_settings, "treeview.style.fontName", "");
 	m_visual.m_nFontSize = static_cast<int>(CGeneral::getSettingNumber(m_settings, "treeview.style.fontSize", 100));
-	m_visual.m_strResourceName = CGeneral::getSettingCString(m_settings, "treeview.style.iconFile", m_visual.m_strResourceName);
+	m_visual.m_strResourceName = CGeneral::getSettingCString(m_settings, "treeview.style.iconFile", "");
 	m_visual.m_nOpacity = static_cast<int>(CGeneral::getSettingNumber(m_settings, "treeview.opacity", 100));
 
 	m_nWindowCheckInterval = static_cast<int>(CGeneral::getSettingNumber(m_settings, "windowCheckInterval", 400));
