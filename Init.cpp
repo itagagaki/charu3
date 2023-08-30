@@ -26,7 +26,7 @@ namespace {
 	{
 		nlohmann::json snippets;
 		try { snippets = nlohmann::json::parse(std::ifstream(filePath)); }
-		catch (...) {}
+		catch (...) { snippets = nlohmann::json(); }
 		for (nlohmann::json::iterator it = snippets.begin(); it != snippets.end(); it++) {
 			nlohmann::json jnode = it.value();
 			MACRO_STRUCT snippet;
@@ -115,7 +115,7 @@ void CInit::initialize()
 
 	// read state
 	try { m_state = nlohmann::json::parse(std::ifstream(m_strStateFile)); }
-	catch (...) {}
+	catch (...) { m_state = nlohmann::json(); }
 
 	m_strDataPath = CGeneral::getSettingCString(m_state, "data.path", _T(""));
 	m_strDataFormat = CGeneral::getSettingCString(m_state, "data.format", DAT_FORMAT);
@@ -135,7 +135,7 @@ void CInit::initialize()
 
 	// read settings
 	try { m_settings = nlohmann::json::parse(std::ifstream(m_strSettingsFile)); }
-	catch (...) {}
+	catch (...) { m_settings = nlohmann::json(); }
 
 	m_etc.m_bPutBackClipboard = CGeneral::getSettingBool(m_settings, "clipboard.putBackAfterPasting", false);
 	m_nClipboardOpenDelay = static_cast<int>(CGeneral::getSettingNumber(m_settings, "clipboard.openDelay", 0));

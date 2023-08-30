@@ -129,28 +129,36 @@ struct COPYPASTE_KEY
 
 	COPYPASTE_KEY()
 		: m_nMessage(0)
-		, m_uMod_Paste(0)
-		, m_uVK_Paste(0)
-		, m_uMod_Copy(0)
-		, m_uVK_Copy(0)
+		, m_uMod_Paste(MOD_CONTROL)
+		, m_uVK_Paste('V')
+		, m_uMod_Copy(MOD_CONTROL)
+		, m_uVK_Copy('C')
 		, m_copyMessage(WINDOWS_MESSAGE())
 		, m_pasteMessage(WINDOWS_MESSAGE())
-		, m_nCopyWait(0)
-		, m_nPasteWait(0)
+		, m_nCopyWait(50)
+		, m_nPasteWait(50)
 	{
 	}
 
 	COPYPASTE_KEY(nlohmann::json& obj)
+		: m_nMessage(0)
+		, m_uMod_Paste(MOD_CONTROL)
+		, m_uVK_Paste('V')
+		, m_uMod_Copy(MOD_CONTROL)
+		, m_uVK_Copy('C')
+		, m_copyMessage(WINDOWS_MESSAGE())
+		, m_pasteMessage(WINDOWS_MESSAGE())
+		, m_nCopyWait(50)
+		, m_nPasteWait(50)
 	{
-		COPYPASTE_KEY();
 		if (obj.is_object()) {
 			m_nMessage = static_cast<int>(CGeneral::getSettingNumber(obj, "method", 0));
-			m_uMod_Copy = static_cast<UINT>(CGeneral::getSettingNumber(obj, "copy.keyCode", 0));
-			m_uVK_Copy = static_cast<UINT>(CGeneral::getSettingNumber(obj, "copy.keyModifier", 0));
-			m_nCopyWait = static_cast<int>(CGeneral::getSettingNumber(obj, "copy.delay", 0));
-			m_uMod_Paste = static_cast<UINT>(CGeneral::getSettingNumber(obj, "paste.keyCode", 0));
-			m_uVK_Paste = static_cast<UINT>(CGeneral::getSettingNumber(obj, "paste.keyModifier", 0));
-			m_nPasteWait = static_cast<int>(CGeneral::getSettingNumber(obj, "paste.delay", 0));
+			m_uMod_Copy = static_cast<UINT>(CGeneral::getSettingNumber(obj, "copy.keyCode", 'C'));
+			m_uVK_Copy = static_cast<UINT>(CGeneral::getSettingNumber(obj, "copy.keyModifier", MOD_CONTROL));
+			m_nCopyWait = static_cast<int>(CGeneral::getSettingNumber(obj, "copy.delay", 50));
+			m_uMod_Paste = static_cast<UINT>(CGeneral::getSettingNumber(obj, "paste.keyCode", 'V'));
+			m_uVK_Paste = static_cast<UINT>(CGeneral::getSettingNumber(obj, "paste.keyModifier", MOD_CONTROL));
+			m_nPasteWait = static_cast<int>(CGeneral::getSettingNumber(obj, "paste.delay", 50));
 
 			nlohmann::json msg;
 			msg = obj["copy.message"];
