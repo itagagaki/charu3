@@ -153,11 +153,11 @@ struct COPYPASTE_KEY
 	{
 		if (obj.is_object()) {
 			m_nMessage = static_cast<int>(CGeneral::getSettingNumber(obj, "method", 0));
-			m_uMod_Copy = static_cast<UINT>(CGeneral::getSettingNumber(obj, "copy.keyCode", 'C'));
-			m_uVK_Copy = static_cast<UINT>(CGeneral::getSettingNumber(obj, "copy.keyModifier", MOD_CONTROL));
+			m_uVK_Copy = static_cast<UINT>(CGeneral::getSettingNumber(obj, "copy.keyCode", 'C'));
+			m_uMod_Copy = static_cast<UINT>(CGeneral::getSettingNumber(obj, "copy.keyModifier", MOD_CONTROL));
 			m_nCopyWait = static_cast<int>(CGeneral::getSettingNumber(obj, "copy.delay", 50));
-			m_uMod_Paste = static_cast<UINT>(CGeneral::getSettingNumber(obj, "paste.keyCode", 'V'));
-			m_uVK_Paste = static_cast<UINT>(CGeneral::getSettingNumber(obj, "paste.keyModifier", MOD_CONTROL));
+			m_uVK_Paste = static_cast<UINT>(CGeneral::getSettingNumber(obj, "paste.keyCode", 'V'));
+			m_uMod_Paste = static_cast<UINT>(CGeneral::getSettingNumber(obj, "paste.keyModifier", MOD_CONTROL));
 			m_nPasteWait = static_cast<int>(CGeneral::getSettingNumber(obj, "paste.delay", 50));
 
 			nlohmann::json msg;
@@ -179,11 +179,11 @@ struct COPYPASTE_KEY
 	nlohmann::json ToJson() {
 		nlohmann::json obj;
 		obj["method"] = m_nMessage;
-		obj["copy.keyCode"] = m_uMod_Copy;
-		obj["copy.keyModifier"] = m_uVK_Copy;
+		obj["copy.keyCode"] = m_uVK_Copy;
+		obj["copy.keyModifier"] = m_uMod_Copy;
 		obj["copy.delay"] = m_nCopyWait;
-		obj["paste.keyCode"] = m_uMod_Paste;
-		obj["paste.keyModifier"] = m_uVK_Paste;
+		obj["paste.keyCode"] = m_uVK_Paste;
+		obj["paste.keyModifier"] = m_uMod_Paste;
 		obj["paste.delay"] = m_nPasteWait;
 
 		nlohmann::json msg;
