@@ -287,6 +287,7 @@ public:
 	CString m_strUserName;
 	CString m_strAppPath;
 	CString m_strRwPluginFolder;
+	bool m_bIsPortableMode;
 	CString m_strAppDataPath;
 	POINT m_IconSize;
 	CString m_strStateFile;

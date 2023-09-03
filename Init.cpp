@@ -101,11 +101,21 @@ void CInit::initialize()
 	m_strAppPath = CString(buf);
 	m_strRwPluginFolder = m_strAppPath + _T("rw_plugin");
 
+	// decide whether in appdata mode or portable mode
+	m_bIsPortableMode = FILEEXIST(m_strAppPath + _T("FORCE_INTO_PORTABLE_MODE"));
+
 	// app data path
-	SHGetSpecialFolderPath(NULL, buf, CSIDL_APPDATA, 0);
-	m_strAppDataPath = CString(buf) + "\\" + NAME;
-	if (!FILEEXIST(m_strAppDataPath)) {
-		CreateDirectory(m_strAppDataPath, NULL);
+	if (m_bIsPortableMode) {
+		// portable mode
+		m_strAppDataPath = m_strAppPath + _T(".");
+	}
+	else {
+		// appdata mode
+		SHGetSpecialFolderPath(NULL, buf, CSIDL_APPDATA, 0);
+		m_strAppDataPath = CString(buf) + "\\" + NAME;
+		if (!FILEEXIST(m_strAppDataPath)) {
+			CreateDirectory(m_strAppDataPath, NULL);
+		}
 	}
 
 	// file paths for state, settings and log
