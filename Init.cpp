@@ -123,6 +123,18 @@ void CInit::initialize()
 	m_strSettingsFile = m_strAppDataPath + "\\" + SETTINGS_FILE;
 	m_strDebugLog = m_strAppDataPath + "\\" + DEBUGLOG_FILE;
 
+	// display a dialog box that allows the user to reset the status and the settings when the Shift key is pressed
+	if (::GetKeyState(VK_SHIFT) < 0) {
+		CString strMessage;
+		strMessage.LoadString(APP_MES_RESET);
+		strMessage += +_T("\n\n") + m_strStateFile + _T("\n") + m_strSettingsFile;
+		int nRet = AfxMessageBox(strMessage, MB_YESNO | MB_APPLMODAL);
+		if (IDYES == nRet) {
+			(void)DeleteFile(m_strStateFile);
+			(void)DeleteFile(m_strSettingsFile);
+		}
+	}
+
 	// read state
 	try { m_state = nlohmann::json::parse(std::ifstream(m_strStateFile)); }
 	catch (...) { m_state = nlohmann::json(); }

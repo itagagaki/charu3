@@ -743,6 +743,7 @@ BEGIN
     APP_INF_TABNAME_06      "高度な設定"
     APP_INF_CAPTION_EDITITEM "アイテム編集"
     APP_INF_CAPTION_NEWITEM "アイテム追加"
+    APP_MES_RESET           "[はい] で、以下のファイルの内容が初期値にリセットされます。\nリセットせず起動するには [いいえ] を選択してください。"
 END
 
 STRINGTABLE
@@ -1760,6 +1761,7 @@ BEGIN
     APP_INF_TABNAME_06      "Advanced"
     APP_INF_CAPTION_EDITITEM "Edit Item"
     APP_INF_CAPTION_NEWITEM "Add Item"
+    APP_MES_RESET           "Select [Yes] to reset the contents of the following files to their default values.\nSelect [No] to start without resetting."
 END
 
 STRINGTABLE

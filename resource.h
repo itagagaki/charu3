@@ -198,6 +198,7 @@
 #define APP_INF_TABNAME_06              62235
 #define APP_INF_CAPTION_EDITITEM        62236
 #define APP_INF_CAPTION_NEWITEM         62237
+#define APP_MES_RESET                   62238
 #define APP_INF_KEY_COMBO01             62240
 #define APP_INF_KEY_COMBO02             62241
 #define APP_INF_KEY_COMBO03             62242
