@@ -197,6 +197,7 @@ void CInit::initialize()
 	m_visual.m_bScrollbarVertical = CGeneral::getSettingBool(m_settings, "treeview.scrollbar.vertical", true);
 	m_visual.m_bScrollbarHorizontal = CGeneral::getSettingBool(m_settings, "treeview.scrollbar.horizontal", true);
 	m_pop.m_bSingleExpand = CGeneral::getSettingBool(m_settings, "treeview.expandOnSingleClick", false);
+	m_pop.m_bSingleEnter = CGeneral::getSettingBool(m_settings, "treeview.pasteBySingleClick", false);
 	m_pop.m_bKeepSelection = CGeneral::getSettingBool(m_settings, "treeview.keepSelection", true);
 	m_pop.m_bKeepFolders = CGeneral::getSettingBool(m_settings, "treeview.keepFolders", true);
 
@@ -282,6 +283,7 @@ void CInit::SaveSettings()
 	m_settings["treeview.scrollbar.vertical"] = m_visual.m_bScrollbarVertical;
 	m_settings["treeview.scrollbar.horizontal"] = m_visual.m_bScrollbarHorizontal;
 	m_settings["treeview.expandOnSingleClick"] = m_pop.m_bSingleExpand;
+	m_settings["treeview.pasteBySingleClick"] = m_pop.m_bSingleEnter;
 	m_settings["treeview.keepSelection"] = m_pop.m_bKeepSelection;
 	m_settings["treeview.keepFolders"] = m_pop.m_bKeepFolders;
 

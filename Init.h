@@ -71,6 +71,7 @@ struct OPTION_POPUP
 	bool m_bSelectByTypingAutoExpand;
 
 	bool m_bSingleExpand;
+	bool m_bSingleEnter;
 };
 
 //---------------------------------------------------

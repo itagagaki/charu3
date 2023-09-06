@@ -398,22 +398,31 @@ void CMyTreeDialog::OnClickMyTree(NMHDR* pNMHDR, LRESULT* pResult)
 
 	hClickItem = m_pTreeCtrl->HitTest(pCursolPos,&Flags);
 	if (hClickItem) {
-		if (m_pTreeCtrl->GetItemRect(hClickItem,&ItemRect,true)) {
-			//アイコンをクリックした
-			if(TVHT_ONITEMICON & Flags) {
+		if (m_pTreeCtrl->GetItemRect(hClickItem, &ItemRect, true)) {
+			if (TVHT_ONITEMICON & Flags) {
+				// Clicking on the icon of the one-time data item in the data tree view changes it to permanent data.
 				STRING_DATA* pData = m_pTreeCtrl->getDataPtr(hClickItem);
 				if (pData->m_cKind & KIND_ONETIME) {
 					pData->m_cKind = KIND_LOCK;
 					m_pTreeCtrl->editData2(hClickItem);
 				}
 			}
-			//チェックボックス
 			if (TVHT_ONITEMSTATEICON & Flags) {
+				// Clicked on checkbox
 				m_pTreeCtrl->checkItem(hClickItem);
-				m_pTreeCtrl->SetCheck(hClickItem,!m_pTreeCtrl->GetCheck(hClickItem));
+				m_pTreeCtrl->SetCheck(hClickItem, !m_pTreeCtrl->GetCheck(hClickItem));
 			}
 		}
 		m_pTreeCtrl->SelectItem(hClickItem);
+
+		// Enter if m_bSingleEnter
+		if (theApp.m_ini.m_pop.m_bSingleEnter && !m_pTreeCtrl->IsDragging()) {
+			if (theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
+			STRING_DATA* data = GetClickedItem();
+			if (data) {
+				enterData(data);
+			}
+		}
 	}
 	*pResult = 0;
 }
@@ -520,6 +529,19 @@ void CMyTreeDialog::OnEndlabeleditMyTree(NMHDR* pNMHDR, LRESULT* pResult)
 	*pResult = 0;
 }
 
+STRING_DATA* CMyTreeDialog::GetClickedItem()
+{
+	HTREEITEM hTreeItem;
+	hTreeItem = m_pTreeCtrl->GetSelectedItem();
+	if (hTreeItem) {
+		STRING_DATA* dataPtr = m_pTreeCtrl->getDataPtr(hTreeItem);
+		if (!(dataPtr->m_cKind & KIND_FOLDER_ALL)) {
+			return dataPtr;
+		}
+	}
+	return nullptr;
+}
+
 //---------------------------------------------------
 //関数名	PreTranslateMessage(MSG* pMsg)
 //機能		メッセージ前処理
@@ -527,31 +549,70 @@ void CMyTreeDialog::OnEndlabeleditMyTree(NMHDR* pNMHDR, LRESULT* pResult)
 BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
 {
 	m_toolTip.RelayEvent(pMsg);
-	//閉じる指令受信
-	if (pMsg->message == WM_TREE_CLOSE) {
+
+	switch (pMsg->message) {
+	case WM_TREE_CLOSE:
 		closePopup();
 		return TRUE;
-	}
-	//左ボタンダブルクリック
-	else if (pMsg->message == WM_LBUTTONDBLCLK && !m_pTreeCtrl->IsDragging()) {
-		if (theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
-		//データ取得
-		HTREEITEM hTreeItem;
-		hTreeItem = m_pTreeCtrl->GetSelectedItem();
-		if (hTreeItem) {
-			STRING_DATA* dataPtr = m_pTreeCtrl->getDataPtr(hTreeItem);
-			if (!(dataPtr->m_cKind & KIND_FOLDER_ALL)) {//フォルダじゃなければ決定
-				m_dataPtrDbClick = dataPtr;
+
+	case WM_LBUTTONDBLCLK:
+		if (!m_pTreeCtrl->IsDragging()) {
+			if (theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
+			m_dataPtrDbClick = GetClickedItem();
+		}
+		break;
+
+	case WM_LBUTTONUP:
+		if (!m_pTreeCtrl->IsDragging()) {
+			if (m_dataPtrDbClick != nullptr) {
+				enterData(m_dataPtrDbClick);
+				return TRUE;
 			}
 		}
+		break;
+
+	case WM_FIND_CLOSE:
+		if (m_bFind) {
+			GetFindParam();
+			m_findDialog->DestroyWindow();
+			m_bFind = false;
+			RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
+		}
+		break;
+
+	case WM_FIND_ONCE:
+		if (m_bFind) {
+			GetFindParam();
+			FindNext();
+			m_findDialog->DestroyWindow();
+			m_bFind = false;
+			RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
+		}
+		break;
+
+	case WM_FIND_NEXT:
+		if (m_bFind) {
+			GetFindParam();
+			FindNext();
+		}
+		break;
+
+	case WM_TIPS_CHANGE:
+		{
+			HTREEITEM hTarget = (HTREEITEM)pMsg->wParam;
+			if (hTarget) {
+				STRING_DATA data = m_pTreeCtrl->getData(hTarget);
+				changeTipString(data);
+			}
+			else {
+				m_toolTip.Activate(FALSE);
+			}
+		}
+		break;
 	}
-	else if (pMsg->message == WM_LBUTTONUP && m_dataPtrDbClick != nullptr && !m_pTreeCtrl->IsDragging()) {
-		enterData(m_dataPtrDbClick);
-		return TRUE;
-	}
-	//ALTかメニューキーポップアップメニューを出す
-	if (pMsg->message == WM_SYSKEYDOWN) m_isAltDown = true;
-	else if (((pMsg->message == WM_SYSKEYUP && m_isAltDown) || (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_APPS)) && !theApp.isCloseKey() && !m_pTreeCtrl->IsDragging()) {
+
+	if (WM_SYSKEYDOWN == pMsg->message) m_isAltDown = true;
+	else if (((WM_SYSKEYUP == pMsg->message && m_isAltDown) || (WM_KEYDOWN == pMsg->message && pMsg->wParam == VK_APPS)) && !theApp.isCloseKey() && !m_pTreeCtrl->IsDragging()) {
 		if (theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
 		m_isAltDown = false;
 		CPoint point;
@@ -568,31 +629,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
 		//		return true;
 	}
 
-	if (pMsg->message == WM_FIND_CLOSE) {
-		if (m_bFind) {
-			GetFindParam();
-			m_findDialog->DestroyWindow();
-			m_bFind = false;
-			RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
-		}
-	}
-	else if (pMsg->message == WM_FIND_ONCE) {
-		if (m_bFind) {
-			GetFindParam();
-			FindNext();
-			m_findDialog->DestroyWindow();
-			m_bFind = false;
-			RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
-		}
-	}
-	else if (pMsg->message == WM_FIND_NEXT) {
-		if (m_bFind) {
-			GetFindParam();
-			FindNext();
-		}
-	}
-
-	if (pMsg->message == WM_KEYDOWN) {
+	if (WM_KEYDOWN == pMsg->message) {
 		if (!m_pTreeCtrl->IsDragging()) {
 			MSG msg;
 			ZeroMemory(&msg, sizeof(msg));
@@ -604,17 +641,17 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
 			::SetCursor(NULL);
 		}
 		//ESCで閉じる
-		if (pMsg->wParam == VK_ESCAPE && !m_isModal && !m_pTreeCtrl->IsDragging()) {
+		if (VK_ESCAPE == pMsg->wParam && !m_isModal && !m_pTreeCtrl->IsDragging()) {
 			closePopup();
 			return TRUE;
 		}
 		//ラベル編集中なら編集終了
-		else if (pMsg->wParam == VK_RETURN && m_isModal) {
+		else if (VK_RETURN == pMsg->wParam && m_isModal) {
 			m_pTreeCtrl->SetFocus();
 			return TRUE;
 		}
 		//リターンキーを押したら決定
-		else if (pMsg->wParam == VK_RETURN && !m_pTreeCtrl->IsDragging()) {
+		else if (VK_RETURN == pMsg->wParam && !m_pTreeCtrl->IsDragging()) {
 			if (theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
 			//データ取得
 			HTREEITEM hTreeItem;
@@ -632,10 +669,10 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
 			}
 		}
 		//スペースキー
-		else if (pMsg->wParam == VK_SPACE && !m_isModal) {
+		else if (VK_SPACE == pMsg->wParam && !m_isModal) {
 			if (theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
 			HTREEITEM hTreeItem = m_pTreeCtrl->GetSelectedItem();
-			if (hTreeItem != NULL) {//選択されてるか?
+			if (hTreeItem) {
 				if (::GetKeyState(VK_CONTROL) < 0) {//CTRLが押されている
 					HTREEITEM hSelItem = m_pTreeCtrl->GetSelectedItem();
 					m_pTreeCtrl->checkItem(hSelItem);
@@ -660,12 +697,12 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
 			return true;
 		}
 		//デリートキー(データ削除)
-		else if (pMsg->wParam == VK_DELETE && !m_pTreeCtrl->IsDragging() && !m_isModal) {
+		else if (VK_DELETE == pMsg->wParam && !m_pTreeCtrl->IsDragging() && !m_isModal) {
 			if (theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
 			OnDelete();
 		}
 		//F1キー 内容表示
-		else if (pMsg->wParam == VK_F1 && !m_pTreeCtrl->IsDragging()) {
+		else if (VK_F1 == pMsg->wParam && !m_pTreeCtrl->IsDragging()) {
 			CPoint point;
 			ZeroMemory(&point, sizeof(point));
 			RECT rSelItem;
@@ -689,13 +726,13 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
 			}
 		}
 		// F2 : Rename
-		else if (pMsg->wParam == VK_F2 && !m_pTreeCtrl->IsDragging()) {
+		else if (VK_F2 == pMsg->wParam && !m_pTreeCtrl->IsDragging()) {
 			if (theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
 			if (m_pTreeCtrl->GetSelectedItem())
 				m_pTreeCtrl->EditLabel(m_pTreeCtrl->GetSelectedItem());
 		}
 		// F3 : Find Next
-		else if (pMsg->wParam == VK_F3 && !m_pTreeCtrl->IsDragging() && !m_isModal) {
+		else if (VK_F3 == pMsg->wParam && !m_pTreeCtrl->IsDragging() && !m_isModal) {
 			if (m_bFind) {
 				GetFindParam();
 			}
@@ -707,20 +744,20 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
 			return true;
 		}
 		//TABキーでチェック
-		else if (pMsg->wParam == VK_TAB && !m_pTreeCtrl->IsDragging() && !m_isModal) {
+		else if (VK_TAB == pMsg->wParam && !m_pTreeCtrl->IsDragging() && !m_isModal) {
 			HTREEITEM hSelItem = m_pTreeCtrl->GetSelectedItem();
 			m_pTreeCtrl->checkItem(hSelItem);
 			return true;
 		}
 		//上下
-		else if (pMsg->wParam == VK_DOWN || pMsg->wParam == VK_UP && !m_isModal) {
+		else if (VK_DOWN == pMsg->wParam || VK_UP == pMsg->wParam && !m_isModal) {
 			if (theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
 
 			HTREEITEM hTreeItem = m_pTreeCtrl->GetSelectedItem(), hTreeItemTmp;
 			if (hTreeItem != NULL && ::GetKeyState(VK_SHIFT) < 0) {//選択されていて、SHIFTを押してる
 				do {
 					hTreeItemTmp = hTreeItem;
-					if (pMsg->wParam == VK_DOWN)	hTreeItem = m_pTreeCtrl->GetNextVisibleItem(hTreeItem);
+					if (VK_DOWN == pMsg->wParam)	hTreeItem = m_pTreeCtrl->GetNextVisibleItem(hTreeItem);
 					else							hTreeItem = m_pTreeCtrl->GetPrevVisibleItem(hTreeItem);
 					if (m_pTreeCtrl->GetChildItem(hTreeItem)) break;
 				} while (hTreeItem);
@@ -731,7 +768,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
 			}
 		}
 		//左
-		else if (pMsg->wParam == VK_LEFT && !m_isModal) {
+		else if (VK_LEFT == pMsg->wParam && !m_isModal) {
 			if (theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
 			if (::GetKeyState(VK_SHIFT) < 0) {
 				if (::GetKeyState(VK_CONTROL) < 0) {
@@ -754,7 +791,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
 		}
 	}
 	// "select by typing" 確定処理
-	else if (pMsg->message == WM_TIMER && pMsg->wParam == CHARU_QUICK_TIMER && !m_pTreeCtrl->IsDragging()) {
+	else if (WM_TIMER == pMsg->message && CHARU_QUICK_TIMER == pMsg->wParam && !m_pTreeCtrl->IsDragging()) {
 		BOOL retval = FALSE;
 		if (m_hQuickItem) {
 			STRING_DATA* dataPtr = m_pTreeCtrl->getDataPtr(m_hQuickItem);
@@ -773,17 +810,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
 		this->KillTimer(CHARU_QUICK_TIMER);
 		return retval;
 	}
-	//TIPSの変更
-	else if (WM_TIPS_CHANGE == pMsg->message) {
-		HTREEITEM hTarget = (HTREEITEM)pMsg->wParam;
-		if (hTarget) {
-			STRING_DATA data = m_pTreeCtrl->getData(hTarget);
-			changeTipString(data);
-		}
-		else {
-			m_toolTip.Activate(FALSE);
-		}
-	}
+
 	return CDialog::PreTranslateMessage(pMsg);
 }
 

@@ -55,6 +55,7 @@ private:
 	int m_nScrollVertical;
 	int m_nScrollHorizontal;
 	int m_nSingleExpand;
+	int m_nSingleEnter;
 	int m_nKeepSelection;
 	int m_nKeepFolders;
 };

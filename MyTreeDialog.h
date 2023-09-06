@@ -126,6 +126,7 @@ private:
 	bool selectByTyping(UINT uKeyCode);
 	void GetFindParam();
 	void FindNext();
+	STRING_DATA* GetClickedItem();
 
 	bool m_bCheckbox;
 	bool m_bFind;

@@ -30,6 +30,7 @@ COptPopup::COptPopup(CWnd* pParent /*=NULL*/) : CDialog(COptPopup::IDD, pParent)
 	m_nScrollVertical = CGeneral::BoolToInt(theApp.m_ini.m_visual.m_bScrollbarVertical);
 	m_nScrollHorizontal = CGeneral::BoolToInt(theApp.m_ini.m_visual.m_bScrollbarHorizontal);
 	m_nSingleExpand = CGeneral::BoolToInt(theApp.m_ini.m_pop.m_bSingleExpand);
+	m_nSingleEnter = CGeneral::BoolToInt(theApp.m_ini.m_pop.m_bSingleEnter);
 	m_nKeepSelection = CGeneral::BoolToInt(theApp.m_ini.m_pop.m_bKeepSelection);
 	m_nKeepFolders = CGeneral::BoolToInt(theApp.m_ini.m_pop.m_bKeepFolders);
 }
@@ -68,6 +69,8 @@ void COptPopup::DoDataExchange(CDataExchange* pDX)
 		DDX_Check(pDX, IDC_OPT_SCROLLBAR_HORIZONTAL, m_nScrollHorizontal);
 	if (GetDlgItem(IDC_OPT_SINGLE_EXPAND))
 		DDX_Check(pDX, IDC_OPT_SINGLE_EXPAND, m_nSingleExpand);
+	if (GetDlgItem(IDC_OPT_SINGLE_ENTER))
+		DDX_Check(pDX, IDC_OPT_SINGLE_ENTER, m_nSingleEnter);
 	if (GetDlgItem(IDC_OPT_SELECT_SAVE))
 		DDX_Check(pDX, IDC_OPT_SELECT_SAVE, m_nKeepSelection);
 	if (GetDlgItem(IDC_OPT_FOLDER_OPEN))
@@ -135,6 +138,7 @@ BOOL COptPopup::DestroyWindow()
 	theApp.m_ini.m_visual.m_bScrollbarVertical = static_cast<CButton*>(GetDlgItem(IDC_OPT_SCROLLBAR_VERTICAL))->GetCheck() != 0;
 	theApp.m_ini.m_visual.m_bScrollbarHorizontal = static_cast<CButton*>(GetDlgItem(IDC_OPT_SCROLLBAR_HORIZONTAL))->GetCheck() != 0;
 	theApp.m_ini.m_pop.m_bSingleExpand = static_cast<CButton*>(GetDlgItem(IDC_OPT_SINGLE_EXPAND))->GetCheck() != 0;
+	theApp.m_ini.m_pop.m_bSingleEnter = static_cast<CButton*>(GetDlgItem(IDC_OPT_SINGLE_ENTER))->GetCheck() != 0;
 	theApp.m_ini.m_pop.m_bKeepSelection = static_cast<CButton*>(GetDlgItem(IDC_OPT_SELECT_SAVE))->GetCheck() != 0;
 	theApp.m_ini.m_pop.m_bKeepFolders = static_cast<CButton*>(GetDlgItem(IDC_OPT_FOLDER_OPEN))->GetCheck() != 0;
 

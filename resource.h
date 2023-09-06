@@ -86,6 +86,7 @@
 #define IDC_OPT_TOUMEI_SLIDER           1041
 #define IDC_OPT_SELECT_BY_TYPING_AUTO_EXPAND 1041
 #define IDC_SEARCH_CASE_INSENSITIVE     1041
+#define IDC_OPT_SINGLE_ENTER            1042
 #define IDC_FIND_NEXT                   1043
 #define IDC_FIND_PREV                   1044
 #define IDC_EDIT_MACRO_COMBO            1048
