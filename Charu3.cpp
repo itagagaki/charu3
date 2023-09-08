@@ -866,7 +866,7 @@ void CCharu3App::closeTreeWindow(int nRet)
 			}
 		}
 		else if(m_pTreeDlg->m_selectDataPtr != nullptr) {//通常選択データ
-			strSelect = getSelectString(m_keySet,m_focusInfo.m_hFocusWnd);//選択テキスト取得
+			strSelect = getSelectString(m_keySet,m_focusInfo.m_hFocusWnd); // TODO: This process is a waste of time if the selection text is not needed.
 			data = *(m_pTreeDlg->m_selectDataPtr);
 
 			if(m_ini.m_bDebug) {
@@ -1146,11 +1146,6 @@ void CCharu3App::playHotItem(int nTarget)
 //---------------------------------------------------
 CString CCharu3App::getSelectString(COPYPASTE_KEY key,HWND hWnd)
 {
-#if false
-/*
- * I don't understand. What is this process?
- * Not only is the intent unclear, but in some cases it can be harmful.
- */
 	m_clipboard.setClipboardText(CString(), m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
 	if(!hWnd)	hWnd = m_focusInfo.m_hFocusWnd;
 	CString strSelect;
@@ -1202,7 +1197,7 @@ CString CCharu3App::getSelectString(COPYPASTE_KEY key,HWND hWnd)
 	if (m_clipboard.getClipboardText(strSelect, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval)) {
 		return strSelect;
 	}
-#endif
+
 	return CString();
 }
 
