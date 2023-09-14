@@ -832,7 +832,7 @@ void CCharu3App::closeTreeWindow(int nRet)
 
 		//貼り付け処理
 		if(m_pTree->m_ltCheckItems.size() > 0) {//複数選択データがある
-			strSelect = getSelectString(m_keySet,m_focusInfo.m_hFocusWnd);//選択テキスト取得
+			strSelect = getSelectString(m_keySet,m_focusInfo.m_hFocusWnd); // TODO: Doing unconditional copy action. Does not consider the necessity.
 
 			if(m_ini.m_bDebug) {
 				CString strText;
@@ -866,7 +866,8 @@ void CCharu3App::closeTreeWindow(int nRet)
 			}
 		}
 		else if(m_pTreeDlg->m_selectDataPtr != nullptr) {//通常選択データ
-			strSelect = getSelectString(m_keySet,m_focusInfo.m_hFocusWnd); // TODO: This process is a waste of time if the selection text is not needed.
+			bool requiresSelectionText = (m_pTreeDlg->m_selectDataPtr->m_strData.Find(_T("$SEL")) != -1); // TODO: This test is true even if $SEL is outside <charu3MACRO>
+			strSelect = requiresSelectionText ? strSelect = getSelectString(m_keySet, m_focusInfo.m_hFocusWnd) : "";
 			data = *(m_pTreeDlg->m_selectDataPtr);
 
 			if(m_ini.m_bDebug) {
