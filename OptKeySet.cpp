@@ -98,30 +98,30 @@ void COptKeySet::SetListData(CHANGE_KEY sKeyData, CHANGE_KEY *dataPtr, bool isSe
 	}
 
 	//ペーストキー設定名を作成
-	strPaste = "";
 	uMod = sKeyData.m_sCopyPasteKey.m_uMod_Paste;
-	if(uMod & MOD_ALT) {
-		strPaste = _T("Alt + ");
+	strPaste = "";
+	if (uMod & MOD_CONTROL) {
+		strPaste = strPaste + _T("Ctrl+");
 	}
-	if(uMod & MOD_CONTROL) {
-		strPaste = strPaste + _T("Ctrl + ");
+	if (uMod & MOD_SHIFT) {
+		strPaste = strPaste + _T("Shift+");
 	}
-	if(uMod & MOD_SHIFT) {
-		strPaste = strPaste + _T("Shift + ");
+	if (uMod & MOD_ALT) {
+		strPaste = strPaste + _T("Alt+");
 	}
 	strPaste = strPaste + CGeneral::getKeyName(sKeyData.m_sCopyPasteKey.m_uVK_Paste,theApp.m_ini.m_keyLayout);
 
 	//コピーキー設定名を作成
-	strCopy = "";
 	uMod = sKeyData.m_sCopyPasteKey.m_uMod_Copy;
-	if(uMod & MOD_ALT) {
-		strCopy = _T("Alt + ");
+	strCopy = "";
+	if (uMod & MOD_CONTROL) {
+		strCopy = strCopy + _T("Ctrl+");
 	}
-	if(uMod & MOD_CONTROL) {
-		strCopy = strCopy + _T("Ctrl + ");
+	if (uMod & MOD_SHIFT) {
+		strCopy = strCopy + _T("Shift+");
 	}
-	if(uMod & MOD_SHIFT) {
-		strCopy = strCopy + _T("Shift + ");
+	if (uMod & MOD_ALT) {
+		strCopy = strCopy + _T("Alt+");
 	}
 	strCopy = strCopy + CGeneral::getKeyName(sKeyData.m_sCopyPasteKey.m_uVK_Copy,theApp.m_ini.m_keyLayout);
 
@@ -240,13 +240,13 @@ BOOL COptKeySet::OnInitDialog()
 
 	CString strRes;
 	strRes.LoadString(APP_INF_KEY_LIST_CAPTION01);
-	m_ctrlIniList.InsertColumn(0,strRes,LVCFMT_LEFT,188);
+	m_ctrlIniList.InsertColumn(0,strRes, LVCFMT_LEFT, 172);
 	strRes.LoadString(APP_INF_KEY_LIST_CAPTION02);
-	m_ctrlIniList.InsertColumn(1,strRes,LVCFMT_LEFT,60);
+	m_ctrlIniList.InsertColumn(1,strRes, LVCFMT_LEFT, 60);
 	strRes.LoadString(APP_INF_KEY_LIST_CAPTION03);
-	m_ctrlIniList.InsertColumn(2,strRes,LVCFMT_LEFT,55);
+	m_ctrlIniList.InsertColumn(2,strRes, LVCFMT_LEFT, 78);
 	strRes.LoadString(APP_INF_KEY_LIST_CAPTION04);
-	m_ctrlIniList.InsertColumn(3,strRes,LVCFMT_LEFT,55);
+	m_ctrlIniList.InsertColumn(3,strRes, LVCFMT_LEFT, 78);
 	ListView_SetExtendedListViewStyle(m_ctrlIniList.GetSafeHwnd(),LVS_EX_FULLROWSELECT);
 
 	std::list<CHANGE_KEY>::iterator it;

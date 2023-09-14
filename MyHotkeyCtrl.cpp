@@ -35,6 +35,10 @@ END_MESSAGE_MAP()
 BOOL CMyHotkeyCtrl::PreTranslateMessage(MSG* pMsg)
 {
 	if(this->GetFocus() == this) {
+#if false
+		/*
+		 * I don't understand the purpose of this code.
+		 */
 		if(!(pMsg->lParam & 0x40000000) && (pMsg->message == WM_KEYDOWN || pMsg->message == WM_SYSKEYDOWN)) {
 			m_mod = 0;
 			if(::GetAsyncKeyState(VK_MENU) < 0)		m_mod = m_mod | HOTKEYF_ALT;
@@ -53,7 +57,16 @@ BOOL CMyHotkeyCtrl::PreTranslateMessage(MSG* pMsg)
 				pMsg->message = NULL;
 			}
 		}
+#else
+		/*
+		 * This is enough, I think.
+		 */
+		if (pMsg->message == WM_SYSKEYDOWN) {
+			this->SendMessage(pMsg->message, pMsg->wParam, pMsg->lParam);
+			return TRUE;
+		}
 	}
+#endif
 
 	return CHotKeyCtrl::PreTranslateMessage(pMsg);
 }

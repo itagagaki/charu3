@@ -1164,32 +1164,34 @@ CString CCharu3App::getSelectString(COPYPASTE_KEY key,HWND hWnd)
 	for(i = 0; keySet.m_nMessage > -1 ;i++) {
 		keySet = m_ini.getAppendKeyInit(strWinName,i);
 		if(keySet.m_nMessage <= -1 && i == 0)	keySet = key;
-		if(keySet.m_nMessage > -1) {
-			if(keySet.m_nMessage == 0) {//イベント方式
-				keyUpDown(keySet.m_uMod_Copy,keySet.m_uVK_Copy,KEY_DOWN);
-				keyUpDown(keySet.m_uMod_Copy,keySet.m_uVK_Copy,KEY_UP);
-				Sleep(keySet.m_nCopyWait);//ウェイト
-				keyUpDownMessage(keySet.m_uMod_Copy,keySet.m_uVK_Copy,KEY_UP,hWnd);
-			}
-			else if(keySet.m_nMessage == 1) {//Charu2Pro方式
-				keyUpDownC2(keySet.m_uMod_Copy,keySet.m_uVK_Copy,KEY_DOWN);
-				keyUpDownC2(keySet.m_uMod_Copy,keySet.m_uVK_Copy,KEY_UP);
-				Sleep(keySet.m_nCopyWait);//ウェイト
-				keyUpDownMessage(keySet.m_uMod_Copy,keySet.m_uVK_Copy,KEY_DOWN,hWnd);
-				Sleep(keySet.m_nCopyWait/4);//ウェイト
-				keyUpDownMessage(keySet.m_uMod_Copy,keySet.m_uVK_Copy,KEY_DOWN,hWnd);
-				keyUpDownMessage(keySet.m_uMod_Copy,keySet.m_uVK_Copy,KEY_UP,hWnd);
-				Sleep(keySet.m_nCopyWait);//ウェイト
-			}
-			else if(keySet.m_nMessage == 2) {
-				::PostMessage(hWnd,key.m_copyMessage.Msg,key.m_copyMessage.wParam,key.m_copyMessage.lParam);//メッセージ方式
-//				::SendMessage(hWnd,WM_COPY,NULL,NULL);//メッセージ方式
-			}
+		if (keySet.m_uVK_Copy) {
+			if (keySet.m_nMessage > -1) {
+				if (keySet.m_nMessage == 0) {//イベント方式
+					keyUpDown(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_DOWN);
+					keyUpDown(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_UP);
+					Sleep(keySet.m_nCopyWait);//ウェイト
+					keyUpDownMessage(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_UP, hWnd);
+				}
+				else if (keySet.m_nMessage == 1) {//Charu2Pro方式
+					keyUpDownC2(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_DOWN);
+					keyUpDownC2(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_UP);
+					Sleep(keySet.m_nCopyWait);//ウェイト
+					keyUpDownMessage(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_DOWN, hWnd);
+					Sleep(keySet.m_nCopyWait / 4);//ウェイト
+					keyUpDownMessage(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_DOWN, hWnd);
+					keyUpDownMessage(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_UP, hWnd);
+					Sleep(keySet.m_nCopyWait);//ウェイト
+				}
+				else if (keySet.m_nMessage == 2) {
+					::PostMessage(hWnd, key.m_copyMessage.Msg, key.m_copyMessage.wParam, key.m_copyMessage.lParam);//メッセージ方式
+	//				::SendMessage(hWnd,WM_COPY,NULL,NULL);//メッセージ方式
+				}
 
-			if(m_ini.m_bDebug) {
-				CString strText;
-				strText.Format(_T("getSelectString %d %s\n"),keySet.m_nMessage,strSelect.GetString());
-				CGeneral::writeLog(m_ini.m_strDebugLog,strText,_ME_NAME_,__LINE__);
+				if (m_ini.m_bDebug) {
+					CString strText;
+					strText.Format(_T("getSelectString %d %s\n"), keySet.m_nMessage, strSelect.GetString());
+					CGeneral::writeLog(m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+				}
 			}
 		}
 	}
