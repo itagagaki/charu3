@@ -14,6 +14,7 @@
 #endif
 #include <dwmapi.h>
 
+#include <ctype.h>
 #include <list>
 #include <vector>
 
@@ -629,13 +630,13 @@ void CCharu3App::convHotKeyConf(CString strKey,UINT *pMod,UINT *pVK,bool *isDoub
 			*pMod = *pMod | MOD_ALT;
 		}
 	}
-	*pVK = getKeycode(strVK.GetBuffer(strVK.GetLength()));
+	*pVK = getKeycode(strVK.GetBuffer(strVK.GetLength()), false);
 }
 //---------------------------------------------------
 //関数名	getKeycode(char *szKeyName)
 //機能		キー名からコードを得る
 //---------------------------------------------------
-int CCharu3App::getKeycode(TCHAR *szKeyName)
+int CCharu3App::getKeycode(TCHAR *szKeyName, bool scanLayout)
 {
 	CString strTmp;
 	strTmp = szKeyName;
@@ -648,8 +649,13 @@ int CCharu3App::getKeycode(TCHAR *szKeyName)
 
 	if(!nRet) {
 		if(_tcsclen(szKeyName) == 1) {
-			SHORT code = VkKeyScanEx(*szKeyName,m_ini.m_keyLayout);
-			nRet = code & 0xff;
+			if (scanLayout || *szKeyName > 0x7f) {
+				SHORT code = VkKeyScanEx(*szKeyName, m_ini.m_keyLayout);
+				nRet = code & 0xff;
+			}
+			else {
+				nRet = toupper(*szKeyName);
+			}
 		}
 		else {
 			for(i = 0; m_keyStruct[i].nKeyCode > 0 && i < 256; i++) {
@@ -1234,7 +1240,7 @@ void CCharu3App::execKeyMacro(CString strKeyMacro)
 	//キー配列を取得　最大で16キー
 	for(i = 0; i <= 15; i++) {
 		UStringWork::awk(szKeyMacro,strKeyCode,_countof(strKeyCode),i+1,_T(','));
-		if(_tcsclen(strKeyCode) > 0) nKey[i] = getKeycode(strKeyCode);
+		if(_tcsclen(strKeyCode) > 0) nKey[i] = getKeycode(strKeyCode, true);
 		else break;
 	}
 	nKeyCount = i - 1;//キーの個数

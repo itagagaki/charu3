@@ -246,7 +246,7 @@ protected:
 	void getPopupPos(POINT *pPos,int nPosType);
 	void adjustLocation(POINT *pos);
 	void convHotKeyConf(CString strKey,UINT *pMod,UINT *pVK,bool *isDoubleClick);
-	int getKeycode(TCHAR *szKeyName);
+	int getKeycode(TCHAR *szKeyName, bool scanLayout);
 	bool setAppendKeyInit(HWND hTopWindow,COPYPASTE_KEY *keySet);
 	void playHotItem(int nTarget);
 	void playData(STRING_DATA data, CString strClip, CString strSelect, bool isPaste, bool isChange = true);
