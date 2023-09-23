@@ -125,7 +125,7 @@ private:
 	void changeTipString(STRING_DATA data);
 	bool selectByTyping(UINT uKeyCode);
 	void GetFindParam();
-	void FindNext();
+	void FindNext(bool backward);
 	STRING_DATA* GetClickedItem();
 
 	bool m_bCheckbox;

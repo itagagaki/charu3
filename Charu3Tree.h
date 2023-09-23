@@ -111,9 +111,12 @@ public:
 	STRING_DATA getData(HTREEITEM hTreeItem);
 	STRING_DATA* getDataPtr(HTREEITEM hTreeItem);
 
-	HTREEITEM searchItem(HTREEITEM hStartItem);
+	HTREEITEM searchItem(HTREEITEM hStartItem, bool backward = false);
 	HTREEITEM searchTitle(HTREEITEM hStartItem, CString strKey, bool makeLower = false);
 	HTREEITEM getTrueNextItem(HTREEITEM hTreeItem);
+	HTREEITEM getTruePrevItem(HTREEITEM hTreeItem);
+	HTREEITEM getLastSiblingItem(HTREEITEM hTreeItem);
+	HTREEITEM getLastDescendantItem(HTREEITEM hTreeItem);
 	HTREEITEM getLastVisibleItem();
 	HTREEITEM getFirstFolder(HTREEITEM hStartItem);
 	HTREEITEM getLastChild(HTREEITEM hStartItem);

@@ -583,7 +583,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
 	case WM_FIND_ONCE:
 		if (m_bFind) {
 			GetFindParam();
-			FindNext();
+			FindNext(false);
 			m_findDialog->DestroyWindow();
 			m_bFind = false;
 			RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
@@ -593,7 +593,14 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
 	case WM_FIND_NEXT:
 		if (m_bFind) {
 			GetFindParam();
-			FindNext();
+			FindNext(false);
+		}
+		break;
+
+	case WM_FIND_PREV:
+		if (m_bFind) {
+			GetFindParam();
+			FindNext(true);
 		}
 		break;
 
@@ -736,7 +743,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
 			if (m_bFind) {
 				GetFindParam();
 			}
-			FindNext();
+			FindNext(::GetKeyState(VK_SHIFT) < 0);
 		}
 		// Ctrl+F : Open Find dialog
 		else if (::GetKeyState(VK_CONTROL) < 0 && pMsg->wParam == 'F' && !m_pTreeCtrl->IsDragging() && !m_isModal) {
@@ -1357,10 +1364,10 @@ void CMyTreeDialog::GetFindParam()
 	}
 }
 
-void CMyTreeDialog::FindNext()
+void CMyTreeDialog::FindNext(bool backward)
 {
 	HTREEITEM hSearchItem = m_pTreeCtrl->GetSelectedItem();
-	hSearchItem = m_pTreeCtrl->searchItem(hSearchItem);
+	hSearchItem = m_pTreeCtrl->searchItem(hSearchItem, backward);
 	if (hSearchItem) {
 		m_pTreeCtrl->SelectItem(hSearchItem);
 	}

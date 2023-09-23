@@ -55,6 +55,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 private:
+	void OnFindPrev();
 	void OnFindNext();
 };
 

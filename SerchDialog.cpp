@@ -22,6 +22,7 @@ extern	CCharu3App theApp;
 //---------------------------------------------------
 BEGIN_MESSAGE_MAP(CSearchDialog, CDialog)
 	//{{AFX_MSG_MAP(CSerchDialog)
+	ON_BN_CLICKED(IDC_FIND_PREV, OnFindPrev)
 	ON_BN_CLICKED(IDC_FIND_NEXT, OnFindNext)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -84,6 +85,11 @@ void CSearchDialog::OnOK()
 	::PostMessage(this->GetParent()->m_hWnd, WM_FIND_ONCE, 0, 0);
 }
 
+void CSearchDialog::OnFindPrev()
+{
+	::PostMessage(this->GetParent()->m_hWnd, WM_FIND_PREV, 0, 0);
+}
+
 void CSearchDialog::OnFindNext()
 {
 	::PostMessage(this->GetParent()->m_hWnd, WM_FIND_NEXT, 0, 0);
@@ -97,7 +103,7 @@ BOOL CSearchDialog::PreTranslateMessage(MSG* pMsg)
 {
 	if (pMsg->message == WM_KEYDOWN) {
 		if (pMsg->wParam == VK_F3) {
-			::PostMessage(this->GetParent()->m_hWnd, WM_FIND_NEXT, 0, 0);
+			::PostMessage(this->GetParent()->m_hWnd, ::GetKeyState(VK_SHIFT) < 0 ? WM_FIND_PREV : WM_FIND_NEXT, 0, 0);
 		}
 	}
 	return CDialog::PreTranslateMessage(pMsg);

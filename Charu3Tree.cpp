@@ -1282,7 +1282,7 @@ STRING_DATA *CCharu3Tree::getDataPtr(HTREEITEM hTreeItem)
 //関数名	searchItem()
 //機能		指定のアイテムを検索し、選択する
 //---------------------------------------------------
-HTREEITEM CCharu3Tree::searchItem(HTREEITEM hStartItem)
+HTREEITEM CCharu3Tree::searchItem(HTREEITEM hStartItem, bool backward)
 {
 	std::vector<CString> words;
 
@@ -1304,7 +1304,7 @@ HTREEITEM CCharu3Tree::searchItem(HTREEITEM hStartItem)
 	}
 
 	// Find
-	HTREEITEM hTreeItem = hStartItem ? getTrueNextItem(hStartItem) : GetRootItem();
+	HTREEITEM hTreeItem = hStartItem ? (backward ? getTruePrevItem(hStartItem) : getTrueNextItem(hStartItem)) : GetRootItem();
 	HTREEITEM hEndItem = hTreeItem;
 	bool found = false;
 	while (hTreeItem) {
@@ -1321,7 +1321,7 @@ HTREEITEM CCharu3Tree::searchItem(HTREEITEM hStartItem)
 				break;
 			}
 		}
-		hTreeItem = getTrueNextItem(hTreeItem);
+		hTreeItem = backward ? getTruePrevItem(hTreeItem) : getTrueNextItem(hTreeItem);
 		if (hTreeItem == hEndItem) {
 			break;
 		}
@@ -1395,6 +1395,64 @@ HTREEITEM CCharu3Tree::getTrueNextItem(HTREEITEM hTreeItem)
 		hRetTreeItem = GetRootItem();//再ループで必要なので戻る
 	}
 	return hRetTreeItem;
+}
+
+HTREEITEM CCharu3Tree::getTruePrevItem(HTREEITEM hTreeItem)
+{
+	HTREEITEM hRetTreeItem;
+
+	if (!hTreeItem) {
+		hRetTreeItem = getLastSiblingItem(GetRootItem());
+	}
+	else {
+		hRetTreeItem = GetPrevSiblingItem(hTreeItem);
+	}
+	if (!hRetTreeItem) {
+		HTREEITEM hParentItem = hTreeItem;
+		do {
+			hParentItem = GetParentItem(hParentItem);
+			if (!hParentItem) {
+				hRetTreeItem = nullptr;
+				break;
+			}
+			hRetTreeItem = GetPrevSiblingItem(hParentItem);
+		} while (hParentItem != GetRootItem() && !hRetTreeItem);
+	}
+	if (!hRetTreeItem) {
+		hRetTreeItem = getLastSiblingItem(GetRootItem());
+	}
+	if (hRetTreeItem) {
+		if (GetChildItem(hRetTreeItem)) {
+			hRetTreeItem = getLastDescendantItem(hRetTreeItem);
+		}
+	}
+	return hRetTreeItem;
+}
+
+HTREEITEM CCharu3Tree::getLastSiblingItem(HTREEITEM hTreeItem)
+{
+	HTREEITEM next;
+
+	if (!hTreeItem) {
+		return nullptr;
+	}
+	while (next = GetNextSiblingItem(hTreeItem)) {
+		hTreeItem = next;
+	}
+	return hTreeItem;
+}
+
+HTREEITEM CCharu3Tree::getLastDescendantItem(HTREEITEM hTreeItem)
+{
+	HTREEITEM next;
+
+	if (!hTreeItem) {
+		return nullptr;
+	}
+	while (next = GetChildItem(hTreeItem)) {
+		hTreeItem = getLastSiblingItem(next);
+	}
+	return hTreeItem;
 }
 
 //---------------------------------------------------
@@ -1798,7 +1856,6 @@ HTREEITEM CCharu3Tree::getFirstFolder(HTREEITEM hStartItem)
 HTREEITEM CCharu3Tree::getLastChild(HTREEITEM hStartItem)
 {
 	if(!hStartItem) return nullptr;
-	std::list<STRING_DATA>::iterator it;
 	HTREEITEM hItem = hStartItem, hPrevItem = nullptr;
 	hItem = GetChildItem(hItem);
 	do {
