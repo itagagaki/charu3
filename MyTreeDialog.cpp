@@ -416,7 +416,7 @@ void CMyTreeDialog::OnClickMyTree(NMHDR* pNMHDR, LRESULT* pResult)
 		m_pTreeCtrl->SelectItem(hClickItem);
 
 		// Enter if m_bSingleEnter
-		if (theApp.m_ini.m_pop.m_bSingleEnter && !m_pTreeCtrl->IsDragging()) {
+		if (theApp.m_ini.m_pop.m_bSingleEnter && !m_pTreeCtrl->IsDragging() && (TVHT_ONITEMSTATEICON & Flags) == 0) {
 			if (theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
 			STRING_DATA* data = GetClickedItem();
 			if (data) {
