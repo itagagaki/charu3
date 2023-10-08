@@ -773,7 +773,7 @@ BEGIN
     APP_INF_TIP_DATA04      "\n変更: "
     APP_INF_COPY_APPEND     "のコピー"
     APP_INF_NEW_FOLDER      "新しいフォルダー"
-    APP_INF_CLASS_HISTORY   "階層履歴"
+    APP_INF_CLASS_HISTORY   "アーカイブされた履歴"
     APP_INF_DEF_FONT        "ＭＳ Ｐゴシック"
     APP_INF_DEF_ICON        "標準リソース"
     APP_INF_CHECKBOX_IMPORT "ルートにインポートする"
@@ -809,16 +809,16 @@ END
 STRINGTABLE
 BEGIN
     APP_INF_MACRO_TEMPLATE15 "end"
-    APP_INF_EXMACRO_TEMPLATE01 "履歴数@R@Count="
+    APP_INF_EXMACRO_TEMPLATE01 "履歴データ個数@R@Count="
     APP_INF_EXMACRO_TEMPLATE02 "先頭に移動@F@Move=yes/no"
     APP_INF_EXMACRO_TEMPLATE03 "履歴に付番する@R@Number=yes/no"
     APP_INF_EXMACRO_TEMPLATE04 "履歴タイプ@R@Lock=yes/no"
-    APP_INF_EXMACRO_TEMPLATE05 "履歴を保存しない@R@ClearRec=yes/no"
+    APP_INF_EXMACRO_TEMPLATE05 "起動時にクリアする@R@ClearRec=yes/no"
     APP_INF_EXMACRO_TEMPLATE06 "マクロ@A@Macro=マクロ名"
     APP_INF_EXMACRO_TEMPLATE07 "貼り付け前キー@A@BeforKey=キー;回数;待ち"
     APP_INF_EXMACRO_TEMPLATE08 "貼り付け後キー@A@AfterKey=キー;回数;待ち"
     APP_INF_EXMACRO_TEMPLATE09 "ホットキー@A@HotKey="
-    APP_INF_EXMACRO_TEMPLATE10 "階層履歴@R@ClassHistory=個数"
+    APP_INF_EXMACRO_TEMPLATE10 "履歴をアーカイブする単位@R@ArchiveUnit="
 END
 
 STRINGTABLE
@@ -1793,7 +1793,7 @@ BEGIN
     APP_INF_TIP_DATA04      "\nModified: "
     APP_INF_COPY_APPEND     "????"
     APP_INF_NEW_FOLDER      "New folder"
-    APP_INF_CLASS_HISTORY   "????"
+    APP_INF_CLASS_HISTORY   "Archived history"
     APP_INF_DEF_FONT        "MS P????"
     APP_INF_DEF_ICON        "??????"
     APP_INF_CHECKBOX_IMPORT "???????????"

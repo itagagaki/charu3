@@ -832,7 +832,7 @@ void CCharu3App::closeTreeWindow(int nRet)
 
 		if(m_ini.m_bDebug) {
 			CString strText;
-			strText.Format(_T("setFocusInfo %x %x\n"),m_focusInfo.m_hActiveWnd,m_focusInfo.m_hActiveWnd);
+			strText.Format(_T("setFocusInfo active:%x focus:%x\n"), m_focusInfo.m_hActiveWnd, m_focusInfo.m_hFocusWnd);
 			CGeneral::writeLog(m_ini.m_strDebugLog,strText,_ME_NAME_,__LINE__);
 		}
 

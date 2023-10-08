@@ -1,11 +1,11 @@
 [
 	{
-		"caption": "Number of History",
-		"data": "Count=",
+		"caption": "Number of History To Keep",
+		"data": "Count=N",
 		"mode": 8
 	},
 	{
-		"caption": "Move to Top",
+		"caption": "Move To Top",
 		"data": "Move=yes/no",
 		"mode": 12
 	},
@@ -20,7 +20,7 @@
 		"mode": 8
 	},
 	{
-		"caption": "Clear History on Startup",
+		"caption": "Clear on Startup",
 		"data": "ClearRec=yes/no",
 		"mode": 8
 	},
@@ -45,8 +45,8 @@
 		"mode": 255
 	},
 	{
-		"caption": "Hierarchy History",
-		"data": "ClassHistory=NumberOfData",
+		"caption": "History Archiving Unit",
+		"data": "ArchiveUnit=N",
 		"mode": 8
 	},
 	{

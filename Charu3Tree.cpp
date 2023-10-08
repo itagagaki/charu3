@@ -1594,16 +1594,24 @@ HTREEITEM CCharu3Tree::getOneTimeText(int nType)
 }
 
 //---------------------------------------------------
-//関数名	getDataOption(CString strData,CString strKind)
-//機能		データ補助設定を解読
+//関数名	hasDataOption(CString strData, CString strKind)
+//機能		データにオプションプロパティがあるかどうかを返す
+//---------------------------------------------------
+bool CCharu3Tree::hasDataOption(CString strData, CString strKind)
+{
+	return strData.MakeLower().Find(strKind) >= 0;
+}
+
+//---------------------------------------------------
+//関数名	getDataOption(CString strData, CString strKind)
+//機能		データのオプションプロパティを取得
 //---------------------------------------------------
 int CCharu3Tree::getDataOption(CString strData,CString strKind)
 {
 	int nRet = 0,nFound,nFoundEnd;
 	CString strBuff;
 
-	strData.MakeLower();
-	nFound = strData.Find(strKind);
+	nFound = strData.MakeLower().Find(strKind);
 	if(nFound >= 0) {
 		nFound = strData.Find(_T("="),nFound);
 		if(nFound >= 0) {
@@ -1753,10 +1761,18 @@ void CCharu3Tree::addDataToRecordFolder(STRING_DATA data,CString strClipBkup)
 					if(nNumber > nRirekiCount) nNumber = 0;
 				}
 
-				//階層履歴処理
-				nRirekiCount = getDataOption(parentData.m_strMacro,_T("classhistory"));//階層履歴数を取得
-				if(nRirekiCount > 0) {
-					classHistoryFolder(hTreeItem,nRirekiCount);
+				// archiving
+				{
+					int archiveBy;
+					if (hasDataOption(parentData.m_strMacro, _T("archiveunit"))) {
+						archiveBy = getDataOption(parentData.m_strMacro, _T("archiveunit"));
+					}
+					else {
+						archiveBy = getDataOption(parentData.m_strMacro, _T("classhistory")); // for historical compatibility
+					}
+					if (archiveBy > 0) {
+						archiveHistory(hTreeItem, archiveBy);
+					}
 				}
 
 				if(theApp.m_ini.m_bDebug) {
@@ -1774,10 +1790,10 @@ void CCharu3Tree::addDataToRecordFolder(STRING_DATA data,CString strClipBkup)
 }
 
 //---------------------------------------------------
-//関数名	classHistoryFolder(HTREEITEM hTreeItem)
-//機能		階層履歴処理
+//関数名	archiveHistory(HTREEITEM hTreeItem)
+//機能		履歴アーカイブ処理
 //---------------------------------------------------
-void CCharu3Tree::classHistoryFolder(HTREEITEM hTreeItem,int nRirekiCount)
+void CCharu3Tree::archiveHistory(HTREEITEM hTreeItem, int nRirekiCount)
 {
 	int nChildCount = getChildCount(hTreeItem,true);//履歴フォルダ直下のアイテム数を取得
 	if(nChildCount >= nRirekiCount) {//階層履歴数を超えてたら

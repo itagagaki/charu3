@@ -173,12 +173,13 @@ public:
 	CString makeTitle(CString strData,int nTitleLength = 32);
 	HTREEITEM getOneTimeText(int nType);
 
+	bool hasDataOption(CString strData, CString strKind);
 	int getDataOption(CString strData,CString strKind);
 	DWORD getDataOptionHex(CString strData,CString strKind);
 	CString getDataOptionStr(CString strData,CString strKind);
 	void addDataToRecordFolder(STRING_DATA data,CString strClipBkup);
 	HTREEITEM moveFolderTop(HTREEITEM hTreeItem);
-	void classHistoryFolder(HTREEITEM hTreeItem,int nRirekiCount);
+	void archiveHistory(HTREEITEM hTreeItem, int nRirekiCount);
 	void checkItem(HTREEITEM hItem);
 	void checkOut(HTREEITEM hItem);
 

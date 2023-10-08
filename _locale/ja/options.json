@@ -1,7 +1,7 @@
 [
 	{
-		"caption": "履歴数",
-		"data": "Count=",
+		"caption": "履歴データ数",
+		"data": "Count=データ数",
 		"mode": 8
 	},
 	{
@@ -20,7 +20,7 @@
 		"mode": 8
 	},
 	{
-		"caption": "履歴を起動時にクリア",
+		"caption": "起動時にクリアする",
 		"data": "ClearRec=yes/no",
 		"mode": 8
 	},
@@ -45,8 +45,8 @@
 		"mode": 255
 	},
 	{
-		"caption": "階層履歴",
-		"data": "ClassHistory=データ数",
+		"caption": "履歴をアーカイブする単位",
+		"data": "ArchiveUnit=データ数",
 		"mode": 8
 	},
 	{
