@@ -10,5 +10,6 @@
 /plugin
 /Debug
 /Release
+/Charu3_[1-9]*
 *.aps
 *~
