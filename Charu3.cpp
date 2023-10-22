@@ -873,7 +873,7 @@ void CCharu3App::closeTreeWindow(int nRet)
 		}
 		else if(m_pTreeDlg->m_selectDataPtr != nullptr) {//通常選択データ
 			bool requiresSelectionText = (m_pTreeDlg->m_selectDataPtr->m_strData.Find(_T("$SEL")) != -1); // TODO: This test is true even if $SEL is outside <charu3MACRO>
-			strSelect = requiresSelectionText ? strSelect = getSelectString(m_keySet, m_focusInfo.m_hFocusWnd) : "";
+			strSelect = requiresSelectionText ? getSelectString(m_keySet, m_focusInfo.m_hFocusWnd) : "";
 			data = *(m_pTreeDlg->m_selectDataPtr);
 
 			if(m_ini.m_bDebug) {
