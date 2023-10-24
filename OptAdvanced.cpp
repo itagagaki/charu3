@@ -74,6 +74,7 @@ BOOL COptAdvanced::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
+	m_stealthList.SetHorizontalExtent(2000);
 	m_stealthList.ResetContent();
 	for (const CString& s : theApp.m_ini.m_stealth) {
 		m_stealthList.AddString(s);
