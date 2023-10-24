@@ -57,7 +57,9 @@ public:
 	static bool getSettingBool(nlohmann::json& j, const char* key, bool defaultValue);
 	static double getSettingNumber(nlohmann::json& j, const char* key, double defaultValue);
 	static std::string getSettingString(nlohmann::json& j, const char* key, std::string defaultValue);
-	static CString getSettingCString(nlohmann::json& j,  const char* key, CString defaultValue);
+	static CString getSettingCString(nlohmann::json& j, const char* key, CString defaultValue);
+	static void appendCStringArray(nlohmann::json& j, const char* key, std::vector<CString>& list);
+	static bool getCStringFromJson(nlohmann::json j, CString& cs);
 	static CStringA ConvertUnicodeToUTF8(const CStringW& uni);
 	static CString getWindowTitle(HWND hWnd);
 

@@ -332,6 +332,8 @@ public:
 	std::vector<MACRO_STRUCT>  m_vctMacro;
 	std::vector<MACRO_STRUCT>  m_vctDataMacro;
 
+	std::vector<CString> m_stealth;
+
 	HMODULE m_hHookDLL;
 
 private:

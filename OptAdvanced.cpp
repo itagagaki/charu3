@@ -43,10 +43,105 @@ void COptAdvanced::DoDataExchange(CDataExchange* pDX)
 		// Not worked correctly
 		//DDV_MinMaxInt(pDX, theApp.m_ini.m_nWindowCheckInterval, 1, 2000);
 	}
+	if (GetDlgItem(IDC_LIST_STEALTH)) {
+		DDX_Control(pDX, IDC_LIST_STEALTH, m_stealthList);
+	}
+	if (GetDlgItem(IDC_STEALTH_INPUT)) {
+		DDX_Control(pDX, IDC_STEALTH_INPUT, m_ctrlStealthInput);
+	}
+	if (GetDlgItem(IDC_STEALTH_ADD)) {
+		DDX_Control(pDX, IDC_STEALTH_ADD, m_ctrlStealthAdd);
+	}
+	if (GetDlgItem(IDC_STEALTH_DELETE)) {
+		DDX_Control(pDX, IDC_STEALTH_DELETE, m_ctrlStealthDelete);
+	}
 	//}}AFX_DATA_MAP
 }
 
 BEGIN_MESSAGE_MAP(COptAdvanced, CDialog)
 	//{{AFX_MSG_MAP(COptAdvanced)
 	//}}AFX_MSG_MAP
+	ON_WM_DROPFILES()
+	ON_LBN_SELCHANGE(IDC_LIST_STEALTH, &COptAdvanced::OnLbnSelchangeListStealth)
+	ON_EN_CHANGE(IDC_STEALTH_INPUT, &COptAdvanced::OnEnChangeStealthInput)
+	ON_BN_CLICKED(IDC_STEALTH_ADD, &COptAdvanced::OnBnClickedStealthAdd)
+	ON_BN_CLICKED(IDC_STEALTH_SELECT, &COptAdvanced::OnBnClickedStealthSelect)
+	ON_BN_CLICKED(IDC_STEALTH_DALETE, &COptAdvanced::OnBnClickedStealthDalete)
 END_MESSAGE_MAP()
+
+
+BOOL COptAdvanced::OnInitDialog()
+{
+	CDialog::OnInitDialog();
+
+	m_stealthList.ResetContent();
+	for (const CString& s : theApp.m_ini.m_stealth) {
+		m_stealthList.AddString(s);
+	}
+
+	return TRUE;
+}
+
+BOOL COptAdvanced::DestroyWindow()
+{
+	theApp.m_ini.m_stealth.clear();
+	int stealthCount = m_stealthList.GetCount();
+	for (int i = 0; i < stealthCount; i++) {
+		CString s;
+		m_stealthList.GetText(i, s);
+		theApp.m_ini.m_stealth.push_back(s);
+	}
+
+	return CDialog::DestroyWindow();
+}
+
+void COptAdvanced::OnLbnSelchangeListStealth()
+{
+	const int index = m_stealthList.GetCurSel();
+	m_ctrlStealthDelete.EnableWindow(LB_ERR != index);
+}
+
+void COptAdvanced::OnEnChangeStealthInput()
+{
+	CString input;
+	m_ctrlStealthInput.GetWindowText(input);
+	input.Trim();
+	m_ctrlStealthAdd.EnableWindow(input.GetLength() > 0);
+}
+
+void COptAdvanced::OnBnClickedStealthAdd()
+{
+	CString input;
+	m_ctrlStealthInput.GetWindowText(input);
+	AddStealthProgram(input);
+	m_ctrlStealthInput.SetWindowText(_T(""));
+}
+
+void COptAdvanced::OnBnClickedStealthSelect()
+{
+	CFileDialog* pFileDialog;
+	CString strRes;
+	strRes.LoadString(APP_INF_FILE_FILTER6);
+	pFileDialog = new CFileDialog(TRUE, _T("*.*"), NULL, NULL, strRes);
+	if (pFileDialog && IDOK == pFileDialog->DoModal()) {
+		AddStealthProgram(pFileDialog->GetPathName());
+		delete pFileDialog;
+	}
+}
+
+void COptAdvanced::OnBnClickedStealthDalete()
+{
+	const int index = m_stealthList.GetCurSel();
+	if (LB_ERR != index) {
+		m_stealthList.DeleteString(index);
+		m_ctrlStealthDelete.EnableWindow(FALSE);
+	}
+}
+
+void COptAdvanced::AddStealthProgram(CString name)
+{
+	name.Trim();
+	if (name.GetLength() > 0 && m_stealthList.FindStringExact(0, name) == LB_ERR) {
+		m_stealthList.AddString(name);
+	}
+}

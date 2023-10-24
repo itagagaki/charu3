@@ -10,6 +10,7 @@
 #endif // _MSC_VER > 1000
 // OptAdvanced.h : ヘッダー ファイル
 #include "resource.h"
+#include "MyEditCtrl.h"
 
 #include <afxwin.h>
 
@@ -30,6 +31,8 @@ public:
 // オーバーライド
 	// ClassWizard は仮想関数のオーバーライドを生成します。
 	//{{AFX_VIRTUAL(COptAdvanced)
+public:
+	virtual BOOL DestroyWindow();
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
@@ -42,6 +45,19 @@ protected:
 	//{{AFX_MSG(COptAdvanced)
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+private:
+	virtual BOOL OnInitDialog();
+	afx_msg void OnLbnSelchangeListStealth();
+	afx_msg void OnEnChangeStealthInput();
+	afx_msg void OnBnClickedStealthAdd();
+	afx_msg void OnBnClickedStealthSelect();
+	afx_msg void OnBnClickedStealthDalete();
+	void AddStealthProgram(CString name);
+
+	CMyEditCtrl	m_ctrlStealthInput;
+	CButton m_ctrlStealthAdd;
+	CButton m_ctrlStealthDelete;
+	CListBox m_stealthList;
 };
 
 //{{AFX_INSERT_LOCATION}}

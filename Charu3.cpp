@@ -1771,9 +1771,11 @@ void CCharu3App::changeClipBord(CString strClipBord)
 	}
 	nEmptyCnt = 0;
 
+	const HWND hActiveWindow = ::GetForegroundWindow();
+
 	// Check size
 	int nLimit = m_ini.m_key.m_nHistoryLimit;
-	CString strTitle = CGeneral::getWindowTitle(::GetForegroundWindow());
+	CString strTitle = CGeneral::getWindowTitle(hActiveWindow);
 	if (strTitle != "") {
 		CHANGE_KEY key;
 		key = m_ini.getAppendKeyInit2(strTitle);
@@ -1793,10 +1795,30 @@ void CCharu3App::changeClipBord(CString strClipBord)
 		m_nPhase = PHASE_LOCK;
 		KillTimer(m_pMainWnd->m_hWnd, TIMER_ACTIVE);
 
+		// Get pathname of the program that owns the current active window.
+		LPWSTR actorPath = nullptr;
+		if (theApp.m_ini.m_stealth.size() > 0) {
+			DWORD actorBufSize = 32768;
+			LPWSTR actorPathBuf = new WCHAR[actorBufSize];
+			DWORD dwProcessId;
+			::GetWindowThreadProcessId(hActiveWindow, &dwProcessId);
+			HANDLE hProcess = ::OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, dwProcessId);
+			if (::QueryFullProcessImageName(hProcess, 0, actorPathBuf, &actorBufSize)) {
+				actorPath = actorPathBuf;
+			}
+			else {
+				delete[] actorPathBuf;
+			}
+		}
+
 		if (m_ini.m_bDebug) {
 			CString strText;
 			strText.Format(_T("clipboard record \"%s\"\n"),strClipBord.GetString());
 			CGeneral::writeLog(m_ini.m_strDebugLog,strText,_ME_NAME_,__LINE__);
+			if (actorPath) {
+				strText.Format(_T("actor=\"%s\"\n"), actorPath);
+				CGeneral::writeLog(m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+			}
 		}
 
 		if (m_isStockMode) {
@@ -1808,7 +1830,28 @@ void CCharu3App::changeClipBord(CString strClipBord)
 			}
 		}
 
-		m_pTree->addDataToRecordFolder(data, m_strClipBackup);
+		bool isStealth = false;
+		if (actorPath) {
+			CString csActorPath = CString(actorPath);
+			LPWSTR p = _tcsrchr(actorPath, _T('\\'));
+			CString csActorProgram = p ? CString(p + 1) : csActorPath;
+			for (const CString& s : theApp.m_ini.m_stealth) {
+				CString csStealth = s;
+				csStealth.Replace(_T('/'), _T('\\'));
+				if (csStealth.Find(_T('\\')) < 0) {
+					isStealth = csActorProgram.CompareNoCase(csStealth) == 0;
+				}
+				else {
+					isStealth = csActorPath.CompareNoCase(csStealth) == 0;
+				}
+				if (isStealth) {
+					break;
+				}
+			}
+		}
+		if (!isStealth) {
+			m_pTree->addDataToRecordFolder(data, m_strClipBackup);
+		}
 
 		if (m_isStockMode && m_ini.m_nWindowCheckInterval > 0) {
 			SetTimer(m_pMainWnd->m_hWnd, TIMER_ACTIVE, m_ini.m_nWindowCheckInterval, NULL);

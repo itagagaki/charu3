@@ -211,6 +211,9 @@ void CInit::initialize()
 
 	m_nWindowCheckInterval = static_cast<int>(CGeneral::getSettingNumber(m_settings, "windowCheckInterval", 400));
 
+	m_stealth.clear();
+	CGeneral::appendCStringArray(m_settings, "stealthPrograms", m_stealth);
+		
 	m_bDebug = CGeneral::getSettingBool(m_settings, "debug", false);
 
 	m_key.m_KeyList.clear();
@@ -312,6 +315,11 @@ void CInit::SaveSettings()
 	m_settings["keyEvent.byWindow"] = keyEventByWindow;
 	m_settings["keyEvent.default"] = m_key.m_defKeySet.ToJson();
 	m_settings["keyEvent.default.copyLimit"] = m_key.m_nHistoryLimit;
+
+	m_settings["stealthPrograms"].clear();
+	for (const CString& s : m_stealth) {
+		m_settings["stealthPrograms"].push_back(CGeneral::ConvertUnicodeToUTF8(s));
+	}
 
 	try { std::ofstream(m_strSettingsFile) << m_settings.dump(1, '\t') << "\n"; }
 	catch (...) {}

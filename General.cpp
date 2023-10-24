@@ -86,19 +86,46 @@ std::string CGeneral::getSettingString(nlohmann::json& j, const char* key, std::
 CString CGeneral::getSettingCString(nlohmann::json& j, const char* key, CString defaultValue)
 {
 	nlohmann::json::iterator it = j.find(key);
-	if (it != j.end() && it.value().is_string()) {
-		auto s = it.value().get<std::string>();
-		const char* cptr = s.c_str();
-		int size = MultiByteToWideChar(CP_UTF8, 0, cptr, -1, nullptr, 0);
-		wchar_t* wbuf = new wchar_t[size];
-		if (wbuf) {
-			MultiByteToWideChar(CP_UTF8, 0, cptr, -1, wbuf, size);
-			CString cs = CString(wbuf);
-			delete[] wbuf;
-			return cs;
+	if (it == j.end()) {
+		return defaultValue;
+	}
+	CString cs;
+	if (!getCStringFromJson(it.value(), cs)) {
+		return defaultValue;
+	}
+	return cs;
+}
+
+void CGeneral::appendCStringArray(nlohmann::json& j, const char* key, std::vector<CString>& list)
+{
+	nlohmann::json::iterator it = j.find(key);
+	if (it != j.end() && it.value().is_array()) {
+		nlohmann::json array = it.value();
+		for (nlohmann::json& item : array) {
+			CString cs;
+			if (getCStringFromJson(item, cs)) {
+				list.push_back(cs);
+			}
 		}
 	}
-	return defaultValue;
+}
+
+bool CGeneral::getCStringFromJson(nlohmann::json j, CString& cs)
+{
+	if (!j.is_string()) {
+		return false;
+	}
+	std::string s = j.get<std::string>();
+	const char* cptr = s.c_str();
+	int size = MultiByteToWideChar(CP_UTF8, 0, cptr, -1, nullptr, 0);
+	wchar_t* wbuf = new wchar_t[size];
+	if (!wbuf) {
+		return false;
+	}
+	MultiByteToWideChar(CP_UTF8, 0, cptr, -1, wbuf, size);
+	cs = CString(wbuf);
+	delete[] wbuf;
+	return true;
 }
 
 CStringA CGeneral::ConvertUnicodeToUTF8(const CStringW& uni)

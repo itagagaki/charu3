@@ -52,7 +52,7 @@
 	{
 		"caption": "Data Name Length",
 		"data": "TitleLen=Length",
-		"mode": 12
+		"mode": 8
 	},
 	{
 		"caption": "Hotkey to Copy",

@@ -52,7 +52,7 @@
 	{
 		"caption": "データ名の長さ",
 		"data": "TitleLen=長さ",
-		"mode": 12
+		"mode": 8
 	},
 	{
 		"caption": "コピーホットキー",
