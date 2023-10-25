@@ -222,22 +222,22 @@ BEGIN
     EDITTEXT        IDC_OPT_CLIPBOARD_OPEN_DELAY,142,21,34,13,ES_RIGHT | ES_AUTOHSCROLL
     LTEXT           "ミリ秒遅延させる",IDC_STATIC,180,21,51,13,SS_CENTERIMAGE
     LTEXT           "他のアプリが HRESULT 0x800401D0 (CLIPBRD_E_CANT_OPEN) エラーとなる場合にお試しください",IDC_STATIC,26,36,229,16
+    GROUPBOX        "失敗時のリトライ",IDC_STATIC,16,62,180,38
     EDITTEXT        IDC_OPT_CLIPBOARD_RETRY_INTERVAL,25,76,34,13,ES_RIGHT | ES_AUTOHSCROLL
     LTEXT           "ミリ秒間隔で",IDC_STATIC,63,76,39,13,SS_CENTERIMAGE
     EDITTEXT        IDC_OPT_CLIPBOARD_RETRY_TIMES,110,76,34,13,ES_RIGHT | ES_AUTOHSCROLL
     LTEXT           "回まで",IDC_STATIC,148,76,21,13,SS_CENTERIMAGE
-    GROUPBOX        "失敗時のリトライ",IDC_STATIC,16,62,180,38
+    GROUPBOX        "監視",IDC_STATIC,7,119,280,36
     LTEXT           "アクティブウィンドウの切り替わりを監視する間隔",IDC_STATIC,16,132,149,13,SS_CENTERIMAGE
     EDITTEXT        IDC_OPT_WINDOW_CHECK_INTERVAL,172,132,34,13,ES_RIGHT | ES_AUTOHSCROLL
     LTEXT           "ミリ秒",IDC_STATIC,210,132,18,13,SS_CENTERIMAGE
-    GROUPBOX        "監視",IDC_STATIC,7,118,280,36
     GROUPBOX        "ステルスプログラム",IDC_STATIC,7,160,280,120
+    LTEXT           "このリストに登録したプログラムのウィンドウがアクティブなときはCharuはクリップボードの内容を取り込みません",IDC_STATIC,16,174,262,16
     LISTBOX         IDC_LIST_STEALTH,16,197,262,52,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP
-    LTEXT           "このリストに登録したプログラムのウィンドウがアクティブなときはクリップボードの内容を履歴フォルダーに追加しません",IDC_STATIC,16,174,189,16
+    EDITTEXT        IDC_STEALTH_INPUT,16,254,82,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "追加",IDC_STEALTH_ADD,100,254,40,14,WS_DISABLED
     PUSHBUTTON      "ファイルを選択して追加...",IDC_STEALTH_SELECT,142,254,93,14
     PUSHBUTTON      "削除",IDC_STEALTH_DELETE,237,254,40,14,WS_DISABLED
-    PUSHBUTTON      "追加",IDC_STEALTH_ADD,100,254,40,14,WS_DISABLED
-    EDITTEXT        IDC_STEALTH_INPUT,16,254,82,14,ES_AUTOHSCROLL
 END
 
 IDD_INITIAL_DIALOG DIALOGEX 0, 0, 167, 120
@@ -484,10 +484,10 @@ BEGIN
     0, 0, 0, 0,
     0, 0, 0, 0,
     0, 0, 0, 0,
+    0, 100, 0, 0,
     0, 0, 0, 0,
     0, 0, 0, 0,
-    0, 0, 0, 0,
-    0, 100, 0, 0
+    0, 0, 0, 0
 END
 
 IDD_INITIAL_DIALOG AFX_DIALOG_LAYOUT
@@ -799,7 +799,7 @@ STRINGTABLE
 BEGIN
     APP_INF_TIP_DATA03      "\n作成: "
     APP_INF_TIP_DATA04      "\n変更: "
-    APP_INF_COPY_APPEND     "のコピー"
+    APP_INF_COPY            " - コピー"
     APP_INF_NEW_FOLDER      "新しいフォルダー"
     APP_INF_CLASS_HISTORY   "アーカイブされた履歴"
     APP_INF_DEF_FONT        "ＭＳ Ｐゴシック"
@@ -1232,23 +1232,23 @@ BEGIN
     EDITTEXT        IDC_OPT_CLIPBOARD_OPEN_DELAY,122,21,34,13,ES_RIGHT | ES_AUTOHSCROLL
     LTEXT           "ms when the clipboard changes",IDC_STATIC,159,21,104,13,SS_CENTERIMAGE
     LTEXT           "Try this if other apps get HRESULT 0x800401D0 (CLIPBRD_E_CANT_OPEN) error.",IDC_STATIC,26,36,229,16
-    EDITTEXT        IDC_OPT_CLIPBOARD_RETRY_INTERVAL,112,76,34,13,ES_RIGHT | ES_AUTOHSCROLL
-    LTEXT           "ms interval",IDC_STATIC,150,76,39,13,SS_CENTERIMAGE
+    GROUPBOX        "Retry After Failure",IDC_STATIC,16,62,180,38
+    LTEXT           "Up to",IDC_STATIC,25,76,18,13,SS_CENTERIMAGE
     EDITTEXT        IDC_OPT_CLIPBOARD_RETRY_TIMES,45,76,34,13,ES_RIGHT | ES_AUTOHSCROLL
     LTEXT           "times at",IDC_STATIC,83,76,25,13,SS_CENTERIMAGE
-    GROUPBOX        "Retry After Failure",IDC_STATIC,16,62,180,38
-    LTEXT           "Monitoring Interval for Active Window Switching",IDC_STATIC,16,132,154,13,SS_CENTERIMAGE
+    EDITTEXT        IDC_OPT_CLIPBOARD_RETRY_INTERVAL,112,76,34,13,ES_RIGHT | ES_AUTOHSCROLL
+    LTEXT           "ms interval",IDC_STATIC,150,76,39,13,SS_CENTERIMAGE
+    GROUPBOX        "Monitoring",IDC_STATIC,7,118,280,36
+    LTEXT           "Monitoring Interval for Active Window Switching",IDC_STATIC,16,132,158,13,SS_CENTERIMAGE
     EDITTEXT        IDC_OPT_WINDOW_CHECK_INTERVAL,176,132,34,13,ES_RIGHT | ES_AUTOHSCROLL
     LTEXT           "ms",IDC_STATIC,214,132,18,13,SS_CENTERIMAGE
-    GROUPBOX        "Monitoring",IDC_STATIC,7,118,280,36
-    LTEXT           "Up to",IDC_STATIC,25,76,18,13,SS_CENTERIMAGE
+    GROUPBOX        "Stealth Programs",IDC_STATIC,7,160,280,120
+    LTEXT           "Charu does not capture the clipboard contents when the window of the program registered in this list is active.",IDC_STATIC,16,174,262,16
     LISTBOX         IDC_LIST_STEALTH,16,197,262,52,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP
-    LTEXT           "The contents of the clipboard are not recorded in the history folders when the window of the program registered in this list is active.",IDC_STATIC,16,174,221,16
+    EDITTEXT        IDC_STEALTH_INPUT,16,254,82,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Add",IDC_STEALTH_ADD,100,254,40,14,WS_DISABLED
     PUSHBUTTON      "Select a file to add...",IDC_STEALTH_SELECT,142,254,93,14
     PUSHBUTTON      "Delete",IDC_STEALTH_DELETE,237,254,40,14,WS_DISABLED
-    PUSHBUTTON      "Add",IDC_STEALTH_ADD,100,254,40,14,WS_DISABLED
-    EDITTEXT        IDC_STEALTH_INPUT,16,254,82,14,ES_AUTOHSCROLL
-    GROUPBOX        "Stealth Programs",IDC_STATIC,7,160,280,120
 END
 
 IDD_EDIT DIALOGEX 0, 0, 199, 242
@@ -1506,9 +1506,9 @@ BEGIN
     0, 0, 0, 0,
     0, 0, 0, 0,
     0, 0, 0, 0,
-    0, 0, 0, 0,
-    0, 0, 0, 0,
     0, 100, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
     0, 0, 0, 0
 END
 
@@ -1848,7 +1848,7 @@ STRINGTABLE
 BEGIN
     APP_INF_TIP_DATA03      "\nCreated: "
     APP_INF_TIP_DATA04      "\nModified: "
-    APP_INF_COPY_APPEND     "????"
+    APP_INF_COPY            " - Copy"
     APP_INF_NEW_FOLDER      "New folder"
     APP_INF_CLASS_HISTORY   "Archived history"
     APP_INF_DEF_FONT        "MS P????"

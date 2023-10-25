@@ -305,7 +305,7 @@ bool CCharu3App::init()
 	}
 
 	//クリップボードクラスの初期化 変更検知を設定(メインフレームでメッセージ処理をしてます)
-	m_clipboard.getClipboardText(m_strClipBackup, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
+	m_clipboard.getClipboardText(m_strSavedClipboard, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
 	m_clipboard.setParent(this->m_pMainWnd->m_hWnd);
 	m_keySet = m_ini.m_key.m_defKeySet;
 
@@ -964,7 +964,7 @@ void CCharu3App::playData(STRING_DATA data, CString strClip, CString strSelect, 
 
 		//クリップボード復帰
 		if(m_ini.m_etc.m_bPutBackClipboard && strClip != "") {
-			m_strClipBackup = strClip;
+			m_strSavedClipboard = strClip;
 			m_clipboard.setClipboardText(strClip.GetString(), m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
 		}
 		if(isChange) {
@@ -1319,7 +1319,7 @@ void CCharu3App::execData(CString strPaste,COPYPASTE_KEY key,HTREEITEM hTargetIt
 					pasteData(strCut,keySet,hWnd);//貼り付け
 				}
 			}
-			m_strClipBackup = strCut;
+			m_strSavedClipboard = strCut;
 		}
 		//キーマクロを実行
 		if(strKeyMacro != _T("")) {
@@ -1343,7 +1343,9 @@ void CCharu3App::execData(CString strPaste,COPYPASTE_KEY key,HTREEITEM hTargetIt
 //---------------------------------------------------
 void CCharu3App::pasteData(CString strPaste,COPYPASTE_KEY key,HWND hWnd)
 {
-	if(m_isStockMode) m_strClipBackup = strPaste;
+	if (m_isStockMode) {
+		m_strSavedClipboard = strPaste;
+	}
 	m_clipboard.setClipboardText(strPaste, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
 
 	if(key.m_nMessage == 0) {//イベント方式
@@ -1742,18 +1744,18 @@ CString CCharu3App::convertMacro(STRING_DATA* SourceData, CString strSelect, CSt
 //機能		メインフレームでクリップボードの変更を検知、
 //          クリップボードの内容をリストに追加する
 //---------------------------------------------------
-void CCharu3App::changeClipBord(CString strClipBord)
+void CCharu3App::onClipboardChanged(CString strClipboard)
 {
 	if(m_ini.m_bDebug) {
 		CString strText;
-		strText.Format(_T("changeClipBord \"%s\"\n"),strClipBord.GetString());
+		strText.Format(_T("onClipboardChanged \"%s\"\n"), strClipboard.GetString());
 		CGeneral::writeLog(m_ini.m_strDebugLog,strText,_ME_NAME_,__LINE__);
 	}
 
 	//連続で空のクリップボード更新イベントが起こるので対策
 	//2007/10/27-20:20:19-------------------
 	static int nEmptyCnt = 0;
-	if(strClipBord == "")  {
+	if (strClipboard == "")  {
 /*		if(nEmptyCnt > 5) {
 			Sleep(3000);
 			nEmptyCnt = 0;
@@ -1771,10 +1773,9 @@ void CCharu3App::changeClipBord(CString strClipBord)
 	}
 	nEmptyCnt = 0;
 
-	const HWND hActiveWindow = ::GetForegroundWindow();
-
 	// Check size
 	int nLimit = m_ini.m_key.m_nHistoryLimit;
+	const HWND hActiveWindow = ::GetForegroundWindow();
 	CString strTitle = CGeneral::getWindowTitle(hActiveWindow);
 	if (strTitle != "") {
 		CHANGE_KEY key;
@@ -1782,84 +1783,46 @@ void CCharu3App::changeClipBord(CString strClipBord)
 		if (key.m_nMatch >= 0) nLimit = key.m_nHistoryLimit;
 	}
 	nLimit *= 1024;
-	if (nLimit >= 0 && strClipBord.GetLength() > nLimit) {
+	if (nLimit >= 0 && strClipboard.GetLength() > nLimit) {
 		return;
 	}
 
-	if (m_nPhase == PHASE_IDOL && /*strClipBord != m_strlClipBackup &&*/ strClipBord != "") {
+	if (m_nPhase == PHASE_IDOL && /*strClipBord != m_strlClipBackup &&*/ strClipboard != "") {
 		STRING_DATA data;
 		data.m_cKind = KIND_ONETIME;
-		data.m_strData = strClipBord;
+		data.m_strData = strClipboard;
 		data.m_cIcon = KIND_DEFAULT;
 
 		m_nPhase = PHASE_LOCK;
 		KillTimer(m_pMainWnd->m_hWnd, TIMER_ACTIVE);
 
-		// Get pathname of the program that owns the current active window.
-		LPWSTR actorPath = nullptr;
-		if (theApp.m_ini.m_stealth.size() > 0) {
-			DWORD actorBufSize = 32768;
-			LPWSTR actorPathBuf = new WCHAR[actorBufSize];
-			DWORD dwProcessId;
-			::GetWindowThreadProcessId(hActiveWindow, &dwProcessId);
-			HANDLE hProcess = ::OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, dwProcessId);
-			if (::QueryFullProcessImageName(hProcess, 0, actorPathBuf, &actorBufSize)) {
-				actorPath = actorPathBuf;
-			}
-			else {
-				delete[] actorPathBuf;
-			}
-		}
-
 		if (m_ini.m_bDebug) {
 			CString strText;
-			strText.Format(_T("clipboard record \"%s\"\n"),strClipBord.GetString());
+			strText.Format(_T("clipboard record \"%s\"\n"), strClipboard.GetString());
 			CGeneral::writeLog(m_ini.m_strDebugLog,strText,_ME_NAME_,__LINE__);
-			if (actorPath) {
-				strText.Format(_T("actor=\"%s\"\n"), actorPath);
-				CGeneral::writeLog(m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
-			}
 		}
 
 		if (m_isStockMode) {
-			if (!(m_ini.m_fifo.m_bDontSaveSameDataAsLast && strClipBord == m_strClipBackup)) {
+			if (!(m_ini.m_fifo.m_bDontSaveSameDataAsLast && strClipboard == m_strPreviousStocked)) {
 				if (m_ini.m_fifo.m_strCopySound != _T("")) {
 					PlaySound(m_ini.m_fifo.m_strCopySound, NULL, SND_ASYNC | SND_FILENAME);
 				}
 				m_pTree->addData(NULL, data);
+				m_strPreviousStocked = strClipboard;
 			}
 		}
 
-		bool isStealth = false;
-		if (actorPath) {
-			CString csActorPath = CString(actorPath);
-			LPWSTR p = _tcsrchr(actorPath, _T('\\'));
-			CString csActorProgram = p ? CString(p + 1) : csActorPath;
-			for (const CString& s : theApp.m_ini.m_stealth) {
-				CString csStealth = s;
-				csStealth.Replace(_T('/'), _T('\\'));
-				if (csStealth.Find(_T('\\')) < 0) {
-					isStealth = csActorProgram.CompareNoCase(csStealth) == 0;
-				}
-				else {
-					isStealth = csActorPath.CompareNoCase(csStealth) == 0;
-				}
-				if (isStealth) {
-					break;
-				}
-			}
-		}
-		if (!isStealth) {
-			m_pTree->addDataToRecordFolder(data, m_strClipBackup);
-		}
+		m_pTree->addDataToRecordFolder(data, m_strPreviousRecordedToHistory);
+		m_strPreviousRecordedToHistory = strClipboard;
 
 		if (m_isStockMode && m_ini.m_nWindowCheckInterval > 0) {
 			SetTimer(m_pMainWnd->m_hWnd, TIMER_ACTIVE, m_ini.m_nWindowCheckInterval, NULL);
 		}
+
 		m_nPhase = PHASE_IDOL;
 	}
 
-	m_strClipBackup = strClipBord;
+	m_strSavedClipboard = strClipboard;
 }
 
 //---------------------------------------------------
@@ -1892,7 +1855,7 @@ void CCharu3App::fifoClipbord()
 				if (m_ini.m_fifo.m_strPasteSound != _T("")) {
 					PlaySound(m_ini.m_fifo.m_strPasteSound, NULL, SND_ASYNC | SND_FILENAME);
 				}
-				m_strClipBackup = text;
+				m_strSavedClipboard = text;
 			}
 		}
 	}
@@ -1927,7 +1890,7 @@ void CCharu3App::toggleStockMode()
 	m_isStockMode = !m_isStockMode;
 	m_pMainFrame->changeTrayIcon(m_isStockMode);
 	if (m_isStockMode) {
-		m_strClipBackup = _T("");
+		m_strSavedClipboard = _T("");
 		setAppendKeyInit(::GetForegroundWindow(), &m_keySet);
 		RegisterHotKey(NULL, HOTKEY_PASTE, theApp.m_keySet.m_uMod_Paste, theApp.m_keySet.m_uVK_Paste);//ペーストキー
 		if (m_ini.m_nWindowCheckInterval > 0) {

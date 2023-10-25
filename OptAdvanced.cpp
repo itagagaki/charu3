@@ -66,9 +66,18 @@ BEGIN_MESSAGE_MAP(COptAdvanced, CDialog)
 	ON_EN_CHANGE(IDC_STEALTH_INPUT, &COptAdvanced::OnEnChangeStealthInput)
 	ON_BN_CLICKED(IDC_STEALTH_ADD, &COptAdvanced::OnBnClickedStealthAdd)
 	ON_BN_CLICKED(IDC_STEALTH_SELECT, &COptAdvanced::OnBnClickedStealthSelect)
-	ON_BN_CLICKED(IDC_STEALTH_DALETE, &COptAdvanced::OnBnClickedStealthDalete)
+	ON_BN_CLICKED(IDC_STEALTH_DELETE, &COptAdvanced::OnBnClickedStealthDelete)
 END_MESSAGE_MAP()
 
+
+BOOL COptAdvanced::PreTranslateMessage(MSG* pMsg)
+{
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_TAB && ::GetKeyState(VK_CONTROL) < 0) {
+		::PostMessage(::GetParent(this->m_hWnd), pMsg->message, VK_PRIOR, pMsg->lParam);
+	}
+
+	return CDialog::PreTranslateMessage(pMsg);
+}
 
 BOOL COptAdvanced::OnInitDialog()
 {
@@ -130,7 +139,7 @@ void COptAdvanced::OnBnClickedStealthSelect()
 	}
 }
 
-void COptAdvanced::OnBnClickedStealthDalete()
+void COptAdvanced::OnBnClickedStealthDelete()
 {
 	const int index = m_stealthList.GetCurSel();
 	if (LB_ERR != index) {

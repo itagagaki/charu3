@@ -124,7 +124,6 @@
 #define IDC_SEARCH_LOGIC                1090
 #define IDC_LIST_STEALTH                1091
 #define IDC_STEALTH_ADD                 1092
-#define IDC_STEALTH_DALETE              1093
 #define IDC_STEALTH_DELETE              1093
 #define IDC_STEALTH_SELECT              1094
 #define IDC_STEALTH_INPUT               1095
@@ -220,7 +219,7 @@
 #define APP_INF_TIP_DATA02              62271
 #define APP_INF_TIP_DATA03              62272
 #define APP_INF_TIP_DATA04              62273
-#define APP_INF_COPY_APPEND             62280
+#define APP_INF_COPY                    62280
 #define APP_INF_NEW_FOLDER              62281
 #define APP_INF_CLASS_HISTORY           62282
 #define APP_INF_DEF_FONT                62283

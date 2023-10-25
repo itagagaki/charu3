@@ -151,13 +151,13 @@ BOOL COptMainDialog::PreTranslateMessage(MSG* pMsg)
 {
 	if( pMsg->message == WM_KEYDOWN) {
 		if(pMsg->wParam == VK_PRIOR) {
-			if(m_nPage < 4) m_nPage++;
+			if(m_nPage < MAX_OPT_PAGE) m_nPage++;
 			else			m_nPage = 0;
 			m_ctrlTab.SetCurFocus(m_nPage);
 		}
 		else if(pMsg->wParam == VK_NEXT) {
 			if(m_nPage > 0) m_nPage--;
-			else			m_nPage = 4;
+			else			m_nPage = MAX_OPT_PAGE;
 			m_ctrlTab.SetCurFocus(m_nPage);
 		}
 	}

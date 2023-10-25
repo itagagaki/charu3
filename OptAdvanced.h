@@ -32,6 +32,7 @@ public:
 	// ClassWizard は仮想関数のオーバーライドを生成します。
 	//{{AFX_VIRTUAL(COptAdvanced)
 public:
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	virtual BOOL DestroyWindow();
 
 protected:
@@ -51,7 +52,7 @@ private:
 	afx_msg void OnEnChangeStealthInput();
 	afx_msg void OnBnClickedStealthAdd();
 	afx_msg void OnBnClickedStealthSelect();
-	afx_msg void OnBnClickedStealthDalete();
+	afx_msg void OnBnClickedStealthDelete();
 	void AddStealthProgram(CString name);
 
 	CMyEditCtrl	m_ctrlStealthInput;

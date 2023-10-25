@@ -1123,7 +1123,7 @@ void CMyTreeDialog::OnDataPaste()
 		HTREEITEM hTreeItem = m_pTreeCtrl->GetSelectedItem();
 		STRING_DATA data = m_pTreeCtrl->getData(m_hCopyData);
 		CString strRes;
-		strRes.LoadString(APP_INF_COPY_APPEND);
+		strRes.LoadString(APP_INF_COPY);
 		data.m_strTitle = data.m_strTitle + strRes;
 		if(m_pTreeCtrl->ItemHasChildren(m_hCopyData)) {
 			if(!m_pTreeCtrl->checkMyChild(m_hCopyData,hTreeItem)) {
@@ -1320,7 +1320,7 @@ void CMyTreeDialog::changeTipString(STRING_DATA data)
 		if (data.m_strData != _T("")) {
 			if (gap) strTip += _T("\n\n");
 			CString s = data.m_strData;
-			(void)s.Replace(_T("\t"), _T(" "));
+			(void)s.Replace(_T('\t'), _T(' '));
 			int max = 500;
 			if (s.GetLength() > max) {
 				s = s.Left(max - 3) + _T("...");
@@ -1331,7 +1331,7 @@ void CMyTreeDialog::changeTipString(STRING_DATA data)
 		if (data.m_strMacro != _T("")) {
 			(void)strRes.LoadString(APP_INF_TIP_DATA02);
 			CString s = data.m_strMacro;
-			(void)s.Replace(_T("\t"), _T(" "));
+			(void)s.Replace(_T('\t'), _T(' '));
 			(void)s.Replace(_T("\n"), _T("\n  "));
 			int max = 300;
 			if (s.GetLength() > max) {

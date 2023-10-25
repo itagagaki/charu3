@@ -195,7 +195,7 @@ public:
 	bool isCloseKey(){return m_isCloseKey;}
 	void popupTreeWinMC(HWND hForeground);
 
-	void changeClipBord(CString strClipBord);
+	void onClipboardChanged(CString strClipboard);
 	void toggleStockMode();
 	bool getStockSW(){return m_isStockMode;}
 	int  getPhase() {return m_nPhase;}
@@ -264,7 +264,7 @@ protected:
 	bool m_isCloseKey,m_isStockMode;
 	BOOL m_isImeStatus;
 	int m_nPhase;
-	CString m_strClipBackup;
+	CString m_strSavedClipboard, m_strPreviousStocked, m_strPreviousRecordedToHistory;
 };
 
 //---------------------------------------------------

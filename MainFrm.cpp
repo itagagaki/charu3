@@ -145,18 +145,54 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 //---------------------------------------------------
 void CMainFrame::changeClip()
 {
-	if (theApp.m_ini.m_nClipboardOpenDelay > 0) {
-		Sleep(theApp.m_ini.m_nClipboardOpenDelay);
+	// Check the program that owns the currently active window if stealth program is registered.
+	bool isStealth = false;
+	if (theApp.m_ini.m_stealth.size() > 0) {
+		const HWND hActiveWindow = ::GetForegroundWindow();
+		DWORD actorBufSize = 32768;
+		LPWSTR actorPathnameBuf = new WCHAR[actorBufSize];
+		DWORD dwProcessId;
+		::GetWindowThreadProcessId(hActiveWindow, &dwProcessId);
+		const HANDLE hProcess = ::OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, dwProcessId);
+		if (::QueryFullProcessImageName(hProcess, 0, actorPathnameBuf, &actorBufSize)) {
+			CString csActorPath = CString(actorPathnameBuf);
+			LPWSTR p = _tcsrchr(actorPathnameBuf, _T('\\'));
+			CString csActorName = p ? CString(p + 1) : csActorPath;
+			for (const CString& s : theApp.m_ini.m_stealth) {
+				CString csStealth = s;
+				csStealth.Replace(_T('/'), _T('\\'));
+				if (csStealth.Find(_T('\\')) < 0) {
+					isStealth = csActorName.CompareNoCase(csStealth) == 0;
+				}
+				else {
+					isStealth = csActorPath.CompareNoCase(csStealth) == 0;
+				}
+				if (isStealth) {
+					break;
+				}
+			}
+		}
+		delete[] actorPathnameBuf;
 	}
-	CString strClipBord;
-	theApp.m_clipboard.getClipboardText(strClipBord, theApp.m_ini.m_nClipboardRetryTimes, theApp.m_ini.m_nClipboardRetryInterval);//クリップボードの内容を取得
-	theApp.changeClipBord(strClipBord);//本体にクリップボードの変更を通知
+
+	CString strClipboard;
+	if (!isStealth) {
+		if (theApp.m_ini.m_nClipboardOpenDelay > 0) {
+			Sleep(theApp.m_ini.m_nClipboardOpenDelay);
+		}
+		theApp.m_clipboard.getClipboardText(strClipboard, theApp.m_ini.m_nClipboardRetryTimes, theApp.m_ini.m_nClipboardRetryInterval); //クリップボードの内容を取得
+		theApp.onClipboardChanged(strClipboard); //本体にクリップボードの変更を通知
+	}
 
 	if(theApp.m_ini.m_etc.m_bShowClipboardInTooltipOfNofifyIcon) {
-		// 通知領域のツールチップを変更
-		strClipBord = strClipBord.Left(1024);
-		strClipBord.Replace(_T("	"),_T(" "));//タブを置換
-		_tcscpy_s(m_nIcon.szTip,strClipBord.Left(63));
+		if (isStealth) {
+			_tcscpy_s(m_nIcon.szTip, _T("**** Stealthed ****"));
+		}
+		else {
+			strClipboard = strClipboard.Left(1024);
+			strClipboard.Replace(_T('\t'), _T(' ')); // Replace tab with space.
+			_tcscpy_s(m_nIcon.szTip, strClipboard.Left(63));
+		}
 		if(!Shell_NotifyIcon(NIM_MODIFY,&m_nIcon)){
 			Shell_NotifyIcon(NIM_ADD,&m_nIcon);
 		}
