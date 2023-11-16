@@ -19,11 +19,11 @@ extern CCharu3App theApp;
 //関数名	COptMainDialog
 //機能		コンストラクタ
 //---------------------------------------------------
-COptMainDialog::COptMainDialog(CWnd* pParent /*=NULL*/,int nPage) : CDialog(COptMainDialog::IDD, pParent)
+COptMainDialog::COptMainDialog(CWnd* pParent /*=NULL*/, int nPage)
+	: CDialog(COptMainDialog::IDD, pParent)
+	, m_OptionPage{&m_EtcPage, &m_VisualPage, &m_PopupPage, &m_FifoPage, &m_KeysetPage, &m_AdvancedPage}
+	, m_nPage(nPage)
 {
-	//{{AFX_DATA_INIT(COptMainDialog)
-	//}}AFX_DATA_INIT
-	m_nPage = nPage;
 }
 
 //---------------------------------------------------
@@ -59,39 +59,23 @@ BOOL COptMainDialog::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	TC_ITEM    item;
-	int i;
-    item.mask = TCIF_TEXT;
-
-	//タブを設定
-	CString strTabText;
-	//{_T("全般"),_T("スタイル"),_T("ポップアップ"),_T("ストックモード"),_T("キーイベント設定")};
-
-	for(i = 0; i <= MAX_OPT_PAGE; i++) {
-		strTabText.LoadString(APP_INF_TABNAME_01 + i);
-	    item.pszText = (TCHAR*)LPCTSTR(strTabText);
-	    m_ctrlTab.InsertItem(i, &item);
+	for (int i = 0; i <= MAX_OPT_PAGE; i++) {
+		CString strTabText;
+		(void)strTabText.LoadString(APP_INF_TABNAME_01 + i);
+		TC_ITEM item = {};
+		item.mask = TCIF_TEXT;
+		item.pszText = (TCHAR*)LPCTSTR(strTabText);
+		m_ctrlTab.InsertItem(i, &item);
 	}
 
-    //タブコンのサイズを取得
     CRect rect;
     m_ctrlTab.GetWindowRect(&rect);
     m_ctrlTab.AdjustRect(FALSE, &rect);
     ScreenToClient(&rect);
 
-	//ページを構築
-	int nDialogID[] = {IDD_SETTINGS_01_GENERAL, IDD_SETTINGS_02_STYLE, IDD_SETTINGS_03_DATATREE, IDD_SETTINGS_04_STOCKMODE, IDD_SETTINGS_05_KEYS, IDD_SETTINGS_06_ADVANCED };
-
-	m_OptionPage[0] = &m_EtcPage;
-	m_OptionPage[1] = &m_VisualPage;
-	m_OptionPage[2] = &m_PopupPage;
-	m_OptionPage[3] = &m_FifoPage;
-	m_OptionPage[4] = &m_KeysetPage;
-	m_OptionPage[5] = &m_AdvancedPage;
-
-	//初期設定
-	for(i = 0; i <= MAX_OPT_PAGE; i++) {
-	    m_OptionPage[i]->Create(nDialogID[i],this);
+	const int nDialogID[] = {IDD_SETTINGS_01_GENERAL, IDD_SETTINGS_02_STYLE, IDD_SETTINGS_03_DATATREE, IDD_SETTINGS_04_STOCKMODE, IDD_SETTINGS_05_KEYS, IDD_SETTINGS_06_ADVANCED };
+	for (int i = 0; i <= MAX_OPT_PAGE; i++) {
+	    m_OptionPage[i]->Create(nDialogID[i], this);
 	    m_OptionPage[i]->MoveWindow(&rect);
 		m_OptionPage[i]->ShowWindow(SW_HIDE);
 	}

@@ -79,10 +79,10 @@ struct OPTION_POPUP
 //---------------------------------------------------
 struct OPTION_FIFO
 {
-	int  m_nFifo;			//履歴動作中はCtrl+Vで貼り付ける文字列を先入れ先出しにする
-	bool m_bAutoOff;	// Turn off stock mode when one-time item is gone
-	bool m_bCleanupAtTurnOff; // Remove all one-time items when turned off
-	bool m_bDontSaveSameDataAsLast;
+	int  m_nFifo{};			//履歴動作中はCtrl+Vで貼り付ける文字列を先入れ先出しにする
+	bool m_bAutoOff{};	// Turn off stock mode when one-time item is gone
+	bool m_bCleanupAtTurnOff{}; // Remove all one-time items when turned off
+	bool m_bDontSaveSameDataAsLast{};
 	CString m_strCopySound;	// コピー時に再生するサウンドのパス名
 	CString m_strPasteSound;	// 貼り付け時に再生するサウンドのパス名
 };
@@ -92,16 +92,16 @@ struct OPTION_FIFO
 //---------------------------------------------------
 struct OPTION_VISUAL
 {
-	uint32_t m_nBorderColor;
-	uint32_t m_nBackgroundColor;
-	uint32_t m_nTextColor;
+	uint32_t m_nBorderColor{};
+	uint32_t m_nBackgroundColor{};
+	uint32_t m_nTextColor{};
 	CString m_strFontName;
-	int m_nFontSize;
+	int m_nFontSize{};
 	CString m_strResourceName;
-	bool m_bScrollbarVertical;
-	bool m_bScrollbarHorizontal;
-	int m_nOpacity;
-	int m_nToolTip;
+	bool m_bScrollbarVertical{};
+	bool m_bScrollbarHorizontal{};
+	int m_nOpacity{};
+	int m_nToolTip{};
 };
 
 struct WINDOWS_MESSAGE
@@ -214,6 +214,7 @@ struct CHANGE_KEY
 
 	CHANGE_KEY()
 		: m_strTitle(_T(""))
+		, m_nMatch(-1)
 		, m_nHistoryLimit(-1)
 		, m_sCopyPasteKey(COPYPASTE_KEY())
 	{
@@ -242,7 +243,7 @@ struct OPTION_KEYSET
 //---------------------------------------------------
 struct MACRO_STRUCT
 {
-	int  m_cKind;
+	int  m_cKind{};
 	CString m_strName;
 	CString m_strMacro;
 };

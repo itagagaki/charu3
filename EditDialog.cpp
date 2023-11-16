@@ -81,7 +81,7 @@ void CEditDialog::OnEditPasteFile()
 {
 	CFileDialog* pFileDialog;
 	CString strRes;
-	strRes.LoadString(APP_INF_FILE_FILTER6);
+	(void)strRes.LoadString(APP_INF_FILE_FILTER6);
 
 
 	pFileDialog = new CFileDialog(TRUE, _T("*.*"), NULL, NULL, strRes);
@@ -107,7 +107,7 @@ BOOL CEditDialog::OnInitDialog()
 
 	CDialog::OnInitDialog();
 
-	strRes.LoadString(m_bNewData ? APP_INF_CAPTION_NEWITEM : APP_INF_CAPTION_EDITITEM);
+	(void)strRes.LoadString(m_bNewData ? APP_INF_CAPTION_NEWITEM : APP_INF_CAPTION_EDITITEM);
 	SetWindowText(strRes);
 
 	m_ctrlDataEdit.SetWindowText(m_pData->m_strData);
@@ -116,9 +116,9 @@ BOOL CEditDialog::OnInitDialog()
 
 	if (m_nKind & KIND_FOLDER_ALL) {
 		CString strRes;
-		strRes.LoadString(APP_INF_FOLDER_REGULAR);
+		(void)strRes.LoadString(APP_INF_FOLDER_REGULAR);
 		m_ctrlKindCombo.AddString(strRes);
-		strRes.LoadString(APP_INF_FOLDER_HISTORY);
+		(void)strRes.LoadString(APP_INF_FOLDER_HISTORY);
 		m_ctrlKindCombo.AddString(strRes);
 		m_ctrlKindCombo.SetCurSel(m_nKind & KIND_RIREKI ? 1 : 0);
 		GetDlgItem(IDC_STATIC_ICON)->ShowWindow(SW_HIDE);
@@ -130,9 +130,9 @@ BOOL CEditDialog::OnInitDialog()
 		m_ctrlNameEdit.SetFocus();
 	}
 	else {
-		strRes.LoadString(APP_INF_DATA_PERMANENT);
+		(void)strRes.LoadString(APP_INF_DATA_PERMANENT);
 		m_ctrlKindCombo.AddString(strRes);
-		strRes.LoadString(APP_INF_DATA_ONETIME);
+		(void)strRes.LoadString(APP_INF_DATA_ONETIME);
 		m_ctrlKindCombo.AddString(strRes);
 		m_ctrlKindCombo.SetCurSel(m_pData->m_cKind & KIND_ONETIME ? 1 : 0);
 		m_ctrlIconCombo.SetCurSel(m_bNewData ? 0 : (1 + m_pData->m_cIcon));
@@ -179,14 +179,14 @@ void CEditDialog::OnOK()
 	if (strName == _T("")) {
 		if (!m_bNewData) {
 			CString strRes;
-			strRes.LoadString(APP_MES_NAME_EMPTY);
+			(void)strRes.LoadString(APP_MES_NAME_EMPTY);
 			AfxMessageBox(strRes);
 			m_ctrlNameEdit.SetFocus();
 			return;
 		}
 		if (strData == _T("")) {
 			CString strRes;
-			strRes.LoadString(APP_MES_ALL_EMPTY);
+			(void)strRes.LoadString(APP_MES_ALL_EMPTY);
 			AfxMessageBox(strRes);
 			m_ctrlDataEdit.SetFocus();
 			return;

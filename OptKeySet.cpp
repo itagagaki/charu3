@@ -23,11 +23,11 @@ extern CCharu3App theApp;
 //関数名	COptKeySet
 //機能		コンストラクタ
 //---------------------------------------------------
-COptKeySet::COptKeySet(CWnd* pParent /*=NULL*/) : CDialog(COptKeySet::IDD, pParent)
+COptKeySet::COptKeySet(CWnd* pParent /*=NULL*/)
+	: CDialog(COptKeySet::IDD, pParent)
+	, m_dataPtrSelect(nullptr)
+	, m_nSelItem(-1)
 {
-	//{{AFX_DATA_INIT(COptKeySet)
-	//}}AFX_DATA_INIT
-	m_nSelItem = -1;
 }
 
 //---------------------------------------------------
@@ -86,15 +86,15 @@ END_MESSAGE_MAP()
 //---------------------------------------------------
 void COptKeySet::SetListData(CHANGE_KEY sKeyData, CHANGE_KEY *dataPtr, bool isSet, int nLine)
 {
-	LVITEM AddItem;
-	LPTSTR pString[4];
+	LVITEM AddItem = {};
+	LPTSTR pString[4] = {};
 	UINT uMod;
 	int i;
 	CString strPaste,strCopy,strTmp;
 
 	CString strMatch[4];
 	for(i = 0; i <= 3; i++) {
-		strMatch[i].LoadString(APP_INF_KEY_COMBO01 + i);
+		(void)strMatch[i].LoadString(APP_INF_KEY_COMBO01 + i);
 	}
 
 	//ペーストキー設定名を作成
@@ -239,13 +239,13 @@ BOOL COptKeySet::OnInitDialog()
 	m_ctrlCopyKey.SetHotKey(uCopyKey,uCopyMod);
 
 	CString strRes;
-	strRes.LoadString(APP_INF_KEY_LIST_CAPTION01);
+	(void)strRes.LoadString(APP_INF_KEY_LIST_CAPTION01);
 	m_ctrlIniList.InsertColumn(0,strRes, LVCFMT_LEFT, 172);
-	strRes.LoadString(APP_INF_KEY_LIST_CAPTION02);
+	(void)strRes.LoadString(APP_INF_KEY_LIST_CAPTION02);
 	m_ctrlIniList.InsertColumn(1,strRes, LVCFMT_LEFT, 60);
-	strRes.LoadString(APP_INF_KEY_LIST_CAPTION03);
+	(void)strRes.LoadString(APP_INF_KEY_LIST_CAPTION03);
 	m_ctrlIniList.InsertColumn(2,strRes, LVCFMT_LEFT, 78);
-	strRes.LoadString(APP_INF_KEY_LIST_CAPTION04);
+	(void)strRes.LoadString(APP_INF_KEY_LIST_CAPTION04);
 	m_ctrlIniList.InsertColumn(3,strRes, LVCFMT_LEFT, 78);
 	ListView_SetExtendedListViewStyle(m_ctrlIniList.GetSafeHwnd(),LVS_EX_FULLROWSELECT);
 
@@ -377,7 +377,7 @@ void COptKeySet::OnOptKeyDalete()
 	if(m_nSelItem > -1) {
 		CString strBuff,strCaption;
 		CString strRes;
-		strRes.LoadString(APP_MES_DELETE_OK);
+		(void)strRes.LoadString(APP_MES_DELETE_OK);
 		strBuff.Format(strRes,m_dataPtrSelect->m_strTitle);
 		int nRet = AfxMessageBox(strBuff,MB_YESNO|MB_ICONEXCLAMATION|MB_APPLMODAL);
 		if(nRet == IDYES) {

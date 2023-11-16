@@ -156,7 +156,7 @@ void COptFifo::OnFilePaste()
 void COptFifo::File(int id)
 {
 	CString strRes;
-	strRes.LoadString(APP_INF_FILE_FILTER4);
+	(void)strRes.LoadString(APP_INF_FILE_FILTER4);
 	CFileDialog openFileDialog(TRUE, _T("wav"), NULL, OFN_FILEMUSTEXIST, strRes);
 	openFileDialog.m_ofn.lpstrInitialDir = theApp.m_ini.m_strAppPath;
 	if (openFileDialog.DoModal() == IDOK) {

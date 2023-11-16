@@ -35,7 +35,7 @@ static char THIS_FILE[] = __FILE__;
 //---------------------------------------------------
 BOOL CALLBACK MonitorEnumFunc(HMONITOR hMonitor,HDC hdc,LPRECT rect,LPARAM lParam)
 {
-    MONITORINFOEX MonitorInfoEx;
+    MONITORINFOEX MonitorInfoEx = {};
     static int count=0;
 
 	CArray<RECT,RECT> *pArray;
@@ -219,18 +219,18 @@ CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD), m_strVersion(_T(""))
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
 	TCHAR fileName[MAX_PATH + 1];
-	::GetModuleFileName(NULL, fileName, sizeof(fileName));
+	::GetModuleFileName(NULL, fileName, MAX_PATH + 1); // TODO: Check return value
 	DWORD bufSize = ::GetFileVersionInfoSize(fileName, NULL);
 	BYTE* pVersion = new BYTE[bufSize];
 	if (::GetFileVersionInfo(fileName, NULL, bufSize, pVersion)) {
 		UINT queryLen;
-		VS_FIXEDFILEINFO* pFileInfo;
+		VS_FIXEDFILEINFO* pFileInfo = nullptr;
 		::VerQueryValue(pVersion, _T("\\"), (void**)&pFileInfo, &queryLen);
-		WORD* pLangCode;
+		WORD* pLangCode = nullptr;
 		::VerQueryValue(pVersion, _T("\\VarFileInfo\\Translation"), (void**)&pLangCode, &queryLen);
 		CString subBlock;
 		subBlock.Format(_T("\\StringFileInfo\\%04X%04X\\ProductVersion"), pLangCode[0], pLangCode[1]);
-		TCHAR* pStrInfo;
+		TCHAR* pStrInfo = nullptr;
 		::VerQueryValue(pVersion, (LPTSTR)(LPCTSTR)subBlock, (void**)&pStrInfo, &queryLen);
 		m_strVersion.Format(_T("%s Version %s"), ABOUT_NAME, pStrInfo);
 	}
@@ -274,8 +274,8 @@ bool CCharu3App::init()
 					m_ini.m_strDataFormat = DAT_FORMAT;
 					m_ini.writeEnvInitData();
 					CString text, caption;
-					text.LoadString(APP_MES_NEWFILE_READY);
-					caption.LoadStringW(AFX_IDS_APP_TITLE);
+					(void)text.LoadString(APP_MES_NEWFILE_READY);
+					(void)caption.LoadStringW(AFX_IDS_APP_TITLE);
 					MessageBox(m_hSelfWnd, text, caption, MB_OK | MB_ICONINFORMATION);
 					ok = true;
 				}
@@ -284,8 +284,8 @@ bool CCharu3App::init()
 			case IDC_OPEN:
 				if (SelectFile()) {
 					CString text, caption;
-					text.LoadString(APP_MES_DATA_READY);
-					caption.LoadStringW(AFX_IDS_APP_TITLE);
+					(void)text.LoadString(APP_MES_DATA_READY);
+					(void)caption.LoadStringW(AFX_IDS_APP_TITLE);
 					MessageBox(m_hSelfWnd, text, caption, MB_OK | MB_ICONINFORMATION);
 					ok = true;
 				}
@@ -331,14 +331,14 @@ bool CCharu3App::init()
 bool CCharu3App::SelectFile()
 {
 	CString strDisplay, strPattern;
-	strDisplay.LoadString(APP_INF_FILE_FILTER_C3D_DISPLAY);
-	strPattern.LoadString(APP_INF_FILE_FILTER_C3D_PATTERN);
+	(void)strDisplay.LoadString(APP_INF_FILE_FILTER_C3D_DISPLAY);
+	(void)strPattern.LoadString(APP_INF_FILE_FILTER_C3D_PATTERN);
 	CString strFilter = strDisplay + _T('\0') + strPattern + _T('\0');
 	for (std::vector<RW_PLUGIN>::iterator it = m_pTree->m_rwPlugin.begin(); it != m_pTree->m_rwPlugin.end(); it++) {
 		CString strFormat, strDisplay, strPattern;
-		strFormat.LoadString(APP_INF_FILE_FILTER_FMT_DISPLAY);
+		(void)strFormat.LoadString(APP_INF_FILE_FILTER_FMT_DISPLAY);
 		strDisplay.Format(strFormat, it->m_strFormatName, it->m_strExtension);
-		strFormat.LoadString(APP_INF_FILE_FILTER_FMT_PATTERN);
+		(void)strFormat.LoadString(APP_INF_FILE_FILTER_FMT_PATTERN);
 		strPattern.Format(strFormat, it->m_strExtension);
 		strFilter = strFilter + strDisplay + _T('\0') + strPattern + _T('\0'); // NOTE: Don't use operator +=
 	}
@@ -380,7 +380,7 @@ bool CCharu3App::SelectFile()
 		}
 		else {
 			CString strRes;
-			strRes.LoadString(APP_MES_UNKNOWN_FORMAT);
+			(void)strRes.LoadString(APP_MES_UNKNOWN_FORMAT);
 			AfxMessageBox(strRes, MB_ICONEXCLAMATION, 0);
 			return false;
 		}
@@ -396,9 +396,9 @@ bool CCharu3App::SelectFile()
 CString CCharu3App::NewFile()
 {
 	CString strTitle, strDisplay, strPattern;
-	strTitle.LoadString(APP_INF_EXPORT_CAPTION);
-	strDisplay.LoadString(APP_INF_FILE_FILTER_C3D_DISPLAY);
-	strPattern.LoadString(APP_INF_FILE_FILTER_C3D_PATTERN);
+	(void)strTitle.LoadString(APP_INF_EXPORT_CAPTION);
+	(void)strDisplay.LoadString(APP_INF_FILE_FILTER_C3D_DISPLAY);
+	(void)strPattern.LoadString(APP_INF_FILE_FILTER_C3D_PATTERN);
 	CString strFilter = strDisplay + _T('\0') + strPattern + _T('\0') + _T('\0') + _T('\0');
 
 		OPENFILENAME param;
@@ -457,7 +457,7 @@ void CCharu3App::registerHotkey()
 	}
 	if(!RegisterHotKey(NULL,HOTKEY_POPUP,uMod,uVK)) {//ポップアップキー
 		CString strRes;
-		strRes.LoadString(APP_MES_FAILURE_HOTKEY);
+		(void)strRes.LoadString(APP_MES_FAILURE_HOTKEY);
 
 		if(m_ini.m_bDebug) {
 			CGeneral::writeLog(m_ini.m_strDebugLog,_T("False hotkey setting popup\n"),_ME_NAME_,__LINE__);
@@ -478,7 +478,7 @@ void CCharu3App::registerHotkey()
 	}
 	if(!RegisterHotKey(NULL,HOTKEY_FIFO,uMod,uVK)) {//履歴FIFOキー
 		CString strRes;
-		strRes.LoadString(APP_MES_FAILURE_HOTKEY);
+		(void)strRes.LoadString(APP_MES_FAILURE_HOTKEY);
 
 		if(m_ini.m_bDebug) {
 			CGeneral::writeLog(m_ini.m_strDebugLog,_T("False hotkey setting stuckmode\n"),_ME_NAME_,__LINE__);
@@ -675,7 +675,7 @@ int CCharu3App::getKeycode(TCHAR *szKeyName, bool scanLayout)
 //---------------------------------------------------
 bool CCharu3App::setAppendKeyInit(HWND hTopWindow,COPYPASTE_KEY *keySet)
 {
-	TCHAR strWindowName[1024];
+	TCHAR strWindowName[1024] = {};
 	*strWindowName = (TCHAR)NULL;
 	CString strWinName;
 	bool isRet = false;
@@ -832,7 +832,7 @@ void CCharu3App::closeTreeWindow(int nRet)
 
 		if(m_ini.m_bDebug) {
 			CString strText;
-			strText.Format(_T("setFocusInfo active:%x focus:%x\n"), m_focusInfo.m_hActiveWnd, m_focusInfo.m_hFocusWnd);
+			strText.Format(_T("setFocusInfo active:%p focus:%p\n"), m_focusInfo.m_hActiveWnd, m_focusInfo.m_hFocusWnd);
 			CGeneral::writeLog(m_ini.m_strDebugLog,strText,_ME_NAME_,__LINE__);
 		}
 
@@ -878,7 +878,7 @@ void CCharu3App::closeTreeWindow(int nRet)
 
 			if(m_ini.m_bDebug) {
 				CString strText;
-				strText.Format(_T("closeTreeWindow sel:%s clip:%s title:\n"),strSelect.GetString(),strClip.GetString(),data.m_strTitle.GetString());
+				strText.Format(_T("closeTreeWindow sel:%s clip:%s title:%s\n"), strSelect.GetString(), strClip.GetString(), data.m_strTitle.GetString());
 				CGeneral::writeLog(m_ini.m_strDebugLog,strText,_ME_NAME_,__LINE__);
 			}
 			playData(data,strClip,strSelect,isPaste);
@@ -925,7 +925,7 @@ void CCharu3App::SaveData()
 	}
 
 	CString strRes;
-	strRes.LoadString(APP_MES_FAILURE_DATA_SAVE);
+	(void)strRes.LoadString(APP_MES_FAILURE_DATA_SAVE);
 	AfxMessageBox(strRes, MB_ICONEXCLAMATION, 0);
 }
 
@@ -956,7 +956,7 @@ void CCharu3App::playData(STRING_DATA data, CString strClip, CString strSelect, 
 	if(isPaste) {
 		if(m_ini.m_bDebug) {
 			CString strText;
-			strText.Format(_T("playData active:%x focus:%x\n"),m_focusInfo.m_hActiveWnd,m_focusInfo.m_hFocusWnd);
+			strText.Format(_T("playData active:%p focus:%p\n"), m_focusInfo.m_hActiveWnd, m_focusInfo.m_hFocusWnd);
 			CGeneral::writeLog(m_ini.m_strDebugLog,strText,_ME_NAME_,__LINE__);
 		}
 
@@ -1112,7 +1112,7 @@ void CCharu3App::playHotItem(int nTarget)
 
 					if(m_ini.m_bDebug) {
 						CString strText;
-						strText.Format(_T("Direct paste data %s active:%x focus:%x\n"),strPaste.GetString(),m_focusInfo.m_hActiveWnd,m_focusInfo.m_hFocusWnd);
+						strText.Format(_T("Direct paste data %s active:%p focus:%p\n"), strPaste.GetString(), m_focusInfo.m_hActiveWnd, m_focusInfo.m_hFocusWnd);
 						CGeneral::writeLog(m_ini.m_strDebugLog,strText,_ME_NAME_,__LINE__);
 					}
 
@@ -1157,7 +1157,7 @@ CString CCharu3App::getSelectString(COPYPASTE_KEY key,HWND hWnd)
 	if(!hWnd)	hWnd = m_focusInfo.m_hFocusWnd;
 	CString strSelect;
 
-	TCHAR strWindowName[1024];
+	TCHAR strWindowName[1024] = {};
 	*strWindowName = (TCHAR)NULL;
 	CString strWinName;
 	int i;
@@ -1217,7 +1217,7 @@ CString CCharu3App::getSelectString(COPYPASTE_KEY key,HWND hWnd)
 void CCharu3App::execKeyMacro(CString strKeyMacro)
 {
 	TCHAR *szKeyMacro,strKeyCode[256],*szSplit;
-	int nCount,nSleep,nKey[16],i,nKeyCount;
+	int nCount, nSleep, nKey[16] = {}, i, nKeyCount;
 	szKeyMacro  = strKeyMacro.GetBuffer(strKeyMacro.GetLength());
 
 	//貼り付け後のスリープを取得
@@ -1265,7 +1265,11 @@ void CCharu3App::execData(CString strPaste,COPYPASTE_KEY key,HTREEITEM hTargetIt
 {
 	HTREEITEM hMacroItem;
 	CString strCut,strKeyMacro;
-	int nStart = 0,nFoundStart,nFoundEnd,nMacroLenS,nMacroLenE;
+	int nStart = 0;
+	int nFoundStart = -1;
+	int nFoundEnd;
+	int nMacroLenS;
+	int nMacroLenE;
 
 	//ビフォアキー処理
 	if(hTargetItem)	hMacroItem  = m_pTree->searchParentOption(hTargetItem,_T("beforkey"));
@@ -1302,7 +1306,7 @@ void CCharu3App::execData(CString strPaste,COPYPASTE_KEY key,HTREEITEM hTargetIt
 //			pasteData(strCut,key,hWnd);//貼り付け
 //			m_strlClipBackup = strCut;
 
-			TCHAR strWindowName[1024];
+			TCHAR strWindowName[1024] = {};
 			*strWindowName = (char)NULL;
 			CString strWinName;
 			int i;
@@ -1365,7 +1369,13 @@ void CCharu3App::pasteData(CString strPaste,COPYPASTE_KEY key,HWND hWnd)
 
 	if(m_ini.m_bDebug) {
 		CString strText;
-		strText.Format(_T("pasteData %d %s %x %x active:%x focus:%x\n"),key.m_nMessage,strPaste.GetString(),key.m_uMod_Paste,key.m_uVK_Paste,m_focusInfo.m_hActiveWnd,m_focusInfo.m_hFocusWnd);
+		strText.Format(_T("pasteData %d %s %x %x active:%p focus:%p\n"),
+			key.m_nMessage,
+			strPaste.GetString(),
+			key.m_uMod_Paste,
+			key.m_uVK_Paste,
+			m_focusInfo.m_hActiveWnd,
+			m_focusInfo.m_hFocusWnd);
 		CGeneral::writeLog(m_ini.m_strDebugLog,strText,_ME_NAME_,__LINE__);
 	}
 }
@@ -1465,7 +1475,7 @@ CString CCharu3App::convertMacro(STRING_DATA* SourceData, CString strSelect, CSt
 	CString strPlugStart = _T("$PLUG-IN<"),strPlugEnd = _T(">$PLUG-IN");
 
 	//マクロ誤処理対策
-	TCHAR strMark[2];
+	TCHAR strMark[2] = {};
 	strMark[0] = 0x7f;
 	strMark[1] = NULL;
 	bool isSelect = false,isClip = false;
@@ -1654,14 +1664,14 @@ CString CCharu3App::convertMacro(STRING_DATA* SourceData, CString strSelect, CSt
 						}
 						else{
 							CString strRes;
-							strRes.LoadString(APP_MES_NO_ENTRY_FUNC);
+							(void)strRes.LoadString(APP_MES_NO_ENTRY_FUNC);
 							AfxMessageBox(strRes,MB_ICONEXCLAMATION | MB_SYSTEMMODAL,0);
 						}
 						FreeLibrary(hDLL);
 					}
 					else{
 						CString strMessage,strRes;
-						strRes.LoadString(APP_MES_NOT_FOUND);
+						(void)strRes.LoadString(APP_MES_NOT_FOUND);
 						strMessage.Format(strRes,strDllName);
 						AfxMessageBox(strMessage,MB_ICONEXCLAMATION | MB_SYSTEMMODAL,0);
 					}
@@ -1694,9 +1704,6 @@ CString CCharu3App::convertMacro(STRING_DATA* SourceData, CString strSelect, CSt
 			}
 		}
 		if(strBuff2.Find(strShellStart) != -1) {//シェル
-			STARTUPINFO sinf;
-			PROCESS_INFORMATION pri;
-			ZeroMemory(&sinf,sizeof(sinf));
 			int nShellLength = strShellStart.GetLength();
 			int nRelateLength = strRelateStart.GetLength();
 
@@ -1707,18 +1714,24 @@ CString CCharu3App::convertMacro(STRING_DATA* SourceData, CString strSelect, CSt
 				strBuff2.Delete(nTagStart,nShellLength);
 			}
 			else {
-				while(strBuff2.Find(strShellStart) != -1) {
-					int nMacroStart = strBuff2.Find(strShellStart);
-					int nShellStart = nMacroStart + nShellLength;//開始位置取得
-					int nShellEnd = strBuff2.Find(strShellEnd,nShellStart);//終わり位置取得
-					if(nShellEnd == -1) nShellEnd = strBuff2.GetLength();
+				while (strBuff2.Find(strShellStart) >= 0) {
+					int macroStartIndex = strBuff2.Find(strShellStart);
+					int commandStartIndex = macroStartIndex + nShellLength;
+					int commandEndIndex = strBuff2.Find(strShellEnd, commandStartIndex);
+					if (commandEndIndex < 0) commandEndIndex = strBuff2.GetLength();
+					CString strCommand = strBuff2.Mid(commandStartIndex, commandEndIndex - commandStartIndex);
 
-					CString strShell;
-					strShell = strBuff2.Mid(nShellStart,nShellEnd - nShellStart);//コマンドライン切り出し
+					STARTUPINFO si;
+					PROCESS_INFORMATION pi;
+					ZeroMemory(&si, sizeof(si));
+					si.cb = sizeof(si);
+					ZeroMemory(&pi, sizeof(pi));
+					CreateProcess(NULL, strCommand.GetBuffer(strCommand.GetLength()), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
+					WaitForInputIdle(pi.hProcess, INFINITE);
+					CloseHandle(pi.hProcess);
+					CloseHandle(pi.hThread);
 
-					CreateProcess(NULL,strShell.GetBuffer(strShell.GetLength()),NULL,NULL,FALSE,0,NULL,NULL,&sinf,&pri);//起動
-					WaitForInputIdle(pri.hProcess,INFINITE);
-					strBuff2.Delete(nMacroStart,nShellLength + nShellEnd  - nMacroStart);//タグを削除
+					strBuff2.Delete(macroStartIndex, nShellLength + commandEndIndex - macroStartIndex);//タグを削除
 				}
 			}
 		}
@@ -1837,7 +1850,7 @@ void CCharu3App::fifoClipbord()
 
 	if (m_ini.m_fifo.m_nFifo) {
 		CString text;
-		HTREEITEM hItem = m_pTree->getOneTimeText(m_ini.m_fifo.m_nFifo);
+		HTREEITEM hItem = m_pTree->getOneTimeItem(m_ini.m_fifo.m_nFifo);
 		if (hItem) {
 			text = m_pTree->getDataPtr(hItem)->m_strData;
 			m_pTree->deleteData(hItem);
@@ -1870,7 +1883,7 @@ void CCharu3App::fifoClipbord()
 	keybd_event(m_keySet.m_uVK_Paste, 0, 0, 0);
 	RegisterHotKey(NULL, HOTKEY_PASTE, m_keySet.m_uMod_Paste, m_keySet.m_uVK_Paste);
 
-	if (m_ini.m_fifo.m_bAutoOff && !m_pTree->getOneTimeText(m_ini.m_fifo.m_nFifo)) {
+	if (m_ini.m_fifo.m_bAutoOff && !m_pTree->getOneTimeItem(m_ini.m_fifo.m_nFifo)) {
 		toggleStockMode(); // Turn off stock mode due to one-time item is gone
 	}
 }
@@ -2266,7 +2279,7 @@ void CCharu3App::OnExport()
 	if (file != _T("")) {
 		if (!m_pTree->saveDataToFile(file, DAT_FORMAT, NULL)) {
 			CString strRes;
-			strRes.LoadString(APP_MES_FAILURE_DATA_SAVE);
+			(void)strRes.LoadString(APP_MES_FAILURE_DATA_SAVE);
 			AfxMessageBox(strRes, MB_ICONEXCLAMATION, 0);
 		}
 	}

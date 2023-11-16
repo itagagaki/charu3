@@ -52,7 +52,17 @@ namespace {
 //関数名	CCharu3Tree
 //機能		コンストラクタ
 //---------------------------------------------------
-CCharu3Tree::CCharu3Tree() : m_dragState(DRAGSTATE_NOT_DRAGGING), m_hPrevTarget(nullptr), m_ImageList(nullptr), m_nMaxID(0), m_nSelectID(0)
+CCharu3Tree::CCharu3Tree()
+	: m_dragState(DragState::NOT_DRAGGING)
+	, m_nHoverTick(0)
+	, m_hDragItem(nullptr)
+	, m_hDragTarget(nullptr)
+	, m_hPrevTarget(nullptr)
+	, m_pDragImage(nullptr)
+	, m_ImageList(nullptr)
+	, m_pMaxID(nullptr)
+	, m_pSelectID(nullptr)
+	, m_pRecNumber(nullptr)
 {
 	m_MyStringList.clear();
 }
@@ -270,11 +280,12 @@ bool CCharu3Tree::saveDataToFile(CString strFileName,CString strPlugin,HTREEITEM
 		return SaveDataWithPlugin(strFileName,strPlugin,&tmplist);
 	}
 
-	FILE *fFile;
-
-	//データを保存する
+	FILE *fFile = nullptr;
 	if (_tfopen_s(&fFile, strFileName, _T("wb")) != 0) {
-		return false; //ファイルを開く
+		return false;
+	}
+	if (nullptr == fFile) {
+		return false;
 	}
 
 #ifdef _UNICODE
@@ -341,7 +352,7 @@ bool CCharu3Tree::SaveDataWithPlugin(CString strFileName, CString strPlugin, std
 
 	if(!getPlugin(strPlugin,&plugin)) {
 		CString strRes;
-		strRes.LoadString(APP_MES_NOT_FOUND_WRITEPLUGIN);
+		(void)strRes.LoadString(APP_MES_NOT_FOUND_WRITEPLUGIN);
 		AfxMessageBox(strRes,MB_ICONEXCLAMATION,0);
 		return isRet;
 	}
@@ -581,7 +592,7 @@ bool CCharu3Tree::LoadDataWithPlugin(CString strFileName, CString strPlugin, std
 
 	if(!getPlugin(strPlugin,&plugin)) {
 		CString strRes;
-		strRes.LoadString(APP_MES_NOT_FOUND_READPLUGIN);
+		(void)strRes.LoadString(APP_MES_NOT_FOUND_READPLUGIN);
 		AfxMessageBox(strRes,MB_ICONEXCLAMATION,0);
 		return false;
 	}
@@ -721,7 +732,7 @@ bool CCharu3Tree::convertMacroPlugin(STRING_DATA* SourceData, CString* strRet, C
 
 	if(!isFound) {
 		CString strRes;
-		strRes.LoadString(APP_MES_NOT_FOUND_MACROPLUGIN);
+		(void)strRes.LoadString(APP_MES_NOT_FOUND_MACROPLUGIN);
 		AfxMessageBox(strRes,MB_ICONEXCLAMATION,0);
 		return isRet;
 	}
@@ -773,7 +784,7 @@ void CCharu3Tree::copyData(int nParentID, HTREEITEM hParentTreeItem, std::list<S
 
 			hTreeItem = InsertItem(&TreeCtrlItem);//インサート
 
-			if(*m_nSelectID == it->m_nMyID) SelectItem(hTreeItem);
+			if(*m_pSelectID == it->m_nMyID) SelectItem(hTreeItem);
 
 			//フォルダなら再帰呼び出し
 			if(it->m_cKind & KIND_FOLDER_ALL) {
@@ -867,7 +878,7 @@ HTREEITEM CCharu3Tree::mergeTreeData(HTREEITEM hTreeItem, std::list<STRING_DATA>
 		int nParentID;
 		CString strRes;
 		if(!isRoot) {//インポートフォルダを作る
-			strRes.LoadString(APP_INF_IMPORT_FOLDERNAME);
+			(void)strRes.LoadString(APP_INF_IMPORT_FOLDERNAME);
 			hTreeItem = addNewFolder(hTreeItem,strRes);//親フォルダを作る
 			if(!hTreeItem) return nullptr;
 			folder = getData(hTreeItem);
@@ -1290,7 +1301,7 @@ HTREEITEM CCharu3Tree::searchItem(HTREEITEM hStartItem, bool backward)
 	{
 		CString& strKeywords = theApp.m_ini.m_strSearchKeywords;
 		CString tokens, resToken;
-		tokens.LoadString(APP_INF_2BYTESPACE);
+		(void)tokens.LoadString(APP_INF_2BYTESPACE);
 		tokens += _T(" \t\n\v\f\r");
 		int curPos = 0;
 		resToken = strKeywords.Tokenize(tokens, curPos);
@@ -1399,24 +1410,19 @@ HTREEITEM CCharu3Tree::getTrueNextItem(HTREEITEM hTreeItem)
 
 HTREEITEM CCharu3Tree::getTruePrevItem(HTREEITEM hTreeItem)
 {
-	HTREEITEM hRetTreeItem;
-
-	if (!hTreeItem) {
-		hRetTreeItem = getLastSiblingItem(GetRootItem());
-	}
-	else {
+	HTREEITEM hRetTreeItem = nullptr;
+	if (hTreeItem) {
 		hRetTreeItem = GetPrevSiblingItem(hTreeItem);
-	}
-	if (!hRetTreeItem) {
-		HTREEITEM hParentItem = hTreeItem;
-		do {
-			hParentItem = GetParentItem(hParentItem);
-			if (!hParentItem) {
-				hRetTreeItem = nullptr;
-				break;
-			}
-			hRetTreeItem = GetPrevSiblingItem(hParentItem);
-		} while (hParentItem != GetRootItem() && !hRetTreeItem);
+		if (!hRetTreeItem) {
+			HTREEITEM hParentItem = hTreeItem;
+			do {
+				hParentItem = GetParentItem(hParentItem);
+				if (!hParentItem) {
+					break;
+				}
+				hRetTreeItem = GetPrevSiblingItem(hParentItem);
+			} while (hParentItem != GetRootItem() && !hRetTreeItem);
+		}
 	}
 	if (!hRetTreeItem) {
 		hRetTreeItem = getLastSiblingItem(GetRootItem());
@@ -1562,32 +1568,26 @@ CString CCharu3Tree::makeTitle(CString strData,int nTitleLength)
 }
 
 //---------------------------------------------------
-//関数名	getOneTimeText(bool isFirst)
+//関数名	getOneTimeItem(bool isFirst)
 //機能		最初か最後の一時項目を取得
 //---------------------------------------------------
-HTREEITEM CCharu3Tree::getOneTimeText(int nType)
+HTREEITEM CCharu3Tree::getOneTimeItem(int nType)
 {
-	CString strRet;
-	STRING_DATA data;
 	HTREEITEM hRet = nullptr;
 
 	//先入れ先出しの場合 FIFO 一番下の一時項目を探す
 	int nSize = m_MyStringList.size();
 	HTREEITEM hTreeItem = GetRootItem();
-	for(int i = 0; i < nSize; hTreeItem = GetNextItem(hTreeItem,TVGN_NEXT),i++) {
-		if(hTreeItem) {
-			data = getData(hTreeItem);
-			if(data.m_cKind & KIND_ONETIME) {
-				if(theApp.m_ini.m_bDebug) {
-					CString strText;
-					strText.Format(_T("getOneTimeText \"%s\" %s %d\n"),data.m_strTitle.GetString(),data.m_strData.GetString(),data.m_cKind);
-					CGeneral::writeLog(theApp.m_ini.m_strDebugLog,strText,_ME_NAME_,__LINE__);
-				}
-
-				strRet = data.m_strData;
-				hRet = hTreeItem;
-				if(nType == 2) break;
+	for (int i = 0; i < nSize && hTreeItem; i++, hTreeItem = GetNextItem(hTreeItem, TVGN_NEXT)) {
+		STRING_DATA* data = getDataPtr(hTreeItem);
+		if (data->m_cKind & KIND_ONETIME) {
+			hRet = hTreeItem;
+			if (theApp.m_ini.m_bDebug) {
+				CString strText;
+				strText.Format(_T("getOneTimeItem \"%s\" %s %d\n"), data->m_strTitle.GetString(), data->m_strData.GetString(), data->m_cKind);
+				CGeneral::writeLog(theApp.m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
 			}
+			if (nType == 2) break;
 		}
 	}
 	return hRet;
@@ -1697,7 +1697,7 @@ CString CCharu3Tree::getDataOptionStr(CString strData,CString strKind)
 
 		if(theApp.m_ini.m_bDebug) {
 			CString strText;
-			strText.Format(_T("getDataOptionHex \"%s\" %s\n"),strKind.GetString(),strRet);
+			strText.Format(_T("getDataOptionHex \"%s\" %s\n"), strKind.GetString(), strRet.GetString());
 			CGeneral::writeLog(theApp.m_ini.m_strDebugLog,strText,_ME_NAME_,__LINE__);
 		}
 	}
@@ -1711,7 +1711,7 @@ CString CCharu3Tree::getDataOptionStr(CString strData,CString strKind)
 void CCharu3Tree::addDataToRecordFolder(STRING_DATA data,CString strClipBkup)
 {
 	int nSize = m_MyStringList.size(),nRirekiCount,nIsLock,i,nDoDuplication;
-	int nNumber = *m_nRecNumber;
+	int nNumber = *m_pRecNumber;
 
 	STRING_DATA parentData;
 	HTREEITEM hTreeItem,hStart = nullptr;
@@ -1719,7 +1719,7 @@ void CCharu3Tree::addDataToRecordFolder(STRING_DATA data,CString strClipBkup)
 	if(theApp.m_ini.m_bDebug) {
 		CString strText;
 		CGeneral::writeLog(theApp.m_ini.m_strDebugLog,_T("addDataToRecordFolder\n"),_ME_NAME_,__LINE__);
-		strText.Format(_T("hRootItem:%d TreeSize:%d\n"),GetRootItem(),nSize);
+		strText.Format(_T("hRootItem:%p TreeSize:%d\n"), GetRootItem(), nSize);
 		CGeneral::writeLog(theApp.m_ini.m_strDebugLog,strText,_ME_NAME_,__LINE__);
 	}
 //	hTreeItem = (HTREEITEM)::SendMessage(m_hWnd, TVM_GETNEXTITEM, TVGN_ROOT, 0);
@@ -1730,11 +1730,11 @@ void CCharu3Tree::addDataToRecordFolder(STRING_DATA data,CString strClipBkup)
 		if(parentData.m_cKind & KIND_RIREKI) {
 			nDoDuplication = getDataOption(parentData.m_strMacro,_T("duplicationcheck"));
 			if((nDoDuplication && strClipBkup != data.m_strData) || !nDoDuplication) {
-				if(*m_nRecNumber == nNumber)	nNumber++;
+				if(*m_pRecNumber == nNumber)	nNumber++;
 
 				if(theApp.m_ini.m_bDebug) {
 					CString strText;
-					strText.Format(_T("number:%d handle:%d title:%s ID:%d\n"),i,hTreeItem,parentData.m_strTitle.GetString(),parentData.m_nMyID);
+					strText.Format(_T("number:%d handle:%p title:%s ID:%d\n"), i, hTreeItem, parentData.m_strTitle.GetString(), parentData.m_nMyID);
 					CGeneral::writeLog(theApp.m_ini.m_strDebugLog,strText,_ME_NAME_,__LINE__);
 				}
 
@@ -1757,7 +1757,7 @@ void CCharu3Tree::addDataToRecordFolder(STRING_DATA data,CString strClipBkup)
 				data.m_strTitle = strTitle;
 
 				if(getDataOption(parentData.m_strMacro,_T("number"))) {//番号をつけるかどうか
-					data.m_strTitle.Format(_T("%02d : %s"),*m_nRecNumber,strTitle.GetString());
+					data.m_strTitle.Format(_T("%02d : %s"),*m_pRecNumber,strTitle.GetString());
 					if(nNumber > nRirekiCount) nNumber = 0;
 				}
 
@@ -1786,7 +1786,7 @@ void CCharu3Tree::addDataToRecordFolder(STRING_DATA data,CString strClipBkup)
 			}
 		}
 	}
-	*m_nRecNumber = nNumber;
+	*m_pRecNumber = nNumber;
 }
 
 //---------------------------------------------------
@@ -1808,7 +1808,7 @@ void CCharu3Tree::archiveHistory(HTREEITEM hTreeItem, int nRirekiCount)
 			}
 			STRING_DATA data;
 			data.m_cKind = KIND_FOLDER;
-			data.m_strTitle.LoadString(APP_INF_CLASS_HISTORY);
+			(void)data.m_strTitle.LoadString(APP_INF_CLASS_HISTORY);
 			addData(hFirstFolder,data);//階層履歴フォルダを作成
 			hFirstFolder = getFirstFolder(hTreeItem);//改めてフォルダ位置を取得
 		}
@@ -2078,44 +2078,51 @@ void CCharu3Tree::OnMouseMove(UINT nFlags, CPoint point)
 				}
 				if (pTargetData->m_cKind & FOLDER_OPEN && ItemHasChildren(hTarget)) {
 					if (ptTree.y < rect.top + height / 3) {
-						m_dragState = DRAGSTATE_INSERT_BEFORE;
+						m_dragState = DragState::INSERT_BEFORE;
 					}
 					else {
-						m_dragState = DRAGSTATE_PLACE_INSIDE;
+						m_dragState = DragState::PLACE_INSIDE;
 					}
 				}
 				else {
 					if (ptTree.y < rect.top + height / 3) {
-						m_dragState = DRAGSTATE_INSERT_BEFORE;
+						m_dragState = DragState::INSERT_BEFORE;
 					}
 					else if (ptTree.y > rect.bottom - height / 3) {
-						m_dragState = DRAGSTATE_INSERT_AFTER;
+						m_dragState = DragState::INSERT_AFTER;
 					}
 					else {
-						m_dragState = DRAGSTATE_PLACE_INSIDE;
+						m_dragState = DragState::PLACE_INSIDE;
 					}
 				}
 			}
 			else {
 				if (ptTree.y < rect.top + height / 2) {
-					m_dragState = DRAGSTATE_INSERT_BEFORE;
+					m_dragState = DragState::INSERT_BEFORE;
 				}
 				else {
-					m_dragState = DRAGSTATE_INSERT_AFTER;
+					m_dragState = DragState::INSERT_AFTER;
 				}
 			}
-			if (DRAGSTATE_PLACE_INSIDE == m_dragState) {
+			if (DragState::PLACE_INSIDE == m_dragState) {
 				SelectItem(m_hDragTarget);
 				SetInsertMark(NULL);
 			}
 			else {
 				SelectItem(NULL);
-				SetInsertMark(hTarget, DRAGSTATE_INSERT_AFTER == m_dragState);
+				SetInsertMark(hTarget, DragState::INSERT_AFTER == m_dragState);
 			}
 		}
 		else {
 			SelectItem(NULL);
+#pragma warning(push)
+#pragma warning(disable:6387)
+			// SetInsertMark is declared as:
+			//     BOOL SetInsertMark(_In_ HTREEITEM hItem, _In_ BOOL fAfter = TRUE);
+			// The specification is to remove the insert mark if hItem is NULL.
+			// But SetInsertMark(NULL) warns C6387 because hItem has an _In_ annotation. Annoying!
 			SetInsertMark(NULL);
+#pragma warning(pop)
 		}
 		m_hDragTarget = hTarget;
 		this->UpdateWindow();
@@ -2166,7 +2173,7 @@ void CCharu3Tree::OnBegindrag(NMHDR* pNMHDR, LRESULT* pResult)
 	SetCapture();
 
 	m_hDragTarget = nullptr;
-	m_dragState = DRAGSTATE_INSERT_AFTER;
+	m_dragState = DragState::INSERT_AFTER;
 	SelectItem(NULL);
 
 	*pResult = 0;
@@ -2184,7 +2191,14 @@ void CCharu3Tree::OnLButtonUp(UINT nFlags, CPoint point)
 	m_pDragImage->EndDrag();
 	delete m_pDragImage;
 	ReleaseCapture();
+#pragma warning(push)
+#pragma warning(disable:6387)
+	// SetInsertMark is declared as:
+	//     BOOL SetInsertMark(_In_ HTREEITEM hItem, _In_ BOOL fAfter = TRUE);
+	// The specification is to remove the insert mark if hItem is NULL.
+	// But SetInsertMark(NULL) warns C6387 because hItem has an _In_ annotation. Annoying!
 	SetInsertMark(NULL);
+#pragma warning(pop)
 
 	//アイテムの移動処理をする
 	if(m_hDragTarget && m_hDragTarget != m_hDragItem) {
@@ -2213,14 +2227,14 @@ void CCharu3Tree::OnLButtonUp(UINT nFlags, CPoint point)
 			AddTreeCtrlItem.item.lParam = TreeCtrlItem.lParam;
 
 			// 移動先の親と挿入位置を決定
-			if (pDataTarget->m_cKind & KIND_FOLDER_ALL && DRAGSTATE_PLACE_INSIDE == m_dragState) {
+			if (pDataTarget->m_cKind & KIND_FOLDER_ALL && DragState::PLACE_INSIDE == m_dragState) {
 				AddTreeCtrlItem.hParent = m_hDragTarget;
 				AddTreeCtrlItem.hInsertAfter = TVI_FIRST;
 				pData->m_nParentID = pDataTarget->m_nMyID;
 			}
 			else {
 				AddTreeCtrlItem.hParent = GetParentItem(m_hDragTarget);
-				if (DRAGSTATE_INSERT_BEFORE == m_dragState) {
+				if (DragState::INSERT_BEFORE == m_dragState) {
 					AddTreeCtrlItem.hInsertAfter = GetPrevSiblingItem(m_hDragTarget);
 					if (NULL == AddTreeCtrlItem.hInsertAfter) {
 						AddTreeCtrlItem.hInsertAfter = TVI_FIRST;
@@ -2248,7 +2262,7 @@ void CCharu3Tree::OnLButtonUp(UINT nFlags, CPoint point)
 			AfxGetApp()->DoWaitCursor(0);
 		}
 	}
-	m_dragState = DRAGSTATE_NOT_DRAGGING;
+	m_dragState = DragState::NOT_DRAGGING;
 	CTreeCtrl::OnLButtonUp(nFlags, point);
 }
 

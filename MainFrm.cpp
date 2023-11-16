@@ -36,7 +36,7 @@ END_MESSAGE_MAP()
 //関数名	CMainFrame
 //機能		コンストラクタ
 //---------------------------------------------------
-CMainFrame::CMainFrame()
+CMainFrame::CMainFrame() : m_hIcon(nullptr), m_hStopIcon(nullptr), m_nIcon(), m_hActive(nullptr)
 {
 	setlocale(LC_ALL, "");
 

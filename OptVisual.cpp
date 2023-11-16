@@ -188,7 +188,7 @@ BOOL COptVisual::DestroyWindow()
 void COptVisual::OnOptVsBrows()
 {
 	CString strRes;
-	strRes.LoadString(APP_INF_FILE_FILTER5);
+	(void)strRes.LoadString(APP_INF_FILE_FILTER5);
 	CFileDialog openFileDialog(TRUE, _T("bmp"), NULL, OFN_FILEMUSTEXIST, strRes);
 
 	openFileDialog.m_ofn.lpstrInitialDir = theApp.m_ini.m_strAppPath;
@@ -305,7 +305,7 @@ void COptVisual::ReadStyleFile()
 	CString strFileName;
 	CFileDialog* pFileDialog;
 	CString strRes;
-	strRes.LoadString(APP_INF_FILE_FILTER_VISUAL_PREF);
+	(void)strRes.LoadString(APP_INF_FILE_FILTER_VISUAL_PREF);
 	pFileDialog = new CFileDialog(TRUE, _T("json"), NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, strRes, NULL);
 
 	if (pFileDialog) {

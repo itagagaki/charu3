@@ -43,8 +43,8 @@ namespace {
 	void DrawFrame(CDC* pDC, CRect& rect, COLORREF color)
 	{
 		CPoint point[3];
-		COLORREF colRD[5];
-		COLORREF colLU[5];
+		COLORREF colRD[3] = {};
+		COLORREF colLU[3] = {};
 
 		colRD[1] = colLU[0] = CGeneral::upDownLight(color, 1.2);
 		colRD[2] = colLU[1] = color;
@@ -78,6 +78,7 @@ namespace {
 //---------------------------------------------------
 CMyTreeDialog::CMyTreeDialog(CWnd* pParent /*=NULL*/)
     : CDialog(CMyTreeDialog::IDD, pParent)
+    , m_pTreeCtrl(nullptr)
     , m_selectDataPtr(nullptr)
     , m_isInitOK(false)
     , m_isModal(true)
@@ -87,8 +88,11 @@ CMyTreeDialog::CMyTreeDialog(CWnd* pParent /*=NULL*/)
     , m_dwStartTime(0)
     , m_hDLL(NULL)
     , m_pExStyle(NULL)
+    , m_cFont(nullptr)
     , m_cOlgFont(nullptr)
+    , m_colFrame(0xff9900)
     , m_strQuickKey("")
+    , m_hQuickItem(nullptr)
     , m_bCheckbox(false)
 	, m_bFind(false)
 	, m_findDialog(nullptr)
@@ -388,7 +392,7 @@ void CMyTreeDialog::OnClickMyTree(NMHDR* pNMHDR, LRESULT* pResult)
 	RECT TreeRect,ItemRect;
 	POINT pCursolPos;
 	HTREEITEM hClickItem;
-	UINT Flags;
+	UINT Flags = 0;
 
 	m_pTreeCtrl->GetWindowRect(&TreeRect);
 	GetCursorPos(&pCursolPos);
@@ -885,7 +889,7 @@ void CMyTreeDialog::OnDelete()
 	RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
 	if (nRet == IDYES) {
 		if ((data.m_cKind & KIND_FOLDER_ALL) && m_pTreeCtrl->ItemHasChildren(hTreeItem)) {
-			strMessage.LoadString(APP_MES_DELETE_FOLDER);
+			(void)strMessage.LoadString(APP_MES_DELETE_FOLDER);
 			nRet = AfxMessageBox(strMessage, MB_YESNO | MB_ICONEXCLAMATION | MB_APPLMODAL);
 			RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
 		}
@@ -1005,7 +1009,7 @@ void CMyTreeDialog::OnFolderClear()
 	if (hTreeItem) {
 		//フォルダを再帰で削除
 		CString strRes;
-		strRes.LoadString(APP_MES_FOLDER_CLEAR);
+		(void)strRes.LoadString(APP_MES_FOLDER_CLEAR);
 		int nRet = AfxMessageBox(strRes, MB_YESNO | MB_ICONEXCLAMATION | MB_APPLMODAL);
 		RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
 		if (nRet == IDYES) {
@@ -1044,7 +1048,7 @@ void CMyTreeDialog::OnNewFolder()
 {
 	HTREEITEM hTreeItem = m_pTreeCtrl->GetSelectedItem();
 	CString strRes;
-	strRes.LoadString(APP_INF_NEW_FOLDER);
+	(void)strRes.LoadString(APP_INF_NEW_FOLDER);
 	m_pTreeCtrl->EditLabel(m_pTreeCtrl->addNewFolder(hTreeItem, strRes));
 }
 
@@ -1055,7 +1059,7 @@ void CMyTreeDialog::OnReselectIcons()
 	}
 	m_isModal = true;
 	CString strRes;
-	strRes.LoadString(APP_MES_DECIDE_ICONS);
+	(void)strRes.LoadString(APP_MES_DECIDE_ICONS);
 	int nRet = AfxMessageBox(strRes, MB_YESNO | MB_ICONEXCLAMATION | MB_APPLMODAL);
 	RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
 	if (nRet == IDYES) {
@@ -1123,7 +1127,7 @@ void CMyTreeDialog::OnDataPaste()
 		HTREEITEM hTreeItem = m_pTreeCtrl->GetSelectedItem();
 		STRING_DATA data = m_pTreeCtrl->getData(m_hCopyData);
 		CString strRes;
-		strRes.LoadString(APP_INF_COPY);
+		(void)strRes.LoadString(APP_INF_COPY);
 		data.m_strTitle = data.m_strTitle + strRes;
 		if(m_pTreeCtrl->ItemHasChildren(m_hCopyData)) {
 			if(!m_pTreeCtrl->checkMyChild(m_hCopyData,hTreeItem)) {
@@ -1133,7 +1137,7 @@ void CMyTreeDialog::OnDataPaste()
 			else {
 				m_isModal = true;
 				CString strRes;
-				strRes.LoadString(APP_MES_CANT_COPY);
+				(void)strRes.LoadString(APP_MES_CANT_COPY);
 				AfxMessageBox(strRes,MB_OK|MB_ICONEXCLAMATION|MB_APPLMODAL);
 				m_pTreeCtrl->SetFocus();
 				m_isModal = false;
@@ -1157,14 +1161,14 @@ void CMyTreeDialog::OnImport()
 	m_isModal = true;
 
 	CString strDisplay, strPattern;
-	strDisplay.LoadString(APP_INF_FILE_FILTER_C3D_DISPLAY);
-	strPattern.LoadString(APP_INF_FILE_FILTER_C3D_PATTERN);
+	(void)strDisplay.LoadString(APP_INF_FILE_FILTER_C3D_DISPLAY);
+	(void)strPattern.LoadString(APP_INF_FILE_FILTER_C3D_PATTERN);
 	CString strFilter = strDisplay + _T('\0') + strPattern + _T('\0');
 	for (std::vector<RW_PLUGIN>::iterator it = m_pTreeCtrl->m_rwPlugin.begin(); it != m_pTreeCtrl->m_rwPlugin.end(); it++) {
 		CString strFormat, strDisplay, strPattern;
-		strFormat.LoadString(APP_INF_FILE_FILTER_FMT_DISPLAY);
+		(void)strFormat.LoadString(APP_INF_FILE_FILTER_FMT_DISPLAY);
 		strDisplay.Format(strFormat, it->m_strFormatName, it->m_strExtension);
-		strFormat.LoadString(APP_INF_FILE_FILTER_FMT_PATTERN);
+		(void)strFormat.LoadString(APP_INF_FILE_FILTER_FMT_PATTERN);
 		strPattern.Format(strFormat, it->m_strExtension);
 		strFilter = strFilter + strDisplay + _T('\0') + strPattern + _T('\0'); // NOTE: Don't use operator +=
 	}
@@ -1201,7 +1205,7 @@ void CMyTreeDialog::OnImport()
 
 		CString strRes;
 		CString strMessage;
-		strRes.LoadString(APP_MES_IMPORT_OK);
+		(void)strRes.LoadString(APP_MES_IMPORT_OK);
 		strMessage.Format(strRes, tmplist.size());
 		AfxMessageBox(strMessage, MB_OK | MB_APPLMODAL);
 
@@ -1227,7 +1231,7 @@ void CMyTreeDialog::OnExport()
 		if (file != _T("")) {
 			if (!m_pTreeCtrl->saveDataToFile(file, DAT_FORMAT, hTreeItem)) {
 				CString strRes;
-				strRes.LoadString(APP_MES_FAILURE_DATA_SAVE);
+				(void)strRes.LoadString(APP_MES_FAILURE_DATA_SAVE);
 				AfxMessageBox(strRes, MB_ICONEXCLAMATION, 0);
 			}
 		}
@@ -1256,11 +1260,9 @@ bool CMyTreeDialog::selectByTyping(UINT uKeyCode)
 {
 	bool isRet = false;
 	BYTE byteKey[256];
-	GetKeyboardState(byteKey);//キーボードの状態を取得
-
-	char strbuff[16];
-	//キーを文字に変換 API使用
-	if (ToAsciiEx(uKeyCode,0,byteKey,(LPWORD)strbuff,0,theApp.m_ini.m_keyLayout) == 1) {
+	BOOL valid = GetKeyboardState(byteKey);
+	char strbuff[16] = {};
+	if (valid && ToAsciiEx(uKeyCode,0,byteKey,(LPWORD)strbuff,0,theApp.m_ini.m_keyLayout) == 1) {
 		strbuff[1] = NULL;
 		DWORD span = timeGetTime() - m_dwStartTime;
 		m_dwStartTime = timeGetTime();

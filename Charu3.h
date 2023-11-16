@@ -150,18 +150,18 @@ typedef void (*unHook)(void);
 //---------------------------------------------------
 struct HOT_KEY_CODE
 {
-	UINT m_uModKey;
-	UINT m_uVkCode;
-	bool m_isDoubleClick;
-	HTREEITEM m_hItem;
-	int  m_nDataID;
-	DWORD m_dwDoubleKeyTime;
+	UINT m_uModKey{};
+	UINT m_uVkCode{};
+	bool m_isDoubleClick{};
+	HTREEITEM m_hItem{};
+	int  m_nDataID{};
+	DWORD m_dwDoubleKeyTime{};
 	CString m_strMacroName;
 };
 struct KEY_CODE_NAME
 {
 	CString strName;
-	int nKeyCode;
+	int nKeyCode{};
 };
 
 //---------------------------------------------------

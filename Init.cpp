@@ -44,14 +44,27 @@ namespace {
 //機能		コンストラクタ
 //---------------------------------------------------
 CInit::CInit()
-	: m_nSelectID(0)
+	: m_bIsPortableMode(false)
 	, m_nOptionPage(0)
+	, m_bSearchCaseInsensitive(true)
+	, m_nSelectID(-1)
+	, m_nTreeID()
 	, m_nRecNumber(0)
 	, m_nSearchTarget(0)
 	, m_nSearchLogic(0)
 	, m_bReadOnly(false)
 	, m_strStateFile(_T(""))
 	, m_strSettingsFile(_T(""))
+	, m_bDebug(false)
+	, m_nToolTipTime(30000)
+	, m_nToolTipDelay(300)
+	, m_nClipboardOpenDelay(0)
+	, m_nClipboardRetryInterval(50)
+	, m_nClipboardRetryTimes(10)
+	, m_nWindowCheckInterval(400)
+	, m_etc()
+	, m_pop()
+	, m_keyLayout()
 	, m_hHookDLL(nullptr)
 {
 	m_DialogSize.x = 100;
@@ -82,7 +95,7 @@ void CInit::initialize()
 	TCHAR *cpName;
 
 	// locale
-	m_locale.LoadString(APP_LOCALE);
+	(void)m_locale.LoadString(APP_LOCALE);
 
 	// user name
 	DWORD dwSize = _countof(buf);
@@ -126,7 +139,7 @@ void CInit::initialize()
 	// display a dialog box that allows the user to reset the status and the settings when the Shift key is pressed
 	if (::GetKeyState(VK_SHIFT) < 0) {
 		CString strMessage;
-		strMessage.LoadString(APP_MES_RESET);
+		(void)strMessage.LoadString(APP_MES_RESET);
 		strMessage += +_T("\n\n") + m_strStateFile + _T("\n") + m_strSettingsFile;
 		int nRet = AfxMessageBox(strMessage, MB_YESNO | MB_APPLMODAL);
 		if (IDYES == nRet) {

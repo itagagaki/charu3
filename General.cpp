@@ -310,7 +310,7 @@ void CGeneral::getCaretPos(POINT *CaretPos,FOCUS_INFO *focusInfo)
 	}
 //	if(CaretPos->x < 0)	CaretPos->x = 0;
 //	if(CaretPos->y < 0)	CaretPos->y = 0;
-	if(focusInfo->m_hFocusWnd == NULL) focusInfo->m_hFocusWnd =  focusInfo->m_hActiveWnd;
+	if(focusInfo && focusInfo->m_hFocusWnd == NULL) focusInfo->m_hFocusWnd = focusInfo->m_hActiveWnd;
 }
 
 //---------------------------------------------------
@@ -320,7 +320,7 @@ void CGeneral::getCaretPos(POINT *CaretPos,FOCUS_INFO *focusInfo)
 BOOL CGeneral::setAbsoluteForegroundWindow(HWND hWnd)
 {
 	int nTargetID = NULL, nForegroundID = NULL;
-	UINT nTimeout;
+	UINT nTimeout = 0;
 	BOOL isRet = false;
 
 	if(GetForegroundWindow() && hWnd) {
@@ -427,7 +427,7 @@ CString CGeneral::getKeyName(UINT uVkCode,HKL keyLayout)
 //---------------------------------------------------
 CString CGeneral::getWindowTitle(HWND hWnd)
 {
-	TCHAR strWindowName[1024];
+	TCHAR strWindowName[1024] = {};
 	*strWindowName = (TCHAR)NULL;
 	CString strWinName;
 	bool isRet = false;
@@ -446,7 +446,7 @@ CString CGeneral::getWindowTitle(HWND hWnd)
 //---------------------------------------------------
 CString CGeneral::getLastErrorMessage()
 {
-	LPTSTR lpMsgBuf;
+	LPTSTR lpMsgBuf = {};
 	CString strRet;
 	strRet = _T("");
 	if(FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,NULL,

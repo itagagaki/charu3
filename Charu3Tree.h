@@ -87,7 +87,6 @@ public:
 	CCharu3Tree();
 	virtual ~CCharu3Tree();
 
-public:
 	void setPlugin(CString strPath);
 	bool getPlugin(CString strName,RW_PLUGIN* pPlugin);
 	void setImageList(POINT posSize,CString strFileName,CString strPath);
@@ -148,20 +147,22 @@ public:
 
 	bool SaveDataWithPlugin(CString strFileName, CString strPlugin, std::list<STRING_DATA> *tmplist);
 	bool saveDataToFile(CString strFileName,CString strPlugin,HTREEITEM hStartItem);
-	int  makeNewID(){
-		(*m_nMaxID)++;
-		while(checkRedundancyID(*m_nMaxID)) {
-			(*m_nMaxID) += 10;
+	int makeNewID() {
+		(*m_pMaxID)++;
+		while (checkRedundancyID(*m_pMaxID)) {
+			*m_pMaxID += 10;
 		}
-		return *m_nMaxID;
+		return *m_pMaxID;
 	}
 
-	void setInitInfo(int *nMaxID,int *nSelectID,int *nRecNumber){
-		m_nMaxID = nMaxID;
-		m_nSelectID = nSelectID;
-		m_nRecNumber = nRecNumber;
+	void setInitInfo(int* pMaxID, int* pSelectID, int* pRecNumber) {
+		m_pMaxID = pMaxID;
+		m_pSelectID = pSelectID;
+		m_pRecNumber = pRecNumber;
 	}
-	void setSelectID(int nID){*m_nSelectID = nID;}
+	void setSelectID(int nID) {
+		*m_pSelectID = nID;
+	}
 
 	bool checkRedundancyID(int nID);
 	bool checkMyChild(HTREEITEM hMeItem,HTREEITEM hChildItem);
@@ -171,7 +172,7 @@ public:
 	void allIconCheck();
 	char decideIcon(CString strData);
 	CString makeTitle(CString strData,int nTitleLength = 32);
-	HTREEITEM getOneTimeText(int nType);
+	HTREEITEM getOneTimeItem(int nType);
 
 	bool hasDataOption(CString strData, CString strKind);
 	int getDataOption(CString strData,CString strKind);
@@ -187,40 +188,36 @@ public:
 	std::vector<RW_PLUGIN>  m_rwPlugin;
 	std::list<HTREEITEM> m_ltCheckItems;
 	void setScrollBar();
-	bool IsDragging() { return m_dragState != DRAGSTATE_NOT_DRAGGING; }
+	bool IsDragging() { return m_dragState != DragState::NOT_DRAGGING; }
 
-protected:
-	int *m_nMaxID;
-	int *m_nRecNumber;
-
-	// オペレーション
-public:
-	CWnd *m_pParent;
 	// オーバーライド
 	// ClassWizard は仮想関数のオーバーライドを生成します。
 	//{{AFX_VIRTUAL(CCharu3Tree)
-	public:
 	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
 	//}}AFX_VIRTUAL
 
 private:
-	enum {
-		DRAGSTATE_NOT_DRAGGING,
-		DRAGSTATE_INSERT_BEFORE,
-		DRAGSTATE_PLACE_INSIDE,
-		DRAGSTATE_INSERT_AFTER
-	} m_dragState;
+	enum class DragState {
+		NOT_DRAGGING,
+		INSERT_BEFORE,
+		PLACE_INSIDE,
+		INSERT_AFTER
+	};
+	DragState m_dragState;
 	ULONGLONG m_nHoverTick;
 	HTREEITEM m_hDragItem;
 	HTREEITEM m_hDragTarget;
 	HTREEITEM m_hPrevTarget;
 	CImageList* m_pDragImage;
 
+	int* m_pMaxID;
+	int* m_pSelectID;
+	int* m_pRecNumber;
+
+	CImageList* m_ImageList;//イメージリスト
+
 	// 生成されたメッセージ マップ関数
 protected:
-	CImageList *m_ImageList;//イメージリスト
-	int *m_nSelectID;
-
 	//{{AFX_MSG(CCharu3Tree)
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnBegindrag(NMHDR* pNMHDR, LRESULT* pResult);

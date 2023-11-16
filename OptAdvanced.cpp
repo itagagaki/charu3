@@ -131,7 +131,7 @@ void COptAdvanced::OnBnClickedStealthSelect()
 {
 	CFileDialog* pFileDialog;
 	CString strRes;
-	strRes.LoadString(APP_INF_FILE_FILTER6);
+	(void)strRes.LoadString(APP_INF_FILE_FILTER6);
 	pFileDialog = new CFileDialog(TRUE, _T("*.*"), NULL, NULL, strRes);
 	if (pFileDialog && IDOK == pFileDialog->DoModal()) {
 		AddStealthProgram(pFileDialog->GetPathName());

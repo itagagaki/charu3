@@ -28,14 +28,7 @@ class COptMainDialog : public CDialog
 {
 // コンストラクション
 public:
-	COptMainDialog(CWnd* pParent = NULL,int nPage = 0);   // 標準のコンストラクタ
-
-	COptEtc m_EtcPage;
-	COptVisual m_VisualPage;
-	COptPopup m_PopupPage;
-	COptFifo m_FifoPage;
-	COptKeySet m_KeysetPage;
-	COptAdvanced m_AdvancedPage;
+	COptMainDialog(CWnd* pParent = NULL, int nPage = 0);
 
 // ダイアログ データ
 	//{{AFX_DATA(COptMainDialog)
@@ -56,9 +49,6 @@ public:
 
 // インプリメンテーション
 protected:
-	CDialog *m_OptionPage[6];
-	int m_nPage;
-
 	// 生成されたメッセージ マップ関数
 	//{{AFX_MSG(COptMainDialog)
 	virtual BOOL OnInitDialog();
@@ -68,6 +58,17 @@ protected:
 	afx_msg void OnKeydownOptTab(NMHDR* pNMHDR, LRESULT* pResult);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+
+private:
+	COptEtc m_EtcPage;
+	COptVisual m_VisualPage;
+	COptPopup m_PopupPage;
+	COptFifo m_FifoPage;
+	COptKeySet m_KeysetPage;
+	COptAdvanced m_AdvancedPage;
+
+	CDialog* m_OptionPage[6];
+	int m_nPage;
 };
 
 //{{AFX_INSERT_LOCATION}}
