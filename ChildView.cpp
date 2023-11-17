@@ -1,6 +1,6 @@
 /*----------------------------------------------------------
-	ChildViewクラス
-									2002/11/16 (c)Keizi
+    ChildViewクラス
+                                    2002/11/16 (c)Keizi
 ----------------------------------------------------------*/
 
 #include "stdafx.h"
@@ -29,10 +29,10 @@ CChildView::~CChildView()
 {
 }
 
-BEGIN_MESSAGE_MAP(CChildView,CWnd )
-	//{{AFX_MSG_MAP(CChildView)
-	ON_WM_PAINT()
-	//}}AFX_MSG_MAP
+BEGIN_MESSAGE_MAP(CChildView, CWnd)
+    //{{AFX_MSG_MAP(CChildView)
+    ON_WM_PAINT()
+    //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 //---------------------------------------------------
@@ -45,15 +45,15 @@ END_MESSAGE_MAP()
 //---------------------------------------------------
 BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs)
 {
-	if (!CWnd::PreCreateWindow(cs))
-		return FALSE;
+    if (!CWnd::PreCreateWindow(cs))
+        return FALSE;
 
-	cs.dwExStyle |= WS_EX_CLIENTEDGE;
-	cs.style &= ~WS_BORDER;
-	cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW|CS_VREDRAW|CS_DBLCLKS,
-		::LoadCursor(NULL, IDC_ARROW), HBRUSH(COLOR_WINDOW+1), NULL);
+    cs.dwExStyle |= WS_EX_CLIENTEDGE;
+    cs.style &= ~WS_BORDER;
+    cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS,
+        ::LoadCursor(NULL, IDC_ARROW), HBRUSH(COLOR_WINDOW + 1), NULL);
 
-	return TRUE;
+    return TRUE;
 }
 
 //---------------------------------------------------
@@ -62,9 +62,9 @@ BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs)
 //---------------------------------------------------
 void CChildView::OnPaint()
 {
-	CPaintDC dc(this); // 描画用のデバイス コンテキスト
+    CPaintDC dc(this); // 描画用のデバイス コンテキスト
 
-	// TODO: メッセージ ハンドラのコードをここに追加してください。
+    // TODO: メッセージ ハンドラのコードをここに追加してください。
 
-	// 描画のために CWnd::OnPaint を呼び出してはいけません。
+    // 描画のために CWnd::OnPaint を呼び出してはいけません。
 }

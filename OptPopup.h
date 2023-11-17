@@ -1,6 +1,6 @@
 /*----------------------------------------------------------
-	ポップアップ設定クラスヘッダ
-									2002/11/16 (c)Keizi
+    ポップアップ設定クラスヘッダ
+                                    2002/11/16 (c)Keizi
 ----------------------------------------------------------*/
 
 #if !defined(AFX_OPTPOPUP_H__3B3D553D_3B12_401F_A02E_A6ED8AF583C8__INCLUDED_)
@@ -19,45 +19,45 @@
 //---------------------------------------------------
 class COptPopup : public CDialog
 {
-// コンストラクション
+    // コンストラクション
 public:
-	COptPopup(CWnd* pParent = NULL);   // 標準のコンストラクタ
+    COptPopup(CWnd* pParent = NULL);   // 標準のコンストラクタ
 
 // ダイアログ データ
-	//{{AFX_DATA(COptPopup)
-	enum { IDD = IDD_SETTINGS_03_DATATREE };
-	//}}AFX_DATA
+    //{{AFX_DATA(COptPopup)
+    enum { IDD = IDD_SETTINGS_03_DATATREE };
+    //}}AFX_DATA
 
 // オーバーライド
-	// ClassWizard は仮想関数のオーバーライドを生成します。
-	//{{AFX_VIRTUAL(COptPopup)
+    // ClassWizard は仮想関数のオーバーライドを生成します。
+    //{{AFX_VIRTUAL(COptPopup)
 public:
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	virtual BOOL DestroyWindow();
+    virtual BOOL PreTranslateMessage(MSG* pMsg);
+    virtual BOOL DestroyWindow();
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
-	//}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
+    //}}AFX_VIRTUAL
 
 // インプリメンテーション
-	// 生成されたメッセージ マップ関数
-	//{{AFX_MSG(COptPopup)
-	virtual BOOL OnInitDialog();
-	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-	afx_msg void OnCbnSelchangeOptPopupPos();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    // 生成されたメッセージ マップ関数
+    //{{AFX_MSG(COptPopup)
+    virtual BOOL OnInitDialog();
+    afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+    afx_msg void OnCbnSelchangeOptPopupPos();
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 
 private:
-	int m_nSelectByTypingCaseInsensitive;
-	int m_nSelectByTypingAutoPaste;
-	int m_nSelectByTypingAutoExpand;
-	int m_nScrollVertical;
-	int m_nScrollHorizontal;
-	int m_nSingleExpand;
-	int m_nSingleEnter;
-	int m_nKeepSelection;
-	int m_nKeepFolders;
+    int m_nSelectByTypingCaseInsensitive;
+    int m_nSelectByTypingAutoPaste;
+    int m_nSelectByTypingAutoExpand;
+    int m_nScrollVertical;
+    int m_nScrollHorizontal;
+    int m_nSingleExpand;
+    int m_nSingleEnter;
+    int m_nKeepSelection;
+    int m_nKeepFolders;
 };
 
 //{{AFX_INSERT_LOCATION}}

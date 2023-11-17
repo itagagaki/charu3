@@ -1,6 +1,6 @@
 /*----------------------------------------------------------
-	PaletStaticクラス
-									2002/12/07 (c)Keizi
+    PaletStaticクラス
+                                    2002/12/07 (c)Keizi
 ----------------------------------------------------------*/
 
 #include "stdafx.h"
@@ -19,7 +19,7 @@ static char THIS_FILE[] = __FILE__;
 //---------------------------------------------------
 CPaletStatic::CPaletStatic()
 {
-	m_colMyColor = 0;
+    m_colMyColor = 0;
 }
 
 //---------------------------------------------------
@@ -31,9 +31,9 @@ CPaletStatic::~CPaletStatic()
 }
 
 BEGIN_MESSAGE_MAP(CPaletStatic, CStatic)
-	//{{AFX_MSG_MAP(CPaletStatic)
-	ON_WM_PAINT()
-	//}}AFX_MSG_MAP
+    //{{AFX_MSG_MAP(CPaletStatic)
+    ON_WM_PAINT()
+    //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 //---------------------------------------------------
@@ -46,10 +46,10 @@ END_MESSAGE_MAP()
 //---------------------------------------------------
 void CPaletStatic::OnPaint()
 {
-	CPaintDC dc(this); // 描画用のデバイス コンテキスト
+    CPaintDC dc(this); // 描画用のデバイス コンテキスト
 
-	RECT rect;
-	GetClientRect(&rect);
-	dc.IntersectClipRect(&rect);
-	dc.FillSolidRect(&rect,m_colMyColor);
+    RECT rect;
+    GetClientRect(&rect);
+    dc.IntersectClipRect(&rect);
+    dc.FillSolidRect(&rect, m_colMyColor);
 }

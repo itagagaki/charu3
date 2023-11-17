@@ -1,6 +1,6 @@
 /*----------------------------------------------------------
-	MainFrmクラスヘッダ
-									2002/11/16 (c)Keizi
+    MainFrmクラスヘッダ
+                                    2002/11/16 (c)Keizi
 ----------------------------------------------------------*/
 
 #if !defined(AFX_MAINFRM_H__86B0B4A1_0092_48D1_B396_31664A4314DB__INCLUDED_)
@@ -20,53 +20,53 @@
 class CMainFrame : public CFrameWnd
 {
 public:
-	CMainFrame();
+    CMainFrame();
 protected:
-	DECLARE_DYNAMIC(CMainFrame)
+    DECLARE_DYNAMIC(CMainFrame)
 
-// アトリビュート
+    // アトリビュート
 public:
 
-// オペレーション
+    // オペレーション
 public:
-	bool checkTrayPos();
-	void changeTrayIcon(bool isStock);
+    bool checkTrayPos();
+    void changeTrayIcon(bool isStock);
 
-// オーバーライド
-	// ClassWizard は仮想関数のオーバーライドを生成します。
-	//{{AFX_VIRTUAL(CMainFrame)
-	public:
-	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
-	protected:
-	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
-	//}}AFX_VIRTUAL
+    // オーバーライド
+        // ClassWizard は仮想関数のオーバーライドを生成します。
+        //{{AFX_VIRTUAL(CMainFrame)
+public:
+    virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+    virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
+protected:
+    virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
+    //}}AFX_VIRTUAL
 
 // インプリメンテーション
 public:
-	virtual ~CMainFrame();
+    virtual ~CMainFrame();
 #ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
+    virtual void AssertValid() const;
+    virtual void Dump(CDumpContext& dc) const;
 #endif
-	CChildView    m_wndView;
+    CChildView    m_wndView;
 
-// 生成されたメッセージ マップ関数
+    // 生成されたメッセージ マップ関数
 protected:
-	//{{AFX_MSG(CMainFrame)
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnSetFocus(CWnd *pOldWnd);
-	afx_msg void OnExit();
-	afx_msg BOOL OnQueryEndSession();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    //{{AFX_MSG(CMainFrame)
+    afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+    afx_msg void OnSetFocus(CWnd* pOldWnd);
+    afx_msg void OnExit();
+    afx_msg BOOL OnQueryEndSession();
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 
-	HICON		m_hIcon,m_hStopIcon;
-	NOTIFYICONDATA m_nIcon;
-	CMenu m_PopupMenu;
-	HWND m_hActive;
+    HICON		m_hIcon, m_hStopIcon;
+    NOTIFYICONDATA m_nIcon;
+    CMenu m_PopupMenu;
+    HWND m_hActive;
 
-	void changeClip();
+    void changeClip();
 };
 
 //{{AFX_INSERT_LOCATION}}

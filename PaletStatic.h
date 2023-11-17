@@ -1,6 +1,6 @@
 /*----------------------------------------------------------
-	PaletStaticクラスヘッダ
-									2002/12/07 (c)Keizi
+    PaletStaticクラスヘッダ
+                                    2002/12/07 (c)Keizi
 ----------------------------------------------------------*/
 
 #if !defined(AFX_PALETSTATIC_H__52F92273_F258_4DFC_B200_6D3A5F68B707__INCLUDED_)
@@ -16,35 +16,35 @@
 //---------------------------------------------------
 class CPaletStatic : public CStatic
 {
-// コンストラクション
+    // コンストラクション
 public:
-	CPaletStatic();
+    CPaletStatic();
 
-// アトリビュート
+    // アトリビュート
 public:
 
-// オペレーション
+    // オペレーション
 public:
-	void setColor(COLORREF colMyColor){
-		m_colMyColor = colMyColor;
-	}
-// オーバーライド
-	// ClassWizard は仮想関数のオーバーライドを生成します。
-	//{{AFX_VIRTUAL(CPaletStatic)
-	//}}AFX_VIRTUAL
+    void setColor(COLORREF colMyColor) {
+        m_colMyColor = colMyColor;
+    }
+    // オーバーライド
+        // ClassWizard は仮想関数のオーバーライドを生成します。
+        //{{AFX_VIRTUAL(CPaletStatic)
+        //}}AFX_VIRTUAL
 
-// インプリメンテーション
+    // インプリメンテーション
 public:
-	virtual ~CPaletStatic();
+    virtual ~CPaletStatic();
 
-	// 生成されたメッセージ マップ関数
+    // 生成されたメッセージ マップ関数
 protected:
-	//{{AFX_MSG(CPaletStatic)
-	afx_msg void OnPaint();
-	//}}AFX_MSG
+    //{{AFX_MSG(CPaletStatic)
+    afx_msg void OnPaint();
+    //}}AFX_MSG
 
-	COLORREF m_colMyColor;
-	DECLARE_MESSAGE_MAP()
+    COLORREF m_colMyColor;
+    DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

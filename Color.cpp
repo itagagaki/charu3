@@ -12,7 +12,7 @@ uint32_t Color::Parse(const std::string str)
         long r = (rgb >> 8) & 0x0f;
         long g = (rgb >> 4) & 0x0f;
         long b = rgb & 0x0f;
-        return static_cast<uint32_t>( (((r << 4) | r) << 16) | (((g << 4) | g) << 8) | ((b << 4) | b) );
+        return static_cast<uint32_t>((((r << 4) | r) << 16) | (((g << 4) | g) << 8) | ((b << 4) | b));
     }
     else if (std::regex_match(str, m, std::regex("^\\s*#([0-9a-fA-F]{6})\\s*$"))) {
         return static_cast<uint32_t>(std::stol(m[1].str(), nullptr, 16));

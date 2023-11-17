@@ -1,6 +1,6 @@
 /*----------------------------------------------------------
-	設定メインクラス
-									2002/11/16 (c)Keizi
+    設定メインクラス
+                                    2002/11/16 (c)Keizi
 ----------------------------------------------------------*/
 
 #include "stdafx.h"
@@ -20,9 +20,9 @@ extern CCharu3App theApp;
 //機能		コンストラクタ
 //---------------------------------------------------
 COptMainDialog::COptMainDialog(CWnd* pParent /*=NULL*/, int nPage)
-	: CDialog(COptMainDialog::IDD, pParent)
-	, m_OptionPage{&m_EtcPage, &m_VisualPage, &m_PopupPage, &m_FifoPage, &m_KeysetPage, &m_AdvancedPage}
-	, m_nPage(nPage)
+    : CDialog(COptMainDialog::IDD, pParent)
+    , m_OptionPage{ &m_EtcPage, &m_VisualPage, &m_PopupPage, &m_FifoPage, &m_KeysetPage, &m_AdvancedPage }
+    , m_nPage(nPage)
 {
 }
 
@@ -32,19 +32,19 @@ COptMainDialog::COptMainDialog(CWnd* pParent /*=NULL*/, int nPage)
 //---------------------------------------------------
 void COptMainDialog::DoDataExchange(CDataExchange* pDX)
 {
-	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(COptMainDialog)
-	if(GetDlgItem(IDC_OPT_TAB))
-		DDX_Control(pDX, IDC_OPT_TAB, m_ctrlTab);
-	//}}AFX_DATA_MAP
+    CDialog::DoDataExchange(pDX);
+    //{{AFX_DATA_MAP(COptMainDialog)
+    if (GetDlgItem(IDC_OPT_TAB))
+        DDX_Control(pDX, IDC_OPT_TAB, m_ctrlTab);
+    //}}AFX_DATA_MAP
 }
 
 BEGIN_MESSAGE_MAP(COptMainDialog, CDialog)
-	//{{AFX_MSG_MAP(COptMainDialog)
-	ON_NOTIFY(TCN_SELCHANGE, IDC_OPT_TAB, OnSelchangeOptTab)
-	ON_WM_SHOWWINDOW()
-	ON_NOTIFY(TCN_KEYDOWN, IDC_OPT_TAB, OnKeydownOptTab)
-	//}}AFX_MSG_MAP
+    //{{AFX_MSG_MAP(COptMainDialog)
+    ON_NOTIFY(TCN_SELCHANGE, IDC_OPT_TAB, OnSelchangeOptTab)
+    ON_WM_SHOWWINDOW()
+    ON_NOTIFY(TCN_KEYDOWN, IDC_OPT_TAB, OnKeydownOptTab)
+    //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 //---------------------------------------------------
@@ -57,34 +57,34 @@ END_MESSAGE_MAP()
 //---------------------------------------------------
 BOOL COptMainDialog::OnInitDialog()
 {
-	CDialog::OnInitDialog();
+    CDialog::OnInitDialog();
 
-	for (int i = 0; i <= MAX_OPT_PAGE; i++) {
-		CString strTabText;
-		(void)strTabText.LoadString(APP_INF_TABNAME_01 + i);
-		TC_ITEM item = {};
-		item.mask = TCIF_TEXT;
-		item.pszText = (TCHAR*)LPCTSTR(strTabText);
-		m_ctrlTab.InsertItem(i, &item);
-	}
+    for (int i = 0; i <= MAX_OPT_PAGE; i++) {
+        CString strTabText;
+        (void)strTabText.LoadString(APP_INF_TABNAME_01 + i);
+        TC_ITEM item = {};
+        item.mask = TCIF_TEXT;
+        item.pszText = (TCHAR*)LPCTSTR(strTabText);
+        m_ctrlTab.InsertItem(i, &item);
+    }
 
     CRect rect;
     m_ctrlTab.GetWindowRect(&rect);
     m_ctrlTab.AdjustRect(FALSE, &rect);
     ScreenToClient(&rect);
 
-	const int nDialogID[] = {IDD_SETTINGS_01_GENERAL, IDD_SETTINGS_02_STYLE, IDD_SETTINGS_03_DATATREE, IDD_SETTINGS_04_STOCKMODE, IDD_SETTINGS_05_KEYS, IDD_SETTINGS_06_ADVANCED };
-	for (int i = 0; i <= MAX_OPT_PAGE; i++) {
-	    m_OptionPage[i]->Create(nDialogID[i], this);
-	    m_OptionPage[i]->MoveWindow(&rect);
-		m_OptionPage[i]->ShowWindow(SW_HIDE);
-	}
-	m_nPage = theApp.m_ini.m_nOptionPage;
+    const int nDialogID[] = { IDD_SETTINGS_01_GENERAL, IDD_SETTINGS_02_STYLE, IDD_SETTINGS_03_DATATREE, IDD_SETTINGS_04_STOCKMODE, IDD_SETTINGS_05_KEYS, IDD_SETTINGS_06_ADVANCED };
+    for (int i = 0; i <= MAX_OPT_PAGE; i++) {
+        m_OptionPage[i]->Create(nDialogID[i], this);
+        m_OptionPage[i]->MoveWindow(&rect);
+        m_OptionPage[i]->ShowWindow(SW_HIDE);
+    }
+    m_nPage = theApp.m_ini.m_nOptionPage;
     m_OptionPage[m_nPage]->ShowWindow(SW_SHOW);
-	m_ctrlTab.SetCurFocus(m_nPage);
+    m_ctrlTab.SetCurFocus(m_nPage);
 
-	return FALSE; // コントロールにフォーカスを設定しないとき、戻り値は TRUE となります
-	              // 例外: OCX プロパティ ページの戻り値は FALSE となります
+    return FALSE; // コントロールにフォーカスを設定しないとき、戻り値は TRUE となります
+                  // 例外: OCX プロパティ ページの戻り値は FALSE となります
 }
 
 //---------------------------------------------------
@@ -93,13 +93,13 @@ BOOL COptMainDialog::OnInitDialog()
 //---------------------------------------------------
 void COptMainDialog::OnSelchangeOptTab(NMHDR* pNMHDR, LRESULT* pResult)
 {
-	for(int i = 0; i <= MAX_OPT_PAGE; i++)
-	    m_OptionPage[i]->ShowWindow(SW_HIDE);
+    for (int i = 0; i <= MAX_OPT_PAGE; i++)
+        m_OptionPage[i]->ShowWindow(SW_HIDE);
 
-	m_nPage = m_ctrlTab.GetCurSel();
+    m_nPage = m_ctrlTab.GetCurSel();
     m_OptionPage[m_nPage]->ShowWindow(SW_SHOW);
 
-	*pResult = 0;
+    *pResult = 0;
 }
 
 //---------------------------------------------------
@@ -108,24 +108,24 @@ void COptMainDialog::OnSelchangeOptTab(NMHDR* pNMHDR, LRESULT* pResult)
 //---------------------------------------------------
 BOOL COptMainDialog::DestroyWindow()
 {
-	if (theApp.m_pTreeDlg->IsWindowVisible()) {
-		theApp.m_pTreeDlg->RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
-	}
+    if (theApp.m_pTreeDlg->IsWindowVisible()) {
+        theApp.m_pTreeDlg->RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
+    }
 
-	for(int i = 0; i <= MAX_OPT_PAGE; i++) {
-		m_OptionPage[i]->UpdateData();
-	    m_OptionPage[i]->DestroyWindow();
-	}
-	theApp.m_ini.m_nOptionPage = m_nPage;
+    for (int i = 0; i <= MAX_OPT_PAGE; i++) {
+        m_OptionPage[i]->UpdateData();
+        m_OptionPage[i]->DestroyWindow();
+    }
+    theApp.m_ini.m_nOptionPage = m_nPage;
 
-	return CDialog::DestroyWindow();
+    return CDialog::DestroyWindow();
 }
 
 void COptMainDialog::OnShowWindow(BOOL bShow, UINT nStatus)
 {
-	CDialog::OnShowWindow(bShow, nStatus);
+    CDialog::OnShowWindow(bShow, nStatus);
 
-	SetWindowPos(&wndTopMost,0,0,0,0,SWP_NOMOVE | SWP_NOSIZE);
+    SetWindowPos(&wndTopMost, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 }
 
 //---------------------------------------------------
@@ -133,29 +133,29 @@ void COptMainDialog::OnShowWindow(BOOL bShow, UINT nStatus)
 //---------------------------------------------------
 BOOL COptMainDialog::PreTranslateMessage(MSG* pMsg)
 {
-	if( pMsg->message == WM_KEYDOWN) {
-		if(pMsg->wParam == VK_PRIOR) {
-			if(m_nPage < MAX_OPT_PAGE) m_nPage++;
-			else			m_nPage = 0;
-			m_ctrlTab.SetCurFocus(m_nPage);
-		}
-		else if(pMsg->wParam == VK_NEXT) {
-			if(m_nPage > 0) m_nPage--;
-			else			m_nPage = MAX_OPT_PAGE;
-			m_ctrlTab.SetCurFocus(m_nPage);
-		}
-	}
+    if (pMsg->message == WM_KEYDOWN) {
+        if (pMsg->wParam == VK_PRIOR) {
+            if (m_nPage < MAX_OPT_PAGE) m_nPage++;
+            else			m_nPage = 0;
+            m_ctrlTab.SetCurFocus(m_nPage);
+        }
+        else if (pMsg->wParam == VK_NEXT) {
+            if (m_nPage > 0) m_nPage--;
+            else			m_nPage = MAX_OPT_PAGE;
+            m_ctrlTab.SetCurFocus(m_nPage);
+        }
+    }
 
-	return CDialog::PreTranslateMessage(pMsg);
+    return CDialog::PreTranslateMessage(pMsg);
 }
 
 void COptMainDialog::OnKeydownOptTab(NMHDR* pNMHDR, LRESULT* pResult)
 {
-	TC_KEYDOWN* pTCKeyDown = (TC_KEYDOWN*)pNMHDR;
-	if(pTCKeyDown->wVKey == VK_TAB && ::GetKeyState(VK_CONTROL) < 0){
-		if(m_nPage < 4) m_nPage++;
-		else			m_nPage = 0;
-		m_ctrlTab.SetCurFocus(m_nPage);
-	}
-	*pResult = 0;
+    TC_KEYDOWN* pTCKeyDown = (TC_KEYDOWN*)pNMHDR;
+    if (pTCKeyDown->wVKey == VK_TAB && ::GetKeyState(VK_CONTROL) < 0) {
+        if (m_nPage < 4) m_nPage++;
+        else			m_nPage = 0;
+        m_ctrlTab.SetCurFocus(m_nPage);
+    }
+    *pResult = 0;
 }

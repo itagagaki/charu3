@@ -1,5 +1,5 @@
 /*----------------------------------------------------------
-	Setting Dialog - Advanced
+    Setting Dialog - Advanced
 ----------------------------------------------------------*/
 
 #if !defined(AFX_OPTADVANCED_H__0D4DFA1E_8391_4DA0_A8C2_1C86D2C0C460__INCLUDED_)
@@ -19,46 +19,46 @@
 //---------------------------------------------------
 class COptAdvanced : public CDialog
 {
-// コンストラクション
+    // コンストラクション
 public:
-	COptAdvanced(CWnd* pParent = NULL) : CDialog(IDD, pParent) {}
+    COptAdvanced(CWnd* pParent = NULL) : CDialog(IDD, pParent) {}
 
-	// ダイアログ データ
-	//{{AFX_DATA(COptAdvanced)
-	enum { IDD = IDD_SETTINGS_06_ADVANCED };
-	//}}AFX_DATA
+    // ダイアログ データ
+    //{{AFX_DATA(COptAdvanced)
+    enum { IDD = IDD_SETTINGS_06_ADVANCED };
+    //}}AFX_DATA
 
 // オーバーライド
-	// ClassWizard は仮想関数のオーバーライドを生成します。
-	//{{AFX_VIRTUAL(COptAdvanced)
+    // ClassWizard は仮想関数のオーバーライドを生成します。
+    //{{AFX_VIRTUAL(COptAdvanced)
 public:
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	virtual BOOL DestroyWindow();
+    virtual BOOL PreTranslateMessage(MSG* pMsg);
+    virtual BOOL DestroyWindow();
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
-	//}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
+    //}}AFX_VIRTUAL
 
 // インプリメンテーション
 protected:
 
-	// 生成されたメッセージ マップ関数
-	//{{AFX_MSG(COptAdvanced)
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    // 生成されたメッセージ マップ関数
+    //{{AFX_MSG(COptAdvanced)
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 private:
-	virtual BOOL OnInitDialog();
-	afx_msg void OnLbnSelchangeListStealth();
-	afx_msg void OnEnChangeStealthInput();
-	afx_msg void OnBnClickedStealthAdd();
-	afx_msg void OnBnClickedStealthSelect();
-	afx_msg void OnBnClickedStealthDelete();
-	void AddStealthProgram(CString name);
+    virtual BOOL OnInitDialog();
+    afx_msg void OnLbnSelchangeListStealth();
+    afx_msg void OnEnChangeStealthInput();
+    afx_msg void OnBnClickedStealthAdd();
+    afx_msg void OnBnClickedStealthSelect();
+    afx_msg void OnBnClickedStealthDelete();
+    void AddStealthProgram(CString name);
 
-	CMyEditCtrl	m_ctrlStealthInput;
-	CButton m_ctrlStealthAdd;
-	CButton m_ctrlStealthDelete;
-	CListBox m_stealthList;
+    CMyEditCtrl	m_ctrlStealthInput;
+    CButton m_ctrlStealthAdd;
+    CButton m_ctrlStealthDelete;
+    CListBox m_stealthList;
 };
 
 //{{AFX_INSERT_LOCATION}}

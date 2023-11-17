@@ -1,6 +1,6 @@
 /*----------------------------------------------------------
-	設定管理クラスヘッダ
-									2002/11/16 (c)Keizi
+    設定管理クラスヘッダ
+                                    2002/11/16 (c)Keizi
 ----------------------------------------------------------*/
 
 #if !defined(AFX_INIT_H__EA6EFDDA_9745_4690_B6A9_8B0533E4AB56__INCLUDED_)
@@ -39,9 +39,9 @@
 //---------------------------------------------------
 struct OPTION_ETC
 {
-	bool m_bPutBackClipboard; // データツリーからのコピー＆ペースト後、クリップボードに以前の内容をセットし直す
-	bool m_bShowClipboardInTooltipOfNofifyIcon; // 通知領域アイコンのツールチップでクリップボードの内容を表示する
-	int m_nIconClick;		// 通知領域アイコンをクリックしたときの動作
+    bool m_bPutBackClipboard; // データツリーからのコピー＆ペースト後、クリップボードに以前の内容をセットし直す
+    bool m_bShowClipboardInTooltipOfNofifyIcon; // 通知領域アイコンのツールチップでクリップボードの内容を表示する
+    int m_nIconClick;		// 通知領域アイコンをクリックしたときの動作
 };
 
 //---------------------------------------------------
@@ -49,29 +49,29 @@ struct OPTION_ETC
 //---------------------------------------------------
 struct OPTION_POPUP
 {
-	bool m_bKeepSelection; // Keep selection on data tree view
-	bool m_bKeepFolders; // Keep expanded/collapsed status of folders
+    bool m_bKeepSelection; // Keep selection on data tree view
+    bool m_bKeepFolders; // Keep expanded/collapsed status of folders
 
-	int  m_nDoubleKeyPOP;
-	UINT m_uVK_Pouup;	//ポップアップキー
-	UINT m_uMod_Pouup;	//ポップアップ特殊キー
-	int  m_nDCKeyPopTime;
+    int  m_nDoubleKeyPOP;
+    UINT m_uVK_Pouup;	//ポップアップキー
+    UINT m_uMod_Pouup;	//ポップアップ特殊キー
+    int  m_nDCKeyPopTime;
 
-	int  m_nDoubleKeyFIFO;
-	UINT m_uVK_Fifo;	//履歴FIFO切り替えキー
-	UINT m_uMod_Fifo;	//履歴FIFO切り替え特殊キー
-	int  m_nDCKeyFifoTime;
+    int  m_nDoubleKeyFIFO;
+    UINT m_uVK_Fifo;	//履歴FIFO切り替えキー
+    UINT m_uMod_Fifo;	//履歴FIFO切り替え特殊キー
+    int  m_nDCKeyFifoTime;
 
-	int  m_nPopupPos;		//ポップアップ出現位置
-	POINT m_posCaretHosei;	//キャレット位置の補正値
+    int  m_nPopupPos;		//ポップアップ出現位置
+    POINT m_posCaretHosei;	//キャレット位置の補正値
 
-	int m_nSelectByTypingFinalizePeriod;
-	bool m_bSelectByTypingCaseInsensitive;
-	bool m_bSelectByTypingAutoPaste;
-	bool m_bSelectByTypingAutoExpand;
+    int m_nSelectByTypingFinalizePeriod;
+    bool m_bSelectByTypingCaseInsensitive;
+    bool m_bSelectByTypingAutoPaste;
+    bool m_bSelectByTypingAutoExpand;
 
-	bool m_bSingleExpand;
-	bool m_bSingleEnter;
+    bool m_bSingleExpand;
+    bool m_bSingleEnter;
 };
 
 //---------------------------------------------------
@@ -79,12 +79,12 @@ struct OPTION_POPUP
 //---------------------------------------------------
 struct OPTION_FIFO
 {
-	int  m_nFifo{};			//履歴動作中はCtrl+Vで貼り付ける文字列を先入れ先出しにする
-	bool m_bAutoOff{};	// Turn off stock mode when one-time item is gone
-	bool m_bCleanupAtTurnOff{}; // Remove all one-time items when turned off
-	bool m_bDontSaveSameDataAsLast{};
-	CString m_strCopySound;	// コピー時に再生するサウンドのパス名
-	CString m_strPasteSound;	// 貼り付け時に再生するサウンドのパス名
+    int  m_nFifo{};			//履歴動作中はCtrl+Vで貼り付ける文字列を先入れ先出しにする
+    bool m_bAutoOff{};	// Turn off stock mode when one-time item is gone
+    bool m_bCleanupAtTurnOff{}; // Remove all one-time items when turned off
+    bool m_bDontSaveSameDataAsLast{};
+    CString m_strCopySound;	// コピー時に再生するサウンドのパス名
+    CString m_strPasteSound;	// 貼り付け時に再生するサウンドのパス名
 };
 
 //---------------------------------------------------
@@ -92,23 +92,23 @@ struct OPTION_FIFO
 //---------------------------------------------------
 struct OPTION_VISUAL
 {
-	uint32_t m_nBorderColor{};
-	uint32_t m_nBackgroundColor{};
-	uint32_t m_nTextColor{};
-	CString m_strFontName;
-	int m_nFontSize{};
-	CString m_strResourceName;
-	bool m_bScrollbarVertical{};
-	bool m_bScrollbarHorizontal{};
-	int m_nOpacity{};
-	int m_nToolTip{};
+    uint32_t m_nBorderColor{};
+    uint32_t m_nBackgroundColor{};
+    uint32_t m_nTextColor{};
+    CString m_strFontName;
+    int m_nFontSize{};
+    CString m_strResourceName;
+    bool m_bScrollbarVertical{};
+    bool m_bScrollbarHorizontal{};
+    int m_nOpacity{};
+    int m_nToolTip{};
 };
 
 struct WINDOWS_MESSAGE
 {
-	UINT Msg; // message to send
-	WPARAM wParam; // first message parameter
-	LPARAM lParam; // second message parameter
+    UINT Msg; // message to send
+    WPARAM wParam; // first message parameter
+    LPARAM lParam; // second message parameter
 };
 
 //---------------------------------------------------
@@ -116,89 +116,89 @@ struct WINDOWS_MESSAGE
 //---------------------------------------------------
 struct COPYPASTE_KEY
 {
-	int  m_nMessage;	//メッセージ方式
-	UINT m_uMod_Paste;	//貼り付け特殊キー
-	UINT m_uVK_Paste;	//貼り付けキー
-	UINT m_uMod_Copy;	//コピー特殊キー
-	UINT m_uVK_Copy;	//コピーキー
+    int  m_nMessage;	//メッセージ方式
+    UINT m_uMod_Paste;	//貼り付け特殊キー
+    UINT m_uVK_Paste;	//貼り付けキー
+    UINT m_uMod_Copy;	//コピー特殊キー
+    UINT m_uVK_Copy;	//コピーキー
 
-	WINDOWS_MESSAGE m_copyMessage;
-	WINDOWS_MESSAGE m_pasteMessage;
+    WINDOWS_MESSAGE m_copyMessage;
+    WINDOWS_MESSAGE m_pasteMessage;
 
-	int  m_nCopyWait;		//コピー待ち時間
-	int  m_nPasteWait;		//ペースト待ち時間
+    int  m_nCopyWait;		//コピー待ち時間
+    int  m_nPasteWait;		//ペースト待ち時間
 
-	COPYPASTE_KEY()
-		: m_nMessage(0)
-		, m_uMod_Paste(MOD_CONTROL)
-		, m_uVK_Paste('V')
-		, m_uMod_Copy(MOD_CONTROL)
-		, m_uVK_Copy('C')
-		, m_copyMessage(WINDOWS_MESSAGE())
-		, m_pasteMessage(WINDOWS_MESSAGE())
-		, m_nCopyWait(50)
-		, m_nPasteWait(50)
-	{
-	}
+    COPYPASTE_KEY()
+        : m_nMessage(0)
+        , m_uMod_Paste(MOD_CONTROL)
+        , m_uVK_Paste('V')
+        , m_uMod_Copy(MOD_CONTROL)
+        , m_uVK_Copy('C')
+        , m_copyMessage(WINDOWS_MESSAGE())
+        , m_pasteMessage(WINDOWS_MESSAGE())
+        , m_nCopyWait(50)
+        , m_nPasteWait(50)
+    {
+    }
 
-	COPYPASTE_KEY(nlohmann::json& obj)
-		: m_nMessage(0)
-		, m_uMod_Paste(MOD_CONTROL)
-		, m_uVK_Paste('V')
-		, m_uMod_Copy(MOD_CONTROL)
-		, m_uVK_Copy('C')
-		, m_copyMessage(WINDOWS_MESSAGE())
-		, m_pasteMessage(WINDOWS_MESSAGE())
-		, m_nCopyWait(50)
-		, m_nPasteWait(50)
-	{
-		if (obj.is_object()) {
-			m_nMessage = static_cast<int>(CGeneral::getSettingNumber(obj, "method", 0));
-			m_uVK_Copy = static_cast<UINT>(CGeneral::getSettingNumber(obj, "copy.keyCode", 'C'));
-			m_uMod_Copy = static_cast<UINT>(CGeneral::getSettingNumber(obj, "copy.keyModifier", MOD_CONTROL));
-			m_nCopyWait = static_cast<int>(CGeneral::getSettingNumber(obj, "copy.delay", 50));
-			m_uVK_Paste = static_cast<UINT>(CGeneral::getSettingNumber(obj, "paste.keyCode", 'V'));
-			m_uMod_Paste = static_cast<UINT>(CGeneral::getSettingNumber(obj, "paste.keyModifier", MOD_CONTROL));
-			m_nPasteWait = static_cast<int>(CGeneral::getSettingNumber(obj, "paste.delay", 50));
+    COPYPASTE_KEY(nlohmann::json& obj)
+        : m_nMessage(0)
+        , m_uMod_Paste(MOD_CONTROL)
+        , m_uVK_Paste('V')
+        , m_uMod_Copy(MOD_CONTROL)
+        , m_uVK_Copy('C')
+        , m_copyMessage(WINDOWS_MESSAGE())
+        , m_pasteMessage(WINDOWS_MESSAGE())
+        , m_nCopyWait(50)
+        , m_nPasteWait(50)
+    {
+        if (obj.is_object()) {
+            m_nMessage = static_cast<int>(CGeneral::getSettingNumber(obj, "method", 0));
+            m_uVK_Copy = static_cast<UINT>(CGeneral::getSettingNumber(obj, "copy.keyCode", 'C'));
+            m_uMod_Copy = static_cast<UINT>(CGeneral::getSettingNumber(obj, "copy.keyModifier", MOD_CONTROL));
+            m_nCopyWait = static_cast<int>(CGeneral::getSettingNumber(obj, "copy.delay", 50));
+            m_uVK_Paste = static_cast<UINT>(CGeneral::getSettingNumber(obj, "paste.keyCode", 'V'));
+            m_uMod_Paste = static_cast<UINT>(CGeneral::getSettingNumber(obj, "paste.keyModifier", MOD_CONTROL));
+            m_nPasteWait = static_cast<int>(CGeneral::getSettingNumber(obj, "paste.delay", 50));
 
-			nlohmann::json msg;
-			msg = obj["copy.message"];
-			if (msg.is_object()) {
-				m_copyMessage.Msg = static_cast<UINT>(CGeneral::getSettingNumber(msg, "id", 0));
-				m_copyMessage.wParam = static_cast<WPARAM>(CGeneral::getSettingNumber(msg, "param1", 0));
-				m_copyMessage.lParam = static_cast<LPARAM>(CGeneral::getSettingNumber(msg, "param2", 0));
-			}
-			msg = obj["paste.message"];
-			if (msg.is_object()) {
-				m_pasteMessage.Msg = static_cast<UINT>(CGeneral::getSettingNumber(msg, "id", 0));
-				m_pasteMessage.wParam = static_cast<WPARAM>(CGeneral::getSettingNumber(msg, "param1", 0));
-				m_pasteMessage.lParam = static_cast<LPARAM>(CGeneral::getSettingNumber(msg, "param2", 0));
-			}
-		}
-	}
+            nlohmann::json msg;
+            msg = obj["copy.message"];
+            if (msg.is_object()) {
+                m_copyMessage.Msg = static_cast<UINT>(CGeneral::getSettingNumber(msg, "id", 0));
+                m_copyMessage.wParam = static_cast<WPARAM>(CGeneral::getSettingNumber(msg, "param1", 0));
+                m_copyMessage.lParam = static_cast<LPARAM>(CGeneral::getSettingNumber(msg, "param2", 0));
+            }
+            msg = obj["paste.message"];
+            if (msg.is_object()) {
+                m_pasteMessage.Msg = static_cast<UINT>(CGeneral::getSettingNumber(msg, "id", 0));
+                m_pasteMessage.wParam = static_cast<WPARAM>(CGeneral::getSettingNumber(msg, "param1", 0));
+                m_pasteMessage.lParam = static_cast<LPARAM>(CGeneral::getSettingNumber(msg, "param2", 0));
+            }
+        }
+    }
 
-	nlohmann::json ToJson() {
-		nlohmann::json obj;
-		obj["method"] = m_nMessage;
-		obj["copy.keyCode"] = m_uVK_Copy;
-		obj["copy.keyModifier"] = m_uMod_Copy;
-		obj["copy.delay"] = m_nCopyWait;
-		obj["paste.keyCode"] = m_uVK_Paste;
-		obj["paste.keyModifier"] = m_uMod_Paste;
-		obj["paste.delay"] = m_nPasteWait;
+    nlohmann::json ToJson() {
+        nlohmann::json obj;
+        obj["method"] = m_nMessage;
+        obj["copy.keyCode"] = m_uVK_Copy;
+        obj["copy.keyModifier"] = m_uMod_Copy;
+        obj["copy.delay"] = m_nCopyWait;
+        obj["paste.keyCode"] = m_uVK_Paste;
+        obj["paste.keyModifier"] = m_uMod_Paste;
+        obj["paste.delay"] = m_nPasteWait;
 
-		nlohmann::json msg;
-		msg["id"] = m_copyMessage.Msg;
-		msg["param1"] = m_copyMessage.wParam;
-		msg["param2"] = m_copyMessage.lParam;
-		obj["copy.message"] = msg;
-		msg["id"] = m_pasteMessage.Msg;
-		msg["param1"] = m_pasteMessage.wParam;
-		msg["param2"] = m_pasteMessage.lParam;
-		obj["paste.message"] = msg;
+        nlohmann::json msg;
+        msg["id"] = m_copyMessage.Msg;
+        msg["param1"] = m_copyMessage.wParam;
+        msg["param2"] = m_copyMessage.lParam;
+        obj["copy.message"] = msg;
+        msg["id"] = m_pasteMessage.Msg;
+        msg["param1"] = m_pasteMessage.wParam;
+        msg["param2"] = m_pasteMessage.lParam;
+        obj["paste.message"] = msg;
 
-		return obj;
-	}
+        return obj;
+    }
 };
 
 //---------------------------------------------------
@@ -206,36 +206,36 @@ struct COPYPASTE_KEY
 //---------------------------------------------------
 struct CHANGE_KEY
 {
-	CString m_strTitle;	//タイトル文字列
-	int		m_nMatch;
+    CString m_strTitle;	//タイトル文字列
+    int		m_nMatch;
 
-	COPYPASTE_KEY m_sCopyPasteKey;
-	int  m_nHistoryLimit;	//クリップボード容量制限
+    COPYPASTE_KEY m_sCopyPasteKey;
+    int  m_nHistoryLimit;	//クリップボード容量制限
 
-	CHANGE_KEY()
-		: m_strTitle(_T(""))
-		, m_nMatch(-1)
-		, m_nHistoryLimit(-1)
-		, m_sCopyPasteKey(COPYPASTE_KEY())
-	{
-	}
+    CHANGE_KEY()
+        : m_strTitle(_T(""))
+        , m_nMatch(-1)
+        , m_nHistoryLimit(-1)
+        , m_sCopyPasteKey(COPYPASTE_KEY())
+    {
+    }
 };
 //---------------------------------------------------
 // キー設定構造体
 //---------------------------------------------------
 struct OPTION_KEYSET
 {
-	COPYPASTE_KEY	m_defKeySet;
-	int  m_nHistoryLimit;	//クリップボード容量制限
+    COPYPASTE_KEY	m_defKeySet;
+    int  m_nHistoryLimit;	//クリップボード容量制限
 
-	std::list<CHANGE_KEY> m_KeyList;//キー設定データリスト
+    std::list<CHANGE_KEY> m_KeyList;//キー設定データリスト
 
-	OPTION_KEYSET()
-		: m_defKeySet(COPYPASTE_KEY())
-		, m_nHistoryLimit(-1)
-		, m_KeyList(std::list<CHANGE_KEY>())
-	{
-	}
+    OPTION_KEYSET()
+        : m_defKeySet(COPYPASTE_KEY())
+        , m_nHistoryLimit(-1)
+        , m_KeyList(std::list<CHANGE_KEY>())
+    {
+    }
 };
 
 //---------------------------------------------------
@@ -243,9 +243,9 @@ struct OPTION_KEYSET
 //---------------------------------------------------
 struct MACRO_STRUCT
 {
-	int  m_cKind{};
-	CString m_strName;
-	CString m_strMacro;
+    int  m_cKind{};
+    CString m_strName;
+    CString m_strMacro;
 };
 
 //---------------------------------------------------
@@ -254,94 +254,94 @@ struct MACRO_STRUCT
 class CInit
 {
 public:
-	CInit();
-	virtual ~CInit();
-	void initialize();
+    CInit();
+    virtual ~CInit();
+    void initialize();
 
-	void writeAllInitData();
-	void writeEnvInitData();
+    void writeAllInitData();
+    void writeEnvInitData();
 
-	COPYPASTE_KEY getAppendKeyInit(CString strWinName,int nNumber = 0);
-	CHANGE_KEY getAppendKeyInit2(CString strWinName);
-	void setHotkey(UINT uPopKey,UINT uPopMod,UINT uFifoKey,UINT uFifoMod);
-	void getHotKey(UINT *uPopKey,UINT *uPopMod,UINT *uFifoKey,UINT *uFifoMod);
-	void setPasteHotkey(UINT uKey,UINT uMod,UINT uCopyKey,UINT uCopyMod);
-	void getPasteHotKey(UINT *uKey,UINT *uMod,UINT *uCopyKey,UINT *uCopyMod);
+    COPYPASTE_KEY getAppendKeyInit(CString strWinName, int nNumber = 0);
+    CHANGE_KEY getAppendKeyInit2(CString strWinName);
+    void setHotkey(UINT uPopKey, UINT uPopMod, UINT uFifoKey, UINT uFifoMod);
+    void getHotKey(UINT* uPopKey, UINT* uPopMod, UINT* uFifoKey, UINT* uFifoMod);
+    void setPasteHotkey(UINT uKey, UINT uMod, UINT uCopyKey, UINT uCopyMod);
+    void getPasteHotKey(UINT* uKey, UINT* uMod, UINT* uCopyKey, UINT* uCopyMod);
 
-	bool setHookKey(HWND hWnd);
-	void unHookKey();
+    bool setHookKey(HWND hWnd);
+    void unHookKey();
 
-	//OSの種族判別(NT40はfalse)
-	bool isNotNt40() {
-		// Windows 9x and its variants are no longer supported.
-		return false;
-	}
-	bool isNt40() {
-		// Assume running on Windows NT 4.0 or later.
-		return true;
-	}
-	bool isWindows98() {
-		// Windows 9x and its variants are no longer supported.
-		return false;
-	}
+    //OSの種族判別(NT40はfalse)
+    bool isNotNt40() {
+        // Windows 9x and its variants are no longer supported.
+        return false;
+    }
+    bool isNt40() {
+        // Assume running on Windows NT 4.0 or later.
+        return true;
+    }
+    bool isWindows98() {
+        // Windows 9x and its variants are no longer supported.
+        return false;
+    }
 
-	// environment
-	CString m_strUserName;
-	CString m_strAppPath;
-	CString m_strRwPluginFolder;
-	bool m_bIsPortableMode;
-	CString m_strAppDataPath;
-	POINT m_IconSize;
-	CString m_strStateFile;
-	CString m_strSettingsFile;
-	CString m_strDebugLog;
+    // environment
+    CString m_strUserName;
+    CString m_strAppPath;
+    CString m_strRwPluginFolder;
+    bool m_bIsPortableMode;
+    CString m_strAppDataPath;
+    POINT m_IconSize;
+    CString m_strStateFile;
+    CString m_strSettingsFile;
+    CString m_strDebugLog;
 
-	// state (reset on every startup)
-	int m_nOptionPage;
+    // state (reset on every startup)
+    int m_nOptionPage;
 
-	// state (to be saved)
-	nlohmann::json m_state;
-	CString m_strDataPath; // data file path
-	CString m_strDataFormat; // data format
-	bool m_bReadOnly; // whether access to data files should be read-only
-	POINT m_DialogSize;
-	int m_nSearchTarget;
-	int m_nSearchLogic;
-	CString m_strSearchKeywords;
-	bool m_bSearchCaseInsensitive;
-	int m_nSelectID;
-	int m_nTreeID;
-	int m_nRecNumber;
+    // state (to be saved)
+    nlohmann::json m_state;
+    CString m_strDataPath; // data file path
+    CString m_strDataFormat; // data format
+    bool m_bReadOnly; // whether access to data files should be read-only
+    POINT m_DialogSize;
+    int m_nSearchTarget;
+    int m_nSearchLogic;
+    CString m_strSearchKeywords;
+    bool m_bSearchCaseInsensitive;
+    int m_nSelectID;
+    int m_nTreeID;
+    int m_nRecNumber;
 
-	// settings
-	nlohmann::json m_settings;
-	bool m_bDebug; // no setting UI
-	int m_nToolTipTime; // no setting UI
-	int m_nToolTipDelay; // no setting UI
-	int m_nClipboardOpenDelay;
-	int m_nClipboardRetryInterval;
-	int m_nClipboardRetryTimes;
-	int m_nWindowCheckInterval;
-	OPTION_ETC		m_etc;
-	OPTION_POPUP	m_pop;
-	OPTION_FIFO		m_fifo;
-	OPTION_VISUAL	m_visual;
-	OPTION_KEYSET	m_key;
+    // settings
+    nlohmann::json m_settings;
+    bool m_bDebug; // no setting UI
+    int m_nToolTipTime; // no setting UI
+    int m_nToolTipDelay; // no setting UI
+    int m_nClipboardOpenDelay;
+    int m_nClipboardRetryInterval;
+    int m_nClipboardRetryTimes;
+    int m_nWindowCheckInterval;
+    OPTION_ETC		m_etc;
+    OPTION_POPUP	m_pop;
+    OPTION_FIFO		m_fifo;
+    OPTION_VISUAL	m_visual;
+    OPTION_KEYSET	m_key;
 
-	HKL     m_keyLayout;
+    HKL     m_keyLayout;
 
-	std::vector<MACRO_STRUCT>  m_vctMacro;
-	std::vector<MACRO_STRUCT>  m_vctDataMacro;
+    std::vector<MACRO_STRUCT>  m_vctMacro;
+    std::vector<MACRO_STRUCT>  m_vctDataMacro;
 
-	std::vector<CString> m_stealth;
+    std::vector<CString> m_stealth;
 
-	HMODULE m_hHookDLL;
+    HMODULE m_hHookDLL;
 
 private:
-	CString m_locale;
+    CString m_locale;
 
-	void SaveSettings();
-	//void ReadPredefined(std::vector<MACRO_STRUCT>& macro, CString filePath);
+    void SaveSettings();
+    //void ReadPredefined(std::vector<MACRO_STRUCT>& macro, CString filePath);
 };
 
 #endif // !defined(AFX_INIT_H__EA6EFDDA_9745_4690_B6A9_8B0533E4AB56__INCLUDED_)

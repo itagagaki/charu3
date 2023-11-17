@@ -23,8 +23,8 @@ CMyEditCtrl::~CMyEditCtrl()
 }
 
 BEGIN_MESSAGE_MAP(CMyEditCtrl, CEdit)
-	//{{AFX_MSG_MAP(CMyEditCtrl)
-	//}}AFX_MSG_MAP
+    //{{AFX_MSG_MAP(CMyEditCtrl)
+    //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -32,10 +32,10 @@ END_MESSAGE_MAP()
 
 BOOL CMyEditCtrl::PreTranslateMessage(MSG* pMsg)
 {
-	if(pMsg->message == WM_KEYDOWN && pMsg->wParam == 0x41 && ::GetKeyState(VK_CONTROL) < 0){
-		this->SetSel(0,-1);
-		return TRUE;
-	}
+    if (pMsg->message == WM_KEYDOWN && pMsg->wParam == 0x41 && ::GetKeyState(VK_CONTROL) < 0) {
+        this->SetSel(0, -1);
+        return TRUE;
+    }
 
-	return CEdit::PreTranslateMessage(pMsg);
+    return CEdit::PreTranslateMessage(pMsg);
 }

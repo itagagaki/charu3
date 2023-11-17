@@ -1,6 +1,6 @@
 /*----------------------------------------------------------
-	履歴FIFO設定クラス
-									2002/11/16 (c)Keizi
+    履歴FIFO設定クラス
+                                    2002/11/16 (c)Keizi
 ----------------------------------------------------------*/
 
 #include "stdafx.h"
@@ -22,13 +22,13 @@ extern CCharu3App theApp;
 //---------------------------------------------------
 COptFifo::COptFifo(CWnd* pParent /*=NULL*/) : CDialog(COptFifo::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(COptFifo)
-	//}}AFX_DATA_INIT
-	m_nAutoOff = CGeneral::BoolToInt(theApp.m_ini.m_fifo.m_bAutoOff);
-	m_nCleanup = CGeneral::BoolToInt(theApp.m_ini.m_fifo.m_bCleanupAtTurnOff);
-	m_nDontSaveSameDataAsLast = CGeneral::BoolToInt(theApp.m_ini.m_fifo.m_bDontSaveSameDataAsLast);
-	//m_strCopySound = theApp.m_ini.m_fifo.m_strCopySound;
-	//m_strPasteSound = theApp.m_ini.m_fifo.m_strPasteSound;
+    //{{AFX_DATA_INIT(COptFifo)
+    //}}AFX_DATA_INIT
+    m_nAutoOff = CGeneral::BoolToInt(theApp.m_ini.m_fifo.m_bAutoOff);
+    m_nCleanup = CGeneral::BoolToInt(theApp.m_ini.m_fifo.m_bCleanupAtTurnOff);
+    m_nDontSaveSameDataAsLast = CGeneral::BoolToInt(theApp.m_ini.m_fifo.m_bDontSaveSameDataAsLast);
+    //m_strCopySound = theApp.m_ini.m_fifo.m_strCopySound;
+    //m_strPasteSound = theApp.m_ini.m_fifo.m_strPasteSound;
 }
 
 //---------------------------------------------------
@@ -37,33 +37,33 @@ COptFifo::COptFifo(CWnd* pParent /*=NULL*/) : CDialog(COptFifo::IDD, pParent)
 //---------------------------------------------------
 void COptFifo::DoDataExchange(CDataExchange* pDX)
 {
-	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(COptFifo)
-	if(GetDlgItem(IDC_OPT_STOCK_NONE))
-		DDX_Radio(pDX, IDC_OPT_STOCK_NONE, theApp.m_ini.m_fifo.m_nFifo);
-	if(GetDlgItem(IDC_OPT_SOUND_COPY))
-		DDX_Text(pDX, IDC_OPT_SOUND_COPY, theApp.m_ini.m_fifo.m_strCopySound);
-	if (GetDlgItem(IDC_OPT_SOUND_PASTE))
-		DDX_Text(pDX, IDC_OPT_SOUND_PASTE, theApp.m_ini.m_fifo.m_strPasteSound);
-	if(GetDlgItem(IDC_OPT_CLEAR_ONETIME))
-		DDX_Check(pDX,IDC_OPT_CLEAR_ONETIME, m_nCleanup);
-	if (GetDlgItem(IDC_ALL_DEL_OFF))
-		DDX_Check(pDX, IDC_ALL_DEL_OFF, m_nAutoOff);
-	if(GetDlgItem(IDC_OPT_DUPLICATION))
-		DDX_Check(pDX, IDC_OPT_DUPLICATION, m_nDontSaveSameDataAsLast);
-	//}}AFX_DATA_MAP
+    CDialog::DoDataExchange(pDX);
+    //{{AFX_DATA_MAP(COptFifo)
+    if (GetDlgItem(IDC_OPT_STOCK_NONE))
+        DDX_Radio(pDX, IDC_OPT_STOCK_NONE, theApp.m_ini.m_fifo.m_nFifo);
+    if (GetDlgItem(IDC_OPT_SOUND_COPY))
+        DDX_Text(pDX, IDC_OPT_SOUND_COPY, theApp.m_ini.m_fifo.m_strCopySound);
+    if (GetDlgItem(IDC_OPT_SOUND_PASTE))
+        DDX_Text(pDX, IDC_OPT_SOUND_PASTE, theApp.m_ini.m_fifo.m_strPasteSound);
+    if (GetDlgItem(IDC_OPT_CLEAR_ONETIME))
+        DDX_Check(pDX, IDC_OPT_CLEAR_ONETIME, m_nCleanup);
+    if (GetDlgItem(IDC_ALL_DEL_OFF))
+        DDX_Check(pDX, IDC_ALL_DEL_OFF, m_nAutoOff);
+    if (GetDlgItem(IDC_OPT_DUPLICATION))
+        DDX_Check(pDX, IDC_OPT_DUPLICATION, m_nDontSaveSameDataAsLast);
+    //}}AFX_DATA_MAP
 }
 
 BEGIN_MESSAGE_MAP(COptFifo, CDialog)
-	//{{AFX_MSG_MAP(COptFifo)
-	ON_BN_CLICKED(IDC_PLAY_COPY, OnPlayCopy)
-	ON_BN_CLICKED(IDC_PLAY_PASTE, OnPlayPaste)
-	ON_BN_CLICKED(IDC_FILE_SOUND_COPY, OnFileCopy)
-	ON_BN_CLICKED(IDC_FILE_SOUND_PASTE, OnFilePaste)
-	ON_BN_CLICKED(IDC_NOSOUND_COPY, OnNoSoundCopy)
-	ON_BN_CLICKED(IDC_NOSOUND_PASTE, OnNoSoundPaste)
-	ON_WM_SHOWWINDOW()
-	//}}AFX_MSG_MAP
+    //{{AFX_MSG_MAP(COptFifo)
+    ON_BN_CLICKED(IDC_PLAY_COPY, OnPlayCopy)
+    ON_BN_CLICKED(IDC_PLAY_PASTE, OnPlayPaste)
+    ON_BN_CLICKED(IDC_FILE_SOUND_COPY, OnFileCopy)
+    ON_BN_CLICKED(IDC_FILE_SOUND_PASTE, OnFilePaste)
+    ON_BN_CLICKED(IDC_NOSOUND_COPY, OnNoSoundCopy)
+    ON_BN_CLICKED(IDC_NOSOUND_PASTE, OnNoSoundPaste)
+    ON_WM_SHOWWINDOW()
+    //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 //---------------------------------------------------
@@ -76,32 +76,32 @@ END_MESSAGE_MAP()
 //---------------------------------------------------
 BOOL COptFifo::PreTranslateMessage(MSG* pMsg)
 {
-	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_TAB && ::GetKeyState(VK_CONTROL) < 0) {
-		::PostMessage(::GetParent(this->m_hWnd), pMsg->message, VK_PRIOR, pMsg->lParam);
-	}
+    if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_TAB && ::GetKeyState(VK_CONTROL) < 0) {
+        ::PostMessage(::GetParent(this->m_hWnd), pMsg->message, VK_PRIOR, pMsg->lParam);
+    }
 
-	return CDialog::PreTranslateMessage(pMsg);
+    return CDialog::PreTranslateMessage(pMsg);
 }
 
 void COptFifo::OnShowWindow(BOOL bShow, UINT nStatus)
 {
-	CDialog::OnShowWindow(bShow, nStatus);
-	if (bShow) {
-		CWnd* w;
-		switch (theApp.m_ini.m_pop.m_nDoubleKeyPOP) {
-		default:
-		case 0:
-			w = GetDlgItem(IDC_OPT_STOCK_NONE);
-			break;
-		case 1:
-			w = GetDlgItem(IDC_OPT_STOCK_FIFO);
-			break;
-		case 2:
-			w = GetDlgItem(IDC_OPT_STOCK_LIFO);
-			break;
-		}
-		if (w) w->SetFocus();
-	}
+    CDialog::OnShowWindow(bShow, nStatus);
+    if (bShow) {
+        CWnd* w;
+        switch (theApp.m_ini.m_pop.m_nDoubleKeyPOP) {
+        default:
+        case 0:
+            w = GetDlgItem(IDC_OPT_STOCK_NONE);
+            break;
+        case 1:
+            w = GetDlgItem(IDC_OPT_STOCK_FIFO);
+            break;
+        case 2:
+            w = GetDlgItem(IDC_OPT_STOCK_LIFO);
+            break;
+        }
+        if (w) w->SetFocus();
+    }
 }
 
 //---------------------------------------------------
@@ -110,71 +110,71 @@ void COptFifo::OnShowWindow(BOOL bShow, UINT nStatus)
 //---------------------------------------------------
 BOOL COptFifo::DestroyWindow()
 {
-	theApp.m_ini.m_fifo.m_bAutoOff = static_cast<CButton*>(GetDlgItem(IDC_ALL_DEL_OFF))->GetCheck() != 0;
-	theApp.m_ini.m_fifo.m_bCleanupAtTurnOff = static_cast<CButton*>(GetDlgItem(IDC_OPT_CLEAR_ONETIME))->GetCheck() != 0;
-	theApp.m_ini.m_fifo.m_bDontSaveSameDataAsLast = static_cast<CButton*>(GetDlgItem(IDC_OPT_DUPLICATION))->GetCheck() != 0;
-	//theApp.m_ini.m_fifo.m_strCopySound = m_strCopySound;
-	//theApp.m_ini.m_fifo.m_strPasteSound = m_strPasteSound;
+    theApp.m_ini.m_fifo.m_bAutoOff = static_cast<CButton*>(GetDlgItem(IDC_ALL_DEL_OFF))->GetCheck() != 0;
+    theApp.m_ini.m_fifo.m_bCleanupAtTurnOff = static_cast<CButton*>(GetDlgItem(IDC_OPT_CLEAR_ONETIME))->GetCheck() != 0;
+    theApp.m_ini.m_fifo.m_bDontSaveSameDataAsLast = static_cast<CButton*>(GetDlgItem(IDC_OPT_DUPLICATION))->GetCheck() != 0;
+    //theApp.m_ini.m_fifo.m_strCopySound = m_strCopySound;
+    //theApp.m_ini.m_fifo.m_strPasteSound = m_strPasteSound;
 
-	return CDialog::DestroyWindow();
+    return CDialog::DestroyWindow();
 }
 
 void COptFifo::OnPlayCopy()
 {
-	Play(IDC_OPT_SOUND_COPY);
+    Play(IDC_OPT_SOUND_COPY);
 }
 
 void COptFifo::OnPlayPaste()
 {
-	Play(IDC_OPT_SOUND_PASTE);
+    Play(IDC_OPT_SOUND_PASTE);
 }
 
 void COptFifo::Play(int id)
 {
-	CWnd* edit = GetDlgItem(id);
-	int len = edit->GetWindowTextLength();
-	TCHAR* textBuf = new TCHAR[len + 1];
-	if (textBuf) {
-		edit->GetWindowText(textBuf, len + 1);
-		if (textBuf != _T("")) {
-			PlaySound(textBuf, NULL, SND_ASYNC | SND_FILENAME);
-		}
-		delete[] textBuf;
-	}
+    CWnd* edit = GetDlgItem(id);
+    int len = edit->GetWindowTextLength();
+    TCHAR* textBuf = new TCHAR[len + 1];
+    if (textBuf) {
+        edit->GetWindowText(textBuf, len + 1);
+        if (textBuf != _T("")) {
+            PlaySound(textBuf, NULL, SND_ASYNC | SND_FILENAME);
+        }
+        delete[] textBuf;
+    }
 }
 
 void COptFifo::OnFileCopy()
 {
-	File(IDC_OPT_SOUND_COPY);
+    File(IDC_OPT_SOUND_COPY);
 }
 
 void COptFifo::OnFilePaste()
 {
-	File(IDC_OPT_SOUND_PASTE);
+    File(IDC_OPT_SOUND_PASTE);
 }
 
 void COptFifo::File(int id)
 {
-	CString strRes;
-	(void)strRes.LoadString(APP_INF_FILE_FILTER4);
-	CFileDialog openFileDialog(TRUE, _T("wav"), NULL, OFN_FILEMUSTEXIST, strRes);
-	openFileDialog.m_ofn.lpstrInitialDir = theApp.m_ini.m_strAppPath;
-	if (openFileDialog.DoModal() == IDOK) {
-		CString file = openFileDialog.GetPathName();
-		int baseLen = theApp.m_ini.m_strAppPath.GetLength();
-		if (theApp.m_ini.m_strAppPath.CompareNoCase(file.Left(baseLen)) == 0) {
-			file = file.Mid(baseLen); // relative path to under exe
-		}
-		SetDlgItemText(id, file);
-	}
+    CString strRes;
+    (void)strRes.LoadString(APP_INF_FILE_FILTER4);
+    CFileDialog openFileDialog(TRUE, _T("wav"), NULL, OFN_FILEMUSTEXIST, strRes);
+    openFileDialog.m_ofn.lpstrInitialDir = theApp.m_ini.m_strAppPath;
+    if (openFileDialog.DoModal() == IDOK) {
+        CString file = openFileDialog.GetPathName();
+        int baseLen = theApp.m_ini.m_strAppPath.GetLength();
+        if (theApp.m_ini.m_strAppPath.CompareNoCase(file.Left(baseLen)) == 0) {
+            file = file.Mid(baseLen); // relative path to under exe
+        }
+        SetDlgItemText(id, file);
+    }
 }
 
 void COptFifo::OnNoSoundCopy()
 {
-	SetDlgItemText(IDC_OPT_SOUND_COPY, _T(""));
+    SetDlgItemText(IDC_OPT_SOUND_COPY, _T(""));
 }
 
 void COptFifo::OnNoSoundPaste()
 {
-	SetDlgItemText(IDC_OPT_SOUND_PASTE, _T(""));
+    SetDlgItemText(IDC_OPT_SOUND_PASTE, _T(""));
 }

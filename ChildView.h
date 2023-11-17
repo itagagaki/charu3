@@ -1,6 +1,6 @@
 /*----------------------------------------------------------
-	ChildViewクラスヘッダ
-									2002/11/16 (c)Keizi
+    ChildViewクラスヘッダ
+                                    2002/11/16 (c)Keizi
 ----------------------------------------------------------*/
 
 #if !defined(AFX_CHILDVIEW_H__F8B13439_ACED_4C46_87CF_498ACB16F2B8__INCLUDED_)
@@ -15,33 +15,33 @@
 //---------------------------------------------------
 class CChildView : public CWnd
 {
-// コンストラクタ
+    // コンストラクタ
 public:
-	CChildView();
+    CChildView();
 
-// アトリビュート
-public:
-
-// オペレーション
+    // アトリビュート
 public:
 
-// オーバーライド
-	// ClassWizard は仮想関数のオーバーライドを生成します。
-	//{{AFX_VIRTUAL(CChildView)
-	protected:
-	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-	//}}AFX_VIRTUAL
+    // オペレーション
+public:
+
+    // オーバーライド
+        // ClassWizard は仮想関数のオーバーライドを生成します。
+        //{{AFX_VIRTUAL(CChildView)
+protected:
+    virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+    //}}AFX_VIRTUAL
 
 // インプリメンテーション
 public:
-	virtual ~CChildView();
+    virtual ~CChildView();
 
-	// 生成されたメッセージ マップ関数
+    // 生成されたメッセージ マップ関数
 protected:
-	//{{AFX_MSG(CChildView)
-	afx_msg void OnPaint();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    //{{AFX_MSG(CChildView)
+    afx_msg void OnPaint();
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

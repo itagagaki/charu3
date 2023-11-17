@@ -1,6 +1,6 @@
 /*----------------------------------------------------------
-	ClipBordクラスヘッダ
-									2002/11/16 (c)Keizi
+    ClipBordクラスヘッダ
+                                    2002/11/16 (c)Keizi
 ----------------------------------------------------------*/
 
 #if !defined(AFX_CLIPBORD_H__582AEB30_7E55_42E1_8D77_A28FAD0F7294__INCLUDED_)
@@ -18,33 +18,33 @@
 class CClipBoard
 {
 public:
-	CClipBoard() : m_hParentWnd(NULL), m_bListening(false), m_nRetryCount(0), m_nRetryInterval(0) {}
-	CClipBoard(int retryCount, int retryInterval) : m_hParentWnd(NULL), m_bListening(false), m_nRetryCount(retryCount), m_nRetryInterval(retryInterval) {}
-	virtual ~CClipBoard() {}
-	void setParent(HWND hWnd) {
-		m_hParentWnd = hWnd;
-		StartListener();
-	}
-	void StartListener() {
-		if (!m_bListening) {
-			::AddClipboardFormatListener(m_hParentWnd);
-			m_bListening = true;
-		}
-	}
-	void StopListener() {
-		::RemoveClipboardFormatListener(m_hParentWnd);
-		m_bListening = false;
-	}
-	bool getClipboardText(CString& sData);
-	bool setClipboardText(const CString sData);
-	bool getClipboardText(CString& sData, int retryCount, int retryInterval);
-	bool setClipboardText(const CString sData, int retryCount, int retryInterval);
+    CClipBoard() : m_hParentWnd(NULL), m_bListening(false), m_nRetryCount(0), m_nRetryInterval(0) {}
+    CClipBoard(int retryCount, int retryInterval) : m_hParentWnd(NULL), m_bListening(false), m_nRetryCount(retryCount), m_nRetryInterval(retryInterval) {}
+    virtual ~CClipBoard() {}
+    void setParent(HWND hWnd) {
+        m_hParentWnd = hWnd;
+        StartListener();
+    }
+    void StartListener() {
+        if (!m_bListening) {
+            ::AddClipboardFormatListener(m_hParentWnd);
+            m_bListening = true;
+        }
+    }
+    void StopListener() {
+        ::RemoveClipboardFormatListener(m_hParentWnd);
+        m_bListening = false;
+    }
+    bool getClipboardText(CString& sData);
+    bool setClipboardText(const CString sData);
+    bool getClipboardText(CString& sData, int retryCount, int retryInterval);
+    bool setClipboardText(const CString sData, int retryCount, int retryInterval);
 
 private:
-	HWND m_hParentWnd;
-	bool m_bListening;
-	int m_nRetryCount;
-	int m_nRetryInterval;
+    HWND m_hParentWnd;
+    bool m_bListening;
+    int m_nRetryCount;
+    int m_nRetryInterval;
 };
 
 #endif // !defined(AFX_CLIPBORD_H__582AEB30_7E55_42E1_8D77_A28FAD0F7294__INCLUDED_)

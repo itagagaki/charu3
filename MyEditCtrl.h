@@ -12,33 +12,33 @@
 
 class CMyEditCtrl : public CEdit
 {
-// コンストラクション
+    // コンストラクション
 public:
-	CMyEditCtrl();
+    CMyEditCtrl();
 
-// アトリビュート
-public:
-
-// オペレーション
+    // アトリビュート
 public:
 
-// オーバーライド
-	// ClassWizard は仮想関数のオーバーライドを生成します。
-	//{{AFX_VIRTUAL(CMyEditCtrl)
-	public:
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	//}}AFX_VIRTUAL
+    // オペレーション
+public:
+
+    // オーバーライド
+        // ClassWizard は仮想関数のオーバーライドを生成します。
+        //{{AFX_VIRTUAL(CMyEditCtrl)
+public:
+    virtual BOOL PreTranslateMessage(MSG* pMsg);
+    //}}AFX_VIRTUAL
 
 // インプリメンテーション
 public:
-	virtual ~CMyEditCtrl();
+    virtual ~CMyEditCtrl();
 
-	// 生成されたメッセージ マップ関数
+    // 生成されたメッセージ マップ関数
 protected:
-	//{{AFX_MSG(CMyEditCtrl)
-	//}}AFX_MSG
+    //{{AFX_MSG(CMyEditCtrl)
+    //}}AFX_MSG
 
-	DECLARE_MESSAGE_MAP()
+    DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////

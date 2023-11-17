@@ -1,6 +1,6 @@
 /*----------------------------------------------------------
-	Charu3ヘッダ
-									2002/11/16 (c)Keizi
+    Charu3ヘッダ
+                                    2002/11/16 (c)Keizi
 ----------------------------------------------------------*/
 
 #if !defined(AFX_CHARU3_H__05C003AF_297C_4BFB_AFB3_822EAE3D3787__INCLUDED_)
@@ -11,7 +11,7 @@
 #endif // _MSC_VER > 1000
 
 #ifndef __AFXWIN_H__
-	#error include 'stdafx.h' before including this file for PCH
+#error include 'stdafx.h' before including this file for PCH
 #endif
 
 #if defined(UNICODE) || defined(_UNICODE)
@@ -33,9 +33,9 @@
 
 // App Name
 #ifdef _UNICODE
-	#define ABOUT_NAME _T("Charu3 SE")
+#define ABOUT_NAME _T("Charu3 SE")
 #else
-	#define ABOUT_NAME _T("Charu3 Version 7.06.07")
+#define ABOUT_NAME _T("Charu3 Version 7.06.07")
 #endif
 
 //ファイル名設定
@@ -138,7 +138,7 @@
 #define PHASE_LOCK		0x08
 
 //プラグイン関数宣言
-typedef bool(*CharuPlugIn)(TCHAR*,TCHAR*,int,STRING_DATA*,void*);
+typedef bool(*CharuPlugIn)(TCHAR*, TCHAR*, int, STRING_DATA*, void*);
 
 typedef bool (*setHook)(const HWND hWnd, const int msg);
 typedef void (*unHook)(void);
@@ -150,18 +150,18 @@ typedef void (*unHook)(void);
 //---------------------------------------------------
 struct HOT_KEY_CODE
 {
-	UINT m_uModKey{};
-	UINT m_uVkCode{};
-	bool m_isDoubleClick{};
-	HTREEITEM m_hItem{};
-	int  m_nDataID{};
-	DWORD m_dwDoubleKeyTime{};
-	CString m_strMacroName;
+    UINT m_uModKey{};
+    UINT m_uVkCode{};
+    bool m_isDoubleClick{};
+    HTREEITEM m_hItem{};
+    int  m_nDataID{};
+    DWORD m_dwDoubleKeyTime{};
+    CString m_strMacroName;
 };
 struct KEY_CODE_NAME
 {
-	CString strName;
-	int nKeyCode{};
+    CString strName;
+    int nKeyCode{};
 };
 
 //---------------------------------------------------
@@ -170,101 +170,101 @@ struct KEY_CODE_NAME
 class CCharu3App : public CWinApp
 {
 public:
-	CCharu3App();
-	~CCharu3App();
+    CCharu3App();
+    ~CCharu3App();
 
-	void popupTreeWindow(POINT pos, bool keepSelection, HTREEITEM hOpenItem = NULL);
-	void closeTreeWindow(int nRet);
-	void pasteData(CString strPaste,COPYPASTE_KEY key,HWND hWnd);
-	void execData(CString strPaste,COPYPASTE_KEY key,HTREEITEM hTargetItem,HWND hWnd);
-	void execKeyMacro(CString strKeyMacro);
+    void popupTreeWindow(POINT pos, bool keepSelection, HTREEITEM hOpenItem = NULL);
+    void closeTreeWindow(int nRet);
+    void pasteData(CString strPaste, COPYPASTE_KEY key, HWND hWnd);
+    void execData(CString strPaste, COPYPASTE_KEY key, HTREEITEM hTargetItem, HWND hWnd);
+    void execKeyMacro(CString strKeyMacro);
 
-	CString getSelectString(COPYPASTE_KEY key,HWND hWnd = NULL);
-	void keyUpDown(UINT uMod,UINT uVKCode,int nFlag);
-	void keyUpDownC2(UINT uMod,UINT uVKCode,int nFlag);
-	void keyUpDownMessage(UINT uMod,UINT uVKCode,int nFlag,HWND hWnd);
+    CString getSelectString(COPYPASTE_KEY key, HWND hWnd = NULL);
+    void keyUpDown(UINT uMod, UINT uVKCode, int nFlag);
+    void keyUpDownC2(UINT uMod, UINT uVKCode, int nFlag);
+    void keyUpDownMessage(UINT uMod, UINT uVKCode, int nFlag, HWND hWnd);
 
-	void registerHotkey();
-	void stopHotkey();
-	void setAppendHotKey();
-	void stopAppendHotKey();
-	CString convertMacro(STRING_DATA* SourceData, CString strSelect, CString strClip, CString strSoftName);
-	CString convertMacroPlugin(STRING_DATA* SourceData, CString strSelect, CString strClip, CString strSoftName);
+    void registerHotkey();
+    void stopHotkey();
+    void setAppendHotKey();
+    void stopAppendHotKey();
+    CString convertMacro(STRING_DATA* SourceData, CString strSelect, CString strClip, CString strSoftName);
+    CString convertMacroPlugin(STRING_DATA* SourceData, CString strSelect, CString strClip, CString strSoftName);
 
-	HWND getAppWnd(){return m_hSelfWnd;}
-	bool isCloseKey(){return m_isCloseKey;}
-	void popupTreeWinMC(HWND hForeground);
+    HWND getAppWnd() { return m_hSelfWnd; }
+    bool isCloseKey() { return m_isCloseKey; }
+    void popupTreeWinMC(HWND hForeground);
 
-	void onClipboardChanged(CString strClipboard);
-	void toggleStockMode();
-	bool getStockSW(){return m_isStockMode;}
-	int  getPhase() {return m_nPhase;}
-	void fifoClipbord();
-	void resetTreeDialog();
+    void onClipboardChanged(CString strClipboard);
+    void toggleStockMode();
+    bool getStockSW() { return m_isStockMode; }
+    int  getPhase() { return m_nPhase; }
+    void fifoClipbord();
+    void resetTreeDialog();
 
-	bool SelectFile();
-	CString NewFile();
-	void SaveData();
+    bool SelectFile();
+    CString NewFile();
+    void SaveData();
 
-	CMyTreeDialog *m_pTreeDlg;
-	CInit m_ini;
-	CClipBoard m_clipboard;
-	CCharu3Tree *m_pTree;
-	CMainFrame *m_pMainFrame;
-	COPYPASTE_KEY m_keySet;
-	FOCUS_INFO m_focusInfo;
-	HWND m_hSelfWnd;
+    CMyTreeDialog* m_pTreeDlg;
+    CInit m_ini;
+    CClipBoard m_clipboard;
+    CCharu3Tree* m_pTree;
+    CMainFrame* m_pMainFrame;
+    COPYPASTE_KEY m_keySet;
+    FOCUS_INFO m_focusInfo;
+    HWND m_hSelfWnd;
 
-	// オーバーライド
-	// ClassWizard は仮想関数のオーバーライドを生成します。
-	//{{AFX_VIRTUAL(CCharu3App)
-	public:
-	virtual BOOL InitInstance();
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	virtual int ExitInstance();
-	//}}AFX_VIRTUAL
+    // オーバーライド
+    // ClassWizard は仮想関数のオーバーライドを生成します。
+    //{{AFX_VIRTUAL(CCharu3App)
+public:
+    virtual BOOL InitInstance();
+    virtual BOOL PreTranslateMessage(MSG* pMsg);
+    virtual int ExitInstance();
+    //}}AFX_VIRTUAL
 
 // インプリメンテーション
 
 public:
-	//{{AFX_MSG(CCharu3App)
-	afx_msg void OnExit();
-	afx_msg void OnAbout();
-	afx_msg void OnIssues();
-	afx_msg void OnDiscussions();
-	afx_msg void OnWiki();
-	afx_msg void OnOption();
-	afx_msg void OnAddData();
-	afx_msg void OnChangData();
-	afx_msg void OnExport();
-	afx_msg void OnStockStop();
-	afx_msg void OnResetTree();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    //{{AFX_MSG(CCharu3App)
+    afx_msg void OnExit();
+    afx_msg void OnAbout();
+    afx_msg void OnIssues();
+    afx_msg void OnDiscussions();
+    afx_msg void OnWiki();
+    afx_msg void OnOption();
+    afx_msg void OnAddData();
+    afx_msg void OnChangData();
+    afx_msg void OnExport();
+    afx_msg void OnStockStop();
+    afx_msg void OnResetTree();
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 
 protected:
-	void getPopupPos(POINT *pPos,int nPosType);
-	void adjustLocation(POINT *pos);
-	void convHotKeyConf(CString strKey,UINT *pMod,UINT *pVK,bool *isDoubleClick);
-	int getKeycode(TCHAR *szKeyName, bool scanLayout);
-	bool setAppendKeyInit(HWND hTopWindow,COPYPASTE_KEY *keySet);
-	void playHotItem(int nTarget);
-	void playData(STRING_DATA data, CString strClip, CString strSelect, bool isPaste, bool isChange = true);
+    void getPopupPos(POINT* pPos, int nPosType);
+    void adjustLocation(POINT* pos);
+    void convHotKeyConf(CString strKey, UINT* pMod, UINT* pVK, bool* isDoubleClick);
+    int getKeycode(TCHAR* szKeyName, bool scanLayout);
+    bool setAppendKeyInit(HWND hTopWindow, COPYPASTE_KEY* keySet);
+    void playHotItem(int nTarget);
+    void playData(STRING_DATA data, CString strClip, CString strSelect, bool isPaste, bool isChange = true);
 
-	HTREEITEM m_hSelectItemBkup;
-	DWORD m_dwDoubleKeyPopTime,m_dwDoubleKeyFifoTime;
+    HTREEITEM m_hSelectItemBkup;
+    DWORD m_dwDoubleKeyPopTime, m_dwDoubleKeyFifoTime;
 
-	std::vector<HOT_KEY_CODE> m_hotkeyVector;
-	KEY_CODE_NAME m_keyStruct[256];
-	bool init();
-	HANDLE m_hMutex;				//重複起動判別ハンドル
-	HWND m_hActiveKeyWnd;
-	HINSTANCE m_hLangDll;
+    std::vector<HOT_KEY_CODE> m_hotkeyVector;
+    KEY_CODE_NAME m_keyStruct[256];
+    bool init();
+    HANDLE m_hMutex;				//重複起動判別ハンドル
+    HWND m_hActiveKeyWnd;
+    HINSTANCE m_hLangDll;
 
-	bool m_isCloseKey,m_isStockMode;
-	BOOL m_isImeStatus;
-	int m_nPhase;
-	CString m_strSavedClipboard, m_strPreviousStocked, m_strPreviousRecordedToHistory;
+    bool m_isCloseKey, m_isStockMode;
+    BOOL m_isImeStatus;
+    int m_nPhase;
+    CString m_strSavedClipboard, m_strPreviousStocked, m_strPreviousRecordedToHistory;
 };
 
 //---------------------------------------------------
@@ -273,24 +273,24 @@ protected:
 class CAboutDlg : public CDialog
 {
 public:
-	CAboutDlg();
-// ダイアログ データ
-	//{{AFX_DATA(CAboutDlg)
-	enum { IDD = IDD_ABOUTBOX };
-	CString	m_strVersion;
-	//}}AFX_DATA
+    CAboutDlg();
+    // ダイアログ データ
+        //{{AFX_DATA(CAboutDlg)
+    enum { IDD = IDD_ABOUTBOX };
+    CString	m_strVersion;
+    //}}AFX_DATA
 
-	// ClassWizard 仮想関数のオーバーライドを生成します。
-	//{{AFX_VIRTUAL(CAboutDlg)
+    // ClassWizard 仮想関数のオーバーライドを生成します。
+    //{{AFX_VIRTUAL(CAboutDlg)
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV のサポート
-	//}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV のサポート
+    //}}AFX_VIRTUAL
 
 // インプリメンテーション
 protected:
-	//{{AFX_MSG(CAboutDlg)
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    //{{AFX_MSG(CAboutDlg)
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

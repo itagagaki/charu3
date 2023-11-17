@@ -12,42 +12,42 @@
 
 class CMyHotkeyCtrl : public CHotKeyCtrl
 {
-// コンストラクション
+    // コンストラクション
 public:
-	CMyHotkeyCtrl();
+    CMyHotkeyCtrl();
 
-// アトリビュート
+    // アトリビュート
 public:
 
-// オペレーション
+    // オペレーション
 public:
-	void SetHotKey( WORD wVirtualKeyCode, WORD wModifiers ) {
-		if(wVirtualKeyCode >= 0x60 || wVirtualKeyCode == 0x1d || wVirtualKeyCode == 0x1c || wVirtualKeyCode == 0x20)
-			CHotKeyCtrl::SetHotKey(wVirtualKeyCode,wModifiers);
-		else
-			CHotKeyCtrl::SetHotKey(wVirtualKeyCode,wModifiers | HOTKEYF_EXT);
-	};
+    void SetHotKey(WORD wVirtualKeyCode, WORD wModifiers) {
+        if (wVirtualKeyCode >= 0x60 || wVirtualKeyCode == 0x1d || wVirtualKeyCode == 0x1c || wVirtualKeyCode == 0x20)
+            CHotKeyCtrl::SetHotKey(wVirtualKeyCode, wModifiers);
+        else
+            CHotKeyCtrl::SetHotKey(wVirtualKeyCode, wModifiers | HOTKEYF_EXT);
+    };
 
-// オーバーライド
-	// ClassWizard は仮想関数のオーバーライドを生成します。
-	//{{AFX_VIRTUAL(CMyHotkeyCtrl)
-	public:
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	//}}AFX_VIRTUAL
+    // オーバーライド
+        // ClassWizard は仮想関数のオーバーライドを生成します。
+        //{{AFX_VIRTUAL(CMyHotkeyCtrl)
+public:
+    virtual BOOL PreTranslateMessage(MSG* pMsg);
+    //}}AFX_VIRTUAL
 
 // インプリメンテーション
 public:
-	virtual ~CMyHotkeyCtrl();
+    virtual ~CMyHotkeyCtrl();
 
-	// 生成されたメッセージ マップ関数
+    // 生成されたメッセージ マップ関数
 protected:
-	//{{AFX_MSG(CMyHotkeyCtrl)
-		// メモ - ClassWizard はこの位置にメンバ関数を追加または削除します。
-	//}}AFX_MSG
+    //{{AFX_MSG(CMyHotkeyCtrl)
+        // メモ - ClassWizard はこの位置にメンバ関数を追加または削除します。
+    //}}AFX_MSG
 
-	DECLARE_MESSAGE_MAP()
+    DECLARE_MESSAGE_MAP()
 
-	WORD m_lastKey,m_mod;
+    WORD m_lastKey, m_mod;
 };
 
 /////////////////////////////////////////////////////////////////////////////
