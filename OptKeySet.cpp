@@ -350,7 +350,6 @@ void COptKeySet::OnOptKeyAdd()
     deffault.m_sCopyPasteKey = theApp.m_ini.m_key.m_defKeySet;
     keySetEditDlg.setKeyInfo(deffault);
 
-    CString strBuff;
     keySetEditDlg.m_pasteMessage = _T("111,0,0");
     keySetEditDlg.m_copyMessage = _T("111,0,0");
 

@@ -45,14 +45,16 @@ namespace {
 //---------------------------------------------------
 CInit::CInit()
     : m_bIsPortableMode(false)
+    , m_IconSize{ ICON_SIZE, ICON_SIZE }
     , m_nOptionPage(0)
+    , m_bReadOnly(false)
+    , m_DialogSize{ 100, 100 }
+    , m_nSearchTarget(0)
+    , m_nSearchLogic(0)
     , m_bSearchCaseInsensitive(true)
     , m_nSelectID(-1)
     , m_nTreeID()
     , m_nRecNumber(0)
-    , m_nSearchTarget(0)
-    , m_nSearchLogic(0)
-    , m_bReadOnly(false)
     , m_strStateFile(_T(""))
     , m_strSettingsFile(_T(""))
     , m_bDebug(false)
@@ -62,16 +64,9 @@ CInit::CInit()
     , m_nClipboardRetryInterval(50)
     , m_nClipboardRetryTimes(10)
     , m_nWindowCheckInterval(400)
-    , m_etc()
-    , m_pop()
-    , m_keyLayout()
+    , m_keyLayout(nullptr)
     , m_hHookDLL(nullptr)
 {
-    m_DialogSize.x = 100;
-    m_DialogSize.y = 100;
-
-    m_IconSize.x = ICON_SIZE;
-    m_IconSize.y = ICON_SIZE;
 }
 
 //---------------------------------------------------
@@ -381,7 +376,6 @@ void CInit::getPasteHotKey(UINT* uKey, UINT* uMod, UINT* uCopyKey, UINT* uCopyMo
 
     *uCopyMod = m_key.m_defKeySet.m_uMod_Copy;
     *uCopyKey = m_key.m_defKeySet.m_uVK_Copy;
-
 }
 //---------------------------------------------------
 //ŠÖ”–¼	setPasteHotkey()
@@ -450,7 +444,7 @@ void CInit::unHookKey()
     //ƒtƒbƒN‚Ì‰ðœ
     if (m_hHookDLL) {
         pUnHook = ::GetProcAddress(m_hHookDLL, "UnHook");
-        if (pUnHook)	pUnHook();
+        if (pUnHook) pUnHook();
         FreeLibrary(m_hHookDLL);
         m_hHookDLL = NULL;
     }
@@ -479,22 +473,22 @@ COPYPASTE_KEY CInit::getAppendKeyInit(CString strWinName, int nNumber)
 
         // ‘O•ûˆê’v
         if (key.m_nMatch == MATCH_FORWARD) {
-            if (nFindPoint == 0)	isMatch = true;
+            if (nFindPoint == 0) isMatch = true;
         }
         // Œã•ûˆê’v
         else if (key.m_nMatch == MATCH_BACKWARD && nFindPoint >= 0) {
-            if (nFindPoint == (strWinName.GetLength() - key.m_strTitle.GetLength()))	isMatch = true;
+            if (nFindPoint == (strWinName.GetLength() - key.m_strTitle.GetLength())) isMatch = true;
         }
         // •”•ªˆê’v
         else if (key.m_nMatch == MATCH_PARTIAL) {
-            if (nFindPoint >= 0)	isMatch = true;
+            if (nFindPoint >= 0) isMatch = true;
         }
         // Š®‘Sˆê’v
         else if (key.m_nMatch == MATCH_EXACT) {
-            if (strWinName == key.m_strTitle)	isMatch = true;
+            if (strWinName == key.m_strTitle) isMatch = true;
         }
 
-        if (isMatch) {		//Œ©‚Â‚©‚Á‚½
+        if (isMatch) { //Œ©‚Â‚©‚Á‚½
             if (nNumber > 0) {
                 nNumber--;
                 isMatch = false;
@@ -531,22 +525,22 @@ CHANGE_KEY CInit::getAppendKeyInit2(CString strWinName)
 
         // ‘O•ûˆê’v
         if (key.m_nMatch == MATCH_FORWARD) {
-            if (nFindPoint == 0)	isMatch = true;
+            if (nFindPoint == 0) isMatch = true;
         }
         // Œã•ûˆê’v
         else if (key.m_nMatch == MATCH_BACKWARD && nFindPoint >= 0) {
-            if (nFindPoint == (strWinName.GetLength() - key.m_strTitle.GetLength()))	isMatch = true;
+            if (nFindPoint == (strWinName.GetLength() - key.m_strTitle.GetLength())) isMatch = true;
         }
         // •”•ªˆê’v
         else if (key.m_nMatch == MATCH_PARTIAL) {
-            if (nFindPoint >= 0)	isMatch = true;
+            if (nFindPoint >= 0) isMatch = true;
         }
         // Š®‘Sˆê’v
         else if (key.m_nMatch == MATCH_EXACT) {
-            if (strWinName == key.m_strTitle)	isMatch = true;
+            if (strWinName == key.m_strTitle) isMatch = true;
         }
 
-        if (isMatch) {		//Œ©‚Â‚©‚Á‚½
+        if (isMatch) { //Œ©‚Â‚©‚Á‚½
             return key;
         }
     }

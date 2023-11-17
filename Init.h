@@ -39,9 +39,9 @@
 //---------------------------------------------------
 struct OPTION_ETC
 {
-    bool m_bPutBackClipboard; // データツリーからのコピー＆ペースト後、クリップボードに以前の内容をセットし直す
-    bool m_bShowClipboardInTooltipOfNofifyIcon; // 通知領域アイコンのツールチップでクリップボードの内容を表示する
-    int m_nIconClick;		// 通知領域アイコンをクリックしたときの動作
+    bool m_bPutBackClipboard{}; // データツリーからのコピー＆ペースト後、クリップボードに以前の内容をセットし直す
+    bool m_bShowClipboardInTooltipOfNofifyIcon{}; // 通知領域アイコンのツールチップでクリップボードの内容を表示する
+    int m_nIconClick{};		// 通知領域アイコンをクリックしたときの動作
 };
 
 //---------------------------------------------------
@@ -49,29 +49,29 @@ struct OPTION_ETC
 //---------------------------------------------------
 struct OPTION_POPUP
 {
-    bool m_bKeepSelection; // Keep selection on data tree view
-    bool m_bKeepFolders; // Keep expanded/collapsed status of folders
+    bool m_bKeepSelection{}; // Keep selection on data tree view
+    bool m_bKeepFolders{}; // Keep expanded/collapsed status of folders
 
-    int  m_nDoubleKeyPOP;
-    UINT m_uVK_Pouup;	//ポップアップキー
-    UINT m_uMod_Pouup;	//ポップアップ特殊キー
-    int  m_nDCKeyPopTime;
+    int  m_nDoubleKeyPOP{};
+    UINT m_uVK_Pouup{};	//ポップアップキー
+    UINT m_uMod_Pouup{};	//ポップアップ特殊キー
+    int  m_nDCKeyPopTime{};
 
-    int  m_nDoubleKeyFIFO;
-    UINT m_uVK_Fifo;	//履歴FIFO切り替えキー
-    UINT m_uMod_Fifo;	//履歴FIFO切り替え特殊キー
-    int  m_nDCKeyFifoTime;
+    int  m_nDoubleKeyFIFO{};
+    UINT m_uVK_Fifo{};	//履歴FIFO切り替えキー
+    UINT m_uMod_Fifo{};	//履歴FIFO切り替え特殊キー
+    int  m_nDCKeyFifoTime{};
 
-    int  m_nPopupPos;		//ポップアップ出現位置
-    POINT m_posCaretHosei;	//キャレット位置の補正値
+    int  m_nPopupPos{};		//ポップアップ出現位置
+    POINT m_posCaretHosei{};	//キャレット位置の補正値
 
-    int m_nSelectByTypingFinalizePeriod;
-    bool m_bSelectByTypingCaseInsensitive;
-    bool m_bSelectByTypingAutoPaste;
-    bool m_bSelectByTypingAutoExpand;
+    int m_nSelectByTypingFinalizePeriod{};
+    bool m_bSelectByTypingCaseInsensitive{};
+    bool m_bSelectByTypingAutoPaste{};
+    bool m_bSelectByTypingAutoExpand{};
 
-    bool m_bSingleExpand;
-    bool m_bSingleEnter;
+    bool m_bSingleExpand{};
+    bool m_bSingleEnter{};
 };
 
 //---------------------------------------------------

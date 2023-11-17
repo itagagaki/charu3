@@ -18,9 +18,24 @@
 class CClipBoard
 {
 public:
-    CClipBoard() : m_hParentWnd(NULL), m_bListening(false), m_nRetryCount(0), m_nRetryInterval(0) {}
-    CClipBoard(int retryCount, int retryInterval) : m_hParentWnd(NULL), m_bListening(false), m_nRetryCount(retryCount), m_nRetryInterval(retryInterval) {}
+    CClipBoard()
+        : m_hParentWnd(nullptr)
+        , m_bListening(false)
+        , m_nRetryCount(0)
+        , m_nRetryInterval(0)
+    {
+    }
+
+    CClipBoard(int retryCount, int retryInterval)
+        : m_hParentWnd(nullptr)
+        , m_bListening(false)
+        , m_nRetryCount(retryCount)
+        , m_nRetryInterval(retryInterval)
+    {
+    }
+
     virtual ~CClipBoard() {}
+
     void setParent(HWND hWnd) {
         m_hParentWnd = hWnd;
         StartListener();

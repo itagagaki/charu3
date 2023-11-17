@@ -16,16 +16,15 @@ static char THIS_FILE[] = __FILE__;
 
 COptKeySetEditDlg::COptKeySetEditDlg(CWnd* pParent /*=NULL*/)
     : CDialog(COptKeySetEditDlg::IDD, pParent)
+    , m_pasteMessage(_T(""))
+    , m_copyMessage(_T(""))
+    , m_keyAction(-1)
+    , m_matchCombo(-1)
+    , m_caption(_T(""))
+    , m_copyWait(0)
+    , m_pasteWait(0)
+    , m_nHistoryLimit(-1)
 {
-    //{{AFX_DATA_INIT(COptKeySetEditDlg)
-    m_pasteMessage = _T("");
-    m_copyMessage = _T("");
-    m_keyAction = -1;
-    m_matchCombo = -1;
-    m_caption = _T("");
-    m_copyWait = 0;
-    m_pasteWait = 0;
-    //}}AFX_DATA_INIT
 }
 
 void COptKeySetEditDlg::DoDataExchange(CDataExchange* pDX)
@@ -113,7 +112,7 @@ BOOL CALLBACK EnumWindowTitle(HWND hwnd, LPARAM lParam)
 {
     CComboBox* combo = (CComboBox*)lParam;
 
-    TCHAR WindowName[1024];
+    TCHAR WindowName[1024] = {};
     *WindowName = (char)NULL;
     if (IsWindowVisible(hwnd)) {
         int resalt = GetWindowText(hwnd, WindowName, _countof(WindowName));
