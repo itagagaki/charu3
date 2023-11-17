@@ -45,8 +45,17 @@ struct RW_PLUGIN
     CString m_strPluginFilePath; // Pathname of the plugin
     CString m_strFormatName; // Data format name
     CString m_strExtension; // Extension of data file
-    RW_PLUGIN(CString path, TCHAR* format, TCHAR* ext) : m_strPluginFilePath(CString(path)), m_strFormatName(CString(format)), m_strExtension(CString(ext)) {}
-    RW_PLUGIN() {}
+
+    RW_PLUGIN(CString path, TCHAR* format, TCHAR* ext)
+        : m_strPluginFilePath(CString(path))
+        , m_strFormatName(CString(format))
+        , m_strExtension(CString(ext))
+    {
+    }
+
+    RW_PLUGIN()
+    {
+    }
 };
 
 //---------------------------------------------------
@@ -64,8 +73,18 @@ struct STRING_DATA
     CString  m_strData;		//設定データ文字列
     CString  m_strMacro;	//拡張用文字列データ
 
-    STRING_DATA() : m_cKind(KIND_LOCK), m_cIcon(0), m_nMyID(0), m_nParentID(0), m_timeCreate(0), m_timeEdit(0)
-        , m_strTitle(_T("")), m_strData(_T("")), m_strMacro(_T("")) {}
+    STRING_DATA()
+        : m_cKind(KIND_LOCK)
+        , m_cIcon(0)
+        , m_nMyID(0)
+        , m_nParentID(0)
+        , m_timeCreate(0)
+        , m_timeEdit(0)
+        , m_strTitle(_T(""))
+        , m_strData(_T(""))
+        , m_strMacro(_T(""))
+    {
+    }
 };
 
 typedef bool (*writeDataFile)(CString strFileName, std::list<STRING_DATA>* pList);
