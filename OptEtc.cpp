@@ -4,16 +4,15 @@
 ----------------------------------------------------------*/
 
 #include "stdafx.h"
-#include "OptEtc.h"
-#include "Charu3.h"
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
 
-extern CCharu3App theApp;
+#include "OptEtc.h"
+#include "Charu3.h"
+#include "resource.h"
 
 //---------------------------------------------------
 //ä÷êîñº	COptEtc

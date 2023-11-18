@@ -9,8 +9,8 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// Charu3Tree.h : ヘッダー ファイル
-//
+
+#include "stdafx.h"
 
 #include <list>
 #include <vector>

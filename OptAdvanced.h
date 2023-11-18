@@ -8,11 +8,11 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// OptAdvanced.h : ヘッダー ファイル
-#include "resource.h"
-#include "MyEditCtrl.h"
 
-#include <afxwin.h>
+#include "stdafx.h"
+
+#include "MyEditCtrl.h"
+#include "resource.h"
 
 //---------------------------------------------------
 // COptAdvanced ダイアログ

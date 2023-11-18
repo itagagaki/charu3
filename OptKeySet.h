@@ -9,13 +9,14 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// OptKeySet.h : ヘッダー ファイル
-#include "resource.h"
-#include "Init.h"
-#include "MyHotkeyCtrl.h"
+
+#include "stdafx.h"
 
 #include <list>
-#include <afxwin.h>
+
+#include "MyHotkeyCtrl.h"
+#include "Init.h"
+#include "resource.h"
 
 //---------------------------------------------------
 // COptKeySet ダイアログ

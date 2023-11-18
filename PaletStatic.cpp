@@ -4,14 +4,13 @@
 ----------------------------------------------------------*/
 
 #include "stdafx.h"
-#include "PaletStatic.h"
-#include "charu3.h"
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
+
+#include "PaletStatic.h"
 
 //---------------------------------------------------
 //ä÷êîñº	CPaletStatic

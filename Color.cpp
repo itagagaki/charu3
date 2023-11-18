@@ -1,8 +1,8 @@
-#include "Color.h"
-
 #include <string>
 #include <regex>
 #include <vector>
+
+#include "Color.h"
 
 uint32_t Color::Parse(const std::string str)
 {

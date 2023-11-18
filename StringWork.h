@@ -6,11 +6,11 @@
 #if !defined(AFX_STRINGWORK_H__E26F2A4C_01CC_4E2E_8A31_1E4C6D507C1E__INCLUDED_)
 #define AFX_STRINGWORK_H__E26F2A4C_01CC_4E2E_8A31_1E4C6D507C1E__INCLUDED_
 
-#include <tchar.h>
-
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
+
+#include <tchar.h>
 
 //---------------------------------------------------
 //Å@ÉNÉâÉXêÈåæ

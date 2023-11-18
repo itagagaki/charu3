@@ -4,18 +4,18 @@
 ----------------------------------------------------------*/
 
 #include "stdafx.h"
-#include "Charu3Tree.h"
-#include "StringWork.h"
-#include "Charu3.h"
-
-#include <list>
-#include <vector>
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
+
+#include <list>
+#include <vector>
+
+#include "Charu3Tree.h"
+#include "Charu3.h"
+#include "StringWork.h"
 
 #ifdef _ME_NAME_
 #undef _ME_NAME_

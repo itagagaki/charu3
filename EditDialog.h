@@ -10,13 +10,14 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "resource.h"
-#include "Charu3Tree.h"
-#include "MyEditCtrl.h"
-#include "Init.h"
+#include "stdafx.h"
 
 #include <vector>
-#include <afxwin.h>
+
+#include "MyEditCtrl.h"
+#include "Charu3Tree.h"
+#include "Init.h"
+#include "resource.h"
 
 //---------------------------------------------------
 // CEditDialog ダイアログ

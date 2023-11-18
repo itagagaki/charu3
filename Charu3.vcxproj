@@ -103,7 +103,7 @@
     <ClCompile Include="OptVisual.cpp" />
     <ClCompile Include="PaletStatic.cpp" />
     <ClCompile Include="SerchDialog.cpp" />
-    <ClCompile Include="StdAfx.cpp" />
+    <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="StringWork.cpp" />
     <ClCompile Include="Color.cpp" />
   </ItemGroup>
@@ -133,7 +133,7 @@
     <ClInclude Include="PaletStatic.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SerchDialog.h" />
-    <ClInclude Include="StdAfx.h" />
+    <ClInclude Include="stdafx.h" />
     <ClInclude Include="StringWork.h" />
   </ItemGroup>
   <ItemGroup>

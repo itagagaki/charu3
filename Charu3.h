@@ -10,6 +10,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "stdafx.h"
+
 #ifndef __AFXWIN_H__
 #error include 'stdafx.h' before including this file for PCH
 #endif
@@ -20,6 +22,9 @@
 
 #define ROOT -1
 
+#include <list>
+#include <vector>
+
 #include "resource.h"       // メイン シンボル
 #include "Charu3Tree.h"
 #include "MyTreeDialog.h"
@@ -27,9 +32,6 @@
 #include "Init.h"
 #include "MainFrm.h"
 #include "General.h"
-
-#include <list>
-#include <vector>
 
 // App Name
 #ifdef _UNICODE
@@ -266,6 +268,8 @@ protected:
     int m_nPhase;
     CString m_strSavedClipboard, m_strPreviousStocked, m_strPreviousRecordedToHistory;
 };
+
+extern CCharu3App theApp;
 
 //---------------------------------------------------
 // アプリケーションのバージョン情報で使われる CAboutDlg ダイアログ

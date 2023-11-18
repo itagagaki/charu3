@@ -10,7 +10,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include <WinUser.h>
+#include "stdafx.h"
 
 //---------------------------------------------------
 // ƒNƒ‰ƒX’è‹`

@@ -11,6 +11,7 @@
 #endif // _MSC_VER > 1000
 
 #include "stdafx.h"
+
 #include "nlomann/json.hpp"
 
 #if !defined(SPI_GETFOREGROUNDLOCKTIMEOUT)

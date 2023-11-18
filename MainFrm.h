@@ -10,6 +10,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "stdafx.h"
+
 #include "ChildView.h"
 
 #define _ME_NAME_ _T("MainFrm.cpp")

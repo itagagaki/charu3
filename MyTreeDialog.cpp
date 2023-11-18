@@ -4,22 +4,20 @@
 ----------------------------------------------------------*/
 
 #include "stdafx.h"
-#include "MyTreeDialog.h"
-#include "EditDialog.h"
-#include "SerchDialog.h"
-#include "General.h"
-#include "Charu3.h"
-
-#include <list>
-#include <vector>
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
 
-extern CCharu3App theApp;
+#include <list>
+#include <vector>
+
+#include "MyTreeDialog.h"
+#include "EditDialog.h"
+#include "SerchDialog.h"
+#include "Charu3.h"
+#include "General.h"
 
 namespace {
     //---------------------------------------------------

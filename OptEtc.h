@@ -9,11 +9,11 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// OptEtc.h : ヘッダー ファイル
-#include "resource.h"
-#include "MyHotkeyCtrl.h"
 
-#include <afxwin.h>
+#include "stdafx.h"
+
+#include "MyHotkeyCtrl.h"
+#include "resource.h"
 
 //---------------------------------------------------
 // COptEtc ダイアログ

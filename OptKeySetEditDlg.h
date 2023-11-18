@@ -4,13 +4,12 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// OptKeySetEditDlg.h : ヘッダー ファイル
-//
-#include "resource.h"
-#include "Init.h"
-#include "MyHotkeyCtrl.h"
 
-#include <afxwin.h>
+#include "stdafx.h"
+
+#include "MyHotkeyCtrl.h"
+#include "Init.h"
+#include "resource.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // COptKeySetEditDlg ダイアログ

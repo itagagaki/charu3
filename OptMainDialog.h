@@ -9,15 +9,15 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// OptMainDialog.h : ヘッダー ファイル
+
+#include "stdafx.h"
+
 #include "OptEtc.h"
 #include "OptVisual.h"
 #include "OptPopup.h"
 #include "OptFifo.h"
 #include "OptKeySet.h"
 #include "OptAdvanced.h"
-
-#include <afxwin.h>
 
 #define MAX_OPT_PAGE 5
 

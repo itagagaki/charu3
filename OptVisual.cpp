@@ -4,20 +4,20 @@
 ----------------------------------------------------------*/
 
 #include "stdafx.h"
-#include "OptVisual.h"
-#include "General.h"
-#include "Color.h"
-#include "Charu3.h"
-#include "nlomann/json.hpp"
-#include <fstream>
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
 
-extern CCharu3App theApp;
+#include <fstream>
+#include "nlomann/json.hpp"
+
+#include "OptVisual.h"
+#include "Charu3.h"
+#include "General.h"
+#include "Color.h"
+#include "resource.h"
 
 //---------------------------------------------------
 //ä÷êîñº	COptVisual

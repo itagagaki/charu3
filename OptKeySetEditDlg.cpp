@@ -2,14 +2,15 @@
 //
 
 #include "stdafx.h"
-#include "General.h"
-#include "OptKeySetEditDlg.h"
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
+
+#include "OptKeySetEditDlg.h"
+#include "General.h"
+#include "resource.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // COptKeySetEditDlg ダイアログ

@@ -1,5 +1,7 @@
-﻿#include "resource.h"
+﻿#include "stdafx.h"
+
 #include "InitialDialog.h"
+#include "resource.h"
 
 IMPLEMENT_DYNAMIC(CInitialDialog, CDialog)
 

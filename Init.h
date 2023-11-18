@@ -10,11 +10,11 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "nlomann/json.hpp"
-#include "General.h"
-
 #include <list>
 #include <vector>
+#include "nlomann/json.hpp"
+
+#include "General.h"
 
 //設定セクション定義
 #define REGKEY_ENV		_T("Environment")

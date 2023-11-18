@@ -4,17 +4,16 @@
 ----------------------------------------------------------*/
 
 #include "stdafx.h"
-#include "General.h"
-#include "OptPopup.h"
-#include "Charu3.h"
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
 
-extern CCharu3App theApp;
+#include "OptPopup.h"
+#include "Charu3.h"
+#include "General.h"
+#include "resource.h"
 
 //---------------------------------------------------
 //ä÷êîñº	COptPopup

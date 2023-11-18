@@ -3,13 +3,16 @@
                                     2002/12/07 (c)Keizi
 ----------------------------------------------------------*/
 
-#include "General.h"
-
+#include "stdafx.h"
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 #endif
+
+#include "nlomann/json.hpp"
+
+#include "General.h"
 
 //---------------------------------------------------
 //ä÷êîñº	CGeneral
@@ -17,7 +20,6 @@ static char THIS_FILE[] = __FILE__;
 //---------------------------------------------------
 CGeneral::CGeneral()
 {
-
 }
 
 //---------------------------------------------------
@@ -26,7 +28,6 @@ CGeneral::CGeneral()
 //---------------------------------------------------
 CGeneral::~CGeneral()
 {
-
 }
 
 //---------------------------------------------------

@@ -4,18 +4,16 @@
 ----------------------------------------------------------*/
 
 #include "stdafx.h"
-#include "Charu3.h"
-#include "SerchDialog.h"
-#include "General.h"
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// アプリケーションオブジェクト
-extern	CCharu3App theApp;
+#include "SerchDialog.h"
+#include "Charu3.h"
+#include "General.h"
+#include "resource.h"
 
 //---------------------------------------------------
 // CSerchDialog ダイアログ

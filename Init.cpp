@@ -4,21 +4,22 @@
 ----------------------------------------------------------*/
 
 #include "stdafx.h"
-#include "Charu3.h"
-#include "Init.h"
-#include "General.h"
-#include "StringWork.h"
-#include "Color.h"
-
-#include <fstream>
-#include <vector>
-#include <list>
-
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 #endif
+
+#include <fstream>
+#include <list>
+#include <vector>
+#include "nlomann/json.hpp"
+
+#include "Init.h"
+#include "Charu3.h"
+#include "General.h"
+#include "StringWork.h"
+#include "Color.h"
 
 namespace {
 

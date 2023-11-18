@@ -9,10 +9,10 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// OptFifo.h : ヘッダー ファイル
-#include "resource.h"
 
-#include <afxwin.h>
+#include "stdafx.h"
+
+#include "resource.h"
 
 //---------------------------------------------------
 // COptFifo ダイアログ

@@ -9,11 +9,12 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// OptVisual.h : ヘッダー ファイル
+
+#include "stdafx.h"
+
 #include "resource.h"
 #include "PaletStatic.h"
-
-#include <afxwin.h>
+#include "resource.h"
 
 #define	MAX_FONT 256
 //---------------------------------------------------

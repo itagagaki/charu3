@@ -9,7 +9,8 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// PaletStatic.h : ヘッダー ファイル
+
+#include "stdafx.h"
 
 //---------------------------------------------------
 // CPaletStatic ウィンドウ

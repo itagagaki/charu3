@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "resource.h"
+#include "stdafx.h"
 
-#include <afxwin.h>
+#include "resource.h"
 
 class CInitialDialog : public CDialog
 {

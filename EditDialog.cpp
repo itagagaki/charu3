@@ -4,19 +4,18 @@
 ----------------------------------------------------------*/
 
 #include "stdafx.h"
-#include "Charu3.h"
-#include "EditDialog.h"
-#include "ClipBord.h"
-
-#include <vector>
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
 
-extern CCharu3App theApp;
+#include <vector>
+
+#include "EditDialog.h"
+#include "Charu3.h"
+#include "ClipBord.h"
+#include "resource.h"
 
 //---------------------------------------------------
 //ä÷êîñº	CEditDialog

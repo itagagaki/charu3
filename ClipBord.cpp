@@ -4,13 +4,13 @@
 ----------------------------------------------------------*/
 
 #include "stdafx.h"
-#include "ClipBord.h"
-
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 #endif
+
+#include "ClipBord.h"
 
 //---------------------------------------------------
 //ä÷êîñº	setClipboardText(const TCHAR* sData)

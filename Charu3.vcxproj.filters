@@ -87,7 +87,7 @@
     <ClCompile Include="ChildView.cpp">
       <Filter>あまり変更しない</Filter>
     </ClCompile>
-    <ClCompile Include="StdAfx.cpp">
+    <ClCompile Include="stdafx.cpp">
       <Filter>あまり変更しない</Filter>
     </ClCompile>
     <ClCompile Include="Charu3Tree.cpp">
@@ -167,7 +167,7 @@
     <ClInclude Include="resource.h">
       <Filter>あまり変更しない</Filter>
     </ClInclude>
-    <ClInclude Include="StdAfx.h">
+    <ClInclude Include="stdafx.h">
       <Filter>あまり変更しない</Filter>
     </ClInclude>
     <ClInclude Include="Charu3Tree.h">

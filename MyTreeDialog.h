@@ -9,10 +9,12 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// MyTreeDialog.h : ヘッダー ファイル
-#include "resource.h"
+
+#include "stdafx.h"
+
 #include "Charu3Tree.h"
 #include "SerchDialog.h"
+#include "resource.h"
 
 //---------------------------------------------------
 // CMyTreeDialog ダイアログ

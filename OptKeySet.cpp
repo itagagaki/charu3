@@ -4,20 +4,19 @@
 ----------------------------------------------------------*/
 
 #include "stdafx.h"
-#include "OptKeySet.h"
-#include "General.h"
-#include "OptKeySetEditDlg.h"
-#include "Charu3.h"
-
-#include <list>
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
 
-extern CCharu3App theApp;
+#include <list>
+
+#include "OptKeySet.h"
+#include "OptKeySetEditDlg.h"
+#include "Charu3.h"
+#include "General.h"
+#include "resource.h"
 
 //---------------------------------------------------
 //ä÷êîñº	COptKeySet

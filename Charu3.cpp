@@ -3,26 +3,26 @@
     アプリケーション用クラスの機能定義	'2002.11.15 (c)C+ Factory
 ----------------------------------------------------------*/
 #include "stdafx.h"
-#include "InitialDialog.h"
-#include "EditDialog.h"
-#include "OptMainDialog.h"
-#include "StringWork.h"
-#include "Charu3.h"
-#if false
-// TODO: Did not handle this well with Visual Studio 2019.
-#include <MULTIMON.H>
-#endif
-#include <dwmapi.h>
-
-#include <ctype.h>
-#include <list>
-#include <vector>
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
+
+#if false
+// TODO: Did not handle this well with Visual Studio 2019.
+#include <MULTIMON.H>
+#endif
+#include <dwmapi.h>
+#include <ctype.h>
+#include <list>
+#include <vector>
+
+#include "Charu3.h"
+#include "InitialDialog.h"
+#include "EditDialog.h"
+#include "OptMainDialog.h"
+#include "StringWork.h"
 
 #ifdef _ME_NAME_
 #undef _ME_NAME_
