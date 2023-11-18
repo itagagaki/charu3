@@ -33,13 +33,6 @@
 #include "MainFrm.h"
 #include "General.h"
 
-// App Name
-#ifdef _UNICODE
-#define ABOUT_NAME _T("Charu3 SE")
-#else
-#define ABOUT_NAME _T("Charu3 Version 7.06.07")
-#endif
-
 //ファイル名設定
 #define NAME				_T("Charu3")
 #define INI_FILE			_T("Charu3.ini")
@@ -270,32 +263,6 @@ protected:
 };
 
 extern CCharu3App theApp;
-
-//---------------------------------------------------
-// アプリケーションのバージョン情報で使われる CAboutDlg ダイアログ
-//---------------------------------------------------
-class CAboutDlg : public CDialog
-{
-public:
-    CAboutDlg();
-    // ダイアログ データ
-        //{{AFX_DATA(CAboutDlg)
-    enum { IDD = IDD_ABOUTBOX };
-    CString	m_strVersion;
-    //}}AFX_DATA
-
-    // ClassWizard 仮想関数のオーバーライドを生成します。
-    //{{AFX_VIRTUAL(CAboutDlg)
-protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV のサポート
-    //}}AFX_VIRTUAL
-
-// インプリメンテーション
-protected:
-    //{{AFX_MSG(CAboutDlg)
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
-};
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ は前行の直前に追加の宣言を挿入します。

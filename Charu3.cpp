@@ -22,6 +22,7 @@ static char THIS_FILE[] = __FILE__;
 #include "InitialDialog.h"
 #include "EditDialog.h"
 #include "OptMainDialog.h"
+#include "AboutDialog.h"
 #include "StringWork.h"
 
 #ifdef _ME_NAME_
@@ -207,39 +208,6 @@ int CCharu3App::ExitInstance()
     }
     return CWinApp::ExitInstance();
 }
-//---------------------------------------------------
-// アプリケーションのバージョン情報で使われる CAboutDlg ダイアログ
-//---------------------------------------------------
-CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD), m_strVersion(_T(""))
-{
-    //{{AFX_DATA_INIT(CAboutDlg)
-    //}}AFX_DATA_INIT
-}
-
-void CAboutDlg::DoDataExchange(CDataExchange* pDX)
-{
-    TCHAR fileName[MAX_PATH + 1];
-    ::GetModuleFileName(NULL, fileName, MAX_PATH + 1); // TODO: Check return value
-    DWORD bufSize = ::GetFileVersionInfoSize(fileName, NULL);
-    BYTE* pVersion = new BYTE[bufSize];
-    if (::GetFileVersionInfo(fileName, NULL, bufSize, pVersion)) {
-        UINT queryLen;
-        VS_FIXEDFILEINFO* pFileInfo = nullptr;
-        ::VerQueryValue(pVersion, _T("\\"), (void**)&pFileInfo, &queryLen);
-        WORD* pLangCode = nullptr;
-        ::VerQueryValue(pVersion, _T("\\VarFileInfo\\Translation"), (void**)&pLangCode, &queryLen);
-        CString subBlock;
-        subBlock.Format(_T("\\StringFileInfo\\%04X%04X\\ProductVersion"), pLangCode[0], pLangCode[1]);
-        TCHAR* pStrInfo = nullptr;
-        ::VerQueryValue(pVersion, (LPTSTR)(LPCTSTR)subBlock, (void**)&pStrInfo, &queryLen);
-        m_strVersion.Format(_T("%s Version %s"), ABOUT_NAME, pStrInfo);
-    }
-    delete[] pVersion;
-    CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAboutDlg)
-    DDX_Text(pDX, IDC_VERSION_NAME, m_strVersion);
-    //}}AFX_DATA_MAP
-}
 
 //---------------------------------------------------
 //関数名	init()
@@ -253,9 +221,7 @@ bool CCharu3App::init()
     m_pTree->setInitInfo(&m_ini.m_nTreeID, &m_ini.m_nSelectID, &m_ini.m_nRecNumber);//ID初期値を設定
 
     if (m_ini.m_bDebug) {
-        CString strText;
-        strText.Format(_T("start \"%s\"\n"), ABOUT_NAME);
-        CGeneral::writeLog(m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+        CGeneral::writeLog(m_ini.m_strDebugLog, _T("Start\n"), _ME_NAME_, __LINE__);
     }
 
     m_pTree->setPlugin(m_ini.m_strRwPluginFolder);
@@ -2177,11 +2143,6 @@ void CCharu3App::OnAbout()
     CAboutDlg aboutDlg;
     aboutDlg.DoModal();
 }
-
-BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-    //{{AFX_MSG_MAP(CAboutDlg)
-    //}}AFX_MSG_MAP
-END_MESSAGE_MAP()
 
 //---------------------------------------------------
 void CCharu3App::OnIssues()

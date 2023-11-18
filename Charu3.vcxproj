@@ -81,6 +81,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AboutDialog.cpp" />
     <ClCompile Include="Charu3.cpp" />
     <ClCompile Include="Charu3Tree.cpp" />
     <ClCompile Include="ChildView.cpp" />
@@ -108,6 +109,7 @@
     <ClCompile Include="Color.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AboutDialog.h" />
     <ClInclude Include="Charu3.h" />
     <ClInclude Include="Charu3Tree.h" />
     <ClInclude Include="ChildView.h" />
