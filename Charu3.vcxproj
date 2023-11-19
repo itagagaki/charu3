@@ -90,6 +90,7 @@
     <ClCompile Include="EditDialog.cpp" />
     <ClCompile Include="General.cpp" />
     <ClCompile Include="Init.cpp" />
+    <ClCompile Include="log.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MyEditCtrl.cpp" />
     <ClCompile Include="MyHotkeyCtrl.cpp" />
@@ -119,6 +120,7 @@
     <ClInclude Include="EditDialog.h" />
     <ClInclude Include="General.h" />
     <ClInclude Include="Init.h" />
+    <ClInclude Include="log.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MyEditCtrl.h" />
     <ClInclude Include="MyHotkeyCtrl.h" />

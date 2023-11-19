@@ -11,7 +11,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 #include "OptEtc.h"
-#include "Charu3.h"
+#include "General.h"
+#include "Charu3.h" // for theApp.m_ini
 #include "resource.h"
 
 //---------------------------------------------------

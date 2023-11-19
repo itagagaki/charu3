@@ -17,6 +17,7 @@ static char THIS_FILE[] = __FILE__;
 #include "Charu3.h"
 #include "General.h"
 #include "Color.h"
+#include "log.h"
 #include "resource.h"
 
 //---------------------------------------------------
@@ -314,8 +315,8 @@ void COptVisual::ReadStyleFile()
         if (IDOK == pFileDialog->DoModal()) {
             if (theApp.m_ini.m_bDebug) {
                 CString strText;
-                strText.Format(_T("OnVisualFile \"%s\"\n"), pFileDialog->GetPathName().GetString());
-                CGeneral::writeLog(theApp.m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+                strText.Format(_T("OnVisualFile \"%s\""), pFileDialog->GetPathName().GetString());
+                LOG(strText);
             }
 
             strFileName = pFileDialog->GetPathName();

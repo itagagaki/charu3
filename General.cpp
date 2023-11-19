@@ -459,53 +459,6 @@ CString CGeneral::getLastErrorMessage()
 }
 
 //---------------------------------------------------
-//関数名	writeLog(CString strFileName,strLogText)
-//機能		ログをファイルに書き出す
-//---------------------------------------------------
-void CGeneral::writeLog(CString strFileName, CString strLogText, CString strSourceFile, int nLine)
-{
-    FILE* outPut = nullptr;
-    CString strWrite, strTest;
-
-#ifdef _UNICODE
-    char* szMbcsBuff = NULL;
-    int nDataSize;
-    errno_t err = -1;
-
-    nDataSize = ::WideCharToMultiByte(CP_ACP, 0, strFileName, -1, NULL, 0, NULL, NULL);
-    szMbcsBuff = new char[nDataSize + 1];
-    if (szMbcsBuff) {
-        ::WideCharToMultiByte(CP_ACP, 0, strFileName, -1, szMbcsBuff, nDataSize, "", NULL);
-        szMbcsBuff[nDataSize] = NULL;
-        err = fopen_s(&outPut, szMbcsBuff, "a");
-        delete[] szMbcsBuff;
-    }
-    if (0 == err) {
-        strWrite.Format(_T("%s %s:%d %s"), getDateTimeString().GetString(), strSourceFile.GetString(), nLine, strLogText.GetString());
-        nDataSize = ::WideCharToMultiByte(CP_ACP, 0, strWrite, -1, NULL, 0, NULL, NULL);
-        szMbcsBuff = new char[nDataSize + 1];
-        if (szMbcsBuff) {
-            ::WideCharToMultiByte(CP_ACP, 0, strWrite, -1, szMbcsBuff, nDataSize, "", NULL);
-            szMbcsBuff[nDataSize] = NULL;
-            fputs(szMbcsBuff, outPut);
-            delete[] szMbcsBuff;
-        }
-        fclose(outPut);
-
-        OutputDebugString(strWrite);
-    }
-#else
-    if ((outPut = fopen(strFileName, "a")) != NULL) {
-        strWrite.Format("%s %s:%d %s", getDateTimeString().GetString(), strSourceFile.GetString(), nLine, strLogText.GetString());
-        fputs(strWrite, outPut);
-        fflush(outPut);
-        OutputDebugString(strWrite);
-        fclose(outPut);
-    }
-#endif
-}
-
-//---------------------------------------------------
 //関数名	convertWareki(long lDate)
 //機能		西暦を和暦に変換
 //---------------------------------------------------
@@ -579,25 +532,6 @@ CString CGeneral::getDateString()
     localtime_s(&newtime, &long_time);
 
     strDate.Format(_T("%04d/%02d/%02d"), newtime.tm_year + 1900, newtime.tm_mon + 1, newtime.tm_mday);
-    return strDate;
-}
-
-//---------------------------------------------------
-//関数名	getDateTimeString()
-//機能		日付時間文字列を作る
-//---------------------------------------------------
-CString CGeneral::getDateTimeString()
-{
-    CString strDate;
-
-    struct tm newtime;
-    time_t long_time;
-
-    time(&long_time);
-    localtime_s(&newtime, &long_time);
-
-    strDate.Format(_T("%04d/%02d/%02d-%02d:%02d:%02d"), newtime.tm_year + 1900, newtime.tm_mon + 1, newtime.tm_mday,
-        newtime.tm_hour, newtime.tm_min, newtime.tm_sec);
     return strDate;
 }
 

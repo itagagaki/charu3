@@ -160,7 +160,6 @@ public:
     void setAppendHotKey();
     void stopAppendHotKey();
     CString convertMacro(STRING_DATA* SourceData, CString strSelect, CString strClip, CString strSoftName);
-    CString convertMacroPlugin(STRING_DATA* SourceData, CString strSelect, CString strClip, CString strSoftName);
 
     HWND getAppWnd() { return m_hSelfWnd; }
     bool isCloseKey() { return m_isCloseKey; }

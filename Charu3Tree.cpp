@@ -16,13 +16,7 @@ static char THIS_FILE[] = __FILE__;
 #include "Charu3Tree.h"
 #include "Charu3.h"
 #include "StringWork.h"
-
-#ifdef _ME_NAME_
-#undef _ME_NAME_
-#endif
-#define _ME_NAME_ _T("Charu3Tree.cpp")
-
-extern CCharu3App theApp;
+#include "log.h"
 
 namespace {
 
@@ -129,8 +123,8 @@ void CCharu3Tree::setPlugin(CString strPath)
 
                         if (theApp.m_ini.m_bDebug) {
                             CString strText;
-                            strText.Format(_T("plugin setting \"%s\"\n"), plugin.m_strPluginFilePath.GetString());
-                            CGeneral::writeLog(theApp.m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+                            strText.Format(_T("plugin setting \"%s\""), plugin.m_strPluginFilePath.GetString());
+                            LOG(strText);
                         }
                     }
                 }
@@ -333,8 +327,8 @@ bool CCharu3Tree::saveDataToFile(CString strFileName, CString strPlugin, HTREEIT
 
     if (theApp.m_ini.m_bDebug) {
         CString strText;
-        strText.Format(_T("wrriten charu3 data \"%s\"\n"), strFileName.GetString());
-        CGeneral::writeLog(theApp.m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+        strText.Format(_T("wrriten charu3 data \"%s\""), strFileName.GetString());
+        LOG(strText);
     }
     fclose(fFile);
 
@@ -373,8 +367,8 @@ bool CCharu3Tree::SaveDataWithPlugin(CString strFileName, CString strPlugin, std
 
     if (theApp.m_ini.m_bDebug) {
         CString strText;
-        strText.Format(_T("wrriten plugin data \"%s\" %s %d\n"), strFileName.GetString(), strPlugin.GetString(), isRet);
-        CGeneral::writeLog(theApp.m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+        strText.Format(_T("wrriten plugin data \"%s\" %s %d"), strFileName.GetString(), strPlugin.GetString(), isRet);
+        LOG(strText);
     }
     return isRet;
 }
@@ -559,8 +553,8 @@ bool CCharu3Tree::loadDataFile(CString strFileName, CString strPlugin, std::list
 
     if (theApp.m_ini.m_bDebug) {
         CString strText;
-        strText.Format(_T("read charu3 data \"%s\" %d\n"), strFileName.GetString(), tmplist->size());
-        CGeneral::writeLog(theApp.m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+        strText.Format(_T("read charu3 data \"%s\" %d"), strFileName.GetString(), tmplist->size());
+        LOG(strText);
     }
 
     isRet = true;
@@ -686,8 +680,8 @@ bool CCharu3Tree::LoadDataWithPlugin(CString strFileName, CString strPlugin, std
 
     if (theApp.m_ini.m_bDebug) {
         CString strText;
-        strText.Format(_T("read plugin data \"%s\" %s\n"), strFileName.GetString(), strPlugin.GetString());
-        CGeneral::writeLog(theApp.m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+        strText.Format(_T("read plugin data \"%s\" %s"), strFileName.GetString(), strPlugin.GetString());
+        LOG(strText);
     }
 
     isRet = true;
@@ -953,8 +947,8 @@ HTREEITEM CCharu3Tree::addNewFolder(HTREEITEM hTreeItem, CString strName)
 
     if (theApp.m_ini.m_bDebug) {
         CString strText;
-        strText.Format(_T("add new folder \"%s\"\n"), strName.GetString());
-        CGeneral::writeLog(theApp.m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+        strText.Format(_T("add new folder \"%s\""), strName.GetString());
+        LOG(strText);
     }
 
     return hAddItem;
@@ -1009,8 +1003,8 @@ HTREEITEM CCharu3Tree::addData(HTREEITEM hTreeItem, STRING_DATA data, bool isNew
 
     if (theApp.m_ini.m_bDebug) {
         CString strText;
-        strText.Format(_T("add data %s %s %d\n"), data.m_strTitle.GetString(), data.m_strData.GetString(), data.m_cKind);
-        CGeneral::writeLog(theApp.m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+        strText.Format(_T("add data %s %s %d"), data.m_strTitle.GetString(), data.m_strData.GetString(), data.m_cKind);
+        LOG(strText);
     }
     return hTreeItem;
 }
@@ -1030,8 +1024,8 @@ void CCharu3Tree::editData(HTREEITEM hTreeItem, STRING_DATA Data)
 
     if (theApp.m_ini.m_bDebug) {
         CString strText;
-        strText.Format(_T("edit data \"%s\" %d\n"), dataPtr->m_strTitle.GetString(), dataPtr->m_cKind);
-        CGeneral::writeLog(theApp.m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+        strText.Format(_T("edit data \"%s\" %d"), dataPtr->m_strTitle.GetString(), dataPtr->m_cKind);
+        LOG(strText);
     }
 }
 
@@ -1049,8 +1043,8 @@ void CCharu3Tree::editData2(HTREEITEM hTreeItem)
 
     if (theApp.m_ini.m_bDebug) {
         CString strText;
-        strText.Format(_T("edit data \"%s\" %d\n"), pData->m_strTitle.GetString(), pData->m_cKind);
-        CGeneral::writeLog(theApp.m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+        strText.Format(_T("edit data \"%s\" %d"), pData->m_strTitle.GetString(), pData->m_cKind);
+        LOG(strText);
     }
 }
 
@@ -1065,8 +1059,8 @@ void CCharu3Tree::deleteData(HTREEITEM hTreeItem)
 
     if (theApp.m_ini.m_bDebug) {
         CString strText;
-        strText.Format(_T("delete data \"%s\" %d\n"), dataPtr->m_strTitle.GetString(), dataPtr->m_cKind);
-        CGeneral::writeLog(theApp.m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+        strText.Format(_T("delete data \"%s\" %d"), dataPtr->m_strTitle.GetString(), dataPtr->m_cKind);
+        LOG(strText);
     }
 
     std::list<STRING_DATA>::iterator it = findData(dataPtr);
@@ -1585,8 +1579,8 @@ HTREEITEM CCharu3Tree::getOneTimeItem(int nType)
             hRet = hTreeItem;
             if (theApp.m_ini.m_bDebug) {
                 CString strText;
-                strText.Format(_T("getOneTimeItem \"%s\" %s %d\n"), data->m_strTitle.GetString(), data->m_strData.GetString(), data->m_cKind);
-                CGeneral::writeLog(theApp.m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+                strText.Format(_T("getOneTimeItem \"%s\" %s %d"), data->m_strTitle.GetString(), data->m_strData.GetString(), data->m_cKind);
+                LOG(strText);
             }
             if (nType == 2) break;
         }
@@ -1630,8 +1624,8 @@ int CCharu3Tree::getDataOption(CString strData, CString strKind)
 
         if (theApp.m_ini.m_bDebug) {
             CString strText;
-            strText.Format(_T("getDataOption \"%s\" %d\n"), strKind.GetString(), nRet);
-            CGeneral::writeLog(theApp.m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+            strText.Format(_T("getDataOption \"%s\" %d"), strKind.GetString(), nRet);
+            LOG(strText);
         }
     }
     else nRet = -1;
@@ -1664,8 +1658,8 @@ DWORD CCharu3Tree::getDataOptionHex(CString strData, CString strKind)
 
         if (theApp.m_ini.m_bDebug) {
             CString strText;
-            strText.Format(_T("getDataOptionHex \"%s\" 0x%x\n"), strKind.GetString(), dwRet);
-            CGeneral::writeLog(theApp.m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+            strText.Format(_T("getDataOptionHex \"%s\" 0x%x"), strKind.GetString(), dwRet);
+            LOG(strText);
         }
     }
 
@@ -1698,8 +1692,8 @@ CString CCharu3Tree::getDataOptionStr(CString strData, CString strKind)
 
         if (theApp.m_ini.m_bDebug) {
             CString strText;
-            strText.Format(_T("getDataOptionHex \"%s\" %s\n"), strKind.GetString(), strRet.GetString());
-            CGeneral::writeLog(theApp.m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+            strText.Format(_T("getDataOptionHex \"%s\" %s"), strKind.GetString(), strRet.GetString());
+            LOG(strText);
         }
     }
     return strRet;
@@ -1719,9 +1713,9 @@ void CCharu3Tree::addDataToRecordFolder(STRING_DATA data, CString strClipBkup)
 
     if (theApp.m_ini.m_bDebug) {
         CString strText;
-        CGeneral::writeLog(theApp.m_ini.m_strDebugLog, _T("addDataToRecordFolder\n"), _ME_NAME_, __LINE__);
-        strText.Format(_T("hRootItem:%p TreeSize:%d\n"), GetRootItem(), nSize);
-        CGeneral::writeLog(theApp.m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+        LOG(_T("addDataToRecordFolder"));
+        strText.Format(_T("hRootItem:%p TreeSize:%d"), GetRootItem(), nSize);
+        LOG(strText);
     }
     //	hTreeItem = (HTREEITEM)::SendMessage(m_hWnd, TVM_GETNEXTITEM, TVGN_ROOT, 0);
     for (hTreeItem = GetRootItem(), i = 0; i < nSize && hTreeItem && hTreeItem != hStart; i++, hTreeItem = getTrueNextItem(hTreeItem)) {
@@ -1735,8 +1729,8 @@ void CCharu3Tree::addDataToRecordFolder(STRING_DATA data, CString strClipBkup)
 
                 if (theApp.m_ini.m_bDebug) {
                     CString strText;
-                    strText.Format(_T("number:%d handle:%p title:%s ID:%d\n"), i, hTreeItem, parentData.m_strTitle.GetString(), parentData.m_nMyID);
-                    CGeneral::writeLog(theApp.m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+                    strText.Format(_T("number:%d handle:%p title:%s ID:%d"), i, hTreeItem, parentData.m_strTitle.GetString(), parentData.m_nMyID);
+                    LOG(strText);
                 }
 
                 nIsLock = getDataOption(parentData.m_strMacro, _T("lock"));//—š—ðŽí•Ê‚ðŽæ“¾
@@ -1778,8 +1772,8 @@ void CCharu3Tree::addDataToRecordFolder(STRING_DATA data, CString strClipBkup)
 
                 if (theApp.m_ini.m_bDebug) {
                     CString strText;
-                    strText.Format(_T("addDataToRecordFolder \"%s\" %s %d\n"), data.m_strTitle.GetString(), data.m_strData.GetString(), nNumber);
-                    CGeneral::writeLog(theApp.m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+                    strText.Format(_T("addDataToRecordFolder \"%s\" %s %d"), data.m_strTitle.GetString(), data.m_strData.GetString(), nNumber);
+                    LOG(strText);
                 }
 
                 addData(hTreeItem, data, true, true);//’Ç‰Á

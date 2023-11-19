@@ -17,7 +17,7 @@ static char THIS_FILE[] = __FILE__;
 #include "EditDialog.h"
 #include "SerchDialog.h"
 #include "Charu3.h"
-#include "General.h"
+#include "log.h"
 
 namespace {
     //---------------------------------------------------
@@ -1192,8 +1192,8 @@ void CMyTreeDialog::OnImport()
     if (GetOpenFileName(&param)) {
         if (theApp.m_ini.m_bDebug) {
             CString strText;
-            strText.Format(_T("OnImport \"%s\"\n"), tcPath);
-            CGeneral::writeLog(theApp.m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+            strText.Format(_T("OnImport \"%s\""), tcPath);
+            LOG(strText);
         }
 
         CString format = param.nFilterIndex < 2 ? DAT_FORMAT : m_pTreeCtrl->m_rwPlugin[param.nFilterIndex - 2].m_strFormatName;

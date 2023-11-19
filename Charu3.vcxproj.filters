@@ -108,6 +108,9 @@
     <ClCompile Include="AboutDialog.cpp">
       <Filter>機能ダイアログ</Filter>
     </ClCompile>
+    <ClCompile Include="log.cpp">
+      <Filter>一般クラス</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Charu3.h">
@@ -193,6 +196,9 @@
     </ClInclude>
     <ClInclude Include="AboutDialog.h">
       <Filter>機能ダイアログ</Filter>
+    </ClInclude>
+    <ClInclude Include="log.h">
+      <Filter>一般クラス</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

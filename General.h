@@ -64,7 +64,6 @@ public:
     static CStringA ConvertUnicodeToUTF8(const CStringW& uni);
     static CString getWindowTitle(HWND hWnd);
 
-    static void writeLog(CString strFileName, CString strLogText, CString strSourceFile, int nLine);
     static CString convertWareki(long lDate);
     static CString getDateString();
     static CString getDateTimeString();

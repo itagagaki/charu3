@@ -17,6 +17,7 @@ static char THIS_FILE[] = __FILE__;
 
 #include "Init.h"
 #include "Charu3.h"
+#include "log.h"
 #include "General.h"
 #include "StringWork.h"
 #include "Color.h"
@@ -259,6 +260,10 @@ void CInit::initialize()
     // read options
     m_vctDataMacro.clear();
     ReadPredefined(m_vctDataMacro, m_strAppPath + "_locale\\" + m_locale + "\\options.json");
+
+    if (m_bDebug) {
+        gLogger.SetLogFile(m_strDebugLog);
+    }
 }
 
 //---------------------------------------------------

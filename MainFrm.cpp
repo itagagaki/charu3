@@ -10,8 +10,12 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+#include <locale.h>
+
 #include "MainFrm.h"
 #include "Charu3.h"
+#include "log.h"
+#include "resource.h"
 
 //---------------------------------------------------
 // CMainFrame
@@ -291,8 +295,8 @@ LRESULT CMainFrame::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
     if (WM_CLIPBOARDUPDATE == message) {
         if (theApp.m_ini.m_bDebug) {
             CString strText;
-            strText.Format(_T("WM_CLIPBOARDUPDATE wParam:%x lParam:%x\n"), wParam, lParam);
-            CGeneral::writeLog(theApp.m_ini.m_strDebugLog, strText, _ME_NAME_, __LINE__);
+            strText.Format(_T("WM_CLIPBOARDUPDATE wParam:%x lParam:%x"), wParam, lParam);
+            LOG(strText);
         }
         changeClip();
     }

@@ -14,7 +14,7 @@ static char THIS_FILE[] = __FILE__;
 
 #include "OptKeySet.h"
 #include "OptKeySetEditDlg.h"
-#include "Charu3.h"
+#include "Charu3.h" // for theApp.m_ini
 #include "General.h"
 #include "resource.h"
 
