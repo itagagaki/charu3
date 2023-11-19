@@ -20,16 +20,11 @@
 #pragma comment(linker, "/entry:\"wWinMainCRTStartup\"")
 #endif
 
-#include <list>
-#include <vector>
-
-#include "resource.h"       // メイン シンボル
 #include "Charu3Tree.h"
 #include "MyTreeDialog.h"
 #include "ClipBord.h"
 #include "Init.h"
 #include "MainFrm.h"
-#include "General.h"
 
 //ファイル名設定
 #define NAME				_T("Charu3")
