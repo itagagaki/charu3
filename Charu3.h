@@ -30,15 +30,6 @@
 #define DAT_FORMAT2			"Charu3Data1.1"
 #define DAT_EXT				"c3d"
 
-#define MACRO_START			_T("<charuMACRO>")
-#define MACRO_END			_T("</charuMACRO>")
-
-#define MACRO_START_KEY		_T("<charuMACRO_KEY>")
-#define MACRO_END_KEY		_T("</charuMACRO_KEY>")
-
-#define ICON_SIZE		18
-#define TEXTBOX_FONT_SIZE	90
-
 #define TIMER_ACTIVE			606
 #define TIMER_MOUSE				607
 #define CHARU_QUICK_TIMER		610
@@ -62,13 +53,6 @@ enum {
     POPUP_POS_LEFT_D,
     POPUP_POS_RIGHT_D
 };
-
-//ägí£É}ÉNÉç
-#define EXMACRO_DIRECT_COPY "directcopykey"
-#define EXMACRO_HOT_KEY		"hotkey"
-
-#define KEY_DOWN			0x01
-#define KEY_UP				0x02
 
 #define PHASE_START		0x00
 #define PHASE_IDOL		0x01

@@ -33,6 +33,18 @@ enum {
     HOT_ITEM_KEY
 };
 
+#define KEY_DOWN			0x01
+#define KEY_UP				0x02
+
+#define MACRO_START			_T("<charuMACRO>")
+#define MACRO_END			_T("</charuMACRO>")
+
+#define MACRO_START_KEY		_T("<charuMACRO_KEY>")
+#define MACRO_END_KEY		_T("</charuMACRO_KEY>")
+
+#define EXMACRO_DIRECT_COPY "directcopykey"
+#define EXMACRO_HOT_KEY		"hotkey"
+
 //---------------------------------------------------
 //関数名	MonitorEnumFunc
 //機能		モニター列挙コールバック

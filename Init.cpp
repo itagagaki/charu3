@@ -64,7 +64,7 @@ namespace {
 //---------------------------------------------------
 CInit::CInit()
     : m_bIsPortableMode(false)
-    , m_IconSize{ ICON_SIZE, ICON_SIZE }
+    , m_IconSize{ 18, 18 }
     , m_nOptionPage(0)
     , m_bReadOnly(false)
     , m_DialogSize{ 100, 100 }
