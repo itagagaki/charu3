@@ -294,9 +294,7 @@ LRESULT CMainFrame::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
     // clipboard update notification
     if (WM_CLIPBOARDUPDATE == message) {
         if (theApp.m_ini.m_bDebug) {
-            CString strText;
-            strText.Format(_T("WM_CLIPBOARDUPDATE wParam:%x lParam:%x"), wParam, lParam);
-            LOG(strText);
+            LOG(_T("WM_CLIPBOARDUPDATE wParam:%x lParam:%x"), wParam, lParam);
         }
         changeClip();
     }

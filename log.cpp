@@ -5,6 +5,8 @@ static char THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 #endif
 
+#include <stdarg.h>
+
 #include "log.h"
 
 namespace{
@@ -57,10 +59,16 @@ void Logger::SetLogFile(const CString& strPath)
     }
 }
 
-void Logger::WriteLog(const CString& strText, const CString& strSourceFile, int nSourceLine)
+void Logger::WriteLog(const CString& strSourceFile, int nSourceLine, const CString strFormat, ...)
 {
+    CString str;
+    va_list args;
+    va_start(args, strFormat);
+    str.FormatV(strFormat, args);
+    va_end(args);
+
     CString strWrite;
-    strWrite.Format(_T("%s %s [%s:%d]\n"), getDateTimeString().GetString(), strText.GetString(), strSourceFile.GetString(), nSourceLine);
+    strWrite.Format(_T("%s %s [%s:%d]\n"), getDateTimeString().GetString(), str.GetString(), strSourceFile.GetString(), nSourceLine);
     OutputDebugString(strWrite);
 
     if (m_logFilePath) {

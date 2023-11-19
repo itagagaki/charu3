@@ -2,12 +2,14 @@
 
 #include "stdafx.h"
 
+#include <stdarg.h>
+
 class Logger {
 public:
     Logger();
     ~Logger();
     void SetLogFile(const CString& strPath);
-    void WriteLog(const CString& strText, const CString& strSourceFile, int nSourceLine);
+    void WriteLog(const CString& strSourceFile, int nSourceLine, const CString strFormat, ...);
 
 private:
     char* m_logFilePath;
@@ -15,4 +17,4 @@ private:
 
 extern Logger gLogger;
 
-#define LOG(text) gLogger.WriteLog(text, THIS_FILE, __LINE__)
+#define LOG(...) gLogger.WriteLog(THIS_FILE, __LINE__, __VA_ARGS__)

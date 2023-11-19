@@ -268,9 +268,7 @@ bool CCharu3App::init()
     }
 
     if (m_ini.m_bDebug) {
-        CString strText;
-        strText.Format(_T("read data file\"%s\" %s"), m_ini.m_strDataPath.GetString(), m_ini.m_strDataFormat.GetString());
-        LOG(strText);
+        LOG(_T("read data file\"%s\" %s"), m_ini.m_strDataPath.GetString(), m_ini.m_strDataFormat.GetString());
     }
 
     //クリップボードクラスの初期化 変更検知を設定(メインフレームでメッセージ処理をしてます)
@@ -283,9 +281,7 @@ bool CCharu3App::init()
     m_ini.m_keyLayout = LoadKeyboardLayout(strKeyLayoutName, KLF_REPLACELANG);
 
     if (m_ini.m_bDebug) {
-        CString strText;
-        strText.Format(_T("KeyLayoutName \"%s\""), strKeyLayoutName);
-        LOG(strText);
+        LOG(_T("KeyLayoutName \"%s\""), strKeyLayoutName);
     }
 
     m_ini.setHookKey(m_hSelfWnd);
@@ -332,9 +328,7 @@ bool CCharu3App::SelectFile()
     param.lpstrDefExt = NULL;
     if (GetOpenFileName(&param)) {
         if (m_ini.m_bDebug) {
-            CString strText;
-            strText.Format(_T("SelectFile \"%s\""), tcPath);
-            LOG(strText);
+            LOG(_T("SelectFile \"%s\""), tcPath);
         }
 
         CString path = CString(tcPath);
@@ -393,9 +387,7 @@ CString CCharu3App::NewFile()
         //	_tcscat_s(tcPath, MAX_PATH, _T(DAT_EXT));
         //}
         if (m_ini.m_bDebug) {
-            CString strText;
-            strText.Format(_T("NewFile \"%s\""), tcPath);
-            LOG(strText);
+            LOG(_T("NewFile \"%s\""), tcPath);
         }
         return CString(tcPath);
     }
@@ -509,9 +501,7 @@ void CCharu3App::setAppendHotKey()
                 int nret = RegisterHotKey(NULL, HOT_ITEM_KEY + m_hotkeyVector.size() - 1, keyData.m_uModKey, keyData.m_uVkCode);//ホットキーをレジスト
 
                 if (m_ini.m_bDebug) {
-                    CString strText;
-                    strText.Format(_T("setAppendHotKey hotkey \"%s\" %d"), strKey.GetString(), nret);
-                    LOG(strText);
+                    LOG(_T("setAppendHotKey hotkey \"%s\" %d"), strKey.GetString(), nret);
                 }
             }
             strKey = m_pTree->getDataOptionStr(data.m_strMacro, EXMACRO_DIRECT_COPY);
@@ -526,9 +516,7 @@ void CCharu3App::setAppendHotKey()
                 int nret = RegisterHotKey(NULL, HOT_ITEM_KEY + m_hotkeyVector.size() - 1, keyData.m_uModKey, keyData.m_uVkCode);//ホットキーをレジスト
 
                 if (m_ini.m_bDebug) {
-                    CString strText;
-                    strText.Format(_T("setAppendHotKey directcopy \"%s\" %d"), strKey.GetString(), nret);
-                    LOG(strText);
+                    LOG(_T("setAppendHotKey directcopy \"%s\" %d"), strKey.GetString(), nret);
                 }
             }
         }
@@ -658,9 +646,7 @@ bool CCharu3App::setAppendKeyInit(HWND hTopWindow, COPYPASTE_KEY* keySet)
     m_hActiveKeyWnd = hTopWindow;
 
     if (m_ini.m_bDebug) {
-        CString strText;
-        strText.Format(_T("setAppendKeyInit %s %d %d %d %d %d"), strWinName.GetString(), keySet->m_uMod_Copy, keySet->m_uVK_Copy, keySet->m_uMod_Paste, keySet->m_uVK_Paste, keySet->m_nMessage);
-        LOG(strText);
+        LOG(_T("setAppendKeyInit %s %d %d %d %d %d"), strWinName.GetString(), keySet->m_uMod_Copy, keySet->m_uVK_Copy, keySet->m_uMod_Paste, keySet->m_uVK_Paste, keySet->m_nMessage);
     }
 
     isRet = true;
@@ -688,9 +674,7 @@ void CCharu3App::popupTreeWindow(POINT pos, bool keepSelection, HTREEITEM hOpenI
     if (m_isStockMode)	KillTimer(m_pMainWnd->m_hWnd, TIMER_ACTIVE);//監視タイマー停止
 
     if (m_ini.m_bDebug) {
-        CString strText;
-        strText.Format(_T("popupTreeWindow x=%d y=%d keep=%s"), pos.x, pos.y, keepSelection ? _T("true") : _T("false"));
-        LOG(strText);
+        LOG(_T("popupTreeWindow x=%d y=%d keep=%s"), pos.x, pos.y, keepSelection ? _T("true") : _T("false"));
     }
 
     CGeneral::setAbsoluteForegroundWindow(m_pMainWnd->m_hWnd);//自分をアクティブに設定
@@ -729,9 +713,7 @@ void CCharu3App::adjustLocation(POINT* pos)
         int nScreenHeight = GetSystemMetrics(SM_CYSCREEN);
 
         if (m_ini.m_bDebug) {
-            CString strText;
-            strText.Format(_T("reviseWindowPos %d %d %d %d"), nDektopWidth, nDesktopHeight, nScreenWidth, nScreenHeight);
-            LOG(strText);
+            LOG(_T("reviseWindowPos %d %d %d %d"), nDektopWidth, nDesktopHeight, nScreenWidth, nScreenHeight);
         }
 
         HWND hDeskTop = GetDesktopWindow();
@@ -783,9 +765,7 @@ void CCharu3App::closeTreeWindow(int nRet)
     if (::GetAsyncKeyState(VK_SHIFT) < 0) isPaste = false;
 
     if (m_ini.m_bDebug) {
-        CString strText;
-        strText.Format(_T("closeTreeWindow %d"), nRet);
-        LOG(strText);
+        LOG(_T("closeTreeWindow %d"), nRet);
     }
 
     //アクティブウィンドウを復帰
@@ -800,9 +780,7 @@ void CCharu3App::closeTreeWindow(int nRet)
         CGeneral::setFocusInfo(&m_focusInfo);//ターゲットをフォーカス
 
         if (m_ini.m_bDebug) {
-            CString strText;
-            strText.Format(_T("setFocusInfo active:%p focus:%p"), m_focusInfo.m_hActiveWnd, m_focusInfo.m_hFocusWnd);
-            LOG(strText);
+            LOG(_T("setFocusInfo active:%p focus:%p"), m_focusInfo.m_hActiveWnd, m_focusInfo.m_hFocusWnd);
         }
 
         //貼り付け処理
@@ -810,9 +788,7 @@ void CCharu3App::closeTreeWindow(int nRet)
             strSelect = getSelectString(m_keySet, m_focusInfo.m_hFocusWnd); // TODO: Doing unconditional copy action. Does not consider the necessity.
 
             if (m_ini.m_bDebug) {
-                CString strText;
-                strText.Format(_T("closeTreeWindow sel:%s clip:%s"), strSelect.GetString(), strClip.GetString());
-                LOG(strText);
+                LOG(_T("closeTreeWindow sel:%s clip:%s"), strSelect.GetString(), strClip.GetString());
             }
 
             std::list<HTREEITEM>::iterator it;
@@ -821,9 +797,7 @@ void CCharu3App::closeTreeWindow(int nRet)
                     data = m_pTree->getData(*it);
 
                     if (m_ini.m_bDebug) {
-                        CString strText;
-                        strText.Format(_T("closeTreeWindow check paste %s"), data.m_strTitle.GetString());
-                        LOG(strText);
+                        LOG(_T("closeTreeWindow check paste %s"), data.m_strTitle.GetString());
                     }
                     playData(data, strClip, strSelect, isPaste, false);
                 }
@@ -846,9 +820,7 @@ void CCharu3App::closeTreeWindow(int nRet)
             data = *(m_pTreeDlg->m_selectDataPtr);
 
             if (m_ini.m_bDebug) {
-                CString strText;
-                strText.Format(_T("closeTreeWindow sel:%s clip:%s title:%s"), strSelect.GetString(), strClip.GetString(), data.m_strTitle.GetString());
-                LOG(strText);
+                LOG(_T("closeTreeWindow sel:%s clip:%s title:%s"), strSelect.GetString(), strClip.GetString(), data.m_strTitle.GetString());
             }
             playData(data, strClip, strSelect, isPaste);
         }
@@ -924,9 +896,7 @@ void CCharu3App::playData(STRING_DATA data, CString strClip, CString strSelect, 
     //テキストを貼り付け処理
     if (isPaste) {
         if (m_ini.m_bDebug) {
-            CString strText;
-            strText.Format(_T("playData active:%p focus:%p"), m_focusInfo.m_hActiveWnd, m_focusInfo.m_hFocusWnd);
-            LOG(strText);
+            LOG(_T("playData active:%p focus:%p"), m_focusInfo.m_hActiveWnd, m_focusInfo.m_hFocusWnd);
         }
 
         execData(strPaste, m_keySet, hSelectItem, m_focusInfo.m_hFocusWnd);
@@ -1010,9 +980,7 @@ void CCharu3App::playHotItem(int nTarget)
                         dataChild.m_strTitle = m_pTree->makeTitle(strSelect, nTitleLength);
 
                         if (m_ini.m_bDebug) {
-                            CString strText;
-                            strText.Format(_T("Direct copy folder %s"), dataChild.m_strTitle.GetString());
-                            LOG(strText);
+                            LOG(_T("Direct copy folder %s"), dataChild.m_strTitle.GetString());
                         }
 
                         m_pTree->addData(keyData.m_hItem, dataChild, true, true);
@@ -1056,9 +1024,7 @@ void CCharu3App::playHotItem(int nTarget)
                     m_pTree->editData(keyData.m_hItem, data);
 
                     if (m_ini.m_bDebug) {
-                        CString strText;
-                        strText.Format(_T("Direct copy data %s"), data.m_strTitle.GetString());
-                        LOG(strText);
+                        LOG(_T("Direct copy data %s"), data.m_strTitle.GetString());
                     }
                 }
                 //ホットキー
@@ -1080,9 +1046,7 @@ void CCharu3App::playHotItem(int nTarget)
                     strPaste = convertMacro(&data, strSelect, strClip, strMacro);//マクロ変換
 
                     if (m_ini.m_bDebug) {
-                        CString strText;
-                        strText.Format(_T("Direct paste data %s active:%p focus:%p"), strPaste.GetString(), m_focusInfo.m_hActiveWnd, m_focusInfo.m_hFocusWnd);
-                        LOG(strText);
+                        LOG(_T("Direct paste data %s active:%p focus:%p"), strPaste.GetString(), m_focusInfo.m_hActiveWnd, m_focusInfo.m_hFocusWnd);
                     }
 
                     //テキストを貼り付け処理
@@ -1164,9 +1128,7 @@ CString CCharu3App::getSelectString(COPYPASTE_KEY key, HWND hWnd)
                 }
 
                 if (m_ini.m_bDebug) {
-                    CString strText;
-                    strText.Format(_T("getSelectString %d %s"), keySet.m_nMessage, strSelect.GetString());
-                    LOG(strText);
+                    LOG(_T("getSelectString %d %s"), keySet.m_nMessage, strSelect.GetString());
                 }
             }
         }
@@ -1337,15 +1299,13 @@ void CCharu3App::pasteData(CString strPaste, COPYPASTE_KEY key, HWND hWnd)
     }
 
     if (m_ini.m_bDebug) {
-        CString strText;
-        strText.Format(_T("pasteData %d %s %x %x active:%p focus:%p"),
+        LOG(_T("pasteData %d %s %x %x active:%p focus:%p"),
             key.m_nMessage,
             strPaste.GetString(),
             key.m_uMod_Paste,
             key.m_uVK_Paste,
             m_focusInfo.m_hActiveWnd,
             m_focusInfo.m_hFocusWnd);
-        LOG(strText);
     }
 }
 
@@ -1729,9 +1689,7 @@ CString CCharu3App::convertMacro(STRING_DATA* SourceData, CString strSelect, CSt
 void CCharu3App::onClipboardChanged(CString strClipboard)
 {
     if (m_ini.m_bDebug) {
-        CString strText;
-        strText.Format(_T("onClipboardChanged \"%s\""), strClipboard.GetString());
-        LOG(strText);
+        LOG(_T("onClipboardChanged \"%s\""), strClipboard.GetString());
     }
 
     //連続で空のクリップボード更新イベントが起こるので対策
@@ -1743,9 +1701,7 @@ void CCharu3App::onClipboardChanged(CString strClipboard)
                     nEmptyCnt = 0;
                     //デバッグログ処理
                     if(m_ini.m_nDebug) {
-                        CString strText;
-                        strText.Format(_T("changeClipBord Sleep \"%s\""),strClipBord);
-                        LOG(strText);
+                        LOG(_T("changeClipBord Sleep \"%s\""),strClipBord);
                     }
                 }
                 else {
@@ -1779,9 +1735,7 @@ void CCharu3App::onClipboardChanged(CString strClipboard)
         KillTimer(m_pMainWnd->m_hWnd, TIMER_ACTIVE);
 
         if (m_ini.m_bDebug) {
-            CString strText;
-            strText.Format(_T("clipboard record \"%s\""), strClipboard.GetString());
-            LOG(strText);
+            LOG(_T("clipboard record \"%s\""), strClipboard.GetString());
         }
 
         if (m_isStockMode) {
@@ -1829,9 +1783,7 @@ void CCharu3App::fifoClipbord()
         }
         if (text != _T("")) {
             if (m_ini.m_bDebug) {
-                CString strText;
-                strText.Format(_T("fifoClipbord text:%s"), text.GetString());
-                LOG(strText);
+                LOG(_T("fifoClipbord text:%s"), text.GetString());
             }
             if (m_clipboard.setClipboardText(text, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval)) {
                 if (m_ini.m_fifo.m_strPasteSound != _T("")) {
@@ -1864,9 +1816,7 @@ void CCharu3App::fifoClipbord()
 void CCharu3App::toggleStockMode()
 {
     if (m_ini.m_bDebug) {
-        CString strText;
-        strText.Format(_T("toggleStockMode %d"), !m_isStockMode);
-        LOG(strText);
+        LOG(_T("toggleStockMode %d"), !m_isStockMode);
     }
 
     m_isStockMode = !m_isStockMode;
@@ -1982,9 +1932,7 @@ BOOL CCharu3App::PreTranslateMessage(MSG* pMsg)
     //キーフック処理
     if (pMsg->message == WM_KEY_HOOK) {
         if (m_ini.m_bDebug) {
-            CString strText;
-            strText.Format(_T("WM_KEY_HOOK %d %d"), pMsg->wParam, pMsg->lParam);
-            LOG(strText);
+            LOG(_T("WM_KEY_HOOK %d %d"), pMsg->wParam, pMsg->lParam);
         }
         UINT uMod = 0;
         if (m_ini.m_pop.m_nDoubleKeyPOP) {
@@ -2047,22 +1995,16 @@ BOOL CCharu3App::PreTranslateMessage(MSG* pMsg)
             }
             if (m_nPhase == PHASE_IDOL) {
                 POINT pos;
-                getPopupPos(&pos, m_ini.m_pop.m_nPopupPos);//ポップアップ位置を取得
 
+                getPopupPos(&pos, m_ini.m_pop.m_nPopupPos);//ポップアップ位置を取得
                 if (m_ini.m_bDebug) {
-                    CString strText;
-                    strText.Format(_T("getPopupPos %d %d"), pos.x, pos.y);
-                    LOG(strText);
+                    LOG(_T("getPopupPos %d %d"), pos.x, pos.y);
                 }
 
                 adjustLocation(&pos);
-
                 if (m_ini.m_bDebug) {
-                    CString strText;
-                    strText.Format(_T("reviseWindowPos %d %d"), pos.x, pos.y);
-                    LOG(strText);
+                    LOG(_T("reviseWindowPos %d %d"), pos.x, pos.y);
                 }
-
                 popupTreeWindow(pos, m_ini.m_pop.m_bKeepSelection);
             }
             else	m_isCloseKey = true;//閉じるスイッチを入れておく

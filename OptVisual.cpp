@@ -314,9 +314,7 @@ void COptVisual::ReadStyleFile()
         pFileDialog->m_ofn.lpstrInitialDir = theApp.m_ini.m_strAppPath;
         if (IDOK == pFileDialog->DoModal()) {
             if (theApp.m_ini.m_bDebug) {
-                CString strText;
-                strText.Format(_T("OnVisualFile \"%s\""), pFileDialog->GetPathName().GetString());
-                LOG(strText);
+                LOG(_T("OnVisualFile \"%s\""), pFileDialog->GetPathName().GetString());
             }
 
             strFileName = pFileDialog->GetPathName();

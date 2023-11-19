@@ -1191,11 +1191,8 @@ void CMyTreeDialog::OnImport()
     param.lpstrDefExt = NULL;
     if (GetOpenFileName(&param)) {
         if (theApp.m_ini.m_bDebug) {
-            CString strText;
-            strText.Format(_T("OnImport \"%s\""), tcPath);
-            LOG(strText);
+            LOG(_T("OnImport \"%s\""), tcPath);
         }
-
         CString format = param.nFilterIndex < 2 ? DAT_FORMAT : m_pTreeCtrl->m_rwPlugin[param.nFilterIndex - 2].m_strFormatName;
         std::list<STRING_DATA> tmplist;
         m_pTreeCtrl->loadDataFile(CString(tcPath), format, &tmplist);
