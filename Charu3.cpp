@@ -19,6 +19,7 @@ static char THIS_FILE[] = __FILE__;
 #include <vector>
 
 #include "Charu3.h"
+#include "Charu3Tree.h"
 #include "InitialDialog.h"
 #include "EditDialog.h"
 #include "OptMainDialog.h"

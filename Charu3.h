@@ -20,11 +20,10 @@
 #pragma comment(linker, "/entry:\"wWinMainCRTStartup\"")
 #endif
 
-#include "Charu3Tree.h"
+#include "MainFrm.h"
 #include "MyTreeDialog.h"
 #include "ClipBord.h"
 #include "Init.h"
-#include "MainFrm.h"
 
 #define DAT_FORMAT			"Charu3Data1.0"
 #define DAT_FORMAT2			"Charu3Data1.1"
