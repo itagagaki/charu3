@@ -14,9 +14,22 @@ static char THIS_FILE[] = __FILE__;
 #include <vector>
 
 #include "Charu3Tree.h"
-#include "Charu3.h"
+#include "search.h"
 #include "StringWork.h"
+#include "Charu3.h"
 #include "log.h"
+
+#define ICON_FOLDER	 0
+#define ICON_RIREKI_FOLDER 2
+#define ICON_ONETIME 4
+#define ICON_KEY	 6
+#define ICON_DATE	 8
+#define ICON_EXE	10
+#define ICON_RELATE	12
+#define ICON_SELECT	14
+#define ICON_CLIP	16
+#define ICON_PLUG	18
+#define ICON_KEYM	20
 
 namespace {
 

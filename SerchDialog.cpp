@@ -12,6 +12,7 @@ static char THIS_FILE[] = __FILE__;
 
 #include "SerchDialog.h"
 #include "Charu3.h"
+#include "search.h"
 #include "General.h"
 #include "resource.h"
 

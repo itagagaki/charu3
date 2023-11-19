@@ -200,6 +200,9 @@
     <ClInclude Include="log.h">
       <Filter>一般クラス</Filter>
     </ClInclude>
+    <ClInclude Include="search.h">
+      <Filter>一般クラス</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Charu3.rc">

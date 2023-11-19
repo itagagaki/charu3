@@ -26,19 +26,9 @@
 #include "Init.h"
 #include "MainFrm.h"
 
-//ファイル名設定
-#define NAME				_T("Charu3")
-#define INI_FILE			_T("Charu3.ini")
-#define STATE_FILE			_T("state.json")
-#define SETTINGS_FILE		_T("settings.json")
-#define DEBUGLOG_FILE		_T("debug.log")
-#define DAT_FILE			_T("Charu3.c3d")
-#define HELP_FILE			_T("Doc\\index.html")
 #define DAT_FORMAT			"Charu3Data1.0"
 #define DAT_FORMAT2			"Charu3Data1.1"
 #define DAT_EXT				"c3d"
-
-#define DAT_FILE_BK			"_bkup."
 
 #define MACRO_START			_T("<charuMACRO>")
 #define MACRO_END			_T("</charuMACRO>")
@@ -49,14 +39,9 @@
 #define ICON_SIZE		18
 #define TEXTBOX_FONT_SIZE	90
 
-#define SZTASKBAR_CLASS		"Shell_TrayWnd"
-#define SZTRAY_CLASS		"TrayNotifyWnd"
-#define TITL_LENGTH 64	//タイトル文字列の長さ
-
 #define TIMER_ACTIVE			606
 #define TIMER_MOUSE				607
 #define CHARU_QUICK_TIMER		610
-
 
 #define WM_TASKTRAY    (WM_USER+100)
 #define WM_TREE_CLOSE  (WM_USER+102)
@@ -82,27 +67,8 @@ enum {
 #define EXMACRO_DIRECT_COPY "directcopykey"
 #define EXMACRO_HOT_KEY		"hotkey"
 
-//アイコン番号
-#define ICON_FOLDER	 0
-#define ICON_RIREKI_FOLDER 2
-#define ICON_ONETIME 4
-#define ICON_KEY	 6
-#define ICON_DATE	 8
-#define ICON_EXE	10
-#define ICON_RELATE	12
-#define ICON_SELECT	14
-#define ICON_CLIP	16
-#define ICON_PLUG	18
-#define ICON_KEYM	20
-
 #define KEY_DOWN			0x01
 #define KEY_UP				0x02
-
-//検索方法
-#define SEARCH_TARGET_NAME	(1<<0)
-#define SEARCH_TARGET_DATA	(1<<1)
-#define SEARCH_LOGIC_AND	0
-#define SEARCH_LOGIC_OR	1
 
 #define PHASE_START		0x00
 #define PHASE_IDOL		0x01

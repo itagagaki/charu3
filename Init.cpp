@@ -19,8 +19,15 @@ static char THIS_FILE[] = __FILE__;
 #include "Charu3.h"
 #include "log.h"
 #include "General.h"
+#include "search.h"
 #include "StringWork.h"
 #include "Color.h"
+
+#define DEFAULT_USERNAME _T("Charu3User")
+#define APP_NAME         _T("Charu3")
+#define SETTINGS_FILE    _T("settings.json")
+#define STATE_FILE       _T("state.json")
+#define LOG_FILE         _T("debug.log")
 
 //キャプションのマッチ方法
 enum {
@@ -110,7 +117,7 @@ void CInit::initialize()
         m_strUserName = CString(buf);
     }
     else {
-        m_strUserName = _T("Charu3User");
+        m_strUserName = DEFAULT_USERNAME;
     }
 
     // app and plugin path
@@ -132,7 +139,7 @@ void CInit::initialize()
     else {
         // appdata mode
         SHGetSpecialFolderPath(NULL, buf, CSIDL_APPDATA, 0);
-        m_strAppDataPath = CString(buf) + "\\" + NAME;
+        m_strAppDataPath = CString(buf) + "\\" + APP_NAME;
         if (!FILEEXIST(m_strAppDataPath)) {
             CreateDirectory(m_strAppDataPath, NULL);
         }
@@ -141,7 +148,7 @@ void CInit::initialize()
     // file paths for state, settings and log
     m_strStateFile = m_strAppDataPath + "\\" + STATE_FILE;
     m_strSettingsFile = m_strAppDataPath + "\\" + SETTINGS_FILE;
-    m_strDebugLog = m_strAppDataPath + "\\" + DEBUGLOG_FILE;
+    m_strDebugLog = m_strAppDataPath + "\\" + LOG_FILE;
 
     // display a dialog box that allows the user to reset the status and the settings when the Shift key is pressed
     if (::GetKeyState(VK_SHIFT) < 0) {

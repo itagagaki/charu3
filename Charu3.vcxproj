@@ -136,6 +136,7 @@
     <ClInclude Include="OptVisual.h" />
     <ClInclude Include="PaletStatic.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="search.h" />
     <ClInclude Include="SerchDialog.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StringWork.h" />

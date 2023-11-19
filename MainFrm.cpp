@@ -107,8 +107,8 @@ bool CMainFrame::checkTrayPos()
     GetCursorPos(&ptCursolPos);
 
     // タスクバーのインジケータ領域の矩形を得る
-    hTaskBarWnd = ::FindWindow(_T(SZTASKBAR_CLASS), NULL);
-    hTrayNotifyWnd = FindWindowEx(hTaskBarWnd, NULL, _T(SZTRAY_CLASS), NULL)->GetSafeHwnd();
+    hTaskBarWnd = ::FindWindow(_T("Shell_TrayWnd"), NULL);
+    hTrayNotifyWnd = FindWindowEx(hTaskBarWnd, NULL, _T("TrayNotifyWnd"), NULL)->GetSafeHwnd();
     if (hTrayNotifyWnd == NULL)	return FALSE;
 
     ZeroMemory(&rtTrayNotify, sizeof(rtTrayNotify));
