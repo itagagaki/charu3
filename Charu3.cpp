@@ -1960,7 +1960,7 @@ void  CCharu3App::resetTreeDialog()
         m_pTree->setPlugin(m_ini.m_strRwPluginFolder);
         m_pTree->m_MyStringList = stringList;
         m_pTree->CWnd::LockWindowUpdate();
-        m_pTree->copyData(ROOT, TVI_ROOT, &m_pTree->m_MyStringList);//ツリーにデータをセット
+        m_pTree->copyData(dataTree::ROOT, TVI_ROOT, &m_pTree->m_MyStringList);//ツリーにデータをセット
         m_pTree->CWnd::UnlockWindowUpdate();
         setAppendHotKey();
     }

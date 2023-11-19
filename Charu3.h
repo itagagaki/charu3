@@ -20,8 +20,6 @@
 #pragma comment(linker, "/entry:\"wWinMainCRTStartup\"")
 #endif
 
-#define ROOT -1
-
 #include <list>
 #include <vector>
 

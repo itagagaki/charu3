@@ -271,7 +271,7 @@ bool CCharu3Tree::saveDataToFile(CString strFileName, CString strPlugin, HTREEIT
     //エクスポートの場合
     else {
         Data = getData(hStartItem);
-        Data.m_nParentID = ROOT;
+        Data.m_nParentID = dataTree::ROOT;
         tmplist.insert(tmplist.end(), Data);
         if (ItemHasChildren(hStartItem)) tree2List(GetChildItem(hStartItem), &tmplist);
     }
@@ -387,7 +387,7 @@ bool CCharu3Tree::loadDataFileDef(CString strFileName, CString strPlugin) {
     DeleteAllItems();
     bool isRet = loadDataFile(strFileName, strPlugin, &m_MyStringList);
     CWnd::LockWindowUpdate();
-    copyData(ROOT, TVI_ROOT, &m_MyStringList);//ツリーにデータをセット
+    copyData(dataTree::ROOT, TVI_ROOT, &m_MyStringList);//ツリーにデータをセット
     CWnd::UnlockWindowUpdate();
 
     return isRet;
@@ -675,7 +675,7 @@ bool CCharu3Tree::LoadDataWithPlugin(CString strFileName, CString strPlugin, std
 
             //本リストに登録
             tmplist->clear();
-            normalizationID(&readList, ROOT);//IDを正規化
+            normalizationID(&readList, dataTree::ROOT);//IDを正規化
             for (stit = readList.begin(); stit != readList.end(); stit++) {
                 tmplist->insert(tmplist->end(), *stit);//リストに追加
             }
@@ -886,7 +886,7 @@ HTREEITEM CCharu3Tree::mergeTreeData(HTREEITEM hTreeItem, std::list<STRING_DATA>
             nParentID = folder.m_nMyID;
         }
         else {//ルートに展開する
-            nParentID = ROOT;
+            nParentID = dataTree::ROOT;
         }
         mergeList(&m_MyStringList, pList, nParentID);
         //親のいない子は消す
@@ -895,7 +895,7 @@ HTREEITEM CCharu3Tree::mergeTreeData(HTREEITEM hTreeItem, std::list<STRING_DATA>
         for (i = 0, it = m_MyStringList.begin(); it != m_MyStringList.end(); i++, it++) {
             STRING_DATA data;
             data = *it;
-            if (it->m_nParentID != ROOT && !checkRedundancyID(it->m_nParentID)) {
+            if (it->m_nParentID != dataTree::ROOT && !checkRedundancyID(it->m_nParentID)) {
                 //親がいないのは消しちゃう
                 itNext = it;
                 if (i > 0) itNext--;
@@ -928,7 +928,7 @@ int CCharu3Tree::mergeList(std::list<STRING_DATA>* pMainList, std::list<STRING_D
     int nRet = 0, nBeginID = 0;
     std::list<STRING_DATA>::iterator it;
     it = pList->begin();
-    nBeginID = ROOT;
+    nBeginID = dataTree::ROOT;
 
     for (it = pList->begin(); it != pList->end(); it++) {
         if (it->m_nParentID == nBeginID)	it->m_nParentID = nParent;
@@ -967,7 +967,7 @@ HTREEITEM CCharu3Tree::addNewFolder(HTREEITEM hTreeItem, CString strName)
 HTREEITEM CCharu3Tree::addData(HTREEITEM hTreeItem, STRING_DATA data, bool isNewID/* = true*/, bool isChild /*fasle*/)
 {
     if (isNewID)	data.m_nMyID = makeNewID();
-    data.m_nParentID = ROOT;
+    data.m_nParentID = dataTree::ROOT;
     //NULLでくると親はROOTになる
     if (hTreeItem) {
         HTREEITEM hParentItem;

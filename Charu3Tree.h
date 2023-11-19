@@ -15,6 +15,10 @@
 #include <list>
 #include <vector>
 
+namespace dataTree {
+    const int ROOT = -1;
+}
+
 //データ種別
 #define KIND_ONETIME 0x01	//ワンタイム項目
 #define KIND_LOCK    0x02	//ノーマル項目
