@@ -21,6 +21,16 @@ static char THIS_FILE[] = __FILE__;
 #include "StringWork.h"
 #include "Color.h"
 
+//キャプションのマッチ方法
+enum {
+    MATCH_FORWARD,
+    MATCH_BACKWARD,
+    MATCH_PARTIAL,
+    MATCH_EXACT
+};
+
+#define FILEEXIST(s) (::GetFileAttributes(s) != 0xFFFFFFFF)
+
 namespace {
 
     void ReadPredefined(std::vector<MACRO_STRUCT>& macro, CString filePath)
@@ -468,7 +478,7 @@ COPYPASTE_KEY CInit::getAppendKeyInit(CString strWinName, int nNumber)
     ret.m_nMessage = -1;
     for (it = m_key.m_KeyList.begin(); it != m_key.m_KeyList.end(); it++) {
         key = *it;
-        if (key.m_nMatch != MATCH_PHRASE) {
+        if (key.m_nMatch != MATCH_EXACT) {
             nFindPoint = strWinName.Find(key.m_strTitle);
         }
 

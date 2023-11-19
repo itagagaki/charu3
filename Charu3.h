@@ -54,11 +54,6 @@
 #define ICON_SIZE		18
 #define TEXTBOX_FONT_SIZE	90
 
-#define HOTKEY_POPUP	0
-#define HOTKEY_FIFO		1
-#define HOTKEY_PASTE	2
-#define HOT_ITEM_KEY	3
-
 #define SZTASKBAR_CLASS		"Shell_TrayWnd"
 #define SZTRAY_CLASS		"TrayNotifyWnd"
 #define TITL_LENGTH 64	//タイトル文字列の長さ
@@ -78,19 +73,15 @@
 #define WM_FIND_ONCE   (WM_USER+108)
 
 //ポップアップ位置種別
-#define POPUP_POS_CARET	0
-#define POPUP_POS_MOUSE	1
-#define POPUP_POS_LEFT_U 2
-#define POPUP_POS_RIGHT_U 3
-#define POPUP_POS_CENTOR 4
-#define POPUP_POS_LEFT_D 5
-#define POPUP_POS_RIGHT_D 6
-
-//キャプションのマッチ方法
-#define MATCH_FORWORD	0
-#define MATCH_BACK		1
-#define MATCH_INCLUDE	2
-#define MATCH_PHRASE	3
+enum {
+    POPUP_POS_CARET,
+    POPUP_POS_MOUSE,
+    POPUP_POS_LEFT_U,
+    POPUP_POS_RIGHT_U,
+    POPUP_POS_CENTOR,
+    POPUP_POS_LEFT_D,
+    POPUP_POS_RIGHT_D
+};
 
 //拡張マクロ
 #define EXMACRO_DIRECT_COPY "directcopykey"
@@ -118,12 +109,6 @@
 #define SEARCH_LOGIC_AND	0
 #define SEARCH_LOGIC_OR	1
 
-//キャプションのマッチ方法
-#define MATCH_FORWARD	0
-#define MATCH_BACKWARD	1
-#define MATCH_PARTIAL	2
-#define MATCH_EXACT		3
-
 #define PHASE_START		0x00
 #define PHASE_IDOL		0x01
 #define PHASE_POPUP		0x02
@@ -135,8 +120,6 @@ typedef bool(*CharuPlugIn)(TCHAR*, TCHAR*, int, STRING_DATA*, void*);
 
 typedef bool (*setHook)(const HWND hWnd, const int msg);
 typedef void (*unHook)(void);
-
-#define FILEEXIST(s) (::GetFileAttributes(s) != 0xFFFFFFFF)
 
 //---------------------------------------------------
 // ホットキー設定構造体

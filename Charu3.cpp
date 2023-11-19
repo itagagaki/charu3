@@ -30,6 +30,13 @@ static char THIS_FILE[] = __FILE__;
 #endif
 #define _ME_NAME_ _T("Charu3.cpp")
 
+enum {
+    HOTKEY_POPUP,
+    HOTKEY_FIFO,
+    HOTKEY_PASTE,
+    HOT_ITEM_KEY
+};
+
 //---------------------------------------------------
 //関数名	MonitorEnumFunc
 //機能		モニター列挙コールバック
