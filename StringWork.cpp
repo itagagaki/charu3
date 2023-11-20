@@ -3,7 +3,12 @@
                                     2002/11/20 (c)keizi
 ----------------------------------------------------------*/
 
-#include <tchar.h>
+#include "stdafx.h"
+#ifdef _DEBUG
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#define new DEBUG_NEW
+#endif
 
 #include "StringWork.h"
 
@@ -114,4 +119,36 @@ int UStringWork::moveForward(TCHAR* szMovePos, int nMove)
     }
     *(szMovePos - nMove) = NULL;
     return i;
+}
+
+//---------------------------------------------------
+//関数名	ConvertWcharToCString(wchar_t *szUnicodeBuff)
+//機能		ワイド文字をMBCSにしてCStringに入れる
+//---------------------------------------------------
+CString UStringWork::ConvertWcharToCString(wchar_t* szUnicodeBuff)
+{
+    char* szMbcsBuff;
+    CString strRet;
+    int nDataSize = ::WideCharToMultiByte(CP_ACP, 0, szUnicodeBuff, -1, NULL, 0, NULL, NULL);
+    szMbcsBuff = new char[nDataSize];
+    if (szMbcsBuff) {
+        ::WideCharToMultiByte(CP_ACP, 0, szUnicodeBuff, -1, szMbcsBuff, nDataSize, "", NULL);
+        strRet = szMbcsBuff;
+        delete[] szMbcsBuff;
+    }
+    return strRet;
+}
+
+CStringA UStringWork::ConvertUnicodeToUTF8(const CStringW& uni)
+{
+    if (uni.IsEmpty()) return "";
+    CStringA utf8;
+    int cc = 0;
+    // get length (cc) of the new multibyte string excluding the \0 terminator first
+    if ((cc = WideCharToMultiByte(CP_UTF8, 0, uni, -1, NULL, 0, 0, 0) - 1) > 0) {
+        char* buf = utf8.GetBuffer(cc);
+        if (buf) WideCharToMultiByte(CP_UTF8, 0, uni, -1, buf, cc, 0, 0);
+        utf8.ReleaseBuffer();
+    }
+    return utf8;
 }

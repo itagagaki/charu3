@@ -1476,10 +1476,6 @@ CString CCharu3App::convertMacro(STRING_DATA* SourceData, CString strSelect, CSt
             strTime.Format(_T("%02d"), cTime.GetYear() - 2000);
             strBuff2.Replace(_T("$y"), strTime);
         }
-        if (strBuff2.Find(_T("$WH")) != -1) {//00 ˜a—ï2Œ…
-            strTime.Format(_T("%02d"), cTime.GetYear() - 1988);
-            strBuff2.Replace(_T("$WH"), strTime);
-        }
 
         if (strBuff2.Find(_T("$MM")) != -1) {//May ŒŽ‰pŒê•\‹L
             CString strMonth[] = { _T("Jan"),_T("Feb"),_T("Mar"),_T("Apr"),_T("May"),_T("Jun"),_T("Jul"),_T("Aug"),_T("Sep"),_T("Oct"),_T("Nov"),_T("Dec") };

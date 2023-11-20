@@ -12,7 +12,7 @@ static char THIS_FILE[] = __FILE__;
 
 #include "OptFifo.h"
 #include "Charu3.h" // for theApp.m_ini
-#include "General.h"
+#include "util.h"
 #include "resource.h"
 
 //---------------------------------------------------
@@ -23,9 +23,9 @@ COptFifo::COptFifo(CWnd* pParent /*=NULL*/) : CDialog(COptFifo::IDD, pParent)
 {
     //{{AFX_DATA_INIT(COptFifo)
     //}}AFX_DATA_INIT
-    m_nAutoOff = CGeneral::BoolToInt(theApp.m_ini.m_fifo.m_bAutoOff);
-    m_nCleanup = CGeneral::BoolToInt(theApp.m_ini.m_fifo.m_bCleanupAtTurnOff);
-    m_nDontSaveSameDataAsLast = CGeneral::BoolToInt(theApp.m_ini.m_fifo.m_bDontSaveSameDataAsLast);
+    m_nAutoOff = Util::BoolToInt(theApp.m_ini.m_fifo.m_bAutoOff);
+    m_nCleanup = Util::BoolToInt(theApp.m_ini.m_fifo.m_bCleanupAtTurnOff);
+    m_nDontSaveSameDataAsLast = Util::BoolToInt(theApp.m_ini.m_fifo.m_bDontSaveSameDataAsLast);
     //m_strCopySound = theApp.m_ini.m_fifo.m_strCopySound;
     //m_strPasteSound = theApp.m_ini.m_fifo.m_strPasteSound;
 }

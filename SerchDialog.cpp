@@ -13,7 +13,7 @@ static char THIS_FILE[] = __FILE__;
 #include "SerchDialog.h"
 #include "Charu3.h"
 #include "search.h"
-#include "General.h"
+#include "util.h"
 #include "resource.h"
 
 //---------------------------------------------------
@@ -69,7 +69,7 @@ BOOL CSearchDialog::OnInitDialog()
     m_ctrlSearchByData.SetCheck((theApp.m_ini.m_nSearchTarget & SEARCH_TARGET_DATA) ? BST_CHECKED : BST_UNCHECKED);
     m_ctrlSearchAnd.SetCheck(theApp.m_ini.m_nSearchLogic == SEARCH_LOGIC_AND ? BST_CHECKED : BST_UNCHECKED);
     m_ctrlSearchOr.SetCheck(theApp.m_ini.m_nSearchLogic == SEARCH_LOGIC_OR ? BST_CHECKED : BST_UNCHECKED);
-    m_ctrlCaseInsensitive.SetCheck(CGeneral::BoolToInt(theApp.m_ini.m_bSearchCaseInsensitive));
+    m_ctrlCaseInsensitive.SetCheck(Util::BoolToInt(theApp.m_ini.m_bSearchCaseInsensitive));
     return FALSE;
 }
 

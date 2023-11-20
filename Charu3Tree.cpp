@@ -17,7 +17,6 @@ static char THIS_FILE[] = __FILE__;
 #include "search.h"
 #include "StringWork.h"
 #include "Charu3.h"
-#include "General.h"
 #include "log.h"
 
 #define ICON_FOLDER	 0
@@ -52,6 +51,18 @@ namespace {
             }
         }
         return found;
+    }
+
+    bool loadBitmapFile(CString strFileName, CBitmap* BitMap)
+    {
+        HBITMAP hBitmap;
+        BitMap->Detach();
+        hBitmap = (HBITMAP)::LoadImage(NULL, strFileName, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+        if (hBitmap == NULL) {
+            return false;
+        }
+        BitMap->Attach(hBitmap);
+        return true;
     }
 
 } // anonymous namespace
@@ -159,7 +170,7 @@ void CCharu3Tree::setImageList(POINT posSize, CString strFileName, CString strPa
         CBitmap Bitmap;
         m_ImageList = new CImageList;
 
-        if (strFileName == "" || !CGeneral::loadBitmapFile(strFileName, &Bitmap))
+        if (strFileName == "" || !loadBitmapFile(strFileName, &Bitmap))
             Bitmap.LoadBitmap(IDB_ICON_BITMAP);//ビットマップをロード
 
         BITMAP bitMap;
@@ -503,10 +514,10 @@ bool CCharu3Tree::loadDataFile(CString strFileName, CString strPlugin, std::list
             szUniReadBuff = new wchar_t[nDataSize + 1];
             fread(szUniReadBuff, nDataSize, 1, fFile);
             szUniReadBuff[nDataSize / sizeof(WCHAR)] = '\0';
-#ifdef _UNICODE
+#ifdef _UNICODEx
             data.m_strTitle = szUniReadBuff;
 #else
-            data.m_strTitle = CGeneral::ConvertWcharToCString(szUniReadBuff);
+            data.m_strTitle = UStringWork::ConvertWcharToCString(szUniReadBuff);
 #endif
             delete[] szUniReadBuff;
             //文章を読み込み
@@ -514,10 +525,10 @@ bool CCharu3Tree::loadDataFile(CString strFileName, CString strPlugin, std::list
             szUniReadBuff = new wchar_t[nDataSize + 1];
             fread(szUniReadBuff, nDataSize, 1, fFile);
             szUniReadBuff[nDataSize / sizeof(WCHAR)] = '\0';
-#ifdef _UNICODE
+#ifdef _UNICODEx
             data.m_strData = szUniReadBuff;
 #else
-            data.m_strData = CGeneral::ConvertWcharToCString(szUniReadBuff);
+            data.m_strData = UStringWork::ConvertWcharToCString(szUniReadBuff);
 #endif
             delete[] szUniReadBuff;
 
@@ -526,10 +537,10 @@ bool CCharu3Tree::loadDataFile(CString strFileName, CString strPlugin, std::list
             szUniReadBuff = new wchar_t[nDataSize + 1];
             fread(szUniReadBuff, nDataSize, 1, fFile);
             szUniReadBuff[nDataSize / sizeof(WCHAR)] = '\0';
-#ifdef _UNICODE
+#ifdef _UNICODEx
             data.m_strMacro = szUniReadBuff;
 #else
-            data.m_strMacro = CGeneral::ConvertWcharToCString(szUniReadBuff);
+            data.m_strMacro = UStringWork::ConvertWcharToCString(szUniReadBuff);
 #endif
             delete[] szUniReadBuff;
         }

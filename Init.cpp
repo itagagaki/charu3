@@ -21,7 +21,6 @@ static char THIS_FILE[] = __FILE__;
 #include "search.h"
 #include "StringWork.h"
 #include "Color.h"
-#include "General.h"
 #include "log.h"
 
 #define DEFAULT_USERNAME _T("Charu3User")
@@ -301,8 +300,8 @@ void CInit::SaveSettings()
     m_settings["stockmode.autoTurnOff"] = m_fifo.m_bAutoOff;
     m_settings["stockmode.cleanupAtTurnOff"] = m_fifo.m_bCleanupAtTurnOff;
     m_settings["stockmode.dontSaveSameDataAsLast"] = m_fifo.m_bDontSaveSameDataAsLast;
-    m_settings["stockmode.sound.copy"] = CGeneral::ConvertUnicodeToUTF8(m_fifo.m_strCopySound);
-    m_settings["stockmode.sound.paste"] = CGeneral::ConvertUnicodeToUTF8(m_fifo.m_strPasteSound);
+    m_settings["stockmode.sound.copy"] = UStringWork::ConvertUnicodeToUTF8(m_fifo.m_strCopySound);
+    m_settings["stockmode.sound.paste"] = UStringWork::ConvertUnicodeToUTF8(m_fifo.m_strPasteSound);
 
     m_settings["tooltip.autopop"] = m_nToolTipTime;
     m_settings["tooltip.delay"] = m_nToolTipDelay;
@@ -325,9 +324,9 @@ void CInit::SaveSettings()
     m_settings["treeview.style.backgroundColor"] = Color::String(m_visual.m_nBackgroundColor);
     m_settings["treeview.style.borderColor"] = Color::String(m_visual.m_nBorderColor);
     m_settings["treeview.style.textColor"] = Color::String(m_visual.m_nTextColor);
-    m_settings["treeview.style.fontName"] = CGeneral::ConvertUnicodeToUTF8(m_visual.m_strFontName);
+    m_settings["treeview.style.fontName"] = UStringWork::ConvertUnicodeToUTF8(m_visual.m_strFontName);
     m_settings["treeview.style.fontSize"] = m_visual.m_nFontSize;
-    m_settings["treeview.style.iconFile"] = CGeneral::ConvertUnicodeToUTF8(m_visual.m_strResourceName);
+    m_settings["treeview.style.iconFile"] = UStringWork::ConvertUnicodeToUTF8(m_visual.m_strResourceName);
     m_settings["treeview.opacity"] = m_visual.m_nOpacity;
 
     m_settings["windowCheckInterval"] = m_nWindowCheckInterval;
@@ -338,7 +337,7 @@ void CInit::SaveSettings()
     std::list<CHANGE_KEY>::iterator it;
     for (it = m_key.m_KeyList.begin(); it != m_key.m_KeyList.end(); it++) {
         nlohmann::json node;
-        node["caption"] = CGeneral::ConvertUnicodeToUTF8(it->m_strTitle);
+        node["caption"] = UStringWork::ConvertUnicodeToUTF8(it->m_strTitle);
         node["captionMatchCondition"] = it->m_nMatch;
         node["keyEvent"] = it->m_sCopyPasteKey.ToJson();
         node["copyLimit"] = it->m_nHistoryLimit;
@@ -350,7 +349,7 @@ void CInit::SaveSettings()
 
     m_settings["stealthPrograms"].clear();
     for (const CString& s : m_stealth) {
-        m_settings["stealthPrograms"].push_back(CGeneral::ConvertUnicodeToUTF8(s));
+        m_settings["stealthPrograms"].push_back(UStringWork::ConvertUnicodeToUTF8(s));
     }
 
     try { std::ofstream(m_strSettingsFile) << m_settings.dump(1, '\t') << "\n"; }
@@ -373,15 +372,15 @@ void CInit::writeAllInitData()
 //---------------------------------------------------
 void CInit::writeEnvInitData()
 {
-    m_state["data.path"] = CGeneral::ConvertUnicodeToUTF8(m_strDataPath);
-    m_state["data.format"] = CGeneral::ConvertUnicodeToUTF8(m_strDataFormat);
+    m_state["data.path"] = UStringWork::ConvertUnicodeToUTF8(m_strDataPath);
+    m_state["data.format"] = UStringWork::ConvertUnicodeToUTF8(m_strDataFormat);
     m_state["data.readOnly"] = m_bReadOnly;
     m_state["treeview.width"] = m_DialogSize.x;
     m_state["treeview.height"] = m_DialogSize.y;
     m_state["find.target"] = m_nSearchTarget;
     m_state["find.logic"] = m_nSearchLogic;
     m_state["find.caseInsensitive"] = m_bSearchCaseInsensitive;
-    m_state["find.keywords"] = CGeneral::ConvertUnicodeToUTF8(m_strSearchKeywords);
+    m_state["find.keywords"] = UStringWork::ConvertUnicodeToUTF8(m_strSearchKeywords);
     m_state["internal.selectId"] = m_nSelectID;
     m_state["internal.treeId"] = m_nTreeID;
     m_state["internal.recordNumber"] = m_nRecNumber;

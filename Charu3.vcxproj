@@ -88,7 +88,6 @@
     <ClCompile Include="ClipBord.cpp" />
     <ClCompile Include="InitialDialog.cpp" />
     <ClCompile Include="EditDialog.cpp" />
-    <ClCompile Include="General.cpp" />
     <ClCompile Include="Init.cpp" />
     <ClCompile Include="jsonHelper.cpp" />
     <ClCompile Include="key.cpp" />
@@ -121,7 +120,6 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="InitialDialog.h" />
     <ClInclude Include="EditDialog.h" />
-    <ClInclude Include="General.h" />
     <ClInclude Include="Init.h" />
     <ClInclude Include="jsonHelper.h" />
     <ClInclude Include="key.h" />
@@ -145,6 +143,7 @@
     <ClInclude Include="SerchDialog.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StringWork.h" />
+    <ClInclude Include="util.h" />
     <ClInclude Include="window.h" />
   </ItemGroup>
   <ItemGroup>

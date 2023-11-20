@@ -13,7 +13,7 @@ static char THIS_FILE[] = __FILE__;
 #include "OptEtc.h"
 #include "Charu3.h" // for theApp.m_ini
 #include "key.h"
-#include "General.h"
+#include "util.h"
 #include "resource.h"
 
 //---------------------------------------------------
@@ -24,8 +24,8 @@ COptEtc::COptEtc(CWnd* pParent /*=NULL*/) : CDialog(COptEtc::IDD, pParent)
 {
     //{{AFX_DATA_INIT(COptEtc)
     //}}AFX_DATA_INIT
-    m_nPutBackClipboard = CGeneral::BoolToInt(theApp.m_ini.m_etc.m_bPutBackClipboard);
-    m_nShowClipboardInNotifyIconTooltip = CGeneral::BoolToInt(theApp.m_ini.m_etc.m_bShowClipboardInTooltipOfNofifyIcon);
+    m_nPutBackClipboard = Util::BoolToInt(theApp.m_ini.m_etc.m_bPutBackClipboard);
+    m_nShowClipboardInNotifyIconTooltip = Util::BoolToInt(theApp.m_ini.m_etc.m_bShowClipboardInTooltipOfNofifyIcon);
 }
 
 //---------------------------------------------------

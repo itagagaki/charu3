@@ -60,9 +60,6 @@
     <ClCompile Include="ClipBord.cpp">
       <Filter>一般クラス</Filter>
     </ClCompile>
-    <ClCompile Include="General.cpp">
-      <Filter>一般クラス</Filter>
-    </ClCompile>
     <ClCompile Include="MyEditCtrl.cpp">
       <Filter>一般クラス</Filter>
     </ClCompile>
@@ -152,9 +149,6 @@
     <ClInclude Include="ClipBord.h">
       <Filter>一般クラス</Filter>
     </ClInclude>
-    <ClInclude Include="General.h">
-      <Filter>一般クラス</Filter>
-    </ClInclude>
     <ClInclude Include="MyEditCtrl.h">
       <Filter>一般クラス</Filter>
     </ClInclude>
@@ -219,6 +213,9 @@
       <Filter>一般クラス</Filter>
     </ClInclude>
     <ClInclude Include="key.h">
+      <Filter>一般クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="util.h">
       <Filter>一般クラス</Filter>
     </ClInclude>
   </ItemGroup>

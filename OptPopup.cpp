@@ -12,7 +12,7 @@ static char THIS_FILE[] = __FILE__;
 
 #include "OptPopup.h"
 #include "Charu3.h"
-#include "General.h"
+#include "util.h"
 #include "resource.h"
 
 //---------------------------------------------------
@@ -23,15 +23,15 @@ COptPopup::COptPopup(CWnd* pParent /*=NULL*/) : CDialog(COptPopup::IDD, pParent)
 {
     //{{AFX_DATA_INIT(COptPopup)
     //}}AFX_DATA_INIT
-    m_nSelectByTypingCaseInsensitive = CGeneral::BoolToInt(theApp.m_ini.m_pop.m_bSelectByTypingCaseInsensitive);
-    m_nSelectByTypingAutoPaste = CGeneral::BoolToInt(theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste);
-    m_nSelectByTypingAutoExpand = CGeneral::BoolToInt(theApp.m_ini.m_pop.m_bSelectByTypingAutoExpand);
-    m_nScrollVertical = CGeneral::BoolToInt(theApp.m_ini.m_visual.m_bScrollbarVertical);
-    m_nScrollHorizontal = CGeneral::BoolToInt(theApp.m_ini.m_visual.m_bScrollbarHorizontal);
-    m_nSingleExpand = CGeneral::BoolToInt(theApp.m_ini.m_pop.m_bSingleExpand);
-    m_nSingleEnter = CGeneral::BoolToInt(theApp.m_ini.m_pop.m_bSingleEnter);
-    m_nKeepSelection = CGeneral::BoolToInt(theApp.m_ini.m_pop.m_bKeepSelection);
-    m_nKeepFolders = CGeneral::BoolToInt(theApp.m_ini.m_pop.m_bKeepFolders);
+    m_nSelectByTypingCaseInsensitive = Util::BoolToInt(theApp.m_ini.m_pop.m_bSelectByTypingCaseInsensitive);
+    m_nSelectByTypingAutoPaste = Util::BoolToInt(theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste);
+    m_nSelectByTypingAutoExpand = Util::BoolToInt(theApp.m_ini.m_pop.m_bSelectByTypingAutoExpand);
+    m_nScrollVertical = Util::BoolToInt(theApp.m_ini.m_visual.m_bScrollbarVertical);
+    m_nScrollHorizontal = Util::BoolToInt(theApp.m_ini.m_visual.m_bScrollbarHorizontal);
+    m_nSingleExpand = Util::BoolToInt(theApp.m_ini.m_pop.m_bSingleExpand);
+    m_nSingleEnter = Util::BoolToInt(theApp.m_ini.m_pop.m_bSingleEnter);
+    m_nKeepSelection = Util::BoolToInt(theApp.m_ini.m_pop.m_bKeepSelection);
+    m_nKeepFolders = Util::BoolToInt(theApp.m_ini.m_pop.m_bKeepFolders);
 }
 
 //---------------------------------------------------
