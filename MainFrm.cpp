@@ -15,6 +15,7 @@ static char THIS_FILE[] = __FILE__;
 #include "MainFrm.h"
 #include "Charu3.h"
 #include "window.h"
+#include "clipboard.h"
 #include "log.h"
 #include "resource.h"
 

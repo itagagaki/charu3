@@ -22,8 +22,8 @@
 
 #include "MainFrm.h"
 #include "MyTreeDialog.h"
-#include "ClipBord.h"
 #include "Init.h"
+#include "clipboard.h"
 #include "window.h"
 
 #define DAT_FORMAT			"Charu3Data1.0"
@@ -119,7 +119,7 @@ public:
     void toggleStockMode();
     bool getStockSW() { return m_isStockMode; }
     int  getPhase() { return m_nPhase; }
-    void fifoClipbord();
+    void fifoClipboard();
     void resetTreeDialog();
 
     bool SelectFile();

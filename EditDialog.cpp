@@ -14,7 +14,7 @@ static char THIS_FILE[] = __FILE__;
 
 #include "EditDialog.h"
 #include "Charu3.h"
-#include "ClipBord.h"
+#include "clipboard.h"
 #include "resource.h"
 
 //---------------------------------------------------

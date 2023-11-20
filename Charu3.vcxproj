@@ -85,7 +85,7 @@
     <ClCompile Include="Charu3.cpp" />
     <ClCompile Include="Charu3Tree.cpp" />
     <ClCompile Include="ChildView.cpp" />
-    <ClCompile Include="ClipBord.cpp" />
+    <ClCompile Include="clipboard.cpp" />
     <ClCompile Include="InitialDialog.cpp" />
     <ClCompile Include="EditDialog.cpp" />
     <ClCompile Include="Init.cpp" />
@@ -108,7 +108,7 @@
     <ClCompile Include="SerchDialog.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="text.cpp" />
-    <ClCompile Include="Color.cpp" />
+    <ClCompile Include="color.cpp" />
     <ClCompile Include="window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -116,8 +116,8 @@
     <ClInclude Include="Charu3.h" />
     <ClInclude Include="Charu3Tree.h" />
     <ClInclude Include="ChildView.h" />
-    <ClInclude Include="ClipBord.h" />
-    <ClInclude Include="Color.h" />
+    <ClInclude Include="clipboard.h" />
+    <ClInclude Include="color.h" />
     <ClInclude Include="InitialDialog.h" />
     <ClInclude Include="EditDialog.h" />
     <ClInclude Include="Init.h" />

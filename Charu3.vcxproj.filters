@@ -57,7 +57,7 @@
     <ClCompile Include="OptVisual.cpp">
       <Filter>設定クラス\ダイアログ</Filter>
     </ClCompile>
-    <ClCompile Include="ClipBord.cpp">
+    <ClCompile Include="clipboard.cpp">
       <Filter>一般クラス</Filter>
     </ClCompile>
     <ClCompile Include="MyEditCtrl.cpp">
@@ -90,7 +90,7 @@
     <ClCompile Include="Charu3Tree.cpp">
       <Filter>ツリー＆データ</Filter>
     </ClCompile>
-    <ClCompile Include="Color.cpp">
+    <ClCompile Include="color.cpp">
       <Filter>一般クラス</Filter>
     </ClCompile>
     <ClCompile Include="OptAdvanced.cpp">
@@ -146,7 +146,7 @@
     <ClInclude Include="OptVisual.h">
       <Filter>設定クラス\ダイアログ</Filter>
     </ClInclude>
-    <ClInclude Include="ClipBord.h">
+    <ClInclude Include="clipboard.h">
       <Filter>一般クラス</Filter>
     </ClInclude>
     <ClInclude Include="MyEditCtrl.h">
@@ -185,7 +185,7 @@
     <ClInclude Include="nlomann\json.hpp">
       <Filter>一般クラス</Filter>
     </ClInclude>
-    <ClInclude Include="Color.h">
+    <ClInclude Include="color.h">
       <Filter>一般クラス</Filter>
     </ClInclude>
     <ClInclude Include="OptAdvanced.h">

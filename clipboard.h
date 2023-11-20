@@ -1,10 +1,10 @@
 /*----------------------------------------------------------
-    ClipBordクラスヘッダ
+    ClipBoardクラスヘッダ
                                     2002/11/16 (c)Keizi
 ----------------------------------------------------------*/
 
-#if !defined(AFX_CLIPBORD_H__582AEB30_7E55_42E1_8D77_A28FAD0F7294__INCLUDED_)
-#define AFX_CLIPBORD_H__582AEB30_7E55_42E1_8D77_A28FAD0F7294__INCLUDED_
+#if !defined(AFX_CLIPBOARD_H__582AEB30_7E55_42E1_8D77_A28FAD0F7294__INCLUDED_)
+#define AFX_CLIPBOARD_H__582AEB30_7E55_42E1_8D77_A28FAD0F7294__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
@@ -62,4 +62,4 @@ private:
     int m_nRetryInterval;
 };
 
-#endif // !defined(AFX_CLIPBORD_H__582AEB30_7E55_42E1_8D77_A28FAD0F7294__INCLUDED_)
+#endif // !defined(AFX_CLIPBOARD_H__582AEB30_7E55_42E1_8D77_A28FAD0F7294__INCLUDED_)

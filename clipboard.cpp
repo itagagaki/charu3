@@ -1,5 +1,5 @@
 /*----------------------------------------------------------
-    ClipBordクラス
+    ClipBoardクラス
                                     2002/11/16 (c)Keizi
 ----------------------------------------------------------*/
 
@@ -10,7 +10,7 @@ static char THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 #endif
 
-#include "ClipBord.h"
+#include "clipboard.h"
 
 //---------------------------------------------------
 //関数名	setClipboardText(const TCHAR* sData)

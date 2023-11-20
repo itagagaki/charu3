@@ -973,7 +973,7 @@ BEGIN
         BEGIN
             VALUE "Comments", "Text input assistant"
             VALUE "CompanyName", "C+ Factory / Itagaki Fumihiko"
-            VALUE "FileDescription", "Charu3(Clipbord and High Amenity Routine for Utility 3) Successor Edition"
+            VALUE "FileDescription", "Charu3 (Clipboard and High Amenity Routine for Utility 3) Successor Edition"
             VALUE "FileVersion", "3.9.0.0 + WIP"
             VALUE "InternalName", "Charu3 SE"
             VALUE "LegalCopyright", "Copyright (C) 1998-2003 matsumoto keizi, 2021-2023 Itagaki Fumihiko"

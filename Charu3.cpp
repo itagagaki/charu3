@@ -1693,7 +1693,7 @@ CString CCharu3App::convertMacro(STRING_DATA* SourceData, CString strSelect, CSt
 }
 
 //---------------------------------------------------
-//関数名	changeClipBord()
+//関数名	onClipboardChanged()
 //機能		メインフレームでクリップボードの変更を検知、
 //          クリップボードの内容をリストに追加する
 //---------------------------------------------------
@@ -1712,7 +1712,7 @@ void CCharu3App::onClipboardChanged(CString strClipboard)
                     nEmptyCnt = 0;
                     //デバッグログ処理
                     if(m_ini.m_nDebug) {
-                        LOG(_T("changeClipBord Sleep \"%s\""),strClipBord);
+                        LOG(_T("onClipBoardChanged Sleep \"%s\""), strClipBoard);
                     }
                 }
                 else {
@@ -1736,7 +1736,7 @@ void CCharu3App::onClipboardChanged(CString strClipboard)
         return;
     }
 
-    if (m_nPhase == PHASE_IDOL && /*strClipBord != m_strlClipBackup &&*/ strClipboard != "") {
+    if (m_nPhase == PHASE_IDOL && /*strClipBoard != m_strlClipBackup &&*/ strClipboard != "") {
         STRING_DATA data;
         data.m_cKind = KIND_ONETIME;
         data.m_strData = strClipboard;
@@ -1773,10 +1773,10 @@ void CCharu3App::onClipboardChanged(CString strClipboard)
 }
 
 //---------------------------------------------------
-//関数名	fifoClipbord()
+//関数名	fifoClipboard()
 //機能		ストックモード処理
 //---------------------------------------------------
-void CCharu3App::fifoClipbord()
+void CCharu3App::fifoClipboard()
 {
     if (!m_isStockMode) {
         return;
@@ -1794,7 +1794,7 @@ void CCharu3App::fifoClipbord()
         }
         if (text != _T("")) {
             if (m_ini.m_bDebug) {
-                LOG(_T("fifoClipbord text:%s"), text.GetString());
+                LOG(_T("fifoClipboard text:%s"), text.GetString());
             }
             if (m_clipboard.setClipboardText(text, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval)) {
                 if (m_ini.m_fifo.m_strPasteSound != _T("")) {
@@ -2043,7 +2043,7 @@ BOOL CCharu3App::PreTranslateMessage(MSG* pMsg)
             if (m_ini.m_bDebug) {
                 LOG(_T("HOTKEY_PASTE"));
             }
-            fifoClipbord();
+            fifoClipboard();
             return FALSE;
             break;
 
