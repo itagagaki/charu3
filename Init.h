@@ -13,8 +13,7 @@
 #include <list>
 #include <vector>
 #include "nlomann/json.hpp"
-
-#include "General.h"
+#include "jsonHelper.h"
 
 //設定セクション定義
 #define REGKEY_ENV		_T("Environment")
@@ -153,26 +152,26 @@ struct COPYPASTE_KEY
         , m_nPasteWait(50)
     {
         if (obj.is_object()) {
-            m_nMessage = static_cast<int>(CGeneral::getSettingNumber(obj, "method", 0));
-            m_uVK_Copy = static_cast<UINT>(CGeneral::getSettingNumber(obj, "copy.keyCode", 'C'));
-            m_uMod_Copy = static_cast<UINT>(CGeneral::getSettingNumber(obj, "copy.keyModifier", MOD_CONTROL));
-            m_nCopyWait = static_cast<int>(CGeneral::getSettingNumber(obj, "copy.delay", 50));
-            m_uVK_Paste = static_cast<UINT>(CGeneral::getSettingNumber(obj, "paste.keyCode", 'V'));
-            m_uMod_Paste = static_cast<UINT>(CGeneral::getSettingNumber(obj, "paste.keyModifier", MOD_CONTROL));
-            m_nPasteWait = static_cast<int>(CGeneral::getSettingNumber(obj, "paste.delay", 50));
+            m_nMessage = static_cast<int>(jsonHelper::GetNumberProperty(obj, "method", 0));
+            m_uVK_Copy = static_cast<UINT>(jsonHelper::GetNumberProperty(obj, "copy.keyCode", 'C'));
+            m_uMod_Copy = static_cast<UINT>(jsonHelper::GetNumberProperty(obj, "copy.keyModifier", MOD_CONTROL));
+            m_nCopyWait = static_cast<int>(jsonHelper::GetNumberProperty(obj, "copy.delay", 50));
+            m_uVK_Paste = static_cast<UINT>(jsonHelper::GetNumberProperty(obj, "paste.keyCode", 'V'));
+            m_uMod_Paste = static_cast<UINT>(jsonHelper::GetNumberProperty(obj, "paste.keyModifier", MOD_CONTROL));
+            m_nPasteWait = static_cast<int>(jsonHelper::GetNumberProperty(obj, "paste.delay", 50));
 
             nlohmann::json msg;
             msg = obj["copy.message"];
             if (msg.is_object()) {
-                m_copyMessage.Msg = static_cast<UINT>(CGeneral::getSettingNumber(msg, "id", 0));
-                m_copyMessage.wParam = static_cast<WPARAM>(CGeneral::getSettingNumber(msg, "param1", 0));
-                m_copyMessage.lParam = static_cast<LPARAM>(CGeneral::getSettingNumber(msg, "param2", 0));
+                m_copyMessage.Msg = static_cast<UINT>(jsonHelper::GetNumberProperty(msg, "id", 0));
+                m_copyMessage.wParam = static_cast<WPARAM>(jsonHelper::GetNumberProperty(msg, "param1", 0));
+                m_copyMessage.lParam = static_cast<LPARAM>(jsonHelper::GetNumberProperty(msg, "param2", 0));
             }
             msg = obj["paste.message"];
             if (msg.is_object()) {
-                m_pasteMessage.Msg = static_cast<UINT>(CGeneral::getSettingNumber(msg, "id", 0));
-                m_pasteMessage.wParam = static_cast<WPARAM>(CGeneral::getSettingNumber(msg, "param1", 0));
-                m_pasteMessage.lParam = static_cast<LPARAM>(CGeneral::getSettingNumber(msg, "param2", 0));
+                m_pasteMessage.Msg = static_cast<UINT>(jsonHelper::GetNumberProperty(msg, "id", 0));
+                m_pasteMessage.wParam = static_cast<WPARAM>(jsonHelper::GetNumberProperty(msg, "param1", 0));
+                m_pasteMessage.lParam = static_cast<LPARAM>(jsonHelper::GetNumberProperty(msg, "param2", 0));
             }
         }
     }

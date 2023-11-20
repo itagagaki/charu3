@@ -14,6 +14,7 @@ static char THIS_FILE[] = __FILE__;
 
 #include "MainFrm.h"
 #include "Charu3.h"
+#include "window.h"
 #include "log.h"
 #include "resource.h"
 
@@ -287,7 +288,7 @@ LRESULT CMainFrame::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
         else if (checkTrayPos()) {
             m_hActive = ::GetForegroundWindow();
             if (m_hActive != theApp.m_focusInfo.m_hActiveWnd) {
-                CGeneral::getFocusInfo(&theApp.m_focusInfo);
+                Window::GetFocusInfo(&theApp.m_focusInfo);
             }
         }
     }

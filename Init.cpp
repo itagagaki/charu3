@@ -14,14 +14,15 @@ static char THIS_FILE[] = __FILE__;
 #include <list>
 #include <vector>
 #include "nlomann/json.hpp"
+#include "jsonHelper.h"
 
 #include "Init.h"
 #include "Charu3.h"
-#include "log.h"
-#include "General.h"
 #include "search.h"
 #include "StringWork.h"
 #include "Color.h"
+#include "General.h"
+#include "log.h"
 
 #define DEFAULT_USERNAME _T("Charu3User")
 #define APP_NAME         _T("Charu3")
@@ -49,9 +50,9 @@ namespace {
         for (nlohmann::json::iterator it = snippets.begin(); it != snippets.end(); it++) {
             nlohmann::json jnode = it.value();
             MACRO_STRUCT snippet;
-            snippet.m_strName = CGeneral::getSettingCString(jnode, "caption", _T(""));
-            snippet.m_strMacro = CGeneral::getSettingCString(jnode, "data", _T(""));
-            snippet.m_cKind = static_cast<int>(CGeneral::getSettingNumber(jnode, "mode", 255));
+            snippet.m_strName = jsonHelper::GetStringPropertyAsCString(jnode, "caption", _T(""));
+            snippet.m_strMacro = jsonHelper::GetStringPropertyAsCString(jnode, "data", _T(""));
+            snippet.m_cKind = static_cast<int>(jsonHelper::GetNumberProperty(jnode, "mode", 255));
             macro.push_back(snippet);
         }
     }
@@ -166,96 +167,96 @@ void CInit::initialize()
     try { m_state = nlohmann::json::parse(std::ifstream(m_strStateFile)); }
     catch (...) { m_state = nlohmann::json(); }
 
-    m_strDataPath = CGeneral::getSettingCString(m_state, "data.path", _T(""));
-    m_strDataFormat = CGeneral::getSettingCString(m_state, "data.format", DAT_FORMAT);
-    m_bReadOnly = CGeneral::getSettingBool(m_state, "data.readOnly", false);
-    m_DialogSize.x = static_cast<LONG>(CGeneral::getSettingNumber(m_state, "treeview.width", 250));
-    m_DialogSize.y = static_cast<LONG>(CGeneral::getSettingNumber(m_state, "treeview.height", 350));
-    m_nSearchTarget = static_cast<int>(CGeneral::getSettingNumber(m_state, "find.target", SEARCH_TARGET_NAME));
-    m_nSearchLogic = static_cast<int>(CGeneral::getSettingNumber(m_state, "find.logic", SEARCH_TARGET_DATA));
-    m_bSearchCaseInsensitive = CGeneral::getSettingBool(m_state, "find.caseInsensitive", true);
-    m_strSearchKeywords = CGeneral::getSettingCString(m_state, "find.keywords", _T(""));
-    m_nSelectID = static_cast<int>(CGeneral::getSettingNumber(m_state, "internal.selectId", -1));
+    m_strDataPath = jsonHelper::GetStringPropertyAsCString(m_state, "data.path", _T(""));
+    m_strDataFormat = jsonHelper ::GetStringPropertyAsCString(m_state, "data.format", DAT_FORMAT);
+    m_bReadOnly = jsonHelper::GetBoolProperty(m_state, "data.readOnly", false);
+    m_DialogSize.x = static_cast<LONG>(jsonHelper::GetNumberProperty(m_state, "treeview.width", 250));
+    m_DialogSize.y = static_cast<LONG>(jsonHelper::GetNumberProperty(m_state, "treeview.height", 350));
+    m_nSearchTarget = static_cast<int>(jsonHelper::GetNumberProperty(m_state, "find.target", SEARCH_TARGET_NAME));
+    m_nSearchLogic = static_cast<int>(jsonHelper::GetNumberProperty(m_state, "find.logic", SEARCH_TARGET_DATA));
+    m_bSearchCaseInsensitive = jsonHelper::GetBoolProperty(m_state, "find.caseInsensitive", true);
+    m_strSearchKeywords = jsonHelper::GetStringPropertyAsCString(m_state, "find.keywords", _T(""));
+    m_nSelectID = static_cast<int>(jsonHelper::GetNumberProperty(m_state, "internal.selectId", -1));
     {
         time_t lTime;
-        m_nTreeID = static_cast<int>(CGeneral::getSettingNumber(m_state, "internal.treeId", time(&lTime)));
+        m_nTreeID = static_cast<int>(jsonHelper::GetNumberProperty(m_state, "internal.treeId", time(&lTime)));
     }
-    m_nRecNumber = static_cast<int>(CGeneral::getSettingNumber(m_state, "internal.recordNumber", 0));
+    m_nRecNumber = static_cast<int>(jsonHelper::GetNumberProperty(m_state, "internal.recordNumber", 0));
 
     // read settings
     try { m_settings = nlohmann::json::parse(std::ifstream(m_strSettingsFile)); }
     catch (...) { m_settings = nlohmann::json(); }
 
-    m_etc.m_bPutBackClipboard = CGeneral::getSettingBool(m_settings, "clipboard.putBackAfterPasting", false);
-    m_nClipboardOpenDelay = static_cast<int>(CGeneral::getSettingNumber(m_settings, "clipboard.openDelay", 0));
-    m_nClipboardRetryInterval = static_cast<int>(CGeneral::getSettingNumber(m_settings, "clipboard.retryInterval", 50));
-    m_nClipboardRetryTimes = static_cast<int>(CGeneral::getSettingNumber(m_settings, "clipboard.retryTimes", 10));
+    m_etc.m_bPutBackClipboard = jsonHelper::GetBoolProperty(m_settings, "clipboard.putBackAfterPasting", false);
+    m_nClipboardOpenDelay = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "clipboard.openDelay", 0));
+    m_nClipboardRetryInterval = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "clipboard.retryInterval", 50));
+    m_nClipboardRetryTimes = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "clipboard.retryTimes", 10));
 
-    m_pop.m_nDoubleKeyPOP = static_cast<int>(CGeneral::getSettingNumber(m_settings, "hotkey.popup", 0));
-    m_pop.m_nDCKeyPopTime = static_cast<int>(CGeneral::getSettingNumber(m_settings, "hotkey.popup.hitTime", 250));
-    m_pop.m_uVK_Pouup = static_cast<UINT>(CGeneral::getSettingNumber(m_settings, "hotkey.popup.keyCode", 88)); // X
-    m_pop.m_uMod_Pouup = static_cast<UINT>(CGeneral::getSettingNumber(m_settings, "hotkey.popup.keyModifier", MOD_ALT));
-    m_pop.m_nDoubleKeyFIFO = static_cast<int>(CGeneral::getSettingNumber(m_settings, "hotkey.stockmode", 0));
-    m_pop.m_nDCKeyFifoTime = static_cast<int>(CGeneral::getSettingNumber(m_settings, "hotkey.stockmode.hitTime", 250));
-    m_pop.m_uVK_Fifo = static_cast<UINT>(CGeneral::getSettingNumber(m_settings, "hotkey.stockmode.keyCode", 83)); // S
-    m_pop.m_uMod_Fifo = static_cast<UINT>(CGeneral::getSettingNumber(m_settings, "hotkey.stockmode.keyModifier", MOD_CONTROL | MOD_SHIFT));
+    m_pop.m_nDoubleKeyPOP = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "hotkey.popup", 0));
+    m_pop.m_nDCKeyPopTime = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "hotkey.popup.hitTime", 250));
+    m_pop.m_uVK_Pouup = static_cast<UINT>(jsonHelper::GetNumberProperty(m_settings, "hotkey.popup.keyCode", 88)); // X
+    m_pop.m_uMod_Pouup = static_cast<UINT>(jsonHelper::GetNumberProperty(m_settings, "hotkey.popup.keyModifier", MOD_ALT));
+    m_pop.m_nDoubleKeyFIFO = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "hotkey.stockmode", 0));
+    m_pop.m_nDCKeyFifoTime = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "hotkey.stockmode.hitTime", 250));
+    m_pop.m_uVK_Fifo = static_cast<UINT>(jsonHelper::GetNumberProperty(m_settings, "hotkey.stockmode.keyCode", 83)); // S
+    m_pop.m_uMod_Fifo = static_cast<UINT>(jsonHelper::GetNumberProperty(m_settings, "hotkey.stockmode.keyModifier", MOD_CONTROL | MOD_SHIFT));
 
-    m_etc.m_nIconClick = static_cast<int>(CGeneral::getSettingNumber(m_settings, "notifyIcon.clickedBehavior", 0));
-    m_etc.m_bShowClipboardInTooltipOfNofifyIcon = CGeneral::getSettingBool(m_settings, "notifyIcon.showClipboard", true);
+    m_etc.m_nIconClick = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "notifyIcon.clickedBehavior", 0));
+    m_etc.m_bShowClipboardInTooltipOfNofifyIcon = jsonHelper::GetBoolProperty(m_settings, "notifyIcon.showClipboard", true);
 
-    m_fifo.m_nFifo = static_cast<int>(CGeneral::getSettingNumber(m_settings, "stockmode.behavior", 1));
-    m_fifo.m_bAutoOff = CGeneral::getSettingBool(m_settings, "stockmode.autoTurnOff", false);
-    m_fifo.m_bCleanupAtTurnOff = CGeneral::getSettingBool(m_settings, "stockmode.cleanupAtTurnOff", false);
-    m_fifo.m_bDontSaveSameDataAsLast = CGeneral::getSettingBool(m_settings, "stockmode.dontSaveSameDataAsLast", false);
-    m_fifo.m_strCopySound = CGeneral::getSettingCString(m_settings, "stockmode.sound.copy", _T("pu.wav"));
-    m_fifo.m_strPasteSound = CGeneral::getSettingCString(m_settings, "stockmode.sound.paste", _T(""));
+    m_fifo.m_nFifo = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "stockmode.behavior", 1));
+    m_fifo.m_bAutoOff = jsonHelper::GetBoolProperty(m_settings, "stockmode.autoTurnOff", false);
+    m_fifo.m_bCleanupAtTurnOff = jsonHelper::GetBoolProperty(m_settings, "stockmode.cleanupAtTurnOff", false);
+    m_fifo.m_bDontSaveSameDataAsLast = jsonHelper::GetBoolProperty(m_settings, "stockmode.dontSaveSameDataAsLast", false);
+    m_fifo.m_strCopySound = jsonHelper::GetStringPropertyAsCString(m_settings, "stockmode.sound.copy", _T("pu.wav"));
+    m_fifo.m_strPasteSound = jsonHelper::GetStringPropertyAsCString(m_settings, "stockmode.sound.paste", _T(""));
 
-    m_nToolTipTime = static_cast<int>(CGeneral::getSettingNumber(m_settings, "tooltip.autopop", 30000));
-    m_nToolTipDelay = static_cast<int>(CGeneral::getSettingNumber(m_settings, "tooltip.delay", 300));
+    m_nToolTipTime = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "tooltip.autopop", 30000));
+    m_nToolTipDelay = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "tooltip.delay", 300));
 
-    m_pop.m_nPopupPos = static_cast<int>(CGeneral::getSettingNumber(m_settings, "treeview.popupPosition", 0));
-    m_pop.m_posCaretHosei.x = static_cast<int>(CGeneral::getSettingNumber(m_settings, "treeview.popupOffset.x", -20));
-    m_pop.m_posCaretHosei.y = static_cast<int>(CGeneral::getSettingNumber(m_settings, "treeview.popupOffset.y", 0));
-    m_pop.m_nSelectByTypingFinalizePeriod = static_cast<int>(CGeneral::getSettingNumber(m_settings, "treeview.selectByTyping.finalizePeriod", 350));
-    m_pop.m_bSelectByTypingCaseInsensitive = CGeneral::getSettingBool(m_settings, "treeview.selectByTyping.caseInsensitive", true);
-    m_pop.m_bSelectByTypingAutoPaste = CGeneral::getSettingBool(m_settings, "treeview.selectByTyping.autoPaste", false);
-    m_pop.m_bSelectByTypingAutoExpand = CGeneral::getSettingBool(m_settings, "treeview.selectByTyping.autoExpand", false);
-    m_visual.m_nToolTip = static_cast<int>(CGeneral::getSettingNumber(m_settings, "treeview.tooltip", 0));
-    m_visual.m_bScrollbarVertical = CGeneral::getSettingBool(m_settings, "treeview.scrollbar.vertical", true);
-    m_visual.m_bScrollbarHorizontal = CGeneral::getSettingBool(m_settings, "treeview.scrollbar.horizontal", true);
-    m_pop.m_bSingleExpand = CGeneral::getSettingBool(m_settings, "treeview.expandOnSingleClick", false);
-    m_pop.m_bSingleEnter = CGeneral::getSettingBool(m_settings, "treeview.pasteBySingleClick", false);
-    m_pop.m_bKeepSelection = CGeneral::getSettingBool(m_settings, "treeview.keepSelection", true);
-    m_pop.m_bKeepFolders = CGeneral::getSettingBool(m_settings, "treeview.keepFolders", true);
+    m_pop.m_nPopupPos = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.popupPosition", 0));
+    m_pop.m_posCaretHosei.x = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.popupOffset.x", -20));
+    m_pop.m_posCaretHosei.y = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.popupOffset.y", 0));
+    m_pop.m_nSelectByTypingFinalizePeriod = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.selectByTyping.finalizePeriod", 350));
+    m_pop.m_bSelectByTypingCaseInsensitive = jsonHelper::GetBoolProperty(m_settings, "treeview.selectByTyping.caseInsensitive", true);
+    m_pop.m_bSelectByTypingAutoPaste = jsonHelper::GetBoolProperty(m_settings, "treeview.selectByTyping.autoPaste", false);
+    m_pop.m_bSelectByTypingAutoExpand = jsonHelper::GetBoolProperty(m_settings, "treeview.selectByTyping.autoExpand", false);
+    m_visual.m_nToolTip = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.tooltip", 0));
+    m_visual.m_bScrollbarVertical = jsonHelper::GetBoolProperty(m_settings, "treeview.scrollbar.vertical", true);
+    m_visual.m_bScrollbarHorizontal = jsonHelper::GetBoolProperty(m_settings, "treeview.scrollbar.horizontal", true);
+    m_pop.m_bSingleExpand = jsonHelper::GetBoolProperty(m_settings, "treeview.expandOnSingleClick", false);
+    m_pop.m_bSingleEnter = jsonHelper::GetBoolProperty(m_settings, "treeview.pasteBySingleClick", false);
+    m_pop.m_bKeepSelection = jsonHelper::GetBoolProperty(m_settings, "treeview.keepSelection", true);
+    m_pop.m_bKeepFolders = jsonHelper::GetBoolProperty(m_settings, "treeview.keepFolders", true);
 
-    m_visual.m_nBorderColor = Color::Parse(CGeneral::getSettingString(m_settings, "treeview.style.borderColor", "#ff9900"));
-    m_visual.m_nBackgroundColor = Color::Parse(CGeneral::getSettingString(m_settings, "treeview.style.backgroundColor", "#ffffee"));
-    m_visual.m_nTextColor = Color::Parse(CGeneral::getSettingString(m_settings, "treeview.style.textColor", "#663300"));
-    m_visual.m_strFontName = CGeneral::getSettingCString(m_settings, "treeview.style.fontName", "");
-    m_visual.m_nFontSize = static_cast<int>(CGeneral::getSettingNumber(m_settings, "treeview.style.fontSize", 100));
-    m_visual.m_strResourceName = CGeneral::getSettingCString(m_settings, "treeview.style.iconFile", "");
-    m_visual.m_nOpacity = static_cast<int>(CGeneral::getSettingNumber(m_settings, "treeview.opacity", 100));
+    m_visual.m_nBorderColor = Color::Parse(jsonHelper::GetStringProperty(m_settings, "treeview.style.borderColor", "#ff9900"));
+    m_visual.m_nBackgroundColor = Color::Parse(jsonHelper::GetStringProperty(m_settings, "treeview.style.backgroundColor", "#ffffee"));
+    m_visual.m_nTextColor = Color::Parse(jsonHelper::GetStringProperty(m_settings, "treeview.style.textColor", "#663300"));
+    m_visual.m_strFontName = jsonHelper::GetStringPropertyAsCString(m_settings, "treeview.style.fontName", "");
+    m_visual.m_nFontSize = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.style.fontSize", 100));
+    m_visual.m_strResourceName = jsonHelper::GetStringPropertyAsCString(m_settings, "treeview.style.iconFile", "");
+    m_visual.m_nOpacity = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.opacity", 100));
 
-    m_nWindowCheckInterval = static_cast<int>(CGeneral::getSettingNumber(m_settings, "windowCheckInterval", 400));
+    m_nWindowCheckInterval = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "windowCheckInterval", 400));
 
     m_stealth.clear();
-    CGeneral::appendCStringArray(m_settings, "stealthPrograms", m_stealth);
+    jsonHelper::AppendCStringArray(m_settings, "stealthPrograms", m_stealth);
 
-    m_bDebug = CGeneral::getSettingBool(m_settings, "debug", false);
+    m_bDebug = jsonHelper::GetBoolProperty(m_settings, "debug", false);
 
     m_key.m_KeyList.clear();
     nlohmann::json keyEventByWindow = m_settings["keyEvent.byWindow"];
     for (nlohmann::json::iterator it = keyEventByWindow.begin(); it != keyEventByWindow.end(); it++) {
         nlohmann::json jnode = it.value();
         CHANGE_KEY node;
-        node.m_strTitle = CGeneral::getSettingCString(jnode, "caption", _T(""));
-        node.m_nMatch = static_cast<int>(CGeneral::getSettingNumber(jnode, "captionMatchCondition", 0));
-        node.m_nHistoryLimit = static_cast<int>(CGeneral::getSettingNumber(jnode, "copyLimit", -1));
+        node.m_strTitle = jsonHelper::GetStringPropertyAsCString(jnode, "caption", _T(""));
+        node.m_nMatch = static_cast<int>(jsonHelper::GetNumberProperty(jnode, "captionMatchCondition", 0));
+        node.m_nHistoryLimit = static_cast<int>(jsonHelper::GetNumberProperty(jnode, "copyLimit", -1));
         node.m_sCopyPasteKey = COPYPASTE_KEY(jnode["keyEvent"]);
         m_key.m_KeyList.push_back(node);
     }
     m_key.m_defKeySet = COPYPASTE_KEY(m_settings["keyEvent.default"]);
-    m_key.m_nHistoryLimit = static_cast<int>(CGeneral::getSettingNumber(m_settings, "keyEvent.default.copyLimit", -1));
+    m_key.m_nHistoryLimit = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "keyEvent.default.copyLimit", -1));
 
     SaveSettings();
 

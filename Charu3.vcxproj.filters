@@ -111,6 +111,12 @@
     <ClCompile Include="log.cpp">
       <Filter>一般クラス</Filter>
     </ClCompile>
+    <ClCompile Include="jsonHelper.cpp">
+      <Filter>一般クラス</Filter>
+    </ClCompile>
+    <ClCompile Include="window.cpp">
+      <Filter>一般クラス</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Charu3.h">
@@ -201,6 +207,12 @@
       <Filter>一般クラス</Filter>
     </ClInclude>
     <ClInclude Include="search.h">
+      <Filter>一般クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="jsonHelper.h">
+      <Filter>一般クラス</Filter>
+    </ClInclude>
+    <ClInclude Include="window.h">
       <Filter>一般クラス</Filter>
     </ClInclude>
   </ItemGroup>

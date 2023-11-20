@@ -25,6 +25,8 @@ static char THIS_FILE[] = __FILE__;
 #include "OptMainDialog.h"
 #include "AboutDialog.h"
 #include "StringWork.h"
+#include "window.h"
+#include "General.h"
 #include "log.h"
 
 enum {
@@ -162,7 +164,7 @@ BOOL CCharu3App::InitInstance()
     LPCTSTR pszMutexObjectName = _T("Charu3");			//重複起動防止名
     m_hMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, pszMutexObjectName);
     //	HWND hActiveWnd = ::GetForegroundWindow();
-    CGeneral::getFocusInfo(&m_focusInfo);
+    Window::GetFocusInfo(&m_focusInfo);
 
     if (m_hMutex) {
         CloseHandle(m_hMutex);
@@ -203,7 +205,7 @@ BOOL CCharu3App::InitInstance()
     //	::SetForegroundWindow(hActiveWnd);
 
     if (init()) {
-        CGeneral::setFocusInfo(&m_focusInfo);
+        Window::SetFocusInfo(&m_focusInfo);
         //	setAppendKeyInit(m_focusInfo.m_hActiveWnd,&m_keySet);//キー設定を変更
 
         m_nPhase = PHASE_IDOL;
@@ -690,7 +692,7 @@ void CCharu3App::popupTreeWindow(POINT pos, bool keepSelection, HTREEITEM hOpenI
         LOG(_T("popupTreeWindow x=%d y=%d keep=%s"), pos.x, pos.y, keepSelection ? _T("true") : _T("false"));
     }
 
-    CGeneral::setAbsoluteForegroundWindow(m_pMainWnd->m_hWnd);//自分をアクティブに設定
+    Window::SetAbsoluteForegroundWindow(m_pMainWnd->m_hWnd);//自分をアクティブに設定
     m_pTreeDlg->showWindowPos(pos, m_ini.m_DialogSize, SW_SHOW, keepSelection, hOpenItem);
 }
 
@@ -790,7 +792,7 @@ void CCharu3App::closeTreeWindow(int nRet)
         //キーが離されるのを待つ
         while (::GetAsyncKeyState(VK_MENU) < 0 || ::GetAsyncKeyState(VK_CONTROL) < 0 ||
             ::GetAsyncKeyState(VK_SHIFT) < 0 || ::GetAsyncKeyState(VK_RETURN) < 0) Sleep(50);
-        CGeneral::setFocusInfo(&m_focusInfo);//ターゲットをフォーカス
+        Window::SetFocusInfo(&m_focusInfo);//ターゲットをフォーカス
 
         if (m_ini.m_bDebug) {
             LOG(_T("setFocusInfo active:%p focus:%p"), m_focusInfo.m_hActiveWnd, m_focusInfo.m_hFocusWnd);
@@ -839,7 +841,7 @@ void CCharu3App::closeTreeWindow(int nRet)
         }
     }
     else if (::GetForegroundWindow() == m_focusInfo.m_hActiveWnd) {
-        CGeneral::setFocusInfo(&m_focusInfo);
+        Window::SetFocusInfo(&m_focusInfo);
     }
     if (m_hSelectItemBkup) {
         m_pTree->SelectItem(m_hSelectItemBkup);
@@ -860,7 +862,7 @@ void CCharu3App::closeTreeWindow(int nRet)
 
     if (m_pTree->GetStyle() & TVS_CHECKBOXES) {
         resetTreeDialog();
-        CGeneral::setFocusInfo(&m_focusInfo);
+        Window::SetFocusInfo(&m_focusInfo);
     }
     else {
         m_pTree->ClearChecks();
@@ -975,7 +977,7 @@ void CCharu3App::playHotItem(int nTarget)
                     m_nPhase = PHASE_LOCK;
                     stopAppendHotKey();//追加ホットキーを停止
                     STRING_DATA dataChild;
-                    CGeneral::getCaretPos(&pos, &m_focusInfo);//キャレット位置を取得(ハンドルを取るため)
+                    Window::GetCaretPos(&pos, &m_focusInfo);//キャレット位置を取得(ハンドルを取るため)
 
                     //キーが離されるのを待つ
                     while (::GetAsyncKeyState(VK_MENU) < 0 || ::GetAsyncKeyState(VK_CONTROL) < 0 ||
@@ -1030,7 +1032,7 @@ void CCharu3App::playHotItem(int nTarget)
 
                 //ダイレクトコピー
                 if (keyData.m_strMacroName == EXMACRO_DIRECT_COPY) {
-                    CGeneral::getCaretPos(&pos, &m_focusInfo);//キャレット位置を取得
+                    Window::GetCaretPos(&pos, &m_focusInfo);//キャレット位置を取得
                     setAppendKeyInit(m_focusInfo.m_hActiveWnd, &m_keySet);//キー設定を変更
                     strSelect = getSelectString(m_keySet, m_focusInfo.m_hFocusWnd);//選択文字取得
                     data.m_strData = strSelect;
@@ -1052,7 +1054,7 @@ void CCharu3App::playHotItem(int nTarget)
                         }
                     }
 
-                    CGeneral::getCaretPos(&pos, &m_focusInfo);//キャレット位置を取得
+                    Window::GetCaretPos(&pos, &m_focusInfo);//キャレット位置を取得
                     setAppendKeyInit(m_focusInfo.m_hActiveWnd, &m_keySet);//キー設定を変更
 
                     strSelect = getSelectString(m_keySet, m_focusInfo.m_hFocusWnd);//選択文字取得
@@ -1727,7 +1729,7 @@ void CCharu3App::onClipboardChanged(CString strClipboard)
     // Check size
     int nLimit = m_ini.m_key.m_nHistoryLimit;
     const HWND hActiveWindow = ::GetForegroundWindow();
-    CString strTitle = CGeneral::getWindowTitle(hActiveWindow);
+    CString strTitle = Window::GetWindowTitle(hActiveWindow);
     if (strTitle != "") {
         CHANGE_KEY key;
         key = m_ini.getAppendKeyInit2(strTitle);
@@ -1860,7 +1862,7 @@ void CCharu3App::getPopupPos(POINT* pPos, int nPosType)
     RECT rectDeskTop;
 
     //ターゲットのハンドルを取るために実行
-    CGeneral::getCaretPos(pPos, &m_focusInfo);//キャレット位置を取得
+    Window::GetCaretPos(pPos, &m_focusInfo);//キャレット位置を取得
 
     //デスクトップのサイズを取得
     if (nPosType > POPUP_POS_MOUSE) {

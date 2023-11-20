@@ -12,6 +12,7 @@ static char THIS_FILE[] = __FILE__;
 
 #include <fstream>
 #include "nlomann/json.hpp"
+#include "jsonHelper.h"
 
 #include "OptVisual.h"
 #include "Charu3.h"
@@ -320,12 +321,12 @@ void COptVisual::ReadStyleFile()
             nlohmann::json j;
             try { j = nlohmann::json::parse(std::ifstream(strFileName)); }
             catch (...) {}
-            theApp.m_ini.m_visual.m_nBorderColor = Color::Parse(CGeneral::getSettingString(j, "borderColor", Color::String(theApp.m_ini.m_visual.m_nBorderColor)));
-            theApp.m_ini.m_visual.m_nBackgroundColor = Color::Parse(CGeneral::getSettingString(j, "backgroundColor", Color::String(theApp.m_ini.m_visual.m_nBackgroundColor)));
-            theApp.m_ini.m_visual.m_nTextColor = Color::Parse(CGeneral::getSettingString(j, "textColor", Color::String(theApp.m_ini.m_visual.m_nTextColor)));
-            //theApp.m_ini.m_visual.m_strFontName = CGeneral::getSettingCString(j, "fontName", theApp.m_ini.m_visual.m_strFontName);
-            //theApp.m_ini.m_visual.m_nFontSize = static_cast<int>(CGeneral::getSettingNumber(j, "fontSize", theApp.m_ini.m_visual.m_nFontSize));
-            //theApp.m_ini.m_visual.m_strResourceName = CGeneral::getSettingCString(j, "iconFile", theApp.m_ini.m_visual.m_strResourceName);
+            theApp.m_ini.m_visual.m_nBorderColor = Color::Parse(jsonHelper::GetStringProperty(j, "borderColor", Color::String(theApp.m_ini.m_visual.m_nBorderColor)));
+            theApp.m_ini.m_visual.m_nBackgroundColor = Color::Parse(jsonHelper::GetStringProperty(j, "backgroundColor", Color::String(theApp.m_ini.m_visual.m_nBackgroundColor)));
+            theApp.m_ini.m_visual.m_nTextColor = Color::Parse(jsonHelper::GetStringProperty(j, "textColor", Color::String(theApp.m_ini.m_visual.m_nTextColor)));
+            //theApp.m_ini.m_visual.m_strFontName = jsonHelper::GetStringPropertyAsCString(j, "fontName", theApp.m_ini.m_visual.m_strFontName);
+            //theApp.m_ini.m_visual.m_nFontSize = static_cast<int>(jsonHelper::GetNumberProperty(j, "fontSize", theApp.m_ini.m_visual.m_nFontSize));
+            //theApp.m_ini.m_visual.m_strResourceName = jsonHelper::GetStringPropertyAsCString(j, "iconFile", theApp.m_ini.m_visual.m_strResourceName);
         }
         delete pFileDialog;
 

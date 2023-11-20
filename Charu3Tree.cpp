@@ -17,6 +17,7 @@ static char THIS_FILE[] = __FILE__;
 #include "search.h"
 #include "StringWork.h"
 #include "Charu3.h"
+#include "General.h"
 #include "log.h"
 
 #define ICON_FOLDER	 0

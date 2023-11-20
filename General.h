@@ -12,18 +12,6 @@
 
 #include "stdafx.h"
 
-#include "nlomann/json.hpp"
-
-#if !defined(SPI_GETFOREGROUNDLOCKTIMEOUT)
-#define SPI_GETFOREGROUNDLOCKTIMEOUT          0x2000
-#define SPI_SETFOREGROUNDLOCKTIMEOUT          0x2001
-#endif
-//フォーカス情報
-struct FOCUS_INFO {
-    HWND m_hActiveWnd;
-    HWND m_hFocusWnd;
-};
-
 //---------------------------------------------------
 // クラス定義
 //---------------------------------------------------
@@ -40,26 +28,14 @@ public:
     static WORD hotkey2MOD(WORD wModS);
     static UINT mod2Hotkey(UINT uMod);
     static UINT mod2VK(UINT uMod);
-    static void getCaretPos(POINT* CaretPos, FOCUS_INFO* focusInfo = NULL);
-    static BOOL setAbsoluteForegroundWindow(HWND hWnd);
-    static void getFocusInfo(FOCUS_INFO* focusInfo, HWND hForeground = NULL);
-    static void setFocusInfo(const FOCUS_INFO* focusInfo);
-    static void setFocus(const HWND hActiveWnd, const HWND hFocusWnd);
-    static void flatSB_UpdateMetrics(HWND hWnd);
-    static void removeScrollBar(HWND hWnd);
-
     static CString getKeyName(UINT uVkCode, HKL keyLayout);
+
     static bool loadBitmapFile(CString strFileName, CBitmap* BitMap);
+
     static CString getLastErrorMessage();
+
     static CString wideCharToCString(wchar_t* szUnicodeBuff);
-    static bool getSettingBool(nlohmann::json& j, const char* key, bool defaultValue);
-    static double getSettingNumber(nlohmann::json& j, const char* key, double defaultValue);
-    static std::string getSettingString(nlohmann::json& j, const char* key, std::string defaultValue);
-    static CString getSettingCString(nlohmann::json& j, const char* key, CString defaultValue);
-    static void appendCStringArray(nlohmann::json& j, const char* key, std::vector<CString>& list);
-    static bool getCStringFromJson(nlohmann::json j, CString& cs);
     static CStringA ConvertUnicodeToUTF8(const CStringW& uni);
-    static CString getWindowTitle(HWND hWnd);
 
     static CString convertWareki(long lDate);
     static CString getDateString();

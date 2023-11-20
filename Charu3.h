@@ -24,6 +24,7 @@
 #include "MyTreeDialog.h"
 #include "ClipBord.h"
 #include "Init.h"
+#include "window.h"
 
 #define DAT_FORMAT			"Charu3Data1.0"
 #define DAT_FORMAT2			"Charu3Data1.1"
