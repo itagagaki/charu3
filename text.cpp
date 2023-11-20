@@ -10,13 +10,13 @@ static char THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 #endif
 
-#include "StringWork.h"
+#include "text.h"
 
 //---------------------------------------------------
 //関数名	awk(char *strSource,int nAwk,char cSplit)
 //機能		指定文字区切りで文字列を切り出す
 //---------------------------------------------------
-TCHAR* UStringWork::awk(TCHAR* strSource, TCHAR* strRet, int nSize, int nAwk, TCHAR cSplit /* = 0x20*/)
+TCHAR* Text::Awk(TCHAR* strSource, TCHAR* strRet, int nSize, int nAwk, TCHAR cSplit /* = 0x20*/)
 {
     bool isSpace = false;
     TCHAR* szStart = NULL;
@@ -24,7 +24,7 @@ TCHAR* UStringWork::awk(TCHAR* strSource, TCHAR* strRet, int nSize, int nAwk, TC
     if (nSize < 1 || nAwk < 1 || *strSource == NULL) return strSource;
     while (*strSource != NULL) {
 
-        if (!isSJIS(strSource)) {
+        if (!Text::IsSJIS(strSource)) {
             if (!isSpace) {
                 if (*strSource == cSplit) {//スプリッタが見つかった
                     isSpace = true;
@@ -50,7 +50,7 @@ TCHAR* UStringWork::awk(TCHAR* strSource, TCHAR* strRet, int nSize, int nAwk, TC
             }
             if (nSize <= 1) break;
             *strRet = *strSource;
-            if (isSJIS(strSource)) {
+            if (Text::IsSJIS(strSource)) {
                 strSource++;//ポインタを進める
                 strRet++;
                 *strRet = *strSource;
@@ -58,7 +58,7 @@ TCHAR* UStringWork::awk(TCHAR* strSource, TCHAR* strRet, int nSize, int nAwk, TC
             nSize--;
             strRet++;
         }
-        else if (isSJIS(strSource))	strSource++;//ポインタを進める
+        else if (Text::IsSJIS(strSource))	strSource++;//ポインタを進める
         strSource++;//ポインタを進める
     }
     *strRet = (TCHAR)NULL;
@@ -70,7 +70,7 @@ TCHAR* UStringWork::awk(TCHAR* strSource, TCHAR* strRet, int nSize, int nAwk, TC
 //関数名	isSJIS(char *szSource)
 //機能		S-JISかどうかを判別
 //---------------------------------------------------
-bool UStringWork::isSJIS(TCHAR* szSource)
+bool Text::IsSJIS(TCHAR* szSource)
 {
     bool isRet = false;
 #ifdef _UNICODE
@@ -90,7 +90,7 @@ bool UStringWork::isSJIS(TCHAR* szSource)
 //関数名	compressionSpace(TCHAR *szSource)
 //機能		複数のスペースを一つに纏める
 //---------------------------------------------------
-int UStringWork::compressionSpace(TCHAR* szSource)
+int Text::CompressionSpace(TCHAR* szSource)
 {
     int i;
     for (i = 0; *szSource; i++, szSource++) {
@@ -99,7 +99,7 @@ int UStringWork::compressionSpace(TCHAR* szSource)
             szSpaceEnd = szSource;
             int j;
             for (j = 0; *szSpaceEnd && *szSpaceEnd == _T(' '); j++, szSpaceEnd++);
-            UStringWork::moveForward(szSpaceEnd, j - 1);
+            Text::MoveForward(szSpaceEnd, j - 1);
             szSource++;
         }
     }
@@ -110,7 +110,7 @@ int UStringWork::compressionSpace(TCHAR* szSource)
 //関数名	moveForward(TCHAR *szMovePos,int nMove)
 //機能		文字列を前に移動(メモリ範囲に注意)
 //---------------------------------------------------
-int UStringWork::moveForward(TCHAR* szMovePos, int nMove)
+int Text::MoveForward(TCHAR* szMovePos, int nMove)
 {
     //文字列移動
     int i;
@@ -125,7 +125,7 @@ int UStringWork::moveForward(TCHAR* szMovePos, int nMove)
 //関数名	ConvertWcharToCString(wchar_t *szUnicodeBuff)
 //機能		ワイド文字をMBCSにしてCStringに入れる
 //---------------------------------------------------
-CString UStringWork::ConvertWcharToCString(wchar_t* szUnicodeBuff)
+CString Text::ConvertWcharToCString(wchar_t* szUnicodeBuff)
 {
     char* szMbcsBuff;
     CString strRet;
@@ -139,7 +139,7 @@ CString UStringWork::ConvertWcharToCString(wchar_t* szUnicodeBuff)
     return strRet;
 }
 
-CStringA UStringWork::ConvertUnicodeToUTF8(const CStringW& uni)
+CStringA Text::ConvertUnicodeToUTF8(const CStringW& uni)
 {
     if (uni.IsEmpty()) return "";
     CStringA utf8;

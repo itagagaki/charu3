@@ -107,7 +107,7 @@
     <ClCompile Include="PaletStatic.cpp" />
     <ClCompile Include="SerchDialog.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="StringWork.cpp" />
+    <ClCompile Include="text.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="window.cpp" />
   </ItemGroup>
@@ -142,7 +142,7 @@
     <ClInclude Include="search.h" />
     <ClInclude Include="SerchDialog.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="StringWork.h" />
+    <ClInclude Include="text.h" />
     <ClInclude Include="util.h" />
     <ClInclude Include="window.h" />
   </ItemGroup>

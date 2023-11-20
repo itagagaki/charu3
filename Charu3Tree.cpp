@@ -15,7 +15,7 @@ static char THIS_FILE[] = __FILE__;
 
 #include "Charu3Tree.h"
 #include "search.h"
-#include "StringWork.h"
+#include "text.h"
 #include "Charu3.h"
 #include "log.h"
 
@@ -514,10 +514,10 @@ bool CCharu3Tree::loadDataFile(CString strFileName, CString strPlugin, std::list
             szUniReadBuff = new wchar_t[nDataSize + 1];
             fread(szUniReadBuff, nDataSize, 1, fFile);
             szUniReadBuff[nDataSize / sizeof(WCHAR)] = '\0';
-#ifdef _UNICODEx
+#ifdef _UNICODE
             data.m_strTitle = szUniReadBuff;
 #else
-            data.m_strTitle = UStringWork::ConvertWcharToCString(szUniReadBuff);
+            data.m_strTitle = Text::ConvertWcharToCString(szUniReadBuff);
 #endif
             delete[] szUniReadBuff;
             //•¶Í‚ð“Ç‚Ýž‚Ý
@@ -525,10 +525,10 @@ bool CCharu3Tree::loadDataFile(CString strFileName, CString strPlugin, std::list
             szUniReadBuff = new wchar_t[nDataSize + 1];
             fread(szUniReadBuff, nDataSize, 1, fFile);
             szUniReadBuff[nDataSize / sizeof(WCHAR)] = '\0';
-#ifdef _UNICODEx
+#ifdef _UNICODE
             data.m_strData = szUniReadBuff;
 #else
-            data.m_strData = UStringWork::ConvertWcharToCString(szUniReadBuff);
+            data.m_strData = Text::ConvertWcharToCString(szUniReadBuff);
 #endif
             delete[] szUniReadBuff;
 
@@ -537,10 +537,10 @@ bool CCharu3Tree::loadDataFile(CString strFileName, CString strPlugin, std::list
             szUniReadBuff = new wchar_t[nDataSize + 1];
             fread(szUniReadBuff, nDataSize, 1, fFile);
             szUniReadBuff[nDataSize / sizeof(WCHAR)] = '\0';
-#ifdef _UNICODEx
+#ifdef _UNICODE
             data.m_strMacro = szUniReadBuff;
 #else
-            data.m_strMacro = UStringWork::ConvertWcharToCString(szUniReadBuff);
+            data.m_strMacro = Text::ConvertWcharToCString(szUniReadBuff);
 #endif
             delete[] szUniReadBuff;
         }
@@ -1558,7 +1558,7 @@ CString CCharu3Tree::makeTitle(CString strData, int nTitleLength)
     strData.Replace(_T("\r"), _T(""));
     strData.Replace(_T("\n"), _T(""));
     strData.Replace(_T("\t"), _T(" "));
-    UStringWork::compressionSpace((TCHAR*)(LPCTSTR)strData);
+    Text::CompressionSpace((TCHAR*)(LPCTSTR)strData);
     strData.TrimLeft();
     strData.TrimRight();
     if (nTitleLength > strData.GetLength())	strBuff = strData;

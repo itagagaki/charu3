@@ -24,9 +24,9 @@ static char THIS_FILE[] = __FILE__;
 #include "EditDialog.h"
 #include "OptMainDialog.h"
 #include "AboutDialog.h"
-#include "StringWork.h"
 #include "window.h"
 #include "key.h"
+#include "text.h"
 #include "log.h"
 
 enum {
@@ -1167,7 +1167,7 @@ void CCharu3App::execKeyMacro(CString strKeyMacro)
     szKeyMacro = strKeyMacro.GetBuffer(strKeyMacro.GetLength());
 
     //貼り付け後のスリープを取得
-    szSplit = UStringWork::awk(szKeyMacro, strKeyCode, _countof(strKeyCode), 3, _T(';'));
+    szSplit = Text::Awk(szKeyMacro, strKeyCode, _countof(strKeyCode), 3, _T(';'));
     if (szSplit) {
         nSleep = _ttoi(strKeyCode);
         if (nSleep > 10000) nSleep = 10000;
@@ -1175,7 +1175,7 @@ void CCharu3App::execKeyMacro(CString strKeyMacro)
     else         nSleep = 0;
 
     //貼り付け回数を取得
-    szSplit = UStringWork::awk(szKeyMacro, strKeyCode, _countof(strKeyCode), 2, _T(';'));
+    szSplit = Text::Awk(szKeyMacro, strKeyCode, _countof(strKeyCode), 2, _T(';'));
     if (szSplit) {
         nCount = _ttoi(strKeyCode);
         if (nCount > 256) nCount = 256;
@@ -1185,7 +1185,7 @@ void CCharu3App::execKeyMacro(CString strKeyMacro)
 
     //キー配列を取得　最大で16キー
     for (i = 0; i <= 15; i++) {
-        UStringWork::awk(szKeyMacro, strKeyCode, _countof(strKeyCode), i + 1, _T(','));
+        Text::Awk(szKeyMacro, strKeyCode, _countof(strKeyCode), i + 1, _T(','));
         if (_tcsclen(strKeyCode) > 0) nKey[i] = getKeycode(strKeyCode, true);
         else break;
     }

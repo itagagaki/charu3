@@ -66,7 +66,7 @@
     <ClCompile Include="PaletStatic.cpp">
       <Filter>一般クラス</Filter>
     </ClCompile>
-    <ClCompile Include="StringWork.cpp">
+    <ClCompile Include="text.cpp">
       <Filter>一般クラス</Filter>
     </ClCompile>
     <ClCompile Include="EditDialog.cpp">
@@ -155,7 +155,7 @@
     <ClInclude Include="PaletStatic.h">
       <Filter>一般クラス</Filter>
     </ClInclude>
-    <ClInclude Include="StringWork.h">
+    <ClInclude Include="text.h">
       <Filter>一般クラス</Filter>
     </ClInclude>
     <ClInclude Include="EditDialog.h">
