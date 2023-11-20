@@ -17,6 +17,7 @@ static char THIS_FILE[] = __FILE__;
 #include "EditDialog.h"
 #include "SerchDialog.h"
 #include "Charu3.h"
+#include "Color.h"
 #include "log.h"
 
 namespace {
@@ -44,9 +45,9 @@ namespace {
         COLORREF colRD[3] = {};
         COLORREF colLU[3] = {};
 
-        colRD[1] = colLU[0] = CGeneral::upDownLight(color, 1.2);
+        colRD[1] = colLU[0] = Color::MultiplyBrightness(color, 1.2);
         colRD[2] = colLU[1] = color;
-        colRD[0] = colLU[2] = CGeneral::upDownLight(color, 0.8);
+        colRD[0] = colLU[2] = Color::MultiplyBrightness(color, 0.8);
 
         for (int i = 1; i <= 3; i++) {
             point[0].x = rect.left + i;
@@ -235,9 +236,9 @@ BOOL CMyTreeDialog::showWindowPos(POINT pos, POINT size, int nCmdShow, bool keep
     m_toolTip.SetDelayTime(theApp.m_ini.m_nToolTipDelay);
     m_toolTip.SetDelayTime(TTDT_AUTOPOP, theApp.m_ini.m_nToolTipTime);
 
-    m_pTreeCtrl->SetBkColor(COLORREF(CGeneral::RGB2BGR(theApp.m_ini.m_visual.m_nBackgroundColor)));
-    m_pTreeCtrl->SetTextColor(COLORREF(CGeneral::RGB2BGR(theApp.m_ini.m_visual.m_nTextColor)));
-    m_pTreeCtrl->SetInsertMarkColor(COLORREF(CGeneral::RGB2BGR(theApp.m_ini.m_visual.m_nBorderColor)));
+    m_pTreeCtrl->SetBkColor(COLORREF(Color::Swap_RGB_BGR(theApp.m_ini.m_visual.m_nBackgroundColor)));
+    m_pTreeCtrl->SetTextColor(COLORREF(Color::Swap_RGB_BGR(theApp.m_ini.m_visual.m_nTextColor)));
+    m_pTreeCtrl->SetInsertMarkColor(COLORREF(Color::Swap_RGB_BGR(theApp.m_ini.m_visual.m_nBorderColor)));
     m_pTreeCtrl->ModifyStyle(NULL, TVS_TRACKSELECT, NULL);
     if (theApp.m_ini.m_pop.m_bSingleExpand) {
         m_pTreeCtrl->ModifyStyle(NULL, TVS_SINGLEEXPAND, NULL);
@@ -275,14 +276,14 @@ BOOL CMyTreeDialog::showWindowPos(POINT pos, POINT size, int nCmdShow, bool keep
     }
     if (hOpenItem) m_pTreeCtrl->Expand(hOpenItem, TVE_EXPAND);
 
-    m_colFrame = CGeneral::RGB2BGR(theApp.m_ini.m_visual.m_nBorderColor);
+    m_colFrame = Color::Swap_RGB_BGR(theApp.m_ini.m_visual.m_nBorderColor);
 
     if (m_brBack.GetSafeHandle()) {
         m_brBack.DeleteObject();
         m_brBack.m_hObject = NULL;
     }
     if (m_brBack.m_hObject == NULL)
-        m_brBack.CreateSolidBrush(COLORREF(CGeneral::RGB2BGR(theApp.m_ini.m_visual.m_nBackgroundColor)));
+        m_brBack.CreateSolidBrush(COLORREF(Color::Swap_RGB_BGR(theApp.m_ini.m_visual.m_nBackgroundColor)));
 
     CGeneral::setAbsoluteForegroundWindow(theApp.m_pMainFrame->m_hWnd);
     m_pTreeCtrl->SetFocus();

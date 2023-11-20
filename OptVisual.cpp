@@ -15,7 +15,6 @@ static char THIS_FILE[] = __FILE__;
 
 #include "OptVisual.h"
 #include "Charu3.h"
-#include "General.h"
 #include "Color.h"
 #include "log.h"
 #include "resource.h"
@@ -30,11 +29,11 @@ COptVisual::COptVisual(CWnd* pParent /*=NULL*/)
     //{{AFX_DATA_INIT(COptVisual)
     //}}AFX_DATA_INIT
     m_strBorderColor.Format(_T("%.6x"), theApp.m_ini.m_visual.m_nBorderColor);
-    m_ctrlBorderPal.setColor((COLORREF)CGeneral::RGB2BGR(theApp.m_ini.m_visual.m_nBorderColor));
+    m_ctrlBorderPal.setColor(Color::Swap_RGB_BGR(theApp.m_ini.m_visual.m_nBorderColor));
     m_strBackgroundColor.Format(_T("%.6x"), theApp.m_ini.m_visual.m_nBackgroundColor);
-    m_ctrlBackgroundPal.setColor((COLORREF)CGeneral::RGB2BGR(theApp.m_ini.m_visual.m_nBackgroundColor));
+    m_ctrlBackgroundPal.setColor(Color::Swap_RGB_BGR(theApp.m_ini.m_visual.m_nBackgroundColor));
     m_strTextColor.Format(_T("%.6x"), theApp.m_ini.m_visual.m_nTextColor);
-    m_ctrlTextPal.setColor((COLORREF)CGeneral::RGB2BGR(theApp.m_ini.m_visual.m_nTextColor));
+    m_ctrlTextPal.setColor(Color::Swap_RGB_BGR(theApp.m_ini.m_visual.m_nTextColor));
 }
 
 //---------------------------------------------------
@@ -271,7 +270,7 @@ void COptVisual::setTextToPalet(CEdit* edit, CPaletStatic* stPal)
     edit->GetWindowText(strBuff);
     _stscanf_s(strBuff, _T("%x"), &nColor);
 
-    stPal->setColor((COLORREF)CGeneral::RGB2BGR(nColor));
+    stPal->setColor(Color::Swap_RGB_BGR(nColor));
     stPal->Invalidate();
 }
 
@@ -289,7 +288,7 @@ void COptVisual::setPalet(CEdit* edit, CPaletStatic* stPal)
         int nColor;
         col = dlgColor.GetColor();
         stPal->setColor(col);//パレットに色を設定
-        nColor = CGeneral::BGR2RGB((int)col);//変換
+        nColor = Color::Swap_RGB_BGR((int)col);//変換
         strBuff.Format(_T("%06x"), nColor);//テキストにする
         //エディットボックスに設定
         edit->SetWindowText(strBuff);

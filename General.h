@@ -40,9 +40,6 @@ public:
     static WORD hotkey2MOD(WORD wModS);
     static UINT mod2Hotkey(UINT uMod);
     static UINT mod2VK(UINT uMod);
-    static COLORREF RGB2BGR(COLORREF col);
-    static COLORREF BGR2RGB(COLORREF col);
-    static COLORREF upDownLight(COLORREF col, double fLight);
     static void getCaretPos(POINT* CaretPos, FOCUS_INFO* focusInfo = NULL);
     static BOOL setAbsoluteForegroundWindow(HWND hWnd);
     static void getFocusInfo(FOCUS_INFO* focusInfo, HWND hForeground = NULL);
