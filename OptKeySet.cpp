@@ -15,7 +15,7 @@ static char THIS_FILE[] = __FILE__;
 #include "OptKeySet.h"
 #include "OptKeySetEditDlg.h"
 #include "Charu3.h" // for theApp.m_ini
-#include "General.h"
+#include "key.h"
 #include "resource.h"
 
 //---------------------------------------------------
@@ -108,7 +108,7 @@ void COptKeySet::SetListData(CHANGE_KEY sKeyData, CHANGE_KEY* dataPtr, bool isSe
     if (uMod & MOD_ALT) {
         strPaste = strPaste + _T("Alt+");
     }
-    strPaste = strPaste + CGeneral::getKeyName(sKeyData.m_sCopyPasteKey.m_uVK_Paste, theApp.m_ini.m_keyLayout);
+    strPaste = strPaste + KeyHelper::GetKeyName(sKeyData.m_sCopyPasteKey.m_uVK_Paste, theApp.m_ini.m_keyLayout);
 
     //コピーキー設定名を作成
     uMod = sKeyData.m_sCopyPasteKey.m_uMod_Copy;
@@ -122,7 +122,7 @@ void COptKeySet::SetListData(CHANGE_KEY sKeyData, CHANGE_KEY* dataPtr, bool isSe
     if (uMod & MOD_ALT) {
         strCopy = strCopy + _T("Alt+");
     }
-    strCopy = strCopy + CGeneral::getKeyName(sKeyData.m_sCopyPasteKey.m_uVK_Copy, theApp.m_ini.m_keyLayout);
+    strCopy = strCopy + KeyHelper::GetKeyName(sKeyData.m_sCopyPasteKey.m_uVK_Copy, theApp.m_ini.m_keyLayout);
 
     pString[0] = (TCHAR*)LPCTSTR(sKeyData.m_strTitle);
     pString[1] = (TCHAR*)LPCTSTR(strMatch[sKeyData.m_nMatch]);
@@ -178,12 +178,12 @@ CHANGE_KEY COptKeySet::windouToKeyOption()
 
         //ペーストキー変換
         m_ctrlPasteKey2.GetHotKey(wVkCode,wMod);
-        key.m_sCopyPasteKey.m_uMod_Paste = CGeneral::hotkey2MOD(wMod);
+        key.m_sCopyPasteKey.m_uMod_Paste = KeyHelper::HotkeyToMod(wMod);
         key.m_sCopyPasteKey.m_uVK_Paste  = wVkCode;
 
         //コピーキー変換
         m_ctrlCopyKey2.GetHotKey(wVkCode,wMod);
-        key.m_sCopyPasteKey.m_uMod_Copy = CGeneral::hotkey2MOD(wMod);
+        key.m_sCopyPasteKey.m_uMod_Copy = KeyHelper::HotkeyToMod(wMod);
         key.m_sCopyPasteKey.m_uVK_Copy  = wVkCode;
 
         key.m_nMatch = m_ctrlMatchCombo.GetCurSel();		//一致方法
@@ -231,8 +231,8 @@ BOOL COptKeySet::OnInitDialog()
 
     UINT uKey, uMod, uCopyKey, uCopyMod;
     theApp.m_ini.getPasteHotKey(&uKey, &uMod, &uCopyKey, &uCopyMod);
-    uMod = CGeneral::mod2Hotkey(uMod);
-    uCopyMod = CGeneral::mod2Hotkey(uCopyMod);
+    uMod = KeyHelper::ModToHotkey(uMod);
+    uCopyMod = KeyHelper::ModToHotkey(uCopyMod);
 
     m_ctrlPasteKey.SetHotKey(uKey, uMod);
     m_ctrlCopyKey.SetHotKey(uCopyKey, uCopyMod);
@@ -282,10 +282,10 @@ BOOL COptKeySet::DestroyWindow()
     WORD wVkCodeC, wModC;
     //基本キー設定を取得、設定
     m_ctrlCopyKey.GetHotKey(wVkCodeC, wModC);
-    wModC = CGeneral::hotkey2MOD(wModC);
+    wModC = KeyHelper::HotkeyToMod(wModC);
 
     m_ctrlPasteKey.GetHotKey(wVkCodeP, wModP);
-    wModP = CGeneral::hotkey2MOD(wModP);
+    wModP = KeyHelper::HotkeyToMod(wModP);
 
     theApp.m_ini.setPasteHotkey(wVkCodeP, wModP, wVkCodeC, wModC);
 
@@ -410,15 +410,15 @@ void COptKeySet::OnItemchangedOptKeyIniList(NMHDR* pNMHDR, LRESULT* pResult)
     return;
     /*	UINT uMod = m_itSelect->m_sCopyPasteKey.m_uMod_Paste;
         if(m_itSelect->m_sCopyPasteKey.m_uVK_Paste >= 0x60)
-            m_ctrlPasteKey2.SetHotKey(m_itSelect->m_sCopyPasteKey.m_uVK_Paste,CGeneral::mod2Hotkey(uMod));
+            m_ctrlPasteKey2.SetHotKey(m_itSelect->m_sCopyPasteKey.m_uVK_Paste, KeyHelper::ModToHotkey(uMod));
         else
-            m_ctrlPasteKey2.SetHotKey(m_itSelect->m_sCopyPasteKey.m_uVK_Paste,CGeneral::mod2Hotkey(uMod) | HOTKEYF_EXT);
+            m_ctrlPasteKey2.SetHotKey(m_itSelect->m_sCopyPasteKey.m_uVK_Paste, KeyHelper::ModToHotkey(uMod) | HOTKEYF_EXT);
 
         uMod = m_itSelect->m_sCopyPasteKey.m_uMod_Copy;
         if(m_itSelect->m_sCopyPasteKey.m_uVK_Copy >= 0x60)
-            m_ctrlCopyKey2.SetHotKey(m_itSelect->m_sCopyPasteKey.m_uVK_Copy,CGeneral::mod2Hotkey(uMod));
+            m_ctrlCopyKey2.SetHotKey(m_itSelect->m_sCopyPasteKey.m_uVK_Copy, KeyHelper::ModToHotkey(uMod));
         else
-            m_ctrlCopyKey2.SetHotKey(m_itSelect->m_sCopyPasteKey.m_uVK_Copy,CGeneral::mod2Hotkey(uMod) | HOTKEYF_EXT);
+            m_ctrlCopyKey2.SetHotKey(m_itSelect->m_sCopyPasteKey.m_uVK_Copy, KeyHelper::ModToHotkey(uMod) | HOTKEYF_EXT);
 
         m_ctrlCaptionCombo.ResetContent ();
         m_ctrlCaptionCombo.SetWindowText(m_itSelect->m_strTitle);

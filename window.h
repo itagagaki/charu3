@@ -2,11 +2,6 @@
 
 #include "stdafx.h"
 
-#if !defined(SPI_GETFOREGROUNDLOCKTIMEOUT)
-#define SPI_GETFOREGROUNDLOCKTIMEOUT          0x2000
-#define SPI_SETFOREGROUNDLOCKTIMEOUT          0x2001
-#endif
-
 struct FOCUS_INFO {
     HWND m_hActiveWnd;
     HWND m_hFocusWnd;

@@ -9,7 +9,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 #include "OptKeySetEditDlg.h"
-#include "General.h"
+#include "key.h"
 #include "resource.h"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -62,15 +62,15 @@ void COptKeySetEditDlg::DoDataExchange(CDataExchange* pDX)
     if (!pDX->m_bSaveAndValidate) {
         UINT uMod = m_key.m_sCopyPasteKey.m_uMod_Paste;
         if (m_key.m_sCopyPasteKey.m_uVK_Paste >= 0x60)
-            m_pasteKey.SetHotKey(m_key.m_sCopyPasteKey.m_uVK_Paste, CGeneral::mod2Hotkey(uMod));
+            m_pasteKey.SetHotKey(m_key.m_sCopyPasteKey.m_uVK_Paste, KeyHelper::ModToHotkey(uMod));
         else
-            m_pasteKey.SetHotKey(m_key.m_sCopyPasteKey.m_uVK_Paste, CGeneral::mod2Hotkey(uMod) | HOTKEYF_EXT);
+            m_pasteKey.SetHotKey(m_key.m_sCopyPasteKey.m_uVK_Paste, KeyHelper::ModToHotkey(uMod) | HOTKEYF_EXT);
 
         uMod = m_key.m_sCopyPasteKey.m_uMod_Copy;
         if (m_key.m_sCopyPasteKey.m_uVK_Copy >= 0x60)
-            m_copyKey.SetHotKey(m_key.m_sCopyPasteKey.m_uVK_Copy, CGeneral::mod2Hotkey(uMod));
+            m_copyKey.SetHotKey(m_key.m_sCopyPasteKey.m_uVK_Copy, KeyHelper::ModToHotkey(uMod));
         else
-            m_copyKey.SetHotKey(m_key.m_sCopyPasteKey.m_uVK_Copy, CGeneral::mod2Hotkey(uMod) | HOTKEYF_EXT);
+            m_copyKey.SetHotKey(m_key.m_sCopyPasteKey.m_uVK_Copy, KeyHelper::ModToHotkey(uMod) | HOTKEYF_EXT);
     }
     else {
         CHANGE_KEY key;
@@ -79,12 +79,12 @@ void COptKeySetEditDlg::DoDataExchange(CDataExchange* pDX)
         key.m_nHistoryLimit = m_nHistoryLimit;
         //ペーストキー変換
         m_pasteKey.GetHotKey(wVkCode, wMod);
-        key.m_sCopyPasteKey.m_uMod_Paste = CGeneral::hotkey2MOD(wMod);
+        key.m_sCopyPasteKey.m_uMod_Paste = KeyHelper::HotkeyToMod(wMod);
         key.m_sCopyPasteKey.m_uVK_Paste = wVkCode;
 
         //コピーキー変換
         m_copyKey.GetHotKey(wVkCode, wMod);
-        key.m_sCopyPasteKey.m_uMod_Copy = CGeneral::hotkey2MOD(wMod);
+        key.m_sCopyPasteKey.m_uMod_Copy = KeyHelper::HotkeyToMod(wMod);
         key.m_sCopyPasteKey.m_uVK_Copy = wVkCode;
 
         _stscanf_s(m_pasteMessage, _T("%x,%x,%x"), &key.m_sCopyPasteKey.m_pasteMessage.Msg,

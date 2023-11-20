@@ -46,10 +46,10 @@ bool CGeneral::loadBitmapFile(CString strFileName, CBitmap* BitMap)
 }
 
 //---------------------------------------------------
-//関数名	wideCharToCString(wchar_t *szUnicodeBuff)
+//関数名	ConvertWcharToCString(wchar_t *szUnicodeBuff)
 //機能		ワイド文字をMBCSにしてCStringに入れる
 //---------------------------------------------------
-CString CGeneral::wideCharToCString(wchar_t* szUnicodeBuff)
+CString CGeneral::ConvertWcharToCString(wchar_t* szUnicodeBuff)
 {
     char* szMbcsBuff;
     CString strRet;
@@ -60,7 +60,6 @@ CString CGeneral::wideCharToCString(wchar_t* szUnicodeBuff)
         strRet = szMbcsBuff;
         delete[] szMbcsBuff;
     }
-
     return strRet;
 }
 
@@ -76,69 +75,6 @@ CStringA CGeneral::ConvertUnicodeToUTF8(const CStringW& uni)
         utf8.ReleaseBuffer();
     }
     return utf8;
-}
-
-//---------------------------------------------------
-//関数名	mod2VK(UINT uMod)
-//機能		キーコード変換
-//---------------------------------------------------
-UINT CGeneral::mod2VK(UINT uMod)
-{
-    UINT uVK = 0;
-    if (uMod & MOD_ALT)		uVK = VK_MENU;
-    if (uMod & MOD_CONTROL)	uVK = VK_CONTROL;
-    if (uMod & MOD_SHIFT)	uVK = VK_SHIFT;
-    return uVK;
-}
-
-//---------------------------------------------------
-//関数名	mod2Hotkey(UINT uMod)
-//機能		キーコード変換
-//---------------------------------------------------
-UINT CGeneral::mod2Hotkey(UINT uMod)
-{
-    WORD wMod = 0;
-    if (uMod & MOD_ALT)		wMod |= HOTKEYF_ALT;
-    if (uMod & MOD_CONTROL)	wMod |= HOTKEYF_CONTROL;
-    if (uMod & MOD_SHIFT)	wMod |= HOTKEYF_SHIFT;
-    return (UINT)wMod;
-}
-
-//---------------------------------------------------
-//関数名	hotkey2MOD(WORD wModS)
-//機能		キーコード変換
-//---------------------------------------------------
-WORD CGeneral::hotkey2MOD(WORD wModS)
-{
-    WORD wMod = 0;
-    if (wModS & HOTKEYF_ALT)		wMod |= MOD_ALT;
-    if (wModS & HOTKEYF_CONTROL)	wMod |= MOD_CONTROL;
-    if (wModS & HOTKEYF_SHIFT)	wMod |= MOD_SHIFT;
-    return wMod;
-}
-
-//---------------------------------------------------
-//関数名	getKeyName(UINT uVkCode,HKL keyLayout)
-//機能		仮想キーの名前を得る
-//---------------------------------------------------
-CString CGeneral::getKeyName(UINT uVkCode, HKL keyLayout)
-{
-    CString strRet;
-    strRet = "";
-    int nExtFlag = 0;
-
-    TCHAR strKeyName[256];
-    int nScanCode = MapVirtualKeyEx(uVkCode, 0, keyLayout) << 16;
-    if (nScanCode) {
-        if (uVkCode == VK_APPS || uVkCode == VK_PRIOR || uVkCode == VK_NEXT || uVkCode == VK_END ||
-            uVkCode == VK_HOME || uVkCode == VK_LEFT || uVkCode == VK_UP || uVkCode == VK_RIGHT ||
-            uVkCode == VK_DOWN || uVkCode == VK_INSERT || uVkCode == VK_DELETE || uVkCode == VK_NUMLOCK)
-            nExtFlag = 1 << 24;
-
-        GetKeyNameText(nScanCode | nExtFlag, strKeyName, _countof(strKeyName));
-        strRet = strKeyName;
-    }
-    return strRet;
 }
 
 //---------------------------------------------------

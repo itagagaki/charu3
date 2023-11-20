@@ -91,6 +91,7 @@
     <ClCompile Include="General.cpp" />
     <ClCompile Include="Init.cpp" />
     <ClCompile Include="jsonHelper.cpp" />
+    <ClCompile Include="key.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MyEditCtrl.cpp" />
@@ -123,6 +124,7 @@
     <ClInclude Include="General.h" />
     <ClInclude Include="Init.h" />
     <ClInclude Include="jsonHelper.h" />
+    <ClInclude Include="key.h" />
     <ClInclude Include="log.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MyEditCtrl.h" />

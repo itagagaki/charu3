@@ -26,7 +26,7 @@ static char THIS_FILE[] = __FILE__;
 #include "AboutDialog.h"
 #include "StringWork.h"
 #include "window.h"
-#include "General.h"
+#include "key.h"
 #include "log.h"
 
 enum {
@@ -679,7 +679,7 @@ void CCharu3App::popupTreeWindow(POINT pos, bool keepSelection, HTREEITEM hOpenI
     m_ini.unHookKey();
     stopAppendHotKey();//追加ホットキーを停止
 
-//	CGeneral::getFocusInfo(&m_focusInfo);
+	// Window::GetFocusInfo(&m_focusInfo);
 
     if (m_focusInfo.m_hActiveWnd == this->m_pMainFrame->m_hWnd) {
         m_nPhase = PHASE_IDOL;
@@ -707,7 +707,7 @@ void CCharu3App::popupTreeWinMC(HWND hForeground)
     pos.x -= m_ini.m_DialogSize.x;
     pos.y -= m_ini.m_DialogSize.y;
     adjustLocation(&pos);
-    //	CGeneral::getFocusInfo(&theApp.m_focusInfo,hForeground);
+    // Window::GetFocusInfo(&theApp.m_focusInfo,hForeground);
     popupTreeWindow(pos, m_ini.m_pop.m_bKeepSelection);
 }
 //---------------------------------------------------
@@ -1949,25 +1949,26 @@ BOOL CCharu3App::PreTranslateMessage(MSG* pMsg)
         if (m_ini.m_bDebug) {
             LOG(_T("WM_KEY_HOOK %d %d"), pMsg->wParam, pMsg->lParam);
         }
-        UINT uMod = 0;
         if (m_ini.m_pop.m_nDoubleKeyPOP) {
+            UINT key = 0;
             switch (m_ini.m_pop.m_nDoubleKeyPOP) {
-            case 1:	uMod = MOD_SHIFT; break;
-            case 2:	uMod = MOD_CONTROL; break;
-            case 3:	uMod = MOD_ALT; break;
+            case 1: key = VK_SHIFT; break;
+            case 2: key = VK_CONTROL; break;
+            case 3: key = VK_MENU; break;
             }
-            if (CGeneral::mod2VK(uMod) == pMsg->wParam) {
+            if (key == pMsg->wParam) {
                 pMsg->message = WM_HOTKEY;
                 pMsg->wParam = HOTKEY_POPUP;
             }
         }
         if (m_ini.m_pop.m_nDoubleKeyFIFO) {
+            UINT key = 0;
             switch (m_ini.m_pop.m_nDoubleKeyFIFO) {
-            case 1:	uMod = MOD_SHIFT; break;
-            case 2:	uMod = MOD_CONTROL; break;
-            case 3:	uMod = MOD_ALT; break;
+            case 1: key = VK_SHIFT; break;
+            case 2: key = VK_CONTROL; break;
+            case 3: key = VK_MENU; break;
             }
-            if (CGeneral::mod2VK(uMod) == pMsg->wParam) {
+            if (key == pMsg->wParam) {
                 pMsg->message = WM_HOTKEY;
                 pMsg->wParam = HOTKEY_FIFO;
             }
@@ -1976,7 +1977,7 @@ BOOL CCharu3App::PreTranslateMessage(MSG* pMsg)
         int nSize = m_hotkeyVector.size();
         for (int i = 0; i < nSize; i++) {
             if (m_hotkeyVector[i].m_isDoubleClick) {
-                if (CGeneral::mod2VK(m_hotkeyVector[i].m_uModKey) == pMsg->wParam) {
+                if (KeyHelper::ModToVK(m_hotkeyVector[i].m_uModKey) == pMsg->wParam) {
                     pMsg->message = WM_HOTKEY;
                     pMsg->wParam = HOT_ITEM_KEY + i;
                     break;

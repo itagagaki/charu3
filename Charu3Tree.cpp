@@ -506,7 +506,7 @@ bool CCharu3Tree::loadDataFile(CString strFileName, CString strPlugin, std::list
 #ifdef _UNICODE
             data.m_strTitle = szUniReadBuff;
 #else
-            data.m_strTitle = CGeneral::wideCharToCString(szUniReadBuff);
+            data.m_strTitle = CGeneral::ConvertWcharToCString(szUniReadBuff);
 #endif
             delete[] szUniReadBuff;
             //ï∂èÕÇì«Ç›çûÇ›
@@ -517,7 +517,7 @@ bool CCharu3Tree::loadDataFile(CString strFileName, CString strPlugin, std::list
 #ifdef _UNICODE
             data.m_strData = szUniReadBuff;
 #else
-            data.m_strData = CGeneral::wideCharToCString(szUniReadBuff);
+            data.m_strData = CGeneral::ConvertWcharToCString(szUniReadBuff);
 #endif
             delete[] szUniReadBuff;
 
@@ -529,7 +529,7 @@ bool CCharu3Tree::loadDataFile(CString strFileName, CString strPlugin, std::list
 #ifdef _UNICODE
             data.m_strMacro = szUniReadBuff;
 #else
-            data.m_strMacro = CGeneral::wideCharToCString(szUniReadBuff);
+            data.m_strMacro = CGeneral::ConvertWcharToCString(szUniReadBuff);
 #endif
             delete[] szUniReadBuff;
         }

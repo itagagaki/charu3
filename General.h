@@ -25,16 +25,11 @@ public:
         return value ? 1 : 0;
     }
 
-    static WORD hotkey2MOD(WORD wModS);
-    static UINT mod2Hotkey(UINT uMod);
-    static UINT mod2VK(UINT uMod);
-    static CString getKeyName(UINT uVkCode, HKL keyLayout);
-
     static bool loadBitmapFile(CString strFileName, CBitmap* BitMap);
 
     static CString getLastErrorMessage();
 
-    static CString wideCharToCString(wchar_t* szUnicodeBuff);
+    static CString ConvertWcharToCString(wchar_t* szUnicodeBuff);
     static CStringA ConvertUnicodeToUTF8(const CStringW& uni);
 
     static CString convertWareki(long lDate);

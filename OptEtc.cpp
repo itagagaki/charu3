@@ -11,8 +11,9 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 #include "OptEtc.h"
-#include "General.h"
 #include "Charu3.h" // for theApp.m_ini
+#include "key.h"
+#include "General.h"
 #include "resource.h"
 
 //---------------------------------------------------
@@ -103,9 +104,9 @@ BOOL COptEtc::OnInitDialog()
     theApp.m_ini.getHotKey(&uPopKey, &uPopMod, &uRirekiKey, &uRirekiMod);
 
     //コントロールにセット
-    uPopMod = CGeneral::mod2Hotkey(uPopMod);
+    uPopMod = KeyHelper::ModToHotkey(uPopMod);
     m_ctrlPopupKey.SetHotKey(uPopKey, uPopMod);
-    uRirekiMod = CGeneral::mod2Hotkey(uRirekiMod);
+    uRirekiMod = KeyHelper::ModToHotkey(uRirekiMod);
     m_ctrlFifoKey.SetHotKey(uRirekiKey, uRirekiMod);
 
     return TRUE;
@@ -145,9 +146,9 @@ BOOL COptEtc::DestroyWindow()
     WORD wVkCodeF, wModF;
 
     m_ctrlPopupKey.GetHotKey(wVkCodeP, wModP);
-    wModP = CGeneral::hotkey2MOD(wModP);
+    wModP = KeyHelper::HotkeyToMod(wModP);
     m_ctrlFifoKey.GetHotKey(wVkCodeF, wModF);
-    wModF = CGeneral::hotkey2MOD(wModF);
+    wModF = KeyHelper::HotkeyToMod(wModF);
     theApp.m_ini.setHotkey(wVkCodeP, wModP, wVkCodeF, wModF);
     theApp.m_ini.m_etc.m_bPutBackClipboard = ((CButton*)GetDlgItem(IDC_OPT_TOCLIP))->GetCheck() != 0;
     theApp.m_ini.m_etc.m_bShowClipboardInTooltipOfNofifyIcon = ((CButton*)GetDlgItem(IDC_OPT_TOOLTIP_TITLE))->GetCheck() != 0;

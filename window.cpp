@@ -7,6 +7,11 @@ static char THIS_FILE[] = __FILE__;
 
 #include "window.h"
 
+#if !defined(SPI_GETFOREGROUNDLOCKTIMEOUT)
+#define SPI_GETFOREGROUNDLOCKTIMEOUT          0x2000
+#define SPI_SETFOREGROUNDLOCKTIMEOUT          0x2001
+#endif
+
 //---------------------------------------------------
 //関数名	SetAbsoluteForegroundWindow(HWND hWnd)
 //機能		ウィンドウを強制アクティブ
