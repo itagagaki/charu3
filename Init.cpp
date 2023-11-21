@@ -106,7 +106,7 @@ void CInit::initialize()
     m_strAppPath = CString(buf);
     m_strRwPluginFolder = m_strAppPath + _T("rw_plugin");
 
-    // decide whether in appdata mode or portable mode
+    // Decide whether in appdata mode or portable mode
     m_bIsPortableMode = FILEEXIST(m_strAppPath + _T("FORCE_INTO_PORTABLE_MODE"));
 
     // app data path
@@ -128,7 +128,7 @@ void CInit::initialize()
     m_strSettingsFile = m_strAppDataPath + "\\" + SETTINGS_FILE;
     m_strDebugLog = m_strAppDataPath + "\\" + LOG_FILE;
 
-    // display a dialog box that allows the user to reset the status and the settings when the Shift key is pressed
+    // Display a dialog box that allows the user to reset the status and the settings when the Shift key is pressed
     if (::GetKeyState(VK_SHIFT) < 0) {
         CString strMessage;
         (void)strMessage.LoadString(APP_MES_RESET);
@@ -140,7 +140,7 @@ void CInit::initialize()
         }
     }
 
-    // read state
+    // Read state
     try { m_state = nlohmann::json::parse(std::ifstream(m_strStateFile)); }
     catch (...) { m_state = nlohmann::json(); }
 
@@ -160,7 +160,7 @@ void CInit::initialize()
     }
     m_nRecNumber = static_cast<int>(jsonHelper::GetNumberProperty(m_state, "internal.recordNumber", 0));
 
-    // read settings
+    // Read settings
     try { m_settings = nlohmann::json::parse(std::ifstream(m_strSettingsFile)); }
     catch (...) { m_settings = nlohmann::json(); }
 
@@ -221,7 +221,7 @@ void CInit::initialize()
 
     m_bDebug = jsonHelper::GetBoolProperty(m_settings, "debug", false);
 
-    m_key.m_KeyList.clear();
+    m_KeyList.clear();
     nlohmann::json keyEventByWindow = m_settings["keyEvent.byWindow"];
     for (nlohmann::json::iterator it = keyEventByWindow.begin(); it != keyEventByWindow.end(); it++) {
         nlohmann::json jnode = it.value();
@@ -230,19 +230,19 @@ void CInit::initialize()
         node.m_nMatch = static_cast<int>(jsonHelper::GetNumberProperty(jnode, "captionMatchCondition", 0));
         node.m_nHistoryLimit = static_cast<int>(jsonHelper::GetNumberProperty(jnode, "copyLimit", -1));
         node.m_sCopyPasteKey = COPYPASTE_KEY(jnode["keyEvent"]);
-        m_key.m_KeyList.push_back(node);
+        m_KeyList.push_back(node);
     }
-    m_key.m_defKeySet = COPYPASTE_KEY(m_settings["keyEvent.default"]);
-    m_key.m_nHistoryLimit = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "keyEvent.default.copyLimit", -1));
+    m_defKeySet = COPYPASTE_KEY(m_settings["keyEvent.default"]);
+    m_nHistoryLimit = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "keyEvent.default.copyLimit", -1));
 
     SaveSettings();
 
-    // read snippets
+    // Read snippets
     m_vctMacro.clear();
     ReadPredefined(m_vctMacro, m_strAppPath + "_locale\\" + m_locale + "\\snippets.json");
     ReadPredefined(m_vctMacro, m_strAppDataPath + "\\snippets.json");
 
-    // read options
+    // Read option properties
     m_vctDataMacro.clear();
     ReadPredefined(m_vctDataMacro, m_strAppPath + "_locale\\" + m_locale + "\\options.json");
 
@@ -313,7 +313,7 @@ void CInit::SaveSettings()
 
     nlohmann::json keyEventByWindow;
     std::list<CHANGE_KEY>::iterator it;
-    for (it = m_key.m_KeyList.begin(); it != m_key.m_KeyList.end(); it++) {
+    for (it = m_KeyList.begin(); it != m_KeyList.end(); it++) {
         nlohmann::json node;
         node["caption"] = Text::ConvertUnicodeToUTF8(it->m_strTitle);
         node["captionMatchCondition"] = it->m_nMatch;
@@ -322,8 +322,8 @@ void CInit::SaveSettings()
         keyEventByWindow.push_back(node);
     }
     m_settings["keyEvent.byWindow"] = keyEventByWindow;
-    m_settings["keyEvent.default"] = m_key.m_defKeySet.ToJson();
-    m_settings["keyEvent.default.copyLimit"] = m_key.m_nHistoryLimit;
+    m_settings["keyEvent.default"] = m_defKeySet.ToJson();
+    m_settings["keyEvent.default.copyLimit"] = m_nHistoryLimit;
 
     m_settings["stealthPrograms"].clear();
     for (const CString& s : m_stealth) {
@@ -372,11 +372,11 @@ void CInit::writeEnvInitData()
 //---------------------------------------------------
 void CInit::getPasteHotKey(UINT* uKey, UINT* uMod, UINT* uCopyKey, UINT* uCopyMod)
 {
-    *uMod = m_key.m_defKeySet.m_uMod_Paste;
-    *uKey = m_key.m_defKeySet.m_uVK_Paste;
+    *uMod = m_defKeySet.m_uMod_Paste;
+    *uKey = m_defKeySet.m_uVK_Paste;
 
-    *uCopyMod = m_key.m_defKeySet.m_uMod_Copy;
-    *uCopyKey = m_key.m_defKeySet.m_uVK_Copy;
+    *uCopyMod = m_defKeySet.m_uMod_Copy;
+    *uCopyKey = m_defKeySet.m_uVK_Copy;
 }
 //---------------------------------------------------
 //ä÷êîñº	setPasteHotkey()
@@ -384,10 +384,10 @@ void CInit::getPasteHotKey(UINT* uKey, UINT* uMod, UINT* uCopyKey, UINT* uCopyMo
 //---------------------------------------------------
 void CInit::setPasteHotkey(UINT uKey, UINT uMod, UINT uCopyKey, UINT uCopyMod)
 {
-    m_key.m_defKeySet.m_uMod_Paste = uMod;
-    m_key.m_defKeySet.m_uVK_Paste = uKey;
-    m_key.m_defKeySet.m_uMod_Copy = uCopyMod;
-    m_key.m_defKeySet.m_uVK_Copy = uCopyKey;
+    m_defKeySet.m_uMod_Paste = uMod;
+    m_defKeySet.m_uVK_Paste = uKey;
+    m_defKeySet.m_uMod_Copy = uCopyMod;
+    m_defKeySet.m_uVK_Copy = uCopyKey;
 }
 //---------------------------------------------------
 //ä÷êîñº	setHotkey()
@@ -466,7 +466,7 @@ COPYPASTE_KEY CInit::getAppendKeyInit(CString strWinName, int nNumber)
     int nFindPoint;
 
     ret.m_nMessage = -1;
-    for (it = m_key.m_KeyList.begin(); it != m_key.m_KeyList.end(); it++) {
+    for (it = m_KeyList.begin(); it != m_KeyList.end(); it++) {
         key = *it;
         if (key.m_nMatch != MATCH_EXACT) {
             nFindPoint = strWinName.Find(key.m_strTitle);
@@ -518,7 +518,7 @@ CHANGE_KEY CInit::getAppendKeyInit2(CString strWinName)
     CHANGE_KEY key;
     int nFindPoint;
 
-    for (it = m_key.m_KeyList.begin(); it != m_key.m_KeyList.end(); it++) {
+    for (it = m_KeyList.begin(); it != m_KeyList.end(); it++) {
         key = *it;
         if (key.m_nMatch != MATCH_EXACT) {
             nFindPoint = strWinName.Find(key.m_strTitle);

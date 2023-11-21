@@ -136,35 +136,10 @@ struct COPYPASTE_KEY
 struct CHANGE_KEY
 {
     CString m_strTitle;	//タイトル文字列
-    int		m_nMatch;
+    int m_nMatch{};
 
     COPYPASTE_KEY m_sCopyPasteKey;
-    int  m_nHistoryLimit;	//クリップボード容量制限
-
-    CHANGE_KEY()
-        : m_strTitle(_T(""))
-        , m_nMatch(-1)
-        , m_nHistoryLimit(-1)
-        , m_sCopyPasteKey(COPYPASTE_KEY())
-    {
-    }
-};
-//---------------------------------------------------
-// キー設定構造体
-//---------------------------------------------------
-struct OPTION_KEYSET
-{
-    COPYPASTE_KEY	m_defKeySet;
-    int  m_nHistoryLimit;	//クリップボード容量制限
-
-    std::list<CHANGE_KEY> m_KeyList;//キー設定データリスト
-
-    OPTION_KEYSET()
-        : m_defKeySet(COPYPASTE_KEY())
-        , m_nHistoryLimit(-1)
-        , m_KeyList(std::list<CHANGE_KEY>())
-    {
-    }
+    int m_nHistoryLimit{};	//クリップボード容量制限
 };
 
 //---------------------------------------------------
@@ -305,7 +280,9 @@ public:
     bool m_bDontSaveSameDataAsLast{};
 
     // Key
-    OPTION_KEYSET	m_key;
+    COPYPASTE_KEY m_defKeySet;
+    int m_nHistoryLimit{};  //クリップボード容量制限
+    std::list<CHANGE_KEY> m_KeyList;
 
     // Advancced
     int m_nClipboardOpenDelay{};
@@ -320,7 +297,7 @@ public:
     std::vector<MACRO_STRUCT>  m_vctMacro;
 
     //
-    // Options
+    // Option properties
     //
     std::vector<MACRO_STRUCT>  m_vctDataMacro;
 

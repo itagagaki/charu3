@@ -298,7 +298,7 @@ bool CCharu3App::init()
     //クリップボードクラスの初期化 変更検知を設定(メインフレームでメッセージ処理をしてます)
     m_clipboard.getClipboardText(m_strSavedClipboard, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
     m_clipboard.setParent(this->m_pMainWnd->m_hWnd);
-    m_keySet = m_ini.m_key.m_defKeySet;
+    m_keySet = m_ini.m_defKeySet;
 
     //ホットキーを設定
     registerHotkey();
@@ -656,7 +656,7 @@ bool CCharu3App::setAppendKeyInit(HWND hTopWindow, COPYPASTE_KEY* keySet)
 
     strWinName = strWindowName;
     *keySet = m_ini.getAppendKeyInit(strWinName);
-    if (keySet->m_nMessage <= -1)	*keySet = m_ini.m_key.m_defKeySet;
+    if (keySet->m_nMessage <= -1)	*keySet = m_ini.m_defKeySet;
     m_hActiveKeyWnd = hTopWindow;
 
     if (m_ini.m_bDebug) {
@@ -1722,7 +1722,7 @@ void CCharu3App::onClipboardChanged(CString strClipboard)
     nEmptyCnt = 0;
 
     // Check size
-    int nLimit = m_ini.m_key.m_nHistoryLimit;
+    int nLimit = m_ini.m_nHistoryLimit;
     const HWND hActiveWindow = ::GetForegroundWindow();
     CString strTitle = Window::GetWindowTitle(hActiveWindow);
     if (strTitle != "") {

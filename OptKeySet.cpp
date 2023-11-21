@@ -50,17 +50,17 @@ void COptKeySet::DoDataExchange(CDataExchange* pDX)
         DDX_Control(pDX, IDC_OPT_PASTKEY, m_ctrlPasteKey);
     }
     if (GetDlgItem(IDC_OPT_COPY_WAIT)) {
-        DDX_Text(pDX, IDC_OPT_COPY_WAIT, theApp.m_ini.m_key.m_defKeySet.m_nCopyWait);
+        DDX_Text(pDX, IDC_OPT_COPY_WAIT, theApp.m_ini.m_defKeySet.m_nCopyWait);
         // Not worked correctly
         //DDV_MinMaxInt(pDX, theApp.m_ini.m_key.m_defKeySet.m_nCopyWait, 0, 1000);
     }
     if (GetDlgItem(IDC_OPT_PASTE_WAIT)) {
-        DDX_Text(pDX, IDC_OPT_PASTE_WAIT, theApp.m_ini.m_key.m_defKeySet.m_nPasteWait);
+        DDX_Text(pDX, IDC_OPT_PASTE_WAIT, theApp.m_ini.m_defKeySet.m_nPasteWait);
         // Not worked correctly
         //DDV_MinMaxInt(pDX, theApp.m_ini.m_key.m_defKeySet.m_nPasteWait,0, 1000);
     }
     if (GetDlgItem(IDC_OPT_HISTORY_SIZE_LIMIT)) {
-        DDX_Text(pDX, IDC_OPT_HISTORY_SIZE_LIMIT, theApp.m_ini.m_key.m_nHistoryLimit);
+        DDX_Text(pDX, IDC_OPT_HISTORY_SIZE_LIMIT, theApp.m_ini.m_nHistoryLimit);
     }
     if (GetDlgItem(IDC_OPT_KEY_INI_LIST)) {
         DDX_Control(pDX, IDC_OPT_KEY_INI_LIST, m_ctrlIniList);
@@ -252,7 +252,7 @@ BOOL COptKeySet::OnInitDialog()
     CHANGE_KEY key;
     int i;
 
-    for (it = theApp.m_ini.m_key.m_KeyList.begin(); it != theApp.m_ini.m_key.m_KeyList.end(); it++) {
+    for (it = theApp.m_ini.m_KeyList.begin(); it != theApp.m_ini.m_KeyList.end(); it++) {
         m_MyKeyList.insert(m_MyKeyList.end(), *it);
     }
 
@@ -293,10 +293,10 @@ BOOL COptKeySet::DestroyWindow()
     CHANGE_KEY ckey;
     std::list<CHANGE_KEY>::iterator it;
 
-    theApp.m_ini.m_key.m_KeyList.clear();
+    theApp.m_ini.m_KeyList.clear();
 
     for (it = m_MyKeyList.begin(); it != m_MyKeyList.end(); it++) {
-        theApp.m_ini.m_key.m_KeyList.insert(theApp.m_ini.m_key.m_KeyList.end(), *it);
+        theApp.m_ini.m_KeyList.insert(theApp.m_ini.m_KeyList.end(), *it);
     }
     return CDialog::DestroyWindow();
 }
@@ -346,7 +346,7 @@ void COptKeySet::OnOptKeyAdd()
     CHANGE_KEY deffault;
     COptKeySetEditDlg keySetEditDlg;
 
-    deffault.m_sCopyPasteKey = theApp.m_ini.m_key.m_defKeySet;
+    deffault.m_sCopyPasteKey = theApp.m_ini.m_defKeySet;
     keySetEditDlg.setKeyInfo(deffault);
 
     keySetEditDlg.m_pasteMessage = _T("111,0,0");
