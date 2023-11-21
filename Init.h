@@ -33,76 +33,6 @@
 #define SETTINGS_SECTION_STYLE "StyleSettings"
 #define SETTINGS_SECTION_TREEVIEW "TreeViewSettings"
 
-//---------------------------------------------------
-// 一般設定構造体
-//---------------------------------------------------
-struct OPTION_ETC
-{
-    bool m_bPutBackClipboard{}; // データツリーからのコピー＆ペースト後、クリップボードに以前の内容をセットし直す
-    bool m_bShowClipboardInTooltipOfNofifyIcon{}; // 通知領域アイコンのツールチップでクリップボードの内容を表示する
-    int m_nIconClick{};		// 通知領域アイコンをクリックしたときの動作
-};
-
-//---------------------------------------------------
-// ポップアップ設定構造体
-//---------------------------------------------------
-struct OPTION_POPUP
-{
-    bool m_bKeepSelection{}; // Keep selection on data tree view
-    bool m_bKeepFolders{}; // Keep expanded/collapsed status of folders
-
-    int  m_nDoubleKeyPOP{};
-    UINT m_uVK_Pouup{};	//ポップアップキー
-    UINT m_uMod_Pouup{};	//ポップアップ特殊キー
-    int  m_nDCKeyPopTime{};
-
-    int  m_nDoubleKeyFIFO{};
-    UINT m_uVK_Fifo{};	//履歴FIFO切り替えキー
-    UINT m_uMod_Fifo{};	//履歴FIFO切り替え特殊キー
-    int  m_nDCKeyFifoTime{};
-
-    int  m_nPopupPos{};		//ポップアップ出現位置
-    POINT m_posCaretHosei{};	//キャレット位置の補正値
-
-    int m_nSelectByTypingFinalizePeriod{};
-    bool m_bSelectByTypingCaseInsensitive{};
-    bool m_bSelectByTypingAutoPaste{};
-    bool m_bSelectByTypingAutoExpand{};
-
-    bool m_bSingleExpand{};
-    bool m_bSingleEnter{};
-};
-
-//---------------------------------------------------
-// ストックモード設定構造体
-//---------------------------------------------------
-struct OPTION_FIFO
-{
-    int  m_nFifo{};			//履歴動作中はCtrl+Vで貼り付ける文字列を先入れ先出しにする
-    bool m_bAutoOff{};	// Turn off stock mode when one-time item is gone
-    bool m_bCleanupAtTurnOff{}; // Remove all one-time items when turned off
-    bool m_bDontSaveSameDataAsLast{};
-    CString m_strCopySound;	// コピー時に再生するサウンドのパス名
-    CString m_strPasteSound;	// 貼り付け時に再生するサウンドのパス名
-};
-
-//---------------------------------------------------
-// ビジュアル設定構造体
-//---------------------------------------------------
-struct OPTION_VISUAL
-{
-    uint32_t m_nBorderColor{};
-    uint32_t m_nBackgroundColor{};
-    uint32_t m_nTextColor{};
-    CString m_strFontName;
-    int m_nFontSize{};
-    CString m_strResourceName;
-    bool m_bScrollbarVertical{};
-    bool m_bScrollbarHorizontal{};
-    int m_nOpacity{};
-    int m_nToolTip{};
-};
-
 struct WINDOWS_MESSAGE
 {
     UINT Msg; // message to send
@@ -284,60 +214,120 @@ public:
         return false;
     }
 
+    //
     // environment
+    //
     CString m_strUserName;
     CString m_strAppPath;
     CString m_strRwPluginFolder;
-    bool m_bIsPortableMode;
     CString m_strAppDataPath;
     POINT m_IconSize;
     CString m_strStateFile;
     CString m_strSettingsFile;
     CString m_strDebugLog;
+    HKL m_keyLayout;
 
+    //
     // state (reset on every startup)
+    //
     int m_nOptionPage;
 
+    //
     // state (to be saved)
-    nlohmann::json m_state;
-    CString m_strDataPath; // data file path
-    CString m_strDataFormat; // data format
-    bool m_bReadOnly; // whether access to data files should be read-only
-    POINT m_DialogSize;
-    int m_nSearchTarget;
-    int m_nSearchLogic;
-    CString m_strSearchKeywords;
-    bool m_bSearchCaseInsensitive;
-    int m_nSelectID;
-    int m_nTreeID;
-    int m_nRecNumber;
+    //
+    nlohmann::json m_state;  // json with all of the following for load/save
 
+    CString m_strDataPath;  // data file path
+    CString m_strDataFormat;  // data format
+    bool m_bReadOnly{};  // whether access to data files should be read-only
+    POINT m_DialogSize{};
+    int m_nSearchTarget{};
+    int m_nSearchLogic{};
+    bool m_bSearchCaseInsensitive{};
+    CString m_strSearchKeywords;
+    int m_nSelectID{};
+    int m_nTreeID{};
+    int m_nRecNumber{};
+
+    //
     // settings
-    nlohmann::json m_settings;
-    bool m_bDebug; // no setting UI
-    int m_nToolTipTime; // no setting UI
-    int m_nToolTipDelay; // no setting UI
-    int m_nClipboardOpenDelay;
-    int m_nClipboardRetryInterval;
-    int m_nClipboardRetryTimes;
-    int m_nWindowCheckInterval;
-    OPTION_ETC		m_etc;
-    OPTION_POPUP	m_pop;
-    OPTION_FIFO		m_fifo;
-    OPTION_VISUAL	m_visual;
+    //
+    nlohmann::json m_settings;  // json with all of the following for load/save
+
+    // no setting UI
+    bool m_bDebug{};
+    int m_nToolTipTime{};
+    int m_nToolTipDelay{};
+    int m_nDCKeyPopTime{};
+    int m_nDCKeyFifoTime{};
+
+    // General
+    int  m_nDoubleKeyPOP{};
+    UINT m_uVK_Pouup{};	//ポップアップキー
+    UINT m_uMod_Pouup{};	//ポップアップ特殊キー
+    int  m_nDoubleKeyFIFO{};
+    UINT m_uVK_Fifo{};	//履歴FIFO切り替えキー
+    UINT m_uMod_Fifo{};	//履歴FIFO切り替え特殊キー
+    int m_nIconClick{};		// 通知領域アイコンをクリックしたときの動作
+    bool m_bPutBackClipboard{}; // データツリーからのコピー＆ペースト後、クリップボードに以前の内容をセットし直す
+    bool m_bShowClipboardInTooltipOfNofifyIcon{}; // 通知領域アイコンのツールチップでクリップボードの内容を表示する
+
+    // Style
+    CString m_strFontName;
+    int m_nFontSize{};
+    CString m_strResourceName;
+    uint32_t m_nBorderColor{};
+    uint32_t m_nBackgroundColor{};
+    uint32_t m_nTextColor{};
+    int m_nOpacity{};
+
+    // Data Tree View
+    int  m_nPopupPos{};		//ポップアップ出現位置
+    POINT m_posCaretHosei{};	//キャレット位置の補正値
+    int m_nSelectByTypingFinalizePeriod{};
+    bool m_bSelectByTypingCaseInsensitive{};
+    bool m_bSelectByTypingAutoPaste{};
+    bool m_bSelectByTypingAutoExpand{};
+    int m_nToolTip{};
+    bool m_bScrollbarVertical{};
+    bool m_bScrollbarHorizontal{};
+    bool m_bSingleExpand{};
+    bool m_bSingleEnter{};
+    bool m_bKeepSelection{};  // Keep selection on data tree view
+    bool m_bKeepFolders{};  // Keep expanded/collapsed status of folders
+
+    // Stock Mode
+    int  m_nFifo{};			//履歴動作中はCtrl+Vで貼り付ける文字列を先入れ先出しにする
+    CString m_strCopySound;	// コピー時に再生するサウンドのパス名
+    CString m_strPasteSound;	// 貼り付け時に再生するサウンドのパス名
+    bool m_bCleanupAtTurnOff{}; // Remove all one-time items when turned off
+    bool m_bAutoOff{};	// Turn off stock mode when one-time item is gone
+    bool m_bDontSaveSameDataAsLast{};
+
+    // Key
     OPTION_KEYSET	m_key;
 
-    HKL     m_keyLayout;
-
-    std::vector<MACRO_STRUCT>  m_vctMacro;
-    std::vector<MACRO_STRUCT>  m_vctDataMacro;
-
+    // Advancced
+    int m_nClipboardOpenDelay{};
+    int m_nClipboardRetryInterval{};
+    int m_nClipboardRetryTimes{};
+    int m_nWindowCheckInterval{};
     std::vector<CString> m_stealth;
 
-    HMODULE m_hHookDLL;
+    //
+    // Snippets
+    //
+    std::vector<MACRO_STRUCT>  m_vctMacro;
+
+    //
+    // Options
+    //
+    std::vector<MACRO_STRUCT>  m_vctDataMacro;
 
 private:
     CString m_locale;
+    HMODULE m_hHookDLL;
+    bool m_bIsPortableMode{};
 
     void SaveSettings();
     //void ReadPredefined(std::vector<MACRO_STRUCT>& macro, CString filePath);

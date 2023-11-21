@@ -62,29 +62,7 @@ namespace {
 //関数名	CInit
 //機能		コンストラクタ
 //---------------------------------------------------
-CInit::CInit()
-    : m_bIsPortableMode(false)
-    , m_IconSize{ 18, 18 }
-    , m_nOptionPage(0)
-    , m_bReadOnly(false)
-    , m_DialogSize{ 100, 100 }
-    , m_nSearchTarget(0)
-    , m_nSearchLogic(0)
-    , m_bSearchCaseInsensitive(true)
-    , m_nSelectID(-1)
-    , m_nTreeID()
-    , m_nRecNumber(0)
-    , m_strStateFile(_T(""))
-    , m_strSettingsFile(_T(""))
-    , m_bDebug(false)
-    , m_nToolTipTime(30000)
-    , m_nToolTipDelay(300)
-    , m_nClipboardOpenDelay(0)
-    , m_nClipboardRetryInterval(50)
-    , m_nClipboardRetryTimes(10)
-    , m_nWindowCheckInterval(400)
-    , m_keyLayout(nullptr)
-    , m_hHookDLL(nullptr)
+CInit::CInit() : m_hHookDLL(nullptr), m_nOptionPage(0)
 {
 }
 
@@ -186,55 +164,55 @@ void CInit::initialize()
     try { m_settings = nlohmann::json::parse(std::ifstream(m_strSettingsFile)); }
     catch (...) { m_settings = nlohmann::json(); }
 
-    m_etc.m_bPutBackClipboard = jsonHelper::GetBoolProperty(m_settings, "clipboard.putBackAfterPasting", false);
+    m_bPutBackClipboard = jsonHelper::GetBoolProperty(m_settings, "clipboard.putBackAfterPasting", false);
     m_nClipboardOpenDelay = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "clipboard.openDelay", 0));
     m_nClipboardRetryInterval = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "clipboard.retryInterval", 50));
     m_nClipboardRetryTimes = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "clipboard.retryTimes", 10));
 
-    m_pop.m_nDoubleKeyPOP = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "hotkey.popup", 0));
-    m_pop.m_nDCKeyPopTime = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "hotkey.popup.hitTime", 250));
-    m_pop.m_uVK_Pouup = static_cast<UINT>(jsonHelper::GetNumberProperty(m_settings, "hotkey.popup.keyCode", 88)); // X
-    m_pop.m_uMod_Pouup = static_cast<UINT>(jsonHelper::GetNumberProperty(m_settings, "hotkey.popup.keyModifier", MOD_ALT));
-    m_pop.m_nDoubleKeyFIFO = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "hotkey.stockmode", 0));
-    m_pop.m_nDCKeyFifoTime = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "hotkey.stockmode.hitTime", 250));
-    m_pop.m_uVK_Fifo = static_cast<UINT>(jsonHelper::GetNumberProperty(m_settings, "hotkey.stockmode.keyCode", 83)); // S
-    m_pop.m_uMod_Fifo = static_cast<UINT>(jsonHelper::GetNumberProperty(m_settings, "hotkey.stockmode.keyModifier", MOD_CONTROL | MOD_SHIFT));
+    m_nDoubleKeyPOP = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "hotkey.popup", 0));
+    m_nDCKeyPopTime = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "hotkey.popup.hitTime", 250));
+    m_uVK_Pouup = static_cast<UINT>(jsonHelper::GetNumberProperty(m_settings, "hotkey.popup.keyCode", 88)); // X
+    m_uMod_Pouup = static_cast<UINT>(jsonHelper::GetNumberProperty(m_settings, "hotkey.popup.keyModifier", MOD_ALT));
+    m_nDoubleKeyFIFO = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "hotkey.stockmode", 0));
+    m_nDCKeyFifoTime = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "hotkey.stockmode.hitTime", 250));
+    m_uVK_Fifo = static_cast<UINT>(jsonHelper::GetNumberProperty(m_settings, "hotkey.stockmode.keyCode", 83)); // S
+    m_uMod_Fifo = static_cast<UINT>(jsonHelper::GetNumberProperty(m_settings, "hotkey.stockmode.keyModifier", MOD_CONTROL | MOD_SHIFT));
 
-    m_etc.m_nIconClick = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "notifyIcon.clickedBehavior", 0));
-    m_etc.m_bShowClipboardInTooltipOfNofifyIcon = jsonHelper::GetBoolProperty(m_settings, "notifyIcon.showClipboard", true);
+    m_nIconClick = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "notifyIcon.clickedBehavior", 0));
+    m_bShowClipboardInTooltipOfNofifyIcon = jsonHelper::GetBoolProperty(m_settings, "notifyIcon.showClipboard", true);
 
-    m_fifo.m_nFifo = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "stockmode.behavior", 1));
-    m_fifo.m_bAutoOff = jsonHelper::GetBoolProperty(m_settings, "stockmode.autoTurnOff", false);
-    m_fifo.m_bCleanupAtTurnOff = jsonHelper::GetBoolProperty(m_settings, "stockmode.cleanupAtTurnOff", false);
-    m_fifo.m_bDontSaveSameDataAsLast = jsonHelper::GetBoolProperty(m_settings, "stockmode.dontSaveSameDataAsLast", false);
-    m_fifo.m_strCopySound = jsonHelper::GetStringPropertyAsCString(m_settings, "stockmode.sound.copy", _T("pu.wav"));
-    m_fifo.m_strPasteSound = jsonHelper::GetStringPropertyAsCString(m_settings, "stockmode.sound.paste", _T(""));
+    m_nFifo = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "stockmode.behavior", 1));
+    m_bAutoOff = jsonHelper::GetBoolProperty(m_settings, "stockmode.autoTurnOff", false);
+    m_bCleanupAtTurnOff = jsonHelper::GetBoolProperty(m_settings, "stockmode.cleanupAtTurnOff", false);
+    m_bDontSaveSameDataAsLast = jsonHelper::GetBoolProperty(m_settings, "stockmode.dontSaveSameDataAsLast", false);
+    m_strCopySound = jsonHelper::GetStringPropertyAsCString(m_settings, "stockmode.sound.copy", _T("pu.wav"));
+    m_strPasteSound = jsonHelper::GetStringPropertyAsCString(m_settings, "stockmode.sound.paste", _T(""));
 
     m_nToolTipTime = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "tooltip.autopop", 30000));
     m_nToolTipDelay = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "tooltip.delay", 300));
 
-    m_pop.m_nPopupPos = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.popupPosition", 0));
-    m_pop.m_posCaretHosei.x = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.popupOffset.x", -20));
-    m_pop.m_posCaretHosei.y = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.popupOffset.y", 0));
-    m_pop.m_nSelectByTypingFinalizePeriod = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.selectByTyping.finalizePeriod", 350));
-    m_pop.m_bSelectByTypingCaseInsensitive = jsonHelper::GetBoolProperty(m_settings, "treeview.selectByTyping.caseInsensitive", true);
-    m_pop.m_bSelectByTypingAutoPaste = jsonHelper::GetBoolProperty(m_settings, "treeview.selectByTyping.autoPaste", false);
-    m_pop.m_bSelectByTypingAutoExpand = jsonHelper::GetBoolProperty(m_settings, "treeview.selectByTyping.autoExpand", false);
-    m_visual.m_nToolTip = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.tooltip", 0));
-    m_visual.m_bScrollbarVertical = jsonHelper::GetBoolProperty(m_settings, "treeview.scrollbar.vertical", true);
-    m_visual.m_bScrollbarHorizontal = jsonHelper::GetBoolProperty(m_settings, "treeview.scrollbar.horizontal", true);
-    m_pop.m_bSingleExpand = jsonHelper::GetBoolProperty(m_settings, "treeview.expandOnSingleClick", false);
-    m_pop.m_bSingleEnter = jsonHelper::GetBoolProperty(m_settings, "treeview.pasteBySingleClick", false);
-    m_pop.m_bKeepSelection = jsonHelper::GetBoolProperty(m_settings, "treeview.keepSelection", true);
-    m_pop.m_bKeepFolders = jsonHelper::GetBoolProperty(m_settings, "treeview.keepFolders", true);
+    m_nPopupPos = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.popupPosition", 0));
+    m_posCaretHosei.x = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.popupOffset.x", -20));
+    m_posCaretHosei.y = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.popupOffset.y", 0));
+    m_nSelectByTypingFinalizePeriod = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.selectByTyping.finalizePeriod", 350));
+    m_bSelectByTypingCaseInsensitive = jsonHelper::GetBoolProperty(m_settings, "treeview.selectByTyping.caseInsensitive", true);
+    m_bSelectByTypingAutoPaste = jsonHelper::GetBoolProperty(m_settings, "treeview.selectByTyping.autoPaste", false);
+    m_bSelectByTypingAutoExpand = jsonHelper::GetBoolProperty(m_settings, "treeview.selectByTyping.autoExpand", false);
+    m_nToolTip = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.tooltip", 0));
+    m_bScrollbarVertical = jsonHelper::GetBoolProperty(m_settings, "treeview.scrollbar.vertical", true);
+    m_bScrollbarHorizontal = jsonHelper::GetBoolProperty(m_settings, "treeview.scrollbar.horizontal", true);
+    m_bSingleExpand = jsonHelper::GetBoolProperty(m_settings, "treeview.expandOnSingleClick", false);
+    m_bSingleEnter = jsonHelper::GetBoolProperty(m_settings, "treeview.pasteBySingleClick", false);
+    m_bKeepSelection = jsonHelper::GetBoolProperty(m_settings, "treeview.keepSelection", true);
+    m_bKeepFolders = jsonHelper::GetBoolProperty(m_settings, "treeview.keepFolders", true);
 
-    m_visual.m_nBorderColor = Color::Parse(jsonHelper::GetStringProperty(m_settings, "treeview.style.borderColor", "#ff9900"));
-    m_visual.m_nBackgroundColor = Color::Parse(jsonHelper::GetStringProperty(m_settings, "treeview.style.backgroundColor", "#ffffee"));
-    m_visual.m_nTextColor = Color::Parse(jsonHelper::GetStringProperty(m_settings, "treeview.style.textColor", "#663300"));
-    m_visual.m_strFontName = jsonHelper::GetStringPropertyAsCString(m_settings, "treeview.style.fontName", "");
-    m_visual.m_nFontSize = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.style.fontSize", 100));
-    m_visual.m_strResourceName = jsonHelper::GetStringPropertyAsCString(m_settings, "treeview.style.iconFile", "");
-    m_visual.m_nOpacity = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.opacity", 100));
+    m_nBorderColor = Color::Parse(jsonHelper::GetStringProperty(m_settings, "treeview.style.borderColor", "#ff9900"));
+    m_nBackgroundColor = Color::Parse(jsonHelper::GetStringProperty(m_settings, "treeview.style.backgroundColor", "#ffffee"));
+    m_nTextColor = Color::Parse(jsonHelper::GetStringProperty(m_settings, "treeview.style.textColor", "#663300"));
+    m_strFontName = jsonHelper::GetStringPropertyAsCString(m_settings, "treeview.style.fontName", "");
+    m_nFontSize = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.style.fontSize", 100));
+    m_strResourceName = jsonHelper::GetStringPropertyAsCString(m_settings, "treeview.style.iconFile", "");
+    m_nOpacity = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.opacity", 100));
 
     m_nWindowCheckInterval = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "windowCheckInterval", 400));
 
@@ -279,55 +257,55 @@ void CInit::initialize()
 //---------------------------------------------------
 void CInit::SaveSettings()
 {
-    m_settings["clipboard.putBackAfterPasting"] = m_etc.m_bPutBackClipboard;
+    m_settings["clipboard.putBackAfterPasting"] = m_bPutBackClipboard;
     m_settings["clipboard.openDelay"] = m_nClipboardOpenDelay;
     m_settings["clipboard.retryInterval"] = m_nClipboardRetryInterval;
     m_settings["clipboard.retryTimes"] = m_nClipboardRetryTimes;
 
-    m_settings["hotkey.popup"] = m_pop.m_nDoubleKeyPOP;
-    m_settings["hotkey.popup.hitTime"] = m_pop.m_nDCKeyPopTime;
-    m_settings["hotkey.popup.keyCode"] = m_pop.m_uVK_Pouup;
-    m_settings["hotkey.popup.keyModifier"] = m_pop.m_uMod_Pouup;
-    m_settings["hotkey.stockmode"] = m_pop.m_nDoubleKeyFIFO;
-    m_settings["hotkey.stockmode.hitTime"] = m_pop.m_nDCKeyFifoTime;
-    m_settings["hotkey.stockmode.keyCode"] = m_pop.m_uVK_Fifo;
-    m_settings["hotkey.stockmode.keyModifier"] = m_pop.m_uMod_Fifo;
+    m_settings["hotkey.popup"] = m_nDoubleKeyPOP;
+    m_settings["hotkey.popup.hitTime"] = m_nDCKeyPopTime;
+    m_settings["hotkey.popup.keyCode"] = m_uVK_Pouup;
+    m_settings["hotkey.popup.keyModifier"] = m_uMod_Pouup;
+    m_settings["hotkey.stockmode"] = m_nDoubleKeyFIFO;
+    m_settings["hotkey.stockmode.hitTime"] = m_nDCKeyFifoTime;
+    m_settings["hotkey.stockmode.keyCode"] = m_uVK_Fifo;
+    m_settings["hotkey.stockmode.keyModifier"] = m_uMod_Fifo;
 
-    m_settings["notifyIcon.clickedBehavior"] = m_etc.m_nIconClick;
-    m_settings["notifyIcon.showClipboard"] = m_etc.m_bShowClipboardInTooltipOfNofifyIcon;
+    m_settings["notifyIcon.clickedBehavior"] = m_nIconClick;
+    m_settings["notifyIcon.showClipboard"] = m_bShowClipboardInTooltipOfNofifyIcon;
 
-    m_settings["stockmode.behavior"] = m_fifo.m_nFifo;
-    m_settings["stockmode.autoTurnOff"] = m_fifo.m_bAutoOff;
-    m_settings["stockmode.cleanupAtTurnOff"] = m_fifo.m_bCleanupAtTurnOff;
-    m_settings["stockmode.dontSaveSameDataAsLast"] = m_fifo.m_bDontSaveSameDataAsLast;
-    m_settings["stockmode.sound.copy"] = Text::ConvertUnicodeToUTF8(m_fifo.m_strCopySound);
-    m_settings["stockmode.sound.paste"] = Text::ConvertUnicodeToUTF8(m_fifo.m_strPasteSound);
+    m_settings["stockmode.behavior"] = m_nFifo;
+    m_settings["stockmode.autoTurnOff"] = m_bAutoOff;
+    m_settings["stockmode.cleanupAtTurnOff"] = m_bCleanupAtTurnOff;
+    m_settings["stockmode.dontSaveSameDataAsLast"] = m_bDontSaveSameDataAsLast;
+    m_settings["stockmode.sound.copy"] = Text::ConvertUnicodeToUTF8(m_strCopySound);
+    m_settings["stockmode.sound.paste"] = Text::ConvertUnicodeToUTF8(m_strPasteSound);
 
     m_settings["tooltip.autopop"] = m_nToolTipTime;
     m_settings["tooltip.delay"] = m_nToolTipDelay;
 
-    m_settings["treeview.popupPosition"] = m_pop.m_nPopupPos;
-    m_settings["treeview.popupOffset.x"] = m_pop.m_posCaretHosei.x;
-    m_settings["treeview.popupOffset.y"] = m_pop.m_posCaretHosei.y;
-    m_settings["treeview.selectByTyping.finalizePeriod"] = m_pop.m_nSelectByTypingFinalizePeriod;
-    m_settings["treeview.selectByTyping.caseInsensitive"] = m_pop.m_bSelectByTypingCaseInsensitive;
-    m_settings["treeview.selectByTyping.autoPaste"] = m_pop.m_bSelectByTypingAutoPaste;
-    m_settings["treeview.selectByTyping.autoExpand"] = m_pop.m_bSelectByTypingAutoExpand;
-    m_settings["treeview.tooltip"] = m_visual.m_nToolTip;
-    m_settings["treeview.scrollbar.vertical"] = m_visual.m_bScrollbarVertical;
-    m_settings["treeview.scrollbar.horizontal"] = m_visual.m_bScrollbarHorizontal;
-    m_settings["treeview.expandOnSingleClick"] = m_pop.m_bSingleExpand;
-    m_settings["treeview.pasteBySingleClick"] = m_pop.m_bSingleEnter;
-    m_settings["treeview.keepSelection"] = m_pop.m_bKeepSelection;
-    m_settings["treeview.keepFolders"] = m_pop.m_bKeepFolders;
+    m_settings["treeview.popupPosition"] = m_nPopupPos;
+    m_settings["treeview.popupOffset.x"] = m_posCaretHosei.x;
+    m_settings["treeview.popupOffset.y"] = m_posCaretHosei.y;
+    m_settings["treeview.selectByTyping.finalizePeriod"] = m_nSelectByTypingFinalizePeriod;
+    m_settings["treeview.selectByTyping.caseInsensitive"] = m_bSelectByTypingCaseInsensitive;
+    m_settings["treeview.selectByTyping.autoPaste"] = m_bSelectByTypingAutoPaste;
+    m_settings["treeview.selectByTyping.autoExpand"] = m_bSelectByTypingAutoExpand;
+    m_settings["treeview.tooltip"] = m_nToolTip;
+    m_settings["treeview.scrollbar.vertical"] = m_bScrollbarVertical;
+    m_settings["treeview.scrollbar.horizontal"] = m_bScrollbarHorizontal;
+    m_settings["treeview.expandOnSingleClick"] = m_bSingleExpand;
+    m_settings["treeview.pasteBySingleClick"] = m_bSingleEnter;
+    m_settings["treeview.keepSelection"] = m_bKeepSelection;
+    m_settings["treeview.keepFolders"] = m_bKeepFolders;
 
-    m_settings["treeview.style.backgroundColor"] = Color::String(m_visual.m_nBackgroundColor);
-    m_settings["treeview.style.borderColor"] = Color::String(m_visual.m_nBorderColor);
-    m_settings["treeview.style.textColor"] = Color::String(m_visual.m_nTextColor);
-    m_settings["treeview.style.fontName"] = Text::ConvertUnicodeToUTF8(m_visual.m_strFontName);
-    m_settings["treeview.style.fontSize"] = m_visual.m_nFontSize;
-    m_settings["treeview.style.iconFile"] = Text::ConvertUnicodeToUTF8(m_visual.m_strResourceName);
-    m_settings["treeview.opacity"] = m_visual.m_nOpacity;
+    m_settings["treeview.style.backgroundColor"] = Color::String(m_nBackgroundColor);
+    m_settings["treeview.style.borderColor"] = Color::String(m_nBorderColor);
+    m_settings["treeview.style.textColor"] = Color::String(m_nTextColor);
+    m_settings["treeview.style.fontName"] = Text::ConvertUnicodeToUTF8(m_strFontName);
+    m_settings["treeview.style.fontSize"] = m_nFontSize;
+    m_settings["treeview.style.iconFile"] = Text::ConvertUnicodeToUTF8(m_strResourceName);
+    m_settings["treeview.opacity"] = m_nOpacity;
 
     m_settings["windowCheckInterval"] = m_nWindowCheckInterval;
 
@@ -417,10 +395,10 @@ void CInit::setPasteHotkey(UINT uKey, UINT uMod, UINT uCopyKey, UINT uCopyMod)
 //---------------------------------------------------
 void CInit::setHotkey(UINT uPopKey, UINT uPopMod, UINT uFifoKey, UINT uFifoMod)
 {
-    m_pop.m_uMod_Pouup = uPopMod;
-    m_pop.m_uVK_Pouup = uPopKey;
-    m_pop.m_uMod_Fifo = uFifoMod;
-    m_pop.m_uVK_Fifo = uFifoKey;
+    m_uMod_Pouup = uPopMod;
+    m_uVK_Pouup = uPopKey;
+    m_uMod_Fifo = uFifoMod;
+    m_uVK_Fifo = uFifoKey;
 }
 //---------------------------------------------------
 //関数名	getHotkey()
@@ -428,10 +406,10 @@ void CInit::setHotkey(UINT uPopKey, UINT uPopMod, UINT uFifoKey, UINT uFifoMod)
 //---------------------------------------------------
 void CInit::getHotKey(UINT* uPopKey, UINT* uPopMod, UINT* uFifoKey, UINT* uFifoMod)
 {
-    *uPopMod = m_pop.m_uMod_Pouup;
-    *uPopKey = m_pop.m_uVK_Pouup;
-    *uFifoMod = m_pop.m_uMod_Fifo;
-    *uFifoKey = m_pop.m_uVK_Fifo;
+    *uPopMod = m_uMod_Pouup;
+    *uPopKey = m_uVK_Pouup;
+    *uFifoMod = m_uMod_Fifo;
+    *uFifoKey = m_uVK_Fifo;
 }
 
 //---------------------------------------------------
@@ -469,7 +447,7 @@ void CInit::unHookKey()
         pUnHook = ::GetProcAddress(m_hHookDLL, "UnHook");
         if (pUnHook) pUnHook();
         FreeLibrary(m_hHookDLL);
-        m_hHookDLL = NULL;
+        m_hHookDLL = nullptr;
     }
 }
 

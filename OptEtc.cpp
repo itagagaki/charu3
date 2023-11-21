@@ -24,8 +24,8 @@ COptEtc::COptEtc(CWnd* pParent /*=NULL*/) : CDialog(COptEtc::IDD, pParent)
 {
     //{{AFX_DATA_INIT(COptEtc)
     //}}AFX_DATA_INIT
-    m_nPutBackClipboard = Util::BoolToInt(theApp.m_ini.m_etc.m_bPutBackClipboard);
-    m_nShowClipboardInNotifyIconTooltip = Util::BoolToInt(theApp.m_ini.m_etc.m_bShowClipboardInTooltipOfNofifyIcon);
+    m_nPutBackClipboard = Util::BoolToInt(theApp.m_ini.m_bPutBackClipboard);
+    m_nShowClipboardInNotifyIconTooltip = Util::BoolToInt(theApp.m_ini.m_bShowClipboardInTooltipOfNofifyIcon);
 }
 
 //---------------------------------------------------
@@ -39,17 +39,17 @@ void COptEtc::DoDataExchange(CDataExchange* pDX)
     //{{AFX_DATA_MAP(COptEtc)
 
     if (GetDlgItem(IDC_OPT_KEYRADIO_POP))
-        DDX_Radio(pDX, IDC_OPT_KEYRADIO_POP, theApp.m_ini.m_pop.m_nDoubleKeyPOP);
+        DDX_Radio(pDX, IDC_OPT_KEYRADIO_POP, theApp.m_ini.m_nDoubleKeyPOP);
     if (GetDlgItem(IDC_OPT_POPUPKEY))
         DDX_Control(pDX, IDC_OPT_POPUPKEY, m_ctrlPopupKey);
 
     if (GetDlgItem(IDC_OPT_KEYRADIO_FIFO))
-        DDX_Radio(pDX, IDC_OPT_KEYRADIO_FIFO, theApp.m_ini.m_pop.m_nDoubleKeyFIFO);
+        DDX_Radio(pDX, IDC_OPT_KEYRADIO_FIFO, theApp.m_ini.m_nDoubleKeyFIFO);
     if (GetDlgItem(IDC_OPT_FIFO_KEY))
         DDX_Control(pDX, IDC_OPT_FIFO_KEY, m_ctrlFifoKey);
 
     if (GetDlgItem(IDC_OPT_ICON_POP))
-        DDX_Radio(pDX, IDC_OPT_ICON_POP, theApp.m_ini.m_etc.m_nIconClick);
+        DDX_Radio(pDX, IDC_OPT_ICON_POP, theApp.m_ini.m_nIconClick);
     if (GetDlgItem(IDC_OPT_TOCLIP))
         DDX_Check(pDX, IDC_OPT_TOCLIP, m_nPutBackClipboard);
     if (GetDlgItem(IDC_OPT_TOOLTIP_TITLE))
@@ -97,8 +97,8 @@ BOOL COptEtc::OnInitDialog()
     CDialog::OnInitDialog();
 
     //ホットキー
-    if (theApp.m_ini.m_pop.m_nDoubleKeyPOP != 0)	m_ctrlPopupKey.EnableWindow(false);
-    if (theApp.m_ini.m_pop.m_nDoubleKeyFIFO != 0)	m_ctrlFifoKey.EnableWindow(false);
+    if (theApp.m_ini.m_nDoubleKeyPOP != 0)	m_ctrlPopupKey.EnableWindow(false);
+    if (theApp.m_ini.m_nDoubleKeyFIFO != 0)	m_ctrlFifoKey.EnableWindow(false);
 
     UINT uPopKey, uPopMod, uRirekiKey, uRirekiMod;
     theApp.m_ini.getHotKey(&uPopKey, &uPopMod, &uRirekiKey, &uRirekiMod);
@@ -117,7 +117,7 @@ void COptEtc::OnShowWindow(BOOL bShow, UINT nStatus)
     CDialog::OnShowWindow(bShow, nStatus);
     if (bShow) {
         CWnd* w;
-        switch (theApp.m_ini.m_pop.m_nDoubleKeyPOP) {
+        switch (theApp.m_ini.m_nDoubleKeyPOP) {
         default:
         case 0:
             w = GetDlgItem(IDC_OPT_KEYRADIO_POP);
@@ -150,8 +150,8 @@ BOOL COptEtc::DestroyWindow()
     m_ctrlFifoKey.GetHotKey(wVkCodeF, wModF);
     wModF = KeyHelper::HotkeyToMod(wModF);
     theApp.m_ini.setHotkey(wVkCodeP, wModP, wVkCodeF, wModF);
-    theApp.m_ini.m_etc.m_bPutBackClipboard = ((CButton*)GetDlgItem(IDC_OPT_TOCLIP))->GetCheck() != 0;
-    theApp.m_ini.m_etc.m_bShowClipboardInTooltipOfNofifyIcon = ((CButton*)GetDlgItem(IDC_OPT_TOOLTIP_TITLE))->GetCheck() != 0;
+    theApp.m_ini.m_bPutBackClipboard = ((CButton*)GetDlgItem(IDC_OPT_TOCLIP))->GetCheck() != 0;
+    theApp.m_ini.m_bShowClipboardInTooltipOfNofifyIcon = ((CButton*)GetDlgItem(IDC_OPT_TOOLTIP_TITLE))->GetCheck() != 0;
 
     return CDialog::DestroyWindow();
 }

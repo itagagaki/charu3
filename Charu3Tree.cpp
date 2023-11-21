@@ -2300,7 +2300,7 @@ void CCharu3Tree::setScrollBar()
 {
     SCROLLINFO si;
 
-    bool showV = theApp.m_ini.m_visual.m_bScrollbarVertical;
+    bool showV = theApp.m_ini.m_bScrollbarVertical;
     if (showV) {
         ZeroMemory(&si, sizeof(si));
         si.cbSize = sizeof si;
@@ -2309,7 +2309,7 @@ void CCharu3Tree::setScrollBar()
     }
     ShowScrollBar(SB_VERT, showV);
 
-    bool showH = theApp.m_ini.m_visual.m_bScrollbarHorizontal;
+    bool showH = theApp.m_ini.m_bScrollbarHorizontal;
     if (showH) {
         ZeroMemory(&si, sizeof(si));
         si.cbSize = sizeof si;

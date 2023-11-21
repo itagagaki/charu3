@@ -234,8 +234,17 @@ int CCharu3App::ExitInstance()
 bool CCharu3App::init()
 {
     m_ini.initialize();
+    m_ini.setHookKey(m_hSelfWnd);
+    {
+        TCHAR strKeyLayoutName[256];
+        GetKeyboardLayoutName(strKeyLayoutName);
+        m_ini.m_keyLayout = LoadKeyboardLayout(strKeyLayoutName, KLF_REPLACELANG);
+        if (m_ini.m_bDebug) {
+            LOG(_T("KeyLayoutName \"%s\""), strKeyLayoutName);
+        }
+    }
 
-    m_pTree->setImageList(theApp.m_ini.m_IconSize, theApp.m_ini.m_visual.m_strResourceName, m_ini.m_strAppPath);
+    m_pTree->setImageList(theApp.m_ini.m_IconSize, theApp.m_ini.m_strResourceName, m_ini.m_strAppPath);
     m_pTree->setInitInfo(&m_ini.m_nTreeID, &m_ini.m_nSelectID, &m_ini.m_nRecNumber);//ID初期値を設定
 
     if (m_ini.m_bDebug) {
@@ -290,16 +299,6 @@ bool CCharu3App::init()
     m_clipboard.getClipboardText(m_strSavedClipboard, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
     m_clipboard.setParent(this->m_pMainWnd->m_hWnd);
     m_keySet = m_ini.m_key.m_defKeySet;
-
-    TCHAR strKeyLayoutName[256];
-    GetKeyboardLayoutName(strKeyLayoutName);
-    m_ini.m_keyLayout = LoadKeyboardLayout(strKeyLayoutName, KLF_REPLACELANG);
-
-    if (m_ini.m_bDebug) {
-        LOG(_T("KeyLayoutName \"%s\""), strKeyLayoutName);
-    }
-
-    m_ini.setHookKey(m_hSelfWnd);
 
     //ホットキーを設定
     registerHotkey();
@@ -421,14 +420,14 @@ CString CCharu3App::NewFile()
 void CCharu3App::registerHotkey()
 {
     UINT uMod = 0, uVK = 0;
-    switch (m_ini.m_pop.m_nDoubleKeyPOP) {
+    switch (m_ini.m_nDoubleKeyPOP) {
     case 1:	uMod = MOD_SHIFT; break;
     case 2:	uMod = MOD_CONTROL; break;
     case 3:	uMod = MOD_ALT; break;
     default:
     case 0:
-        uMod = m_ini.m_pop.m_uMod_Pouup;
-        uVK = m_ini.m_pop.m_uVK_Pouup;
+        uMod = m_ini.m_uMod_Pouup;
+        uVK = m_ini.m_uVK_Pouup;
         break;
     }
     if (!RegisterHotKey(NULL, HOTKEY_POPUP, uMod, uVK)) {//ポップアップキー
@@ -442,14 +441,14 @@ void CCharu3App::registerHotkey()
     }
 
     uMod = 0, uVK = 0;
-    switch (m_ini.m_pop.m_nDoubleKeyFIFO) {
+    switch (m_ini.m_nDoubleKeyFIFO) {
     case 1:	uMod = MOD_SHIFT; break;
     case 2:	uMod = MOD_CONTROL; break;
     case 3:	uMod = MOD_ALT; break;
     default:
     case 0:
-        uMod = m_ini.m_pop.m_uMod_Fifo;
-        uVK = m_ini.m_pop.m_uVK_Fifo;
+        uMod = m_ini.m_uMod_Fifo;
+        uVK = m_ini.m_uVK_Fifo;
         break;
     }
     if (!RegisterHotKey(NULL, HOTKEY_FIFO, uMod, uVK)) {//履歴FIFOキー
@@ -708,7 +707,7 @@ void CCharu3App::popupTreeWinMC(HWND hForeground)
     pos.y -= m_ini.m_DialogSize.y;
     adjustLocation(&pos);
     // Window::GetFocusInfo(&theApp.m_focusInfo,hForeground);
-    popupTreeWindow(pos, m_ini.m_pop.m_bKeepSelection);
+    popupTreeWindow(pos, m_ini.m_bKeepSelection);
 }
 //---------------------------------------------------
 //関数名	adjustLocation(POINT pos)
@@ -917,7 +916,7 @@ void CCharu3App::playData(STRING_DATA data, CString strClip, CString strSelect, 
         execData(strPaste, m_keySet, hSelectItem, m_focusInfo.m_hFocusWnd);
 
         //クリップボード復帰
-        if (m_ini.m_etc.m_bPutBackClipboard && strClip != "") {
+        if (m_ini.m_bPutBackClipboard && strClip != "") {
             m_strSavedClipboard = strClip;
             m_clipboard.setClipboardText(strClip.GetString(), m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
         }
@@ -958,7 +957,7 @@ void CCharu3App::playHotItem(int nTarget)
         keyData = m_hotkeyVector.at(nTarget);
         if (!keyData.m_uVkCode) {
             DWORD dwTime = timeGetTime();
-            if (static_cast<int>(dwTime - keyData.m_dwDoubleKeyTime) > m_ini.m_pop.m_nDCKeyPopTime) {
+            if (static_cast<int>(dwTime - keyData.m_dwDoubleKeyTime) > m_ini.m_nDCKeyPopTime) {
                 m_hotkeyVector[nTarget].m_dwDoubleKeyTime = dwTime;
                 return;
             }
@@ -1008,7 +1007,7 @@ void CCharu3App::playHotItem(int nTarget)
                     m_hSelectItemBkup = m_pTree->GetSelectedItem();
 
                     m_pTree->SelectItem(keyData.m_hItem);
-                    getPopupPos(&pos, m_ini.m_pop.m_nPopupPos);//ポップアップ位置を取得
+                    getPopupPos(&pos, m_ini.m_nPopupPos);//ポップアップ位置を取得
                     adjustLocation(&pos);
                     popupTreeWindow(pos, true, keyData.m_hItem);
                 }
@@ -1079,7 +1078,7 @@ void CCharu3App::playHotItem(int nTarget)
                         }
                     }
                     //クリップボード復帰
-                    if (m_ini.m_etc.m_bPutBackClipboard && strClip != "") {
+                    if (m_ini.m_bPutBackClipboard && strClip != "") {
                         m_clipboard.setClipboardText(strClip.GetString(), m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
                     }
                     //一時項目は消す
@@ -1750,9 +1749,9 @@ void CCharu3App::onClipboardChanged(CString strClipboard)
         }
 
         if (m_isStockMode) {
-            if (!(m_ini.m_fifo.m_bDontSaveSameDataAsLast && strClipboard == m_strPreviousStocked)) {
-                if (m_ini.m_fifo.m_strCopySound != _T("")) {
-                    PlaySound(m_ini.m_fifo.m_strCopySound, NULL, SND_ASYNC | SND_FILENAME);
+            if (!(m_ini.m_bDontSaveSameDataAsLast && strClipboard == m_strPreviousStocked)) {
+                if (m_ini.m_strCopySound != _T("")) {
+                    PlaySound(m_ini.m_strCopySound, NULL, SND_ASYNC | SND_FILENAME);
                 }
                 m_pTree->addData(NULL, data);
                 m_strPreviousStocked = strClipboard;
@@ -1782,9 +1781,9 @@ void CCharu3App::fifoClipboard()
         return;
     }
 
-    if (m_ini.m_fifo.m_nFifo) {
+    if (m_ini.m_nFifo) {
         CString text;
-        HTREEITEM hItem = m_pTree->getOneTimeItem(m_ini.m_fifo.m_nFifo);
+        HTREEITEM hItem = m_pTree->getOneTimeItem(m_ini.m_nFifo);
         if (hItem) {
             text = m_pTree->getDataPtr(hItem)->m_strData;
             m_pTree->deleteData(hItem);
@@ -1797,8 +1796,8 @@ void CCharu3App::fifoClipboard()
                 LOG(_T("fifoClipboard text:%s"), text.GetString());
             }
             if (m_clipboard.setClipboardText(text, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval)) {
-                if (m_ini.m_fifo.m_strPasteSound != _T("")) {
-                    PlaySound(m_ini.m_fifo.m_strPasteSound, NULL, SND_ASYNC | SND_FILENAME);
+                if (m_ini.m_strPasteSound != _T("")) {
+                    PlaySound(m_ini.m_strPasteSound, NULL, SND_ASYNC | SND_FILENAME);
                 }
                 m_strSavedClipboard = text;
             }
@@ -1815,7 +1814,7 @@ void CCharu3App::fifoClipboard()
     keybd_event(m_keySet.m_uVK_Paste, 0, 0, 0);
     RegisterHotKey(NULL, HOTKEY_PASTE, m_keySet.m_uMod_Paste, m_keySet.m_uVK_Paste);
 
-    if (m_ini.m_fifo.m_bAutoOff && !m_pTree->getOneTimeItem(m_ini.m_fifo.m_nFifo)) {
+    if (m_ini.m_bAutoOff && !m_pTree->getOneTimeItem(m_ini.m_nFifo)) {
         toggleStockMode(); // Turn off stock mode due to one-time item is gone
     }
 }
@@ -1843,7 +1842,7 @@ void CCharu3App::toggleStockMode()
     else {
         KillTimer(m_pMainWnd->m_hWnd, TIMER_ACTIVE);
         UnregisterHotKey(NULL, HOTKEY_PASTE);
-        if (m_ini.m_fifo.m_bCleanupAtTurnOff) {
+        if (m_ini.m_bCleanupAtTurnOff) {
             m_pTree->cleanupOneTimeItems(m_pTree->GetRootItem());
         }
     }
@@ -1890,8 +1889,8 @@ void CCharu3App::getPopupPos(POINT* pPos, int nPosType)
         pPos->y = rectDeskTop.bottom - m_ini.m_DialogSize.y;
         break;
     case POPUP_POS_CARET:
-        pPos->x += m_ini.m_pop.m_posCaretHosei.x;
-        pPos->y += m_ini.m_pop.m_posCaretHosei.y;
+        pPos->x += m_ini.m_posCaretHosei.x;
+        pPos->y += m_ini.m_posCaretHosei.y;
         break;
     }
 }
@@ -1919,7 +1918,7 @@ void  CCharu3App::resetTreeDialog()
     if (m_pTree) {
         m_pTreeDlg->setTree(m_pTree);
         m_pTreeDlg->Create(IDD_DATA_TREE_VIEW, this->m_pMainWnd);
-        m_pTree->setImageList(m_ini.m_IconSize, theApp.m_ini.m_visual.m_strResourceName, m_ini.m_strAppPath);
+        m_pTree->setImageList(m_ini.m_IconSize, theApp.m_ini.m_strResourceName, m_ini.m_strAppPath);
         m_pTree->setInitInfo(&m_ini.m_nTreeID, &m_ini.m_nSelectID, &m_ini.m_nRecNumber);//ID初期値を設定
         m_pTree->setPlugin(m_ini.m_strRwPluginFolder);
         m_pTree->m_MyStringList = stringList;
@@ -1945,9 +1944,9 @@ BOOL CCharu3App::PreTranslateMessage(MSG* pMsg)
         if (m_ini.m_bDebug) {
             LOG(_T("WM_KEY_HOOK %d %d"), pMsg->wParam, pMsg->lParam);
         }
-        if (m_ini.m_pop.m_nDoubleKeyPOP) {
+        if (m_ini.m_nDoubleKeyPOP) {
             UINT key = 0;
-            switch (m_ini.m_pop.m_nDoubleKeyPOP) {
+            switch (m_ini.m_nDoubleKeyPOP) {
             case 1: key = VK_SHIFT; break;
             case 2: key = VK_CONTROL; break;
             case 3: key = VK_MENU; break;
@@ -1957,9 +1956,9 @@ BOOL CCharu3App::PreTranslateMessage(MSG* pMsg)
                 pMsg->wParam = HOTKEY_POPUP;
             }
         }
-        if (m_ini.m_pop.m_nDoubleKeyFIFO) {
+        if (m_ini.m_nDoubleKeyFIFO) {
             UINT key = 0;
-            switch (m_ini.m_pop.m_nDoubleKeyFIFO) {
+            switch (m_ini.m_nDoubleKeyFIFO) {
             case 1: key = VK_SHIFT; break;
             case 2: key = VK_CONTROL; break;
             case 3: key = VK_MENU; break;
@@ -1998,9 +1997,9 @@ BOOL CCharu3App::PreTranslateMessage(MSG* pMsg)
             if (m_ini.m_bDebug) {
                 LOG(_T("HOTKEY_POPUP"));
             }
-            if (m_ini.m_pop.m_nDoubleKeyPOP) {//ダブルキークリック
+            if (m_ini.m_nDoubleKeyPOP) {//ダブルキークリック
                 DWORD dwTime = timeGetTime();
-                if (static_cast<int>(dwTime - m_dwDoubleKeyPopTime) > m_ini.m_pop.m_nDCKeyPopTime) {
+                if (static_cast<int>(dwTime - m_dwDoubleKeyPopTime) > m_ini.m_nDCKeyPopTime) {
                     m_dwDoubleKeyPopTime = dwTime;
                     return FALSE;
                 }
@@ -2008,7 +2007,7 @@ BOOL CCharu3App::PreTranslateMessage(MSG* pMsg)
             if (m_nPhase == PHASE_IDOL) {
                 POINT pos;
 
-                getPopupPos(&pos, m_ini.m_pop.m_nPopupPos);//ポップアップ位置を取得
+                getPopupPos(&pos, m_ini.m_nPopupPos);//ポップアップ位置を取得
                 if (m_ini.m_bDebug) {
                     LOG(_T("getPopupPos %d %d"), pos.x, pos.y);
                 }
@@ -2017,7 +2016,7 @@ BOOL CCharu3App::PreTranslateMessage(MSG* pMsg)
                 if (m_ini.m_bDebug) {
                     LOG(_T("reviseWindowPos %d %d"), pos.x, pos.y);
                 }
-                popupTreeWindow(pos, m_ini.m_pop.m_bKeepSelection);
+                popupTreeWindow(pos, m_ini.m_bKeepSelection);
             }
             else	m_isCloseKey = true;//閉じるスイッチを入れておく
             return FALSE;
@@ -2028,9 +2027,9 @@ BOOL CCharu3App::PreTranslateMessage(MSG* pMsg)
                 LOG(_T("HOTKEY_FIFO"));
             }
 
-            if (m_ini.m_pop.m_nDoubleKeyFIFO) {//ダブルキークリック
+            if (m_ini.m_nDoubleKeyFIFO) {//ダブルキークリック
                 DWORD dwTime = timeGetTime();
-                if (static_cast<int>(dwTime - m_dwDoubleKeyFifoTime) > m_ini.m_pop.m_nDCKeyFifoTime) {
+                if (static_cast<int>(dwTime - m_dwDoubleKeyFifoTime) > m_ini.m_nDCKeyFifoTime) {
                     m_dwDoubleKeyFifoTime = dwTime;
                     return FALSE;
                 }
@@ -2156,7 +2155,7 @@ void CCharu3App::OnOption()
     CRect rect;
     m_pTreeDlg->GetWindowRect(&rect);
 
-    if (iniBkup.m_visual.m_strResourceName != m_ini.m_visual.m_strResourceName) {
+    if (iniBkup.m_strResourceName != m_ini.m_strResourceName) {
         resetTreeDialog();
     }
 

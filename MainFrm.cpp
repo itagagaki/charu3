@@ -188,7 +188,7 @@ void CMainFrame::changeClip()
         theApp.onClipboardChanged(strClipboard); //本体にクリップボードの変更を通知
     }
 
-    if (theApp.m_ini.m_etc.m_bShowClipboardInTooltipOfNofifyIcon) {
+    if (theApp.m_ini.m_bShowClipboardInTooltipOfNofifyIcon) {
         if (isStealth) {
             _tcscpy_s(m_nIcon.szTip, _T("**** Stealthed ****"));
         }
@@ -275,7 +275,7 @@ LRESULT CMainFrame::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
             return FALSE; // to suppress notification area menu
         }
         else if (WM_LBUTTONDOWN == lParam) {
-            if (theApp.m_ini.m_etc.m_nIconClick == 0) {
+            if (theApp.m_ini.m_nIconClick == 0) {
                 // popup treeview
                 if (theApp.getPhase() == PHASE_IDOL) {
                     theApp.popupTreeWinMC(m_hActive);

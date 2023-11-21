@@ -237,11 +237,11 @@ BOOL CMyTreeDialog::showWindowPos(POINT pos, POINT size, int nCmdShow, bool keep
     m_toolTip.SetDelayTime(theApp.m_ini.m_nToolTipDelay);
     m_toolTip.SetDelayTime(TTDT_AUTOPOP, theApp.m_ini.m_nToolTipTime);
 
-    m_pTreeCtrl->SetBkColor(COLORREF(Color::Swap_RGB_BGR(theApp.m_ini.m_visual.m_nBackgroundColor)));
-    m_pTreeCtrl->SetTextColor(COLORREF(Color::Swap_RGB_BGR(theApp.m_ini.m_visual.m_nTextColor)));
-    m_pTreeCtrl->SetInsertMarkColor(COLORREF(Color::Swap_RGB_BGR(theApp.m_ini.m_visual.m_nBorderColor)));
+    m_pTreeCtrl->SetBkColor(COLORREF(Color::Swap_RGB_BGR(theApp.m_ini.m_nBackgroundColor)));
+    m_pTreeCtrl->SetTextColor(COLORREF(Color::Swap_RGB_BGR(theApp.m_ini.m_nTextColor)));
+    m_pTreeCtrl->SetInsertMarkColor(COLORREF(Color::Swap_RGB_BGR(theApp.m_ini.m_nBorderColor)));
     m_pTreeCtrl->ModifyStyle(NULL, TVS_TRACKSELECT, NULL);
-    if (theApp.m_ini.m_pop.m_bSingleExpand) {
+    if (theApp.m_ini.m_bSingleExpand) {
         m_pTreeCtrl->ModifyStyle(NULL, TVS_SINGLEEXPAND, NULL);
     }
     else {
@@ -263,7 +263,7 @@ BOOL CMyTreeDialog::showWindowPos(POINT pos, POINT size, int nCmdShow, bool keep
     if (!keepSelection) {
         m_pTreeCtrl->SelectItem(m_pTreeCtrl->GetRootItem());
     }
-    if (!theApp.m_ini.m_pop.m_bKeepFolders) {
+    if (!theApp.m_ini.m_bKeepFolders) {
         m_pTreeCtrl->closeFolder(m_pTreeCtrl->GetRootItem());
         if (keepSelection) {
             m_pTreeCtrl->SelectItem(hSelectItem);
@@ -277,14 +277,14 @@ BOOL CMyTreeDialog::showWindowPos(POINT pos, POINT size, int nCmdShow, bool keep
     }
     if (hOpenItem) m_pTreeCtrl->Expand(hOpenItem, TVE_EXPAND);
 
-    m_colFrame = Color::Swap_RGB_BGR(theApp.m_ini.m_visual.m_nBorderColor);
+    m_colFrame = Color::Swap_RGB_BGR(theApp.m_ini.m_nBorderColor);
 
     if (m_brBack.GetSafeHandle()) {
         m_brBack.DeleteObject();
         m_brBack.m_hObject = NULL;
     }
     if (m_brBack.m_hObject == NULL)
-        m_brBack.CreateSolidBrush(COLORREF(Color::Swap_RGB_BGR(theApp.m_ini.m_visual.m_nBackgroundColor)));
+        m_brBack.CreateSolidBrush(COLORREF(Color::Swap_RGB_BGR(theApp.m_ini.m_nBackgroundColor)));
 
     Window::SetAbsoluteForegroundWindow(theApp.m_pMainFrame->m_hWnd);
     m_pTreeCtrl->SetFocus();
@@ -296,7 +296,7 @@ BOOL CMyTreeDialog::showWindowPos(POINT pos, POINT size, int nCmdShow, bool keep
     m_dataPtrDbClick = nullptr;
 
     m_pTreeCtrl->m_ltCheckItems.clear();
-    if (theApp.m_ini.m_visual.m_nToolTip == 2)	m_toolTip.Activate(FALSE);
+    if (theApp.m_ini.m_nToolTip == 2)	m_toolTip.Activate(FALSE);
     else	m_toolTip.Activate(TRUE);
     SetWindowPos(&wndTopMost, pos.x, pos.y, size.x, size.y, NULL);
 
@@ -420,8 +420,8 @@ void CMyTreeDialog::OnClickMyTree(NMHDR* pNMHDR, LRESULT* pResult)
         m_pTreeCtrl->SelectItem(hClickItem);
 
         // Enter if m_bSingleEnter
-        if (theApp.m_ini.m_pop.m_bSingleEnter && !m_pTreeCtrl->IsDragging() && (TVHT_ONITEMSTATEICON & Flags) == 0) {
-            if (theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
+        if (theApp.m_ini.m_bSingleEnter && !m_pTreeCtrl->IsDragging() && (TVHT_ONITEMSTATEICON & Flags) == 0) {
+            if (theApp.m_ini.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
             STRING_DATA* data = GetClickedItem();
             if (data) {
                 enterData(data);
@@ -462,9 +462,9 @@ void CMyTreeDialog::OnShowWindow(BOOL bShow, UINT nStatus)
     if (bShow) {
         //半透明処理
         LONG lExStyle = ::GetWindowLong(this->m_hWnd, GWL_EXSTYLE);
-        if (m_pExStyle && theApp.m_ini.m_visual.m_nOpacity < 100) {
+        if (m_pExStyle && theApp.m_ini.m_nOpacity < 100) {
             SetWindowLong(this->m_hWnd, GWL_EXSTYLE, lExStyle | 0x80000);
-            int nTansparent = 255 * theApp.m_ini.m_visual.m_nOpacity / 100;
+            int nTansparent = 255 * theApp.m_ini.m_nOpacity / 100;
             m_pExStyle(this->m_hWnd, 0, nTansparent, 2);
         }
         else {
@@ -473,7 +473,7 @@ void CMyTreeDialog::OnShowWindow(BOOL bShow, UINT nStatus)
         m_cOlgFont = m_pTreeCtrl->GetFont();
         m_cFont = new CFont;
         if (m_cFont) {
-            m_cFont->CreatePointFont(theApp.m_ini.m_visual.m_nFontSize, theApp.m_ini.m_visual.m_strFontName);
+            m_cFont->CreatePointFont(theApp.m_ini.m_nFontSize, theApp.m_ini.m_strFontName);
             m_pTreeCtrl->SetFont(m_cFont, TRUE);
         }
     }
@@ -561,7 +561,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
 
     case WM_LBUTTONDBLCLK:
         if (!m_pTreeCtrl->IsDragging()) {
-            if (theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
+            if (theApp.m_ini.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
             m_dataPtrDbClick = GetClickedItem();
         }
         break;
@@ -624,7 +624,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
 
     if (WM_SYSKEYDOWN == pMsg->message) m_isAltDown = true;
     else if (((WM_SYSKEYUP == pMsg->message && m_isAltDown) || (WM_KEYDOWN == pMsg->message && pMsg->wParam == VK_APPS)) && !theApp.isCloseKey() && !m_pTreeCtrl->IsDragging()) {
-        if (theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
+        if (theApp.m_ini.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
         m_isAltDown = false;
         CPoint point;
         ZeroMemory(&point, sizeof(point));
@@ -663,7 +663,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
         }
         //リターンキーを押したら決定
         else if (VK_RETURN == pMsg->wParam && !m_pTreeCtrl->IsDragging()) {
-            if (theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
+            if (theApp.m_ini.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
             //データ取得
             HTREEITEM hTreeItem;
             hTreeItem = m_pTreeCtrl->GetSelectedItem();
@@ -681,7 +681,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
         }
         //スペースキー
         else if (VK_SPACE == pMsg->wParam && !m_isModal) {
-            if (theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
+            if (theApp.m_ini.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
             HTREEITEM hTreeItem = m_pTreeCtrl->GetSelectedItem();
             if (hTreeItem) {
                 if (::GetKeyState(VK_CONTROL) < 0) {//CTRLが押されている
@@ -709,7 +709,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
         }
         //デリートキー(データ削除)
         else if (VK_DELETE == pMsg->wParam && !m_pTreeCtrl->IsDragging() && !m_isModal) {
-            if (theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
+            if (theApp.m_ini.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
             OnDelete();
         }
         //F1キー 内容表示
@@ -738,7 +738,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
         }
         // F2 : Rename
         else if (VK_F2 == pMsg->wParam && !m_pTreeCtrl->IsDragging()) {
-            if (theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
+            if (theApp.m_ini.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
             if (m_pTreeCtrl->GetSelectedItem())
                 m_pTreeCtrl->EditLabel(m_pTreeCtrl->GetSelectedItem());
         }
@@ -762,7 +762,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
         }
         //上下
         else if (VK_DOWN == pMsg->wParam || VK_UP == pMsg->wParam && !m_isModal) {
-            if (theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
+            if (theApp.m_ini.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
 
             HTREEITEM hTreeItem = m_pTreeCtrl->GetSelectedItem(), hTreeItemTmp;
             if (hTreeItem != NULL && ::GetKeyState(VK_SHIFT) < 0) {//選択されていて、SHIFTを押してる
@@ -780,7 +780,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
         }
         //左
         else if (VK_LEFT == pMsg->wParam && !m_isModal) {
-            if (theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
+            if (theApp.m_ini.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
             if (::GetKeyState(VK_SHIFT) < 0) {
                 if (::GetKeyState(VK_CONTROL) < 0) {
                     m_pTreeCtrl->closeFolder(m_pTreeCtrl->GetRootItem()); // Ctrl+Shift+Left: collapse all
@@ -807,12 +807,12 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
         if (m_hQuickItem) {
             STRING_DATA* dataPtr = m_pTreeCtrl->getDataPtr(m_hQuickItem);
             if (dataPtr->m_cKind & KIND_DATA_ALL) {
-                if (theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste) {
+                if (theApp.m_ini.m_bSelectByTypingAutoPaste) {
                     enterData(dataPtr);
                 }
             }
             else if (dataPtr->m_cKind & KIND_FOLDER_ALL) {
-                if (theApp.m_ini.m_pop.m_bSelectByTypingAutoExpand) {
+                if (theApp.m_ini.m_bSelectByTypingAutoExpand) {
                     m_pTreeCtrl->Expand(m_hQuickItem, TVE_EXPAND);
                 }
             }
@@ -1264,19 +1264,19 @@ bool CMyTreeDialog::selectByTyping(UINT uKeyCode)
         DWORD span = timeGetTime() - m_dwStartTime;
         m_dwStartTime = timeGetTime();
         m_hQuickItem = m_pTreeCtrl->GetSelectedItem();
-        if (span >= static_cast<DWORD>(theApp.m_ini.m_pop.m_nSelectByTypingFinalizePeriod)) {
+        if (span >= static_cast<DWORD>(theApp.m_ini.m_nSelectByTypingFinalizePeriod)) {
             // Reset findkey, find from the next item onward, and reset timer
             m_strQuickKey = "";
             if (m_hQuickItem) {
                 m_hQuickItem = m_pTreeCtrl->getTrueNextItem(m_hQuickItem);
             }
-            if (theApp.m_ini.m_pop.m_bSelectByTypingAutoPaste || theApp.m_ini.m_pop.m_bSelectByTypingAutoExpand) {
+            if (theApp.m_ini.m_bSelectByTypingAutoPaste || theApp.m_ini.m_bSelectByTypingAutoExpand) {
                 this->KillTimer(CHARU_QUICK_TIMER);
-                this->SetTimer(CHARU_QUICK_TIMER, theApp.m_ini.m_pop.m_nSelectByTypingFinalizePeriod, NULL);
+                this->SetTimer(CHARU_QUICK_TIMER, theApp.m_ini.m_nSelectByTypingFinalizePeriod, NULL);
             }
         }
         CString strKey = CString(strbuff);
-        if (theApp.m_ini.m_pop.m_bSelectByTypingCaseInsensitive) {
+        if (theApp.m_ini.m_bSelectByTypingCaseInsensitive) {
             strKey.MakeLower();
         }
         m_strQuickKey += strKey;
@@ -1284,7 +1284,7 @@ bool CMyTreeDialog::selectByTyping(UINT uKeyCode)
             m_hQuickItem = m_pTreeCtrl->GetRootItem();
         }
         if (m_hQuickItem) {
-            m_hQuickItem = m_pTreeCtrl->searchTitle(m_hQuickItem, m_strQuickKey, theApp.m_ini.m_pop.m_bSelectByTypingCaseInsensitive);
+            m_hQuickItem = m_pTreeCtrl->searchTitle(m_hQuickItem, m_strQuickKey, theApp.m_ini.m_bSelectByTypingCaseInsensitive);
             if (m_hQuickItem) {
                 m_pTreeCtrl->SelectItem(m_hQuickItem);
                 isRet = true;//標準のインクリメンタルサーチをキャンセル
@@ -1305,7 +1305,7 @@ void CMyTreeDialog::changeTipString(STRING_DATA data)
     bool gap = false;
 
     m_toolTip.Activate(FALSE);
-    if (theApp.m_ini.m_visual.m_nToolTip == 0) {
+    if (theApp.m_ini.m_nToolTip == 0) {
         (void)strRes.LoadString(APP_INF_TIP_DATA01);
         CString s = data.m_strTitle;
         int max = 100;
@@ -1315,7 +1315,7 @@ void CMyTreeDialog::changeTipString(STRING_DATA data)
         strTip += strRes + s;
         gap = true;
     }
-    if (theApp.m_ini.m_visual.m_nToolTip != 2) {
+    if (theApp.m_ini.m_nToolTip != 2) {
         if (data.m_strData != _T("")) {
             if (gap) strTip += _T("\n\n");
             CString s = data.m_strData;
@@ -1341,7 +1341,7 @@ void CMyTreeDialog::changeTipString(STRING_DATA data)
             gap = true;
         }
     }
-    if (theApp.m_ini.m_visual.m_nToolTip == 0) {
+    if (theApp.m_ini.m_nToolTip == 0) {
         if (gap) strTip += _T("\n");
         (void)strRes.LoadString(APP_INF_TIP_DATA03);
         strTip += strRes + CTime(data.m_timeCreate).Format(_T("%x %X"));

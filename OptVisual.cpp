@@ -29,12 +29,12 @@ COptVisual::COptVisual(CWnd* pParent /*=NULL*/)
 {
     //{{AFX_DATA_INIT(COptVisual)
     //}}AFX_DATA_INIT
-    m_strBorderColor.Format(_T("%.6x"), theApp.m_ini.m_visual.m_nBorderColor);
-    m_ctrlBorderPal.setColor(Color::Swap_RGB_BGR(theApp.m_ini.m_visual.m_nBorderColor));
-    m_strBackgroundColor.Format(_T("%.6x"), theApp.m_ini.m_visual.m_nBackgroundColor);
-    m_ctrlBackgroundPal.setColor(Color::Swap_RGB_BGR(theApp.m_ini.m_visual.m_nBackgroundColor));
-    m_strTextColor.Format(_T("%.6x"), theApp.m_ini.m_visual.m_nTextColor);
-    m_ctrlTextPal.setColor(Color::Swap_RGB_BGR(theApp.m_ini.m_visual.m_nTextColor));
+    m_strBorderColor.Format(_T("%.6x"), theApp.m_ini.m_nBorderColor);
+    m_ctrlBorderPal.setColor(Color::Swap_RGB_BGR(theApp.m_ini.m_nBorderColor));
+    m_strBackgroundColor.Format(_T("%.6x"), theApp.m_ini.m_nBackgroundColor);
+    m_ctrlBackgroundPal.setColor(Color::Swap_RGB_BGR(theApp.m_ini.m_nBackgroundColor));
+    m_strTextColor.Format(_T("%.6x"), theApp.m_ini.m_nTextColor);
+    m_ctrlTextPal.setColor(Color::Swap_RGB_BGR(theApp.m_ini.m_nTextColor));
 }
 
 //---------------------------------------------------
@@ -49,9 +49,9 @@ void COptVisual::DoDataExchange(CDataExchange* pDX)
     if (GetDlgItem(IDC_OPT_FONT_NAME))
         DDX_Control(pDX, IDC_OPT_FONT_NAME, m_ctrlFontCombo);
     if (GetDlgItem(IDC_OPT_FONT_SIZE))
-        DDX_Text(pDX, IDC_OPT_FONT_SIZE, theApp.m_ini.m_visual.m_nFontSize);
+        DDX_Text(pDX, IDC_OPT_FONT_SIZE, theApp.m_ini.m_nFontSize);
     if (GetDlgItem(IDC_OPT_ICON_FILE_NAME))
-        DDX_Text(pDX, IDC_OPT_ICON_FILE_NAME, theApp.m_ini.m_visual.m_strResourceName);
+        DDX_Text(pDX, IDC_OPT_ICON_FILE_NAME, theApp.m_ini.m_strResourceName);
     if (GetDlgItem(IDC_OPT_BORDER_COLOR))
         DDX_Text(pDX, IDC_OPT_BORDER_COLOR, m_strBorderColor);
     if (GetDlgItem(IDC_OPT_BORDER_COLOR_PAL))
@@ -66,7 +66,7 @@ void COptVisual::DoDataExchange(CDataExchange* pDX)
         DDX_Control(pDX, IDC_OPT_TEXT_COLOR_PAL, m_ctrlTextPal);
 
     if (GetDlgItem(IDC_OPT_TOUMEI_SLIDER))
-        DDX_Slider(pDX, IDC_OPT_TOUMEI_SLIDER, theApp.m_ini.m_visual.m_nOpacity);
+        DDX_Slider(pDX, IDC_OPT_TOUMEI_SLIDER, theApp.m_ini.m_nOpacity);
     //}}AFX_DATA_MAP
 }
 
@@ -95,7 +95,7 @@ int CALLBACK EnumFontProc(ENUMLOGFONT* lpelf, NEWTEXTMETRIC* lpntm, int FontType
     COptVisual* ThisClass = (COptVisual*)lparam;
 
     ThisClass->m_ctrlFontCombo.AddString(lpelf->elfLogFont.lfFaceName);
-    if (_tcscmp(lpelf->elfLogFont.lfFaceName, LPCTSTR(theApp.m_ini.m_visual.m_strFontName)) == 0)
+    if (_tcscmp(lpelf->elfLogFont.lfFaceName, LPCTSTR(theApp.m_ini.m_strFontName)) == 0)
         ThisClass->m_ctrlFontCombo.SetCurSel(ThisClass->m_ctrlFontCombo.GetCount() - 1);
 
     return TRUE; // —ñ‹“Œp‘±
@@ -133,7 +133,7 @@ BOOL COptVisual::OnInitDialog()
     EnumFontFamilies(hDC, NULL, (FONTENUMPROC)EnumFontProc, (LPARAM)this);
     ::ReleaseDC(NULL, hDC);
 
-    SetOpacityText(theApp.m_ini.m_visual.m_nOpacity);
+    SetOpacityText(theApp.m_ini.m_nOpacity);
     return TRUE;
 }
 
@@ -164,20 +164,20 @@ BOOL COptVisual::DestroyWindow()
     CEdit* edit;
     edit = (CEdit*)GetDlgItem(IDC_OPT_BACKGROUND_COLOR);
     edit->GetWindowText(strBuff);
-    _stscanf_s(strBuff, _T("%x"), &theApp.m_ini.m_visual.m_nBackgroundColor);
+    _stscanf_s(strBuff, _T("%x"), &theApp.m_ini.m_nBackgroundColor);
 
     edit = (CEdit*)GetDlgItem(IDC_OPT_TEXT_COLOR);
     edit->GetWindowText(strBuff);
-    _stscanf_s(strBuff, _T("%x"), &theApp.m_ini.m_visual.m_nTextColor);
+    _stscanf_s(strBuff, _T("%x"), &theApp.m_ini.m_nTextColor);
 
     edit = (CEdit*)GetDlgItem(IDC_OPT_BORDER_COLOR);
     edit->GetWindowText(strBuff);
-    _stscanf_s(strBuff, _T("%x"), &theApp.m_ini.m_visual.m_nBorderColor);
+    _stscanf_s(strBuff, _T("%x"), &theApp.m_ini.m_nBorderColor);
 
     int nCursel = m_ctrlFontCombo.GetCurSel();
     if (nCursel == CB_ERR) nCursel = 0;
     m_ctrlFontCombo.GetLBText(nCursel, strBuff);
-    theApp.m_ini.m_visual.m_strFontName = strBuff;
+    theApp.m_ini.m_strFontName = strBuff;
 
     return CDialog::DestroyWindow();
 }
@@ -310,7 +310,7 @@ void COptVisual::ReadStyleFile()
     pFileDialog = new CFileDialog(TRUE, _T("json"), NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, strRes, NULL);
 
     if (pFileDialog) {
-        CString prevIconResourceName = theApp.m_ini.m_visual.m_strResourceName;
+        CString prevIconResourceName = theApp.m_ini.m_strResourceName;
         pFileDialog->m_ofn.lpstrInitialDir = theApp.m_ini.m_strAppPath;
         if (IDOK == pFileDialog->DoModal()) {
             if (theApp.m_ini.m_bDebug) {
@@ -321,16 +321,16 @@ void COptVisual::ReadStyleFile()
             nlohmann::json j;
             try { j = nlohmann::json::parse(std::ifstream(strFileName)); }
             catch (...) {}
-            theApp.m_ini.m_visual.m_nBorderColor = Color::Parse(jsonHelper::GetStringProperty(j, "borderColor", Color::String(theApp.m_ini.m_visual.m_nBorderColor)));
-            theApp.m_ini.m_visual.m_nBackgroundColor = Color::Parse(jsonHelper::GetStringProperty(j, "backgroundColor", Color::String(theApp.m_ini.m_visual.m_nBackgroundColor)));
-            theApp.m_ini.m_visual.m_nTextColor = Color::Parse(jsonHelper::GetStringProperty(j, "textColor", Color::String(theApp.m_ini.m_visual.m_nTextColor)));
+            theApp.m_ini.m_nBorderColor = Color::Parse(jsonHelper::GetStringProperty(j, "borderColor", Color::String(theApp.m_ini.m_nBorderColor)));
+            theApp.m_ini.m_nBackgroundColor = Color::Parse(jsonHelper::GetStringProperty(j, "backgroundColor", Color::String(theApp.m_ini.m_nBackgroundColor)));
+            theApp.m_ini.m_nTextColor = Color::Parse(jsonHelper::GetStringProperty(j, "textColor", Color::String(theApp.m_ini.m_nTextColor)));
             //theApp.m_ini.m_visual.m_strFontName = jsonHelper::GetStringPropertyAsCString(j, "fontName", theApp.m_ini.m_visual.m_strFontName);
             //theApp.m_ini.m_visual.m_nFontSize = static_cast<int>(jsonHelper::GetNumberProperty(j, "fontSize", theApp.m_ini.m_visual.m_nFontSize));
             //theApp.m_ini.m_visual.m_strResourceName = jsonHelper::GetStringPropertyAsCString(j, "iconFile", theApp.m_ini.m_visual.m_strResourceName);
         }
         delete pFileDialog;
 
-        if (theApp.m_ini.m_visual.m_strResourceName != prevIconResourceName) {
+        if (theApp.m_ini.m_strResourceName != prevIconResourceName) {
             theApp.resetTreeDialog();
         }
     }

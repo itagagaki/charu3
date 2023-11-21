@@ -23,9 +23,9 @@ COptFifo::COptFifo(CWnd* pParent /*=NULL*/) : CDialog(COptFifo::IDD, pParent)
 {
     //{{AFX_DATA_INIT(COptFifo)
     //}}AFX_DATA_INIT
-    m_nAutoOff = Util::BoolToInt(theApp.m_ini.m_fifo.m_bAutoOff);
-    m_nCleanup = Util::BoolToInt(theApp.m_ini.m_fifo.m_bCleanupAtTurnOff);
-    m_nDontSaveSameDataAsLast = Util::BoolToInt(theApp.m_ini.m_fifo.m_bDontSaveSameDataAsLast);
+    m_nAutoOff = Util::BoolToInt(theApp.m_ini.m_bAutoOff);
+    m_nCleanup = Util::BoolToInt(theApp.m_ini.m_bCleanupAtTurnOff);
+    m_nDontSaveSameDataAsLast = Util::BoolToInt(theApp.m_ini.m_bDontSaveSameDataAsLast);
     //m_strCopySound = theApp.m_ini.m_fifo.m_strCopySound;
     //m_strPasteSound = theApp.m_ini.m_fifo.m_strPasteSound;
 }
@@ -39,11 +39,11 @@ void COptFifo::DoDataExchange(CDataExchange* pDX)
     CDialog::DoDataExchange(pDX);
     //{{AFX_DATA_MAP(COptFifo)
     if (GetDlgItem(IDC_OPT_STOCK_NONE))
-        DDX_Radio(pDX, IDC_OPT_STOCK_NONE, theApp.m_ini.m_fifo.m_nFifo);
+        DDX_Radio(pDX, IDC_OPT_STOCK_NONE, theApp.m_ini.m_nFifo);
     if (GetDlgItem(IDC_OPT_SOUND_COPY))
-        DDX_Text(pDX, IDC_OPT_SOUND_COPY, theApp.m_ini.m_fifo.m_strCopySound);
+        DDX_Text(pDX, IDC_OPT_SOUND_COPY, theApp.m_ini.m_strCopySound);
     if (GetDlgItem(IDC_OPT_SOUND_PASTE))
-        DDX_Text(pDX, IDC_OPT_SOUND_PASTE, theApp.m_ini.m_fifo.m_strPasteSound);
+        DDX_Text(pDX, IDC_OPT_SOUND_PASTE, theApp.m_ini.m_strPasteSound);
     if (GetDlgItem(IDC_OPT_CLEAR_ONETIME))
         DDX_Check(pDX, IDC_OPT_CLEAR_ONETIME, m_nCleanup);
     if (GetDlgItem(IDC_ALL_DEL_OFF))
@@ -87,7 +87,7 @@ void COptFifo::OnShowWindow(BOOL bShow, UINT nStatus)
     CDialog::OnShowWindow(bShow, nStatus);
     if (bShow) {
         CWnd* w;
-        switch (theApp.m_ini.m_pop.m_nDoubleKeyPOP) {
+        switch (theApp.m_ini.m_nDoubleKeyPOP) {
         default:
         case 0:
             w = GetDlgItem(IDC_OPT_STOCK_NONE);
@@ -109,9 +109,9 @@ void COptFifo::OnShowWindow(BOOL bShow, UINT nStatus)
 //---------------------------------------------------
 BOOL COptFifo::DestroyWindow()
 {
-    theApp.m_ini.m_fifo.m_bAutoOff = static_cast<CButton*>(GetDlgItem(IDC_ALL_DEL_OFF))->GetCheck() != 0;
-    theApp.m_ini.m_fifo.m_bCleanupAtTurnOff = static_cast<CButton*>(GetDlgItem(IDC_OPT_CLEAR_ONETIME))->GetCheck() != 0;
-    theApp.m_ini.m_fifo.m_bDontSaveSameDataAsLast = static_cast<CButton*>(GetDlgItem(IDC_OPT_DUPLICATION))->GetCheck() != 0;
+    theApp.m_ini.m_bAutoOff = static_cast<CButton*>(GetDlgItem(IDC_ALL_DEL_OFF))->GetCheck() != 0;
+    theApp.m_ini.m_bCleanupAtTurnOff = static_cast<CButton*>(GetDlgItem(IDC_OPT_CLEAR_ONETIME))->GetCheck() != 0;
+    theApp.m_ini.m_bDontSaveSameDataAsLast = static_cast<CButton*>(GetDlgItem(IDC_OPT_DUPLICATION))->GetCheck() != 0;
     //theApp.m_ini.m_fifo.m_strCopySound = m_strCopySound;
     //theApp.m_ini.m_fifo.m_strPasteSound = m_strPasteSound;
 
