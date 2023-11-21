@@ -10,17 +10,17 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-#include "SerchDialog.h"
-#include "Charu3.h"
+#include "SearchDialog.h"
 #include "search.h"
 #include "util.h"
+#include "Charu3.h"
 #include "resource.h"
 
 //---------------------------------------------------
-// CSerchDialog ダイアログ
+// CSearchDialog ダイアログ
 //---------------------------------------------------
 BEGIN_MESSAGE_MAP(CSearchDialog, CDialog)
-    //{{AFX_MSG_MAP(CSerchDialog)
+    //{{AFX_MSG_MAP(CSearchDialog)
     ON_BN_CLICKED(IDC_FIND_PREV, OnFindPrev)
     ON_BN_CLICKED(IDC_FIND_NEXT, OnFindNext)
     //}}AFX_MSG_MAP
@@ -31,7 +31,7 @@ END_MESSAGE_MAP()
 //---------------------------------------------------
 CSearchDialog::CSearchDialog(CWnd* pParent /*=NULL*/) : CDialog(CSearchDialog::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CSerchDialog)
+    //{{AFX_DATA_INIT(CSearchDialog)
     //}}AFX_DATA_INIT
 }
 
@@ -41,7 +41,7 @@ CSearchDialog::CSearchDialog(CWnd* pParent /*=NULL*/) : CDialog(CSearchDialog::I
 void CSearchDialog::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CSerchDialog)
+    //{{AFX_DATA_MAP(CSearchDialog)
     if (GetDlgItem(IDC_SEARCH_TEXT))
         DDX_Control(pDX, IDC_SEARCH_TEXT, m_ctrlSearchText);
     if (GetDlgItem(IDC_SEARCH_NAME))

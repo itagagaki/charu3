@@ -9,7 +9,7 @@ static char THIS_FILE[] = __FILE__;
 #include <regex>
 #include <vector>
 
-#include "Color.h"
+#include "color.h"
 
 uint32_t Color::Parse(const std::string str)
 {

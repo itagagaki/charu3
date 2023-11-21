@@ -105,7 +105,7 @@
     <ClCompile Include="OptPopup.cpp" />
     <ClCompile Include="OptVisual.cpp" />
     <ClCompile Include="PaletStatic.cpp" />
-    <ClCompile Include="SerchDialog.cpp" />
+    <ClCompile Include="SearchDialog.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="text.cpp" />
     <ClCompile Include="color.cpp" />
@@ -140,7 +140,7 @@
     <ClInclude Include="PaletStatic.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="search.h" />
-    <ClInclude Include="SerchDialog.h" />
+    <ClInclude Include="SearchDialog.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="text.h" />
     <ClInclude Include="util.h" />

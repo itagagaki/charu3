@@ -16,7 +16,7 @@ static char THIS_FILE[] = __FILE__;
 
 #include "OptVisual.h"
 #include "Charu3.h"
-#include "Color.h"
+#include "color.h"
 #include "log.h"
 #include "resource.h"
 

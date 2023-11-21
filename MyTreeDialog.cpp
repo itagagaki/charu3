@@ -15,9 +15,9 @@ static char THIS_FILE[] = __FILE__;
 
 #include "MyTreeDialog.h"
 #include "EditDialog.h"
-#include "SerchDialog.h"
+#include "SearchDialog.h"
 #include "Charu3.h"
-#include "Color.h"
+#include "color.h"
 #include "window.h"
 #include "log.h"
 

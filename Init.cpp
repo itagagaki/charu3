@@ -20,7 +20,7 @@ static char THIS_FILE[] = __FILE__;
 #include "Charu3.h"
 #include "search.h"
 #include "text.h"
-#include "Color.h"
+#include "color.h"
 #include "log.h"
 
 #define DEFAULT_USERNAME _T("Charu3User")

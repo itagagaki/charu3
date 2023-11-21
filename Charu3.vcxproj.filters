@@ -72,7 +72,7 @@
     <ClCompile Include="EditDialog.cpp">
       <Filter>機能ダイアログ</Filter>
     </ClCompile>
-    <ClCompile Include="SerchDialog.cpp">
+    <ClCompile Include="SearchDialog.cpp">
       <Filter>機能ダイアログ</Filter>
     </ClCompile>
     <ClCompile Include="Init.cpp">
@@ -161,7 +161,7 @@
     <ClInclude Include="EditDialog.h">
       <Filter>機能ダイアログ</Filter>
     </ClInclude>
-    <ClInclude Include="SerchDialog.h">
+    <ClInclude Include="SearchDialog.h">
       <Filter>機能ダイアログ</Filter>
     </ClInclude>
     <ClInclude Include="Init.h">

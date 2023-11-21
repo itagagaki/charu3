@@ -13,7 +13,7 @@
 #include "stdafx.h"
 
 #include "Charu3Tree.h"
-#include "SerchDialog.h"
+#include "SearchDialog.h"
 #include "resource.h"
 
 //---------------------------------------------------
