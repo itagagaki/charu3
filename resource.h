@@ -44,7 +44,7 @@
 #define IDC_OPT_SCROLLBAR_VERTICAL      1014
 #define IDC_OPT_SCROLLBAR_HORIZONTAL    1015
 #define IDC_OPT_HISTORY_SIZE_LIMIT      1016
-#define IDC_OPT_LOAD_VISUAL             1017
+#define IDC_OPT_LOAD_STYLE              1017
 #define IDC_KIND_COMBO                  1019
 #define IDC_OPACITY_TEXT                1019
 #define IDC_ICON_COMBO                  1020

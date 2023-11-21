@@ -20,8 +20,8 @@ static char THIS_FILE[] = __FILE__;
 //---------------------------------------------------
 COptMainDialog::COptMainDialog(CWnd* pParent /*=NULL*/, int nPage)
     : CDialog(COptMainDialog::IDD, pParent)
-    , m_OptionPage{ &m_EtcPage, &m_VisualPage, &m_PopupPage, &m_FifoPage, &m_KeysetPage, &m_AdvancedPage }
-    , m_nPage(nPage)
+    , m_pages{ &m_general, &m_style, &m_popup, &m_fifo, &m_key, &m_advanced }
+    , m_nPageNo(nPage)
 {
 }
 
@@ -74,13 +74,13 @@ BOOL COptMainDialog::OnInitDialog()
 
     const int nDialogID[] = { IDD_SETTINGS_01_GENERAL, IDD_SETTINGS_02_STYLE, IDD_SETTINGS_03_DATATREE, IDD_SETTINGS_04_STOCKMODE, IDD_SETTINGS_05_KEYS, IDD_SETTINGS_06_ADVANCED };
     for (int i = 0; i <= MAX_OPT_PAGE; i++) {
-        m_OptionPage[i]->Create(nDialogID[i], this);
-        m_OptionPage[i]->MoveWindow(&rect);
-        m_OptionPage[i]->ShowWindow(SW_HIDE);
+        m_pages[i]->Create(nDialogID[i], this);
+        m_pages[i]->MoveWindow(&rect);
+        m_pages[i]->ShowWindow(SW_HIDE);
     }
-    m_nPage = theApp.m_ini.m_nOptionPage;
-    m_OptionPage[m_nPage]->ShowWindow(SW_SHOW);
-    m_ctrlTab.SetCurFocus(m_nPage);
+    m_nPageNo = theApp.m_ini.m_nOptionPage;
+    m_pages[m_nPageNo]->ShowWindow(SW_SHOW);
+    m_ctrlTab.SetCurFocus(m_nPageNo);
 
     return FALSE; // コントロールにフォーカスを設定しないとき、戻り値は TRUE となります
                   // 例外: OCX プロパティ ページの戻り値は FALSE となります
@@ -93,10 +93,10 @@ BOOL COptMainDialog::OnInitDialog()
 void COptMainDialog::OnSelchangeOptTab(NMHDR* pNMHDR, LRESULT* pResult)
 {
     for (int i = 0; i <= MAX_OPT_PAGE; i++)
-        m_OptionPage[i]->ShowWindow(SW_HIDE);
+        m_pages[i]->ShowWindow(SW_HIDE);
 
-    m_nPage = m_ctrlTab.GetCurSel();
-    m_OptionPage[m_nPage]->ShowWindow(SW_SHOW);
+    m_nPageNo = m_ctrlTab.GetCurSel();
+    m_pages[m_nPageNo]->ShowWindow(SW_SHOW);
 
     *pResult = 0;
 }
@@ -112,10 +112,10 @@ BOOL COptMainDialog::DestroyWindow()
     }
 
     for (int i = 0; i <= MAX_OPT_PAGE; i++) {
-        m_OptionPage[i]->UpdateData();
-        m_OptionPage[i]->DestroyWindow();
+        m_pages[i]->UpdateData();
+        m_pages[i]->DestroyWindow();
     }
-    theApp.m_ini.m_nOptionPage = m_nPage;
+    theApp.m_ini.m_nOptionPage = m_nPageNo;
 
     return CDialog::DestroyWindow();
 }
@@ -134,14 +134,14 @@ BOOL COptMainDialog::PreTranslateMessage(MSG* pMsg)
 {
     if (pMsg->message == WM_KEYDOWN) {
         if (pMsg->wParam == VK_PRIOR) {
-            if (m_nPage < MAX_OPT_PAGE) m_nPage++;
-            else			m_nPage = 0;
-            m_ctrlTab.SetCurFocus(m_nPage);
+            if (m_nPageNo < MAX_OPT_PAGE) m_nPageNo++;
+            else			m_nPageNo = 0;
+            m_ctrlTab.SetCurFocus(m_nPageNo);
         }
         else if (pMsg->wParam == VK_NEXT) {
-            if (m_nPage > 0) m_nPage--;
-            else			m_nPage = MAX_OPT_PAGE;
-            m_ctrlTab.SetCurFocus(m_nPage);
+            if (m_nPageNo > 0) m_nPageNo--;
+            else			m_nPageNo = MAX_OPT_PAGE;
+            m_ctrlTab.SetCurFocus(m_nPageNo);
         }
     }
 
@@ -152,9 +152,9 @@ void COptMainDialog::OnKeydownOptTab(NMHDR* pNMHDR, LRESULT* pResult)
 {
     TC_KEYDOWN* pTCKeyDown = (TC_KEYDOWN*)pNMHDR;
     if (pTCKeyDown->wVKey == VK_TAB && ::GetKeyState(VK_CONTROL) < 0) {
-        if (m_nPage < 4) m_nPage++;
-        else			m_nPage = 0;
-        m_ctrlTab.SetCurFocus(m_nPage);
+        if (m_nPageNo < 4) m_nPageNo++;
+        else			m_nPageNo = 0;
+        m_ctrlTab.SetCurFocus(m_nPageNo);
     }
     *pResult = 0;
 }

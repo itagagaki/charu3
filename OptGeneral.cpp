@@ -10,19 +10,19 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-#include "OptEtc.h"
+#include "OptGeneral.h"
 #include "Charu3.h" // for theApp.m_ini
 #include "key.h"
 #include "util.h"
 #include "resource.h"
 
 //---------------------------------------------------
-//関数名	COptEtc
+//関数名	COptGereral
 //機能		コンストラクタ
 //---------------------------------------------------
-COptEtc::COptEtc(CWnd* pParent /*=NULL*/) : CDialog(COptEtc::IDD, pParent)
+COptGeneral::COptGeneral(CWnd* pParent /*=NULL*/) : CDialog(COptGeneral::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(COptEtc)
+    //{{AFX_DATA_INIT(COptGeneral)
     //}}AFX_DATA_INIT
     m_nPutBackClipboard = Util::BoolToInt(theApp.m_ini.m_bPutBackClipboard);
     m_nShowClipboardInNotifyIconTooltip = Util::BoolToInt(theApp.m_ini.m_bShowClipboardInTooltipOfNofifyIcon);
@@ -32,11 +32,11 @@ COptEtc::COptEtc(CWnd* pParent /*=NULL*/) : CDialog(COptEtc::IDD, pParent)
 //関数名	DoDataExchange(CDataExchange* pDX)
 //機能		データエクスチェンジ
 //---------------------------------------------------
-void COptEtc::DoDataExchange(CDataExchange* pDX)
+void COptGeneral::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(COptEtc)
+    //{{AFX_DATA_MAP(COptGeneral)
 
     if (GetDlgItem(IDC_OPT_KEYRADIO_POP))
         DDX_Radio(pDX, IDC_OPT_KEYRADIO_POP, theApp.m_ini.m_nDoubleKeyPOP);
@@ -57,8 +57,8 @@ void COptEtc::DoDataExchange(CDataExchange* pDX)
     //}}AFX_DATA_MAP
 }
 
-BEGIN_MESSAGE_MAP(COptEtc, CDialog)
-    //{{AFX_MSG_MAP(COptEtc)
+BEGIN_MESSAGE_MAP(COptGeneral, CDialog)
+    //{{AFX_MSG_MAP(COptGeneral)
     ON_BN_CLICKED(IDC_OPT_KEYRADIO_POP, hotkeyEnablePOP)
     ON_BN_CLICKED(IDC_OPT_KEYRADIO_POP2, hotkeyDisablePOP)
     ON_BN_CLICKED(IDC_OPT_KEYRADIO_POP3, hotkeyDisablePOP)
@@ -72,14 +72,14 @@ BEGIN_MESSAGE_MAP(COptEtc, CDialog)
 END_MESSAGE_MAP()
 
 //---------------------------------------------------
-// COptEtc メッセージ ハンドラ
+// COptGeneral メッセージ ハンドラ
 //---------------------------------------------------
 
 //---------------------------------------------------
 //関数名	PreTranslateMessage(MSG* pMsg)
 //機能		メッセージ前処理
 //---------------------------------------------------
-BOOL COptEtc::PreTranslateMessage(MSG* pMsg)
+BOOL COptGeneral::PreTranslateMessage(MSG* pMsg)
 {
     if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_TAB && ::GetKeyState(VK_CONTROL) < 0) {
         ::PostMessage(::GetParent(this->m_hWnd), pMsg->message, VK_PRIOR, pMsg->lParam);
@@ -92,7 +92,7 @@ BOOL COptEtc::PreTranslateMessage(MSG* pMsg)
 //関数名	OnInitDialog()
 //機能		初期化
 //---------------------------------------------------
-BOOL COptEtc::OnInitDialog()
+BOOL COptGeneral::OnInitDialog()
 {
     CDialog::OnInitDialog();
 
@@ -112,7 +112,7 @@ BOOL COptEtc::OnInitDialog()
     return TRUE;
 }
 
-void COptEtc::OnShowWindow(BOOL bShow, UINT nStatus)
+void COptGeneral::OnShowWindow(BOOL bShow, UINT nStatus)
 {
     CDialog::OnShowWindow(bShow, nStatus);
     if (bShow) {
@@ -140,7 +140,7 @@ void COptEtc::OnShowWindow(BOOL bShow, UINT nStatus)
 //関数名	DestroyWindow()
 //機能		設定を反映
 //---------------------------------------------------
-BOOL COptEtc::DestroyWindow()
+BOOL COptGeneral::DestroyWindow()
 {
     WORD wVkCodeP, wModP;
     WORD wVkCodeF, wModF;
@@ -156,24 +156,24 @@ BOOL COptEtc::DestroyWindow()
     return CDialog::DestroyWindow();
 }
 
-void COptEtc::hotkeyEnablePOP()
+void COptGeneral::hotkeyEnablePOP()
 {
     m_ctrlPopupKey.EnableWindow(true);
     m_ctrlPopupKey.SetFocus();
 }
 
-void COptEtc::hotkeyDisablePOP()
+void COptGeneral::hotkeyDisablePOP()
 {
     m_ctrlPopupKey.EnableWindow(false);
 }
 
-void COptEtc::hotkeyEnableFIFO()
+void COptGeneral::hotkeyEnableFIFO()
 {
     m_ctrlFifoKey.EnableWindow(true);
     m_ctrlFifoKey.SetFocus();
 }
 
-void COptEtc::hotkeyDisableFIFO()
+void COptGeneral::hotkeyDisableFIFO()
 {
     m_ctrlFifoKey.EnableWindow(false);
 }

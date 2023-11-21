@@ -12,8 +12,8 @@
 
 #include "stdafx.h"
 
-#include "OptEtc.h"
-#include "OptVisual.h"
+#include "OptGeneral.h"
+#include "OptStyle.h"
 #include "OptPopup.h"
 #include "OptFifo.h"
 #include "OptKeySet.h"
@@ -60,15 +60,15 @@ protected:
     DECLARE_MESSAGE_MAP()
 
 private:
-    COptEtc m_EtcPage;
-    COptVisual m_VisualPage;
-    COptPopup m_PopupPage;
-    COptFifo m_FifoPage;
-    COptKeySet m_KeysetPage;
-    COptAdvanced m_AdvancedPage;
+    COptGeneral m_general;
+    COptStyle m_style;
+    COptPopup m_popup;
+    COptFifo m_fifo;
+    COptKeySet m_key;
+    COptAdvanced m_advanced;
 
-    CDialog* m_OptionPage[6];
-    int m_nPage;
+    CDialog* m_pages[6];
+    int m_nPageNo;
 };
 
 //{{AFX_INSERT_LOCATION}}
