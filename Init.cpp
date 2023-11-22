@@ -340,6 +340,9 @@ void CInit::SaveSettings()
 //---------------------------------------------------
 void CInit::writeAllInitData()
 {
+    if (m_bDebug) {
+        LOG(_T("writeAllInitData"));
+    }
     SaveSettings();
     writeEnvInitData();
 }

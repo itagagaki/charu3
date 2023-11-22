@@ -118,6 +118,7 @@
     <ClInclude Include="ChildView.h" />
     <ClInclude Include="clipboard.h" />
     <ClInclude Include="color.h" />
+    <ClInclude Include="hotkey.h" />
     <ClInclude Include="InitialDialog.h" />
     <ClInclude Include="EditDialog.h" />
     <ClInclude Include="Init.h" />

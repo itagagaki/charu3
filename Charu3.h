@@ -105,10 +105,6 @@ public:
     void keyUpDownC2(UINT uMod, UINT uVKCode, int nFlag);
     void keyUpDownMessage(UINT uMod, UINT uVKCode, int nFlag, HWND hWnd);
 
-    void registerHotkey();
-    void stopHotkey();
-    void setAppendHotKey();
-    void stopAppendHotKey();
     CString convertMacro(STRING_DATA* SourceData, CString strSelect, CString strClip, CString strSoftName);
 
     HWND getAppWnd() { return m_hSelfWnd; }
@@ -185,6 +181,12 @@ protected:
     BOOL m_isImeStatus;
     int m_nPhase;
     CString m_strSavedClipboard, m_strPreviousStocked, m_strPreviousRecordedToHistory;
+
+private:
+    void registerHotkeys();
+    void unregisterHotkeys();
+    void registerAdditionalHotkeys();
+    void unregisterAdditionalHotkeys();
 };
 
 extern CCharu3App theApp;

@@ -25,16 +25,10 @@ static char THIS_FILE[] = __FILE__;
 #include "OptMainDialog.h"
 #include "AboutDialog.h"
 #include "window.h"
+#include "hotkey.h"
 #include "key.h"
 #include "text.h"
 #include "log.h"
-
-enum {
-    HOTKEY_POPUP,
-    HOTKEY_FIFO,
-    HOTKEY_PASTE,
-    HOT_ITEM_KEY
-};
 
 #define KEY_DOWN			0x01
 #define KEY_UP				0x02
@@ -301,8 +295,8 @@ bool CCharu3App::init()
     m_keySet = m_ini.m_defKeySet;
 
     //ホットキーを設定
-    registerHotkey();
-    setAppendHotKey();
+    registerHotkeys();
+    registerAdditionalHotkeys();
 
     return true;
 }
@@ -414,11 +408,15 @@ CString CCharu3App::NewFile()
 }
 
 //---------------------------------------------------
-//関数名	registerHotkey()
+//関数名	registerHotkeys()
 //機能		ホットキーを設定する
 //---------------------------------------------------
-void CCharu3App::registerHotkey()
+void CCharu3App::registerHotkeys()
 {
+    if (m_ini.m_bDebug) {
+        LOG(_T("registerHotkeys"));
+    }
+
     UINT uMod = 0, uVK = 0;
     switch (m_ini.m_nDoubleKeyPOP) {
     case 1:	uMod = MOD_SHIFT; break;
@@ -431,13 +429,9 @@ void CCharu3App::registerHotkey()
         break;
     }
     if (!RegisterHotKey(NULL, HOTKEY_POPUP, uMod, uVK)) {//ポップアップキー
-        CString strRes;
-        (void)strRes.LoadString(APP_MES_FAILURE_HOTKEY);
-
         if (m_ini.m_bDebug) {
-            LOG(_T("False hotkey setting popup"));
+            LOG(_T("Failed to register popup hotkey"));
         }
-        //		AfxMessageBox(strRes + _T("Popup Key"),MB_ICONEXCLAMATION,0);
     }
 
     uMod = 0, uVK = 0;
@@ -452,39 +446,31 @@ void CCharu3App::registerHotkey()
         break;
     }
     if (!RegisterHotKey(NULL, HOTKEY_FIFO, uMod, uVK)) {//履歴FIFOキー
-        CString strRes;
-        (void)strRes.LoadString(APP_MES_FAILURE_HOTKEY);
-
         if (m_ini.m_bDebug) {
-            LOG(_T("False hotkey setting stuckmode"));
+            LOG(_T("Failed to register stock mode hotkey"));
         }
-        //		AfxMessageBox(strRes + _T("Stock mode Key"),MB_ICONEXCLAMATION,0);
-    }
-
-    if (m_ini.m_bDebug) {
-        LOG(_T("registerHotkey"));
     }
 }
 
 //---------------------------------------------------
-//関数名	stopHotkey()
+//関数名	unregisterHotkeys()
 //機能		ホットキーを止める
 //---------------------------------------------------
-void CCharu3App::stopHotkey()
+void CCharu3App::unregisterHotkeys()
 {
+    if (m_ini.m_bDebug) {
+        LOG(_T("unregisterHotkeys"));
+    }
+
     UnregisterHotKey(NULL, HOTKEY_POPUP);
     UnregisterHotKey(NULL, HOTKEY_FIFO);
-
-    if (m_ini.m_bDebug) {
-        LOG(_T("stopHotkey"));
-    }
 }
 
 //---------------------------------------------------
-//関数名	setAppendHotKey()
+//関数名	registerdditionalHotkeys()
 //機能		追加ホットキーを設定
 //---------------------------------------------------
-void CCharu3App::setAppendHotKey()
+void CCharu3App::registerAdditionalHotkeys()
 {
     HOT_KEY_CODE keyData;
     std::list<STRING_DATA>::iterator it;
@@ -512,10 +498,10 @@ void CCharu3App::setAppendHotKey()
                 keyData.m_hItem = hTreeItem;
                 keyData.m_dwDoubleKeyTime = 0;
                 m_hotkeyVector.insert(m_hotkeyVector.end(), keyData);//設定アレイに追加
-                int nret = RegisterHotKey(NULL, HOT_ITEM_KEY + m_hotkeyVector.size() - 1, keyData.m_uModKey, keyData.m_uVkCode);//ホットキーをレジスト
+                int nret = RegisterHotKey(NULL, HOT_ITEM_KEY + m_hotkeyVector.size() - 1, keyData.m_uModKey, keyData.m_uVkCode);
 
                 if (m_ini.m_bDebug) {
-                    LOG(_T("setAppendHotKey hotkey \"%s\" %d"), strKey.GetString(), nret);
+                    LOG(_T("registerAdditionalHotkeys hotkey \"%s\" %d"), strKey.GetString(), nret);
                 }
             }
             strKey = m_pTree->getDataOptionStr(data.m_strMacro, EXMACRO_DIRECT_COPY);
@@ -527,20 +513,21 @@ void CCharu3App::setAppendHotKey()
                 keyData.m_hItem = hTreeItem;
                 keyData.m_dwDoubleKeyTime = 0;
                 m_hotkeyVector.insert(m_hotkeyVector.end(), keyData);//設定アレイに追加
-                int nret = RegisterHotKey(NULL, HOT_ITEM_KEY + m_hotkeyVector.size() - 1, keyData.m_uModKey, keyData.m_uVkCode);//ホットキーをレジスト
+                int nret = RegisterHotKey(NULL, HOT_ITEM_KEY + m_hotkeyVector.size() - 1, keyData.m_uModKey, keyData.m_uVkCode);
 
                 if (m_ini.m_bDebug) {
-                    LOG(_T("setAppendHotKey directcopy \"%s\" %d"), strKey.GetString(), nret);
+                    LOG(_T("registerAdditionalHotkeys directcopy \"%s\" %d"), strKey.GetString(), nret);
                 }
             }
         }
     }
 }
+
 //---------------------------------------------------
-//関数名	stopAppendHotKey()
+//関数名	unregisterAdditionalHotkeys()
 //機能		追加ホットキーをすべて止める
 //---------------------------------------------------
-void CCharu3App::stopAppendHotKey()
+void CCharu3App::unregisterAdditionalHotkeys()
 {
     UnregisterHotKey(NULL, HOTKEY_PASTE);
     int nSize = m_hotkeyVector.size();
@@ -676,7 +663,7 @@ void CCharu3App::popupTreeWindow(POINT pos, bool keepSelection, HTREEITEM hOpenI
     if (m_nPhase != PHASE_IDOL) return;
     m_nPhase = PHASE_POPUP;
     m_ini.unHookKey();
-    stopAppendHotKey();//追加ホットキーを停止
+    unregisterAdditionalHotkeys();//追加ホットキーを停止
 
 	// Window::GetFocusInfo(&m_focusInfo);
 
@@ -856,7 +843,7 @@ void CCharu3App::closeTreeWindow(int nRet)
         SetTimer(m_pMainWnd->m_hWnd, TIMER_ACTIVE, m_ini.m_nWindowCheckInterval, NULL);
     }
 
-    setAppendHotKey();//追加ホットキーを設定
+    registerAdditionalHotkeys();//追加ホットキーを設定
     m_ini.setHookKey(m_hSelfWnd);
 
     if (m_pTree->GetStyle() & TVS_CHECKBOXES) {
@@ -974,7 +961,7 @@ void CCharu3App::playHotItem(int nTarget)
                 //ダイレクトコピー
                 if (keyData.m_strMacroName == EXMACRO_DIRECT_COPY) {
                     m_nPhase = PHASE_LOCK;
-                    stopAppendHotKey();//追加ホットキーを停止
+                    unregisterAdditionalHotkeys();//追加ホットキーを停止
                     STRING_DATA dataChild;
                     Window::GetCaretPos(&pos, &m_focusInfo);//キャレット位置を取得(ハンドルを取るため)
 
@@ -999,7 +986,7 @@ void CCharu3App::playHotItem(int nTarget)
 
                         m_pTree->addData(keyData.m_hItem, dataChild, true, true);
                     }
-                    setAppendHotKey();//追加ホットキーを設定
+                    registerAdditionalHotkeys();//追加ホットキーを設定
                     m_nPhase = PHASE_IDOL;
                 }
                 //ホットキー
@@ -1014,7 +1001,7 @@ void CCharu3App::playHotItem(int nTarget)
             }
             else {//定形文は一発貼り付け
                 m_nPhase = PHASE_LOCK;
-                stopAppendHotKey();//追加ホットキーを停止
+                unregisterAdditionalHotkeys();//追加ホットキーを停止
 
                 CString strClip, strPaste;
                 m_clipboard.getClipboardText(strClip, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);//クリップボードを保存
@@ -1086,7 +1073,7 @@ void CCharu3App::playHotItem(int nTarget)
                         m_pTree->deleteData(keyData.m_hItem);
                     }
                 }
-                setAppendHotKey();//追加ホットキーを設定
+                registerAdditionalHotkeys();//追加ホットキーを設定
                 m_nPhase = PHASE_IDOL;
             }
         }
@@ -1925,7 +1912,7 @@ void  CCharu3App::resetTreeDialog()
         m_pTree->CWnd::LockWindowUpdate();
         m_pTree->copyData(dataTree::ROOT, TVI_ROOT, &m_pTree->m_MyStringList);//ツリーにデータをセット
         m_pTree->CWnd::UnlockWindowUpdate();
-        setAppendHotKey();
+        registerAdditionalHotkeys();
     }
 }
 
@@ -2046,6 +2033,9 @@ BOOL CCharu3App::PreTranslateMessage(MSG* pMsg)
             return FALSE;
             break;
 
+        case 99:
+            break;
+
             //ホットアイテム
         default:
             if (m_nPhase == PHASE_IDOL) {
@@ -2076,8 +2066,8 @@ BOOL CCharu3App::PreTranslateMessage(MSG* pMsg)
 //---------------------------------------------------
 void CCharu3App::OnExit()
 {
-    stopAppendHotKey();
-    stopHotkey();
+    unregisterAdditionalHotkeys();
+    unregisterHotkeys();
     KillTimer(m_pMainWnd->m_hWnd, TIMER_ACTIVE);
     KillTimer(m_pMainWnd->m_hWnd, TIMER_MOUSE);
     if (m_hLangDll) {
@@ -2130,42 +2120,33 @@ void CCharu3App::OnOption()
     KillTimer(m_pMainWnd->m_hWnd, TIMER_ACTIVE);
     KillTimer(m_pMainWnd->m_hWnd, TIMER_MOUSE);
 
-    COptMainDialog dlgOption(NULL, m_ini.m_nOptionPage);
-    CInit iniBkup;
-
-    iniBkup = m_ini;
-
     if (nPhase == PHASE_IDOL)	m_ini.unHookKey();
-    stopAppendHotKey();//追加ホットキーを停止
-    stopHotkey();
+    unregisterAdditionalHotkeys();
+    unregisterHotkeys();
 
     if (m_ini.m_bDebug) {
         LOG(_T("OnOption"));
     }
-    int ret = dlgOption.DoModal();
-    if (ret == IDOK) {
-        m_ini.writeAllInitData();
-
-        if (m_ini.m_bDebug) {
-            LOG(_T("writeAllInitData"));
-        }
-    }
-    else m_ini = iniBkup;
-
     CRect rect;
     m_pTreeDlg->GetWindowRect(&rect);
-
-    if (iniBkup.m_strResourceName != m_ini.m_strResourceName) {
-        resetTreeDialog();
+    CInit iniBackup = m_ini;
+    COptMainDialog dlgOption(NULL, m_ini.m_nOptionPage);
+    if (dlgOption.DoModal() == IDOK) {
+        m_ini.writeAllInitData();
+        if (m_ini.m_strResourceName != iniBackup.m_strResourceName) {
+            resetTreeDialog();
+        }
+        if (nPhase == PHASE_POPUP) {
+            m_pTreeDlg->ShowWindow(false);
+            m_pTreeDlg->showWindowPos(rect.TopLeft(), m_ini.m_DialogSize, SW_SHOW, true);
+        }
+    }
+    else {
+        m_ini = iniBackup;
     }
 
-    if (ret == IDOK && nPhase == PHASE_POPUP) {
-        m_pTreeDlg->ShowWindow(false);
-        m_pTreeDlg->showWindowPos(rect.TopLeft(), m_ini.m_DialogSize, SW_SHOW, true);
-    }
-
-    registerHotkey();
-    setAppendHotKey();//追加ホットキーを設定
+    registerHotkeys();
+    registerAdditionalHotkeys();
     if (nPhase == PHASE_IDOL)	m_ini.setHookKey(m_hSelfWnd);
 
     //監視タイマーセット アイドル状態でストックモード中なら

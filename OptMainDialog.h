@@ -19,8 +19,6 @@
 #include "OptKeySet.h"
 #include "OptAdvanced.h"
 
-#define MAX_OPT_PAGE 5
-
 //---------------------------------------------------
 // COptMainDialog ダイアログ
 //---------------------------------------------------
@@ -54,21 +52,21 @@ protected:
     virtual BOOL OnInitDialog();
     afx_msg void OnSelchangeOptTab(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-    afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
-    afx_msg void OnKeydownOptTab(NMHDR* pNMHDR, LRESULT* pResult);
+    afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized);
     //}}AFX_MSG
     DECLARE_MESSAGE_MAP()
 
 private:
+    static const int NUM_PAGES = 6;
+    CDialog* m_pages[NUM_PAGES];
+    int m_nPageNo;
+
     COptGeneral m_general;
     COptStyle m_style;
     COptPopup m_popup;
     COptFifo m_fifo;
     COptKeySet m_key;
     COptAdvanced m_advanced;
-
-    CDialog* m_pages[6];
-    int m_nPageNo;
 };
 
 //{{AFX_INSERT_LOCATION}}

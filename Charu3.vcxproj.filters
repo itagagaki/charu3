@@ -218,6 +218,9 @@
     <ClInclude Include="util.h">
       <Filter>一般クラス</Filter>
     </ClInclude>
+    <ClInclude Include="hotkey.h">
+      <Filter>一般クラス</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Charu3.rc">

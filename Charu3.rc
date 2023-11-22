@@ -39,11 +39,11 @@ BEGIN
     PUSHBUTTON      "スタイル設定ファイルを読み込む",IDC_OPT_LOAD_STYLE,90,138,140,14,BS_CENTER | WS_DISABLED
     CONTROL         "Slider1",IDC_OPT_TOUMEI_SLIDER,"msctls_trackbar32",TBS_NOTICKS | WS_TABSTOP,52,179,192,13
     GROUPBOX        "配色",IDC_STATIC,16,62,260,69
-    LTEXT           "ツリービュー枠色",IDC_STATIC,55,76,76,13,SS_CENTERIMAGE
+    LTEXT           "ツリービュー枠色",IDC_STATIC,55,76,76,13,SS_CENTERIMAGE | NOT WS_GROUP
     CONTROL         "",IDC_OPT_BORDER_COLOR_PAL,"Static",SS_BLACKRECT | SS_NOTIFY,194,76,18,13
-    LTEXT           "ツリービュー背景色",IDC_STATIC,55,92,76,13,SS_CENTERIMAGE
+    LTEXT           "ツリービュー背景色",IDC_STATIC,55,92,76,13,SS_CENTERIMAGE | NOT WS_GROUP
     CONTROL         "",IDC_OPT_BACKGROUND_COLOR_PAL,"Static",SS_BLACKRECT | SS_NOTIFY,194,92,18,13
-    LTEXT           "ツリービュー文字色",IDC_STATIC,55,108,76,13,SS_CENTERIMAGE
+    LTEXT           "ツリービュー文字色",IDC_STATIC,55,108,76,13,SS_CENTERIMAGE | NOT WS_GROUP
     CONTROL         "",IDC_OPT_TEXT_COLOR_PAL,"Static",SS_BLACKRECT | SS_NOTIFY,194,108,18,13
     LTEXT           "フォント",IDC_STATIC,16,21,24,13,SS_CENTERIMAGE
     LTEXT           "サイズ",IDC_STATIC,231,21,22,13,SS_CENTERIMAGE
@@ -93,27 +93,27 @@ STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 400, 0, 0x80
 BEGIN
-    GROUPBOX        "データツリーをポップアップするホットキー",IDC_STATIC,7,7,136,77
     CONTROL         "カスタム",IDC_OPT_KEYRADIO_POP,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,16,21,40,13
     CONTROL         "Shift×2",IDC_OPT_KEYRADIO_POP2,"Button",BS_AUTORADIOBUTTON,16,35,40,13
     CONTROL         "Ctrl×2",IDC_OPT_KEYRADIO_POP3,"Button",BS_AUTORADIOBUTTON,16,49,40,13
     CONTROL         "Alt×2",IDC_OPT_KEYRADIO_POP4,"Button",BS_AUTORADIOBUTTON,16,63,40,13
-    CONTROL         "",IDC_OPT_POPUPKEY,"msctls_hotkey32",WS_BORDER,60,21,73,13
-    GROUPBOX        "ストックモードを切り替えるホットキー",IDC_STATIC,150,7,136,77
+    CONTROL         "",IDC_OPT_POPUPKEY,"msctls_hotkey32",WS_BORDER | WS_GROUP,60,21,73,13
+    GROUPBOX        "データツリーをポップアップするホットキー",IDC_STATIC,7,7,136,77
     CONTROL         "カスタム",IDC_OPT_KEYRADIO_FIFO,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,162,20,40,13
     CONTROL         "Shift×2",IDC_OPT_KEYRADIO_FIFO2,"Button",BS_AUTORADIOBUTTON,162,35,40,13
     CONTROL         "Ctrl×2",IDC_OPT_KEYRADIO_FIFO3,"Button",BS_AUTORADIOBUTTON,162,49,40,13
     CONTROL         "Alt×2",IDC_OPT_KEYRADIO_FIFO4,"Button",BS_AUTORADIOBUTTON,162,63,40,13
-    CONTROL         "",IDC_OPT_FIFO_KEY,"msctls_hotkey32",WS_BORDER,206,20,73,13
-    GROUPBOX        "通知領域のアイコンをクリックした時の動作",IDC_STATIC,7,90,280,36,WS_GROUP
+    CONTROL         "",IDC_OPT_FIFO_KEY,"msctls_hotkey32",WS_BORDER | WS_GROUP,206,20,73,13
+    GROUPBOX        "ストックモードを切り替えるホットキー",IDC_STATIC,150,7,136,77
     CONTROL         "データツリーをポップアップする",IDC_OPT_ICON_POP,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,16,104,112,13
     CONTROL         "ストックモードを切り替える",IDC_OPT_ICON_RIREKI,"Button",BS_AUTORADIOBUTTON,162,104,112,13
-    GROUPBOX        "オプション",IDC_STATIC,7,132,280,72
+    GROUPBOX        "通知領域のアイコンをクリックした時の動作",IDC_STATIC,7,90,280,36,WS_GROUP
     CONTROL         "データを貼り付け後、クリップボードに直前のテキストをセットし直す",IDC_OPT_TOCLIP,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,146,260,11
-    LTEXT           "※直前の内容がテキストでなければクリップボードを空にします",IDC_STATIC,34,159,242,8
-    LTEXT           "※チェックを入れなければ貼り付けたテキストがクリップボードに残ります",IDC_STATIC,34,171,242,8
+    LTEXT           "※直前の内容がテキストでなければクリップボードを空にします",IDC_STATIC,34,159,242,8,NOT WS_GROUP
+    LTEXT           "※チェックを入れなければ貼り付けたテキストがクリップボードに残ります",IDC_STATIC,34,171,242,8,NOT WS_GROUP
     CONTROL         "通知領域のツールチップでクリップボードのテキストを表示する",IDC_OPT_TOOLTIP_TITLE,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,184,260,11
+    GROUPBOX        "オプション",IDC_STATIC,7,132,280,72
 END
 
 IDD_SETTINGS_05_KEYS DIALOGEX 0, 0, 300, 300
@@ -151,30 +151,30 @@ BEGIN
     COMBOBOX        IDC_OPT_POPUP_POS,16,21,98,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     EDITTEXT        IDC_OPT_HoseiX,166,21,31,13,ES_RIGHT | ES_AUTOHSCROLL
     EDITTEXT        IDC_OPT_HoseiY,210,21,31,13,ES_RIGHT | ES_AUTOHSCROLL
+    LTEXT           "オフセット X",IDC_STATIC,128,21,36,13,SS_CENTERIMAGE,WS_EX_RIGHT
+    LTEXT           "Y",IDC_STATIC,200,21,8,13,SS_CENTERIMAGE,WS_EX_RIGHT
+    GROUPBOX        "ポップアップする位置",IDC_STATIC,7,7,280,36
     EDITTEXT        IDC_OPT_SELECT_BY_TYPING_PERIOD,126,63,31,13,ES_RIGHT | ES_AUTOHSCROLL
+    LTEXT           "入力が終わったと判断する時間",IDC_STATIC,16,63,103,13,SS_CENTERIMAGE
+    LTEXT           "ミリ秒",IDC_STATIC,160,63,26,13,SS_CENTERIMAGE
     CONTROL         "大文字と小文字を区別しない",IDC_OPT_SELECT_BY_TYPING_CASE_INSENSITIVE,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,81,260,11
     CONTROL         "確定した項目がデータなら貼り付けを実行する",IDC_OPT_SELECT_BY_TYPING_AUTO_PASTE,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,95,260,11
     CONTROL         "確定した項目がフォルダなら展開する",IDC_OPT_SELECT_BY_TYPING_AUTO_EXPAND,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,109,260,11
+    GROUPBOX        "項目の名前をタイピングすることで選択",IDC_STATIC,7,49,280,78
     CONTROL         "名前, データ, 日付を表示",IDC_OPT_TOOLTIP_01,"Button",BS_AUTORADIOBUTTON | WS_GROUP,16,147,108,13
     CONTROL         "データを表示",IDC_OPT_TOOLTIP_02,"Button",BS_AUTORADIOBUTTON,128,147,66,13
     CONTROL         "なし",IDC_OPT_TOOLTIP_03,"Button",BS_AUTORADIOBUTTON,198,147,40,13
-    CONTROL         "垂直スクロールバー",IDC_OPT_SCROLLBAR_VERTICAL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,190,260,11
+    GROUPBOX        "ツールチップ",IDC_STATIC,7,133,280,36,WS_GROUP
+    CONTROL         "垂直スクロールバー",IDC_OPT_SCROLLBAR_VERTICAL,"Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,16,190,260,11
     CONTROL         "水平スクロールバー",IDC_OPT_SCROLLBAR_HORIZONTAL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,204,260,11
     CONTROL         "シングルクリックでフォルダーを展開／折りたたみ",IDC_OPT_SINGLE_EXPAND,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,218,260,11
     CONTROL         "シングルクリックで貼り付けを実行する",IDC_OPT_SINGLE_ENTER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,232,260,11
     CONTROL         "アイテム選択状態を保持する",IDC_OPT_SELECT_SAVE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,246,260,11
     CONTROL         "フォルダーの展開と折りたたみの状態を保持する",IDC_OPT_FOLDER_OPEN,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,260,260,11
-    LTEXT           "オフセット X",IDC_STATIC,128,21,36,13,SS_CENTERIMAGE,WS_EX_RIGHT
-    LTEXT           "ミリ秒",IDC_STATIC,160,63,26,13,SS_CENTERIMAGE
-    LTEXT           "Y",IDC_STATIC,200,21,8,13,SS_CENTERIMAGE,WS_EX_RIGHT
     GROUPBOX        "その他のオプション",IDC_STATIC,7,175,280,106
-    GROUPBOX        "ポップアップする位置",IDC_STATIC,7,7,280,36
-    GROUPBOX        "項目の名前をタイピングすることで選択",IDC_STATIC,7,49,280,78
-    GROUPBOX        "ツールチップ",IDC_STATIC,7,133,280,36
-    LTEXT           "入力が終わったと判断する時間",IDC_STATIC,16,63,103,13,SS_CENTERIMAGE
 END
 
 IDD_SETTINGS_04_STOCKMODE DIALOGEX 0, 0, 300, 300
@@ -185,21 +185,21 @@ BEGIN
     CONTROL         "なにもしない",IDC_OPT_STOCK_NONE,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,16,21,60,13
     CONTROL         "先入れ先出し(FIFO)",IDC_OPT_STOCK_FIFO,"Button",BS_AUTORADIOBUTTON,16,35,86,13
     CONTROL         "先入れ後出し(LIFO)",IDC_OPT_STOCK_LIFO,"Button",BS_AUTORADIOBUTTON,16,49,86,13
+    GROUPBOX        "ストックモード中の貼り付け動作",IDC_STATIC,7,7,280,63,WS_GROUP
     EDITTEXT        IDC_OPT_SOUND_COPY,16,89,168,13,ES_AUTOHSCROLL
     PUSHBUTTON      "テスト",IDC_PLAY_COPY,188,89,32,13
     PUSHBUTTON      "参照...",IDC_FILE_SOUND_COPY,222,89,32,13
     PUSHBUTTON      "なし",IDC_NOSOUND_COPY,256,89,32,13
+    LTEXT           "ストックモード中、収集（ストック）時に再生するサウンド",IDC_STATIC,16,77,176,8
     EDITTEXT        IDC_OPT_SOUND_PASTE,16,119,168,13,ES_AUTOHSCROLL
     PUSHBUTTON      "テスト",IDC_PLAY_PASTE,188,119,32,13
     PUSHBUTTON      "参照...",IDC_FILE_SOUND_PASTE,222,119,32,13
     PUSHBUTTON      "なし",IDC_NOSOUND_PASTE,256,119,32,13
+    LTEXT           "ストックから取り出したデータを貼り付ける時に再生するサウンド",IDC_STATIC,16,107,194,8
     CONTROL         "ストックモードをオフにする際にワンタイム項目をクリアする",IDC_OPT_CLEAR_ONETIME,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,141,260,11
     CONTROL         "ワンタイム項目が無くなったらストックモードをオフにする",IDC_ALL_DEL_OFF,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,155,260,11
     CONTROL         "直前と同じデータはストックしない",IDC_OPT_DUPLICATION,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,169,260,11
-    GROUPBOX        "ストックモード中の貼り付け動作",IDC_STATIC,7,7,280,63,WS_GROUP
-    LTEXT           "ストックモード中、収集（ストック）時に再生するサウンド",IDC_STATIC,16,77,176,8
-    LTEXT           "ストックから取り出したデータを貼り付ける時に再生するサウンド",IDC_STATIC,16,107,194,8
 END
 
 IDD_SETTINGS DIALOGEX 0, 0, 315, 340
@@ -1075,28 +1075,28 @@ STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 400, 0, 0x80
 BEGIN
-    GROUPBOX        "Hotkey to popup data tree",IDC_STATIC,7,7,136,77
     CONTROL         "Custom",IDC_OPT_KEYRADIO_POP,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,16,21,40,13
     CONTROL         "Shiftﾗ2",IDC_OPT_KEYRADIO_POP2,"Button",BS_AUTORADIOBUTTON,16,35,40,13
     CONTROL         "Ctrlﾗ2",IDC_OPT_KEYRADIO_POP3,"Button",BS_AUTORADIOBUTTON,16,49,40,13
     CONTROL         "Altﾗ2",IDC_OPT_KEYRADIO_POP4,"Button",BS_AUTORADIOBUTTON,16,63,40,13
-    CONTROL         "",IDC_OPT_POPUPKEY,"msctls_hotkey32",WS_BORDER,60,21,73,13
-    GROUPBOX        "Hotkey to toggle stock mode",IDC_STATIC,150,7,136,78
+    CONTROL         "",IDC_OPT_POPUPKEY,"msctls_hotkey32",WS_BORDER | WS_GROUP,60,21,73,13
+    GROUPBOX        "Hotkey to popup data tree",IDC_STATIC,7,7,136,77
     CONTROL         "Custom",IDC_OPT_KEYRADIO_FIFO,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,162,20,40,13
     CONTROL         "Shiftﾗ2",IDC_OPT_KEYRADIO_FIFO2,"Button",BS_AUTORADIOBUTTON,162,35,40,13
     CONTROL         "Ctrlﾗ2",IDC_OPT_KEYRADIO_FIFO3,"Button",BS_AUTORADIOBUTTON,162,49,40,13
     CONTROL         "Altﾗ2",IDC_OPT_KEYRADIO_FIFO4,"Button",BS_AUTORADIOBUTTON,162,63,40,13
-    CONTROL         "",IDC_OPT_FIFO_KEY,"msctls_hotkey32",WS_BORDER,206,20,73,13
-    GROUPBOX        "Behavior when you click the notification area icon",IDC_STATIC,7,90,280,36,WS_GROUP
+    CONTROL         "",IDC_OPT_FIFO_KEY,"msctls_hotkey32",WS_BORDER | WS_GROUP,206,20,73,13
+    GROUPBOX        "Hotkey to toggle stock mode",IDC_STATIC,150,7,136,78
     CONTROL         "Popup data tree",IDC_OPT_ICON_POP,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,19,105,112,13
     CONTROL         "Toggle stock mode",IDC_OPT_ICON_RIREKI,"Button",BS_AUTORADIOBUTTON,162,104,112,13
-    GROUPBOX        "Options",IDC_STATIC,7,132,280,72
+    GROUPBOX        "Behavior when you click the notification area icon",IDC_STATIC,7,90,280,36,WS_GROUP
     CONTROL         "Reset the previous text in the clipboard after pasting data",IDC_OPT_TOCLIP,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,146,260,11
-    LTEXT           "* It will be empty if the previous content of the clipboard is not text",IDC_STATIC,34,159,242,8
-    LTEXT           "* If not checked, the pasted text remains on the clipboard",IDC_STATIC,34,171,242,8
+                    "Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,16,146,260,11
+    LTEXT           "* It will be empty if the previous content of the clipboard is not text",IDC_STATIC,34,159,242,8,NOT WS_GROUP
+    LTEXT           "* If not checked, the pasted text remains on the clipboard",IDC_STATIC,34,171,242,8,NOT WS_GROUP
     CONTROL         "Use the tooltip on the notification area icon to display clipboard text",IDC_OPT_TOOLTIP_TITLE,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,184,260,11
+    GROUPBOX        "Options",IDC_STATIC,7,132,280,72
 END
 
 IDD_SETTINGS_02_STYLE DIALOGEX 0, 0, 300, 300
@@ -1114,11 +1114,11 @@ BEGIN
     PUSHBUTTON      "Read Style Settings File",IDC_OPT_LOAD_STYLE,80,138,140,14,BS_CENTER | WS_DISABLED
     CONTROL         "Slider1",IDC_OPT_TOUMEI_SLIDER,"msctls_trackbar32",TBS_NOTICKS | WS_TABSTOP,52,179,192,13
     GROUPBOX        "Color",IDC_STATIC,16,62,260,69
-    LTEXT           "Tree View Border",IDC_STATIC,55,76,76,13,SS_CENTERIMAGE
+    LTEXT           "Tree View Border",IDC_STATIC,55,76,76,13,SS_CENTERIMAGE | NOT WS_GROUP
     CONTROL         "",IDC_OPT_BORDER_COLOR_PAL,"Static",SS_BLACKRECT | SS_NOTIFY,194,76,18,13
-    LTEXT           "Tree View Background",IDC_STATIC,55,92,76,13,SS_CENTERIMAGE
+    LTEXT           "Tree View Background",IDC_STATIC,55,92,76,13,SS_CENTERIMAGE | NOT WS_GROUP
     CONTROL         "",IDC_OPT_BACKGROUND_COLOR_PAL,"Static",SS_BLACKRECT | SS_NOTIFY,194,92,18,13
-    LTEXT           "Tree View Text",IDC_STATIC,55,108,76,13,SS_CENTERIMAGE
+    LTEXT           "Tree View Text",IDC_STATIC,55,108,76,13,SS_CENTERIMAGE | NOT WS_GROUP
     CONTROL         "",IDC_OPT_TEXT_COLOR_PAL,"Static",SS_BLACKRECT | SS_NOTIFY,194,108,18,13
     LTEXT           "Font",IDC_STATIC,16,21,22,13,SS_CENTERIMAGE
     LTEXT           "Size",IDC_STATIC,231,21,22,13,SS_CENTERIMAGE
@@ -1137,35 +1137,35 @@ BEGIN
     COMBOBOX        IDC_OPT_POPUP_POS,16,21,120,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     EDITTEXT        IDC_OPT_HoseiX,180,21,31,13,ES_RIGHT | ES_AUTOHSCROLL
     EDITTEXT        IDC_OPT_HoseiY,226,21,31,13,ES_RIGHT | ES_AUTOHSCROLL
+    LTEXT           "Offset X",IDC_STATIC,148,21,28,13,SS_CENTERIMAGE | NOT WS_GROUP,WS_EX_RIGHT
+    LTEXT           "Y",IDC_STATIC,214,21,8,13,SS_CENTERIMAGE | NOT WS_GROUP,WS_EX_RIGHT
+    GROUPBOX        "Location to Popup",IDC_STATIC,7,7,280,36
     EDITTEXT        IDC_OPT_SELECT_BY_TYPING_PERIOD,154,63,31,13,ES_RIGHT | ES_AUTOHSCROLL
+    LTEXT           "Time to determine that typing is finished",IDC_STATIC,16,63,134,13,SS_CENTERIMAGE | NOT WS_GROUP
+    LTEXT           "ms",IDC_STATIC,188,63,26,13,SS_CENTERIMAGE | NOT WS_GROUP
     CONTROL         "Case Insensitive",IDC_OPT_SELECT_BY_TYPING_CASE_INSENSITIVE,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,81,260,11
     CONTROL         "Perform the paste operation when the finalized item is a data",IDC_OPT_SELECT_BY_TYPING_AUTO_PASTE,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,95,260,11
     CONTROL         "Expand when the finalized item is a folder",IDC_OPT_SELECT_BY_TYPING_AUTO_EXPAND,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,109,260,11
+    GROUPBOX        "Select Item by Typing",IDC_STATIC,7,49,280,78
     CONTROL         "Show Name, Data, Date and Time",IDC_OPT_TOOLTIP_01,
                     "Button",BS_AUTORADIOBUTTON | WS_GROUP,16,147,133,13
     CONTROL         "Show Data",IDC_OPT_TOOLTIP_02,"Button",BS_AUTORADIOBUTTON,153,147,62,13
     CONTROL         "None",IDC_OPT_TOOLTIP_03,"Button",BS_AUTORADIOBUTTON,219,147,40,13
+    GROUPBOX        "Tooltip",IDC_STATIC,7,133,280,36,WS_GROUP
     CONTROL         "Vertical Scrollbar",IDC_OPT_SCROLLBAR_VERTICAL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,190,260,11
     CONTROL         "Horizontal Scrollbar",IDC_OPT_SCROLLBAR_HORIZONTAL,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,204,260,11
     CONTROL         "Expand/Collapse folders with a single click",IDC_OPT_SINGLE_EXPAND,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,218,260,11
+    CONTROL         "Perform the paste operation with a single click",IDC_OPT_SINGLE_ENTER,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,232,260,11
     CONTROL         "Keep item selection state",IDC_OPT_SELECT_SAVE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,246,260,11
     CONTROL         "Keep expanded/collapsed state of folders",IDC_OPT_FOLDER_OPEN,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,260,260,11
-    LTEXT           "Offset X",IDC_STATIC,148,21,28,13,SS_CENTERIMAGE,WS_EX_RIGHT
-    LTEXT           "ms",IDC_STATIC,188,63,26,13,SS_CENTERIMAGE
-    LTEXT           "Y",IDC_STATIC,214,21,8,13,SS_CENTERIMAGE,WS_EX_RIGHT
     GROUPBOX        "More Options",IDC_STATIC,7,175,280,106
-    GROUPBOX        "Location to Popup",IDC_STATIC,7,7,280,36
-    GROUPBOX        "Select Item by Typing",IDC_STATIC,7,49,280,78
-    GROUPBOX        "Tooltip",IDC_STATIC,7,133,280,36
-    LTEXT           "Time to determine that typing is finished",IDC_STATIC,16,63,134,13,SS_CENTERIMAGE
-    CONTROL         "Perform the paste operation with a single click",IDC_OPT_SINGLE_ENTER,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,232,260,11
 END
 
 IDD_SETTINGS_04_STOCKMODE DIALOGEX 0, 0, 300, 300
@@ -1176,23 +1176,23 @@ BEGIN
     CONTROL         "Nothing",IDC_OPT_STOCK_NONE,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,16,21,60,13
     CONTROL         "First-In First-Out (FIFO)",IDC_OPT_STOCK_FIFO,"Button",BS_AUTORADIOBUTTON,16,35,90,13
     CONTROL         "Last-In First-Out (LIFO)",IDC_OPT_STOCK_LIFO,"Button",BS_AUTORADIOBUTTON,16,49,90,13
+    GROUPBOX        "Paste Behavior in Stock Mode",IDC_STATIC,7,7,280,63,WS_GROUP
     EDITTEXT        IDC_OPT_SOUND_COPY,16,89,150,13,ES_AUTOHSCROLL
     PUSHBUTTON      "Test",IDC_PLAY_COPY,170,89,38,13
     PUSHBUTTON      "Browse...",IDC_FILE_SOUND_COPY,210,89,38,13
     PUSHBUTTON      "None",IDC_NOSOUND_COPY,250,89,38,13
+    LTEXT           "Sound when collecting data in stock mode",IDC_STATIC,16,77,176,8
     EDITTEXT        IDC_OPT_SOUND_PASTE,16,119,150,13,ES_AUTOHSCROLL
     PUSHBUTTON      "Test",IDC_PLAY_PASTE,170,119,38,13
     PUSHBUTTON      "Browse...",IDC_FILE_SOUND_PASTE,210,119,38,13
     PUSHBUTTON      "None",IDC_NOSOUND_PASTE,250,119,38,13
+    LTEXT           "Sound when pasting data fetched from stock",IDC_STATIC,16,107,144,8
     CONTROL         "Clean up one-time items when turning off stock mode",IDC_OPT_CLEAR_ONETIME,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,141,260,11
     CONTROL         "Turn off stock mode when one-time items are gone",IDC_ALL_DEL_OFF,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,155,260,11
     CONTROL         "Do not collect the same data as immediately before",IDC_OPT_DUPLICATION,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,169,260,11
-    GROUPBOX        "Paste Behavior in Stock Mode",IDC_STATIC,7,7,280,63,WS_GROUP
-    LTEXT           "Sound when collecting data in stock mode",IDC_STATIC,16,77,176,8
-    LTEXT           "Sound when pasting data fetched from stock",IDC_STATIC,16,107,144,8
 END
 
 IDD_SETTINGS_05_KEYS DIALOGEX 0, 0, 300, 300
