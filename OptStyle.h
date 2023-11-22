@@ -51,9 +51,6 @@ protected:
 
 // インプリメンテーション
 protected:
-    void setPalet(CEdit* edit, CPaletStatic* stPal);
-    void setTextToPalet(CEdit* edit, CPaletStatic* stPal);
-
     // 生成されたメッセージ マップ関数
     //{{AFX_MSG(COptStyle)
     afx_msg void OnOptBorderColorPal();
@@ -72,7 +69,8 @@ public:
     void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 
 private:
-    void ReadStyleFile();
+    void updateColor(CEdit* edit, CPaletStatic* stPal);
+    void pickColor(CEdit* edit, CPaletStatic* stPal);
     void SetOpacityText(int value);
 };
 
