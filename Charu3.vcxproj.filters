@@ -1,252 +1,196 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="あまり変更しない">
-      <UniqueIdentifier>{f8844b84-bcbb-4e1f-b9e7-75c01b5c2f8c}</UniqueIdentifier>
+    <Filter Include="controls">
+      <UniqueIdentifier>{35142dcb-bd93-4d65-8337-c10fc0f9b4c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="あまり変更しない\Resource Files">
+    <Filter Include="dialogs">
+      <UniqueIdentifier>{a172bd89-0fd7-469e-be98-018e9b271234}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dialogs\settings">
+      <UniqueIdentifier>{c48d5123-2a78-4f0c-bb39-30395cb07073}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
       <UniqueIdentifier>{9294db98-f3dc-4610-ae82-a00fd9f2d426}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ツリー＆データ">
-      <UniqueIdentifier>{1ed713bf-7878-4eea-9012-ce8f71ad703e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="メインC++">
-      <UniqueIdentifier>{35c21cb0-3610-440f-94dc-7ebcff62bc55}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="メインヘッダ">
-      <UniqueIdentifier>{1315e66c-a4a6-42ca-839f-251118e75869}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="一般クラス">
-      <UniqueIdentifier>{70d8db3f-5d31-46af-ab26-f2591478f602}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="機能ダイアログ">
-      <UniqueIdentifier>{0afa0706-2c95-4f6c-a76a-a8c1d1004fc0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="設定クラス">
-      <UniqueIdentifier>{ddfa7c7b-77a0-4af4-a6c1-e87c596ac7a5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="設定クラス\ダイアログ">
-      <UniqueIdentifier>{adf5f5cc-f690-47d6-880b-2660034c626d}</UniqueIdentifier>
+    <Filter Include="util">
+      <UniqueIdentifier>{c38de862-257f-440d-9876-a3d28d638db1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Charu3.cpp">
-      <Filter>メインC++</Filter>
-    </ClCompile>
-    <ClCompile Include="MainFrm.cpp">
-      <Filter>メインC++</Filter>
-    </ClCompile>
-    <ClCompile Include="OptGeneral.cpp">
-      <Filter>設定クラス\ダイアログ</Filter>
-    </ClCompile>
-    <ClCompile Include="OptFifo.cpp">
-      <Filter>設定クラス\ダイアログ</Filter>
-    </ClCompile>
-    <ClCompile Include="OptKeySet.cpp">
-      <Filter>設定クラス\ダイアログ</Filter>
-    </ClCompile>
-    <ClCompile Include="OptKeySetEditDlg.cpp">
-      <Filter>設定クラス\ダイアログ</Filter>
-    </ClCompile>
-    <ClCompile Include="OptMainDialog.cpp">
-      <Filter>設定クラス\ダイアログ</Filter>
-    </ClCompile>
-    <ClCompile Include="OptPopup.cpp">
-      <Filter>設定クラス\ダイアログ</Filter>
-    </ClCompile>
-    <ClCompile Include="OptStyle.cpp">
-      <Filter>設定クラス\ダイアログ</Filter>
-    </ClCompile>
-    <ClCompile Include="clipboard.cpp">
-      <Filter>一般クラス</Filter>
-    </ClCompile>
     <ClCompile Include="MyEditCtrl.cpp">
-      <Filter>一般クラス</Filter>
-    </ClCompile>
-    <ClCompile Include="PaletStatic.cpp">
-      <Filter>一般クラス</Filter>
-    </ClCompile>
-    <ClCompile Include="text.cpp">
-      <Filter>一般クラス</Filter>
-    </ClCompile>
-    <ClCompile Include="EditDialog.cpp">
-      <Filter>機能ダイアログ</Filter>
-    </ClCompile>
-    <ClCompile Include="SearchDialog.cpp">
-      <Filter>機能ダイアログ</Filter>
-    </ClCompile>
-    <ClCompile Include="Init.cpp">
-      <Filter>設定クラス</Filter>
+      <Filter>controls</Filter>
     </ClCompile>
     <ClCompile Include="MyHotkeyCtrl.cpp">
-      <Filter>設定クラス</Filter>
+      <Filter>controls</Filter>
     </ClCompile>
-    <ClCompile Include="ChildView.cpp">
-      <Filter>あまり変更しない</Filter>
+    <ClCompile Include="OptGeneral.cpp">
+      <Filter>dialogs\settings</Filter>
     </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>あまり変更しない</Filter>
+    <ClCompile Include="OptFifo.cpp">
+      <Filter>dialogs\settings</Filter>
     </ClCompile>
-    <ClCompile Include="Charu3Tree.cpp">
-      <Filter>ツリー＆データ</Filter>
+    <ClCompile Include="OptStyle.cpp">
+      <Filter>dialogs\settings</Filter>
     </ClCompile>
-    <ClCompile Include="color.cpp">
-      <Filter>一般クラス</Filter>
+    <ClCompile Include="OptPopup.cpp">
+      <Filter>dialogs\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="OptMainDialog.cpp">
+      <Filter>dialogs\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="OptKeySet.cpp">
+      <Filter>dialogs\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="OptKeySetEditDlg.cpp">
+      <Filter>dialogs\settings</Filter>
     </ClCompile>
     <ClCompile Include="OptAdvanced.cpp">
-      <Filter>設定クラス\ダイアログ</Filter>
-    </ClCompile>
-    <ClCompile Include="InitialDialog.cpp">
-      <Filter>機能ダイアログ</Filter>
-    </ClCompile>
-    <ClCompile Include="MyTreeDialog.cpp">
-      <Filter>ツリー＆データ</Filter>
+      <Filter>dialogs\settings</Filter>
     </ClCompile>
     <ClCompile Include="AboutDialog.cpp">
-      <Filter>機能ダイアログ</Filter>
+      <Filter>dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="EditDialog.cpp">
+      <Filter>dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="InitialDialog.cpp">
+      <Filter>dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchDialog.cpp">
+      <Filter>dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="Init.cpp" />
+    <ClCompile Include="clipboard.cpp" />
+    <ClCompile Include="PaletStatic.cpp" />
+    <ClCompile Include="Charu3.cpp" />
+    <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="Charu3Tree.cpp" />
+    <ClCompile Include="MyTreeDialog.cpp" />
+    <ClCompile Include="ChildView.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="text.cpp">
+      <Filter>util</Filter>
     </ClCompile>
     <ClCompile Include="log.cpp">
-      <Filter>一般クラス</Filter>
-    </ClCompile>
-    <ClCompile Include="jsonHelper.cpp">
-      <Filter>一般クラス</Filter>
+      <Filter>util</Filter>
     </ClCompile>
     <ClCompile Include="window.cpp">
-      <Filter>一般クラス</Filter>
+      <Filter>util</Filter>
     </ClCompile>
     <ClCompile Include="key.cpp">
-      <Filter>一般クラス</Filter>
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="jsonHelper.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="color.cpp">
+      <Filter>util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Charu3.h">
-      <Filter>メインヘッダ</Filter>
-    </ClInclude>
-    <ClInclude Include="MainFrm.h">
-      <Filter>メインヘッダ</Filter>
-    </ClInclude>
-    <ClInclude Include="OptGeneral.h">
-      <Filter>設定クラス\ダイアログ</Filter>
-    </ClInclude>
-    <ClInclude Include="OptFifo.h">
-      <Filter>設定クラス\ダイアログ</Filter>
-    </ClInclude>
-    <ClInclude Include="OptKeySet.h">
-      <Filter>設定クラス\ダイアログ</Filter>
-    </ClInclude>
-    <ClInclude Include="OptKeySetEditDlg.h">
-      <Filter>設定クラス\ダイアログ</Filter>
-    </ClInclude>
-    <ClInclude Include="OptMainDialog.h">
-      <Filter>設定クラス\ダイアログ</Filter>
-    </ClInclude>
-    <ClInclude Include="OptPopup.h">
-      <Filter>設定クラス\ダイアログ</Filter>
-    </ClInclude>
-    <ClInclude Include="OptStyle.h">
-      <Filter>設定クラス\ダイアログ</Filter>
-    </ClInclude>
-    <ClInclude Include="clipboard.h">
-      <Filter>一般クラス</Filter>
-    </ClInclude>
     <ClInclude Include="MyEditCtrl.h">
-      <Filter>一般クラス</Filter>
-    </ClInclude>
-    <ClInclude Include="PaletStatic.h">
-      <Filter>一般クラス</Filter>
-    </ClInclude>
-    <ClInclude Include="text.h">
-      <Filter>一般クラス</Filter>
-    </ClInclude>
-    <ClInclude Include="EditDialog.h">
-      <Filter>機能ダイアログ</Filter>
-    </ClInclude>
-    <ClInclude Include="SearchDialog.h">
-      <Filter>機能ダイアログ</Filter>
-    </ClInclude>
-    <ClInclude Include="Init.h">
-      <Filter>設定クラス</Filter>
+      <Filter>controls</Filter>
     </ClInclude>
     <ClInclude Include="MyHotkeyCtrl.h">
-      <Filter>設定クラス</Filter>
+      <Filter>controls</Filter>
     </ClInclude>
-    <ClInclude Include="ChildView.h">
-      <Filter>あまり変更しない</Filter>
+    <ClInclude Include="OptGeneral.h">
+      <Filter>dialogs\settings</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>あまり変更しない</Filter>
+    <ClInclude Include="OptFifo.h">
+      <Filter>dialogs\settings</Filter>
     </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>あまり変更しない</Filter>
+    <ClInclude Include="OptStyle.h">
+      <Filter>dialogs\settings</Filter>
     </ClInclude>
-    <ClInclude Include="Charu3Tree.h">
-      <Filter>ツリー＆データ</Filter>
+    <ClInclude Include="OptPopup.h">
+      <Filter>dialogs\settings</Filter>
     </ClInclude>
-    <ClInclude Include="nlomann\json.hpp">
-      <Filter>一般クラス</Filter>
+    <ClInclude Include="OptMainDialog.h">
+      <Filter>dialogs\settings</Filter>
     </ClInclude>
-    <ClInclude Include="color.h">
-      <Filter>一般クラス</Filter>
+    <ClInclude Include="OptKeySet.h">
+      <Filter>dialogs\settings</Filter>
+    </ClInclude>
+    <ClInclude Include="OptKeySetEditDlg.h">
+      <Filter>dialogs\settings</Filter>
     </ClInclude>
     <ClInclude Include="OptAdvanced.h">
-      <Filter>設定クラス\ダイアログ</Filter>
-    </ClInclude>
-    <ClInclude Include="InitialDialog.h">
-      <Filter>機能ダイアログ</Filter>
-    </ClInclude>
-    <ClInclude Include="MyTreeDialog.h">
-      <Filter>ツリー＆データ</Filter>
+      <Filter>dialogs\settings</Filter>
     </ClInclude>
     <ClInclude Include="AboutDialog.h">
-      <Filter>機能ダイアログ</Filter>
+      <Filter>dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="EditDialog.h">
+      <Filter>dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="InitialDialog.h">
+      <Filter>dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchDialog.h">
+      <Filter>dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="Init.h" />
+    <ClInclude Include="clipboard.h" />
+    <ClInclude Include="hotkey.h" />
+    <ClInclude Include="PaletStatic.h" />
+    <ClInclude Include="search.h" />
+    <ClInclude Include="Charu3.h" />
+    <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="Charu3Tree.h" />
+    <ClInclude Include="MyTreeDialog.h" />
+    <ClInclude Include="ChildView.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="util.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="text.h">
+      <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="log.h">
-      <Filter>一般クラス</Filter>
-    </ClInclude>
-    <ClInclude Include="search.h">
-      <Filter>一般クラス</Filter>
-    </ClInclude>
-    <ClInclude Include="jsonHelper.h">
-      <Filter>一般クラス</Filter>
+      <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="window.h">
-      <Filter>一般クラス</Filter>
+      <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="key.h">
-      <Filter>一般クラス</Filter>
+      <Filter>util</Filter>
     </ClInclude>
-    <ClInclude Include="util.h">
-      <Filter>一般クラス</Filter>
+    <ClInclude Include="nlomann\json.hpp">
+      <Filter>util</Filter>
     </ClInclude>
-    <ClInclude Include="hotkey.h">
-      <Filter>一般クラス</Filter>
+    <ClInclude Include="jsonHelper.h">
+      <Filter>util</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Charu3.rc">
-      <Filter>メインC++</Filter>
-    </ResourceCompile>
+    <ClInclude Include="color.h">
+      <Filter>util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\c2p256_16_run.ico">
-      <Filter>あまり変更しない\Resource Files</Filter>
+      <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\c2p256_16_stop.ico">
-      <Filter>あまり変更しない\Resource Files</Filter>
+      <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\itemIcon.bmp">
-      <Filter>あまり変更しない\Resource Files</Filter>
+      <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\itemIconPink.bmp">
-      <Filter>あまり変更しない\Resource Files</Filter>
+      <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\Charu3-SE.ico">
-      <Filter>あまり変更しない\Resource Files</Filter>
+      <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Charu3.rc2">
-      <Filter>あまり変更しない\Resource Files</Filter>
+      <Filter>Resource Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Charu3.rc" />
   </ItemGroup>
 </Project>
