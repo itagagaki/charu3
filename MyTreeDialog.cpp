@@ -612,8 +612,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
     {
         HTREEITEM hTarget = (HTREEITEM)pMsg->wParam;
         if (hTarget) {
-            STRING_DATA data = m_pTreeCtrl->getData(hTarget);
-            changeTipString(data);
+            changeTipString(m_pTreeCtrl->getDataPtr(hTarget));
         }
         else {
             m_toolTip.Activate(FALSE);
@@ -882,13 +881,13 @@ void CMyTreeDialog::OnDelete()
         return;
     }
     m_isModal = true;
-    STRING_DATA data = m_pTreeCtrl->getData(hTreeItem);
+    STRING_DATA* data = m_pTreeCtrl->getDataPtr(hTreeItem);
     CString strMessage;
-    strMessage.Format(APP_MES_DELETE_OK, data.m_strTitle);
+    strMessage.Format(APP_MES_DELETE_OK, data->m_strTitle);
     int nRet = AfxMessageBox(strMessage, MB_YESNO | MB_ICONEXCLAMATION | MB_APPLMODAL);
     RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
     if (nRet == IDYES) {
-        if ((data.m_cKind & KIND_FOLDER_ALL) && m_pTreeCtrl->ItemHasChildren(hTreeItem)) {
+        if ((data->m_cKind & KIND_FOLDER_ALL) && m_pTreeCtrl->ItemHasChildren(hTreeItem)) {
             (void)strMessage.LoadString(APP_MES_DELETE_FOLDER);
             nRet = AfxMessageBox(strMessage, MB_YESNO | MB_ICONEXCLAMATION | MB_APPLMODAL);
             RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
@@ -1298,7 +1297,7 @@ bool CMyTreeDialog::selectByTyping(UINT uKeyCode)
 //関数名	changeTipString(CString strData)
 //機能		引数のテキストをツールチップに設定
 //---------------------------------------------------
-void CMyTreeDialog::changeTipString(STRING_DATA data)
+void CMyTreeDialog::changeTipString(STRING_DATA* data)
 {
     CString strTip = _T("");
     CString strRes;
@@ -1307,7 +1306,7 @@ void CMyTreeDialog::changeTipString(STRING_DATA data)
     m_toolTip.Activate(FALSE);
     if (theApp.m_ini.m_nToolTip == 0) {
         (void)strRes.LoadString(APP_INF_TIP_DATA01);
-        CString s = data.m_strTitle;
+        CString s = data->m_strTitle;
         int max = 100;
         if (s.GetLength() > max) {
             s = s.Left(max - 3) + _T("...");
@@ -1316,9 +1315,9 @@ void CMyTreeDialog::changeTipString(STRING_DATA data)
         gap = true;
     }
     if (theApp.m_ini.m_nToolTip != 2) {
-        if (data.m_strData != _T("")) {
+        if (data->m_strData != _T("")) {
             if (gap) strTip += _T("\n\n");
-            CString s = data.m_strData;
+            CString s = data->m_strData;
             (void)s.Replace(_T('\t'), _T(' '));
             int max = 500;
             if (s.GetLength() > max) {
@@ -1327,9 +1326,9 @@ void CMyTreeDialog::changeTipString(STRING_DATA data)
             strTip += s;
             gap = true;
         }
-        if (data.m_strMacro != _T("")) {
+        if (data->m_strMacro != _T("")) {
             (void)strRes.LoadString(APP_INF_TIP_DATA02);
-            CString s = data.m_strMacro;
+            CString s = data->m_strMacro;
             (void)s.Replace(_T('\t'), _T(' '));
             (void)s.Replace(_T("\n"), _T("\n  "));
             int max = 300;
@@ -1344,9 +1343,9 @@ void CMyTreeDialog::changeTipString(STRING_DATA data)
     if (theApp.m_ini.m_nToolTip == 0) {
         if (gap) strTip += _T("\n");
         (void)strRes.LoadString(APP_INF_TIP_DATA03);
-        strTip += strRes + CTime(data.m_timeCreate).Format(_T("%x %X"));
+        strTip += strRes + CTime(data->m_timeCreate).Format(_T("%x %X"));
         (void)strRes.LoadString(APP_INF_TIP_DATA04);
-        strTip += strRes + CTime(data.m_timeEdit).Format(_T("%x %X"));
+        strTip += strRes + CTime(data->m_timeEdit).Format(_T("%x %X"));
     }
     m_toolTip.UpdateTipText(strTip, m_pTreeCtrl); // NOTE: Experiments have shown that if strTip exceeds 1024 characters, the app will crash after MFC fails with Debug Assertion Failed.
     m_toolTip.Activate(TRUE);

@@ -478,7 +478,7 @@ void CCharu3App::registerAdditionalHotkeys()
     m_hotkeyVector.clear();
 
     CString strKey;
-    STRING_DATA data;
+    STRING_DATA* data;
     HTREEITEM hRet = NULL;
 
     if (m_isStockMode)
@@ -488,13 +488,13 @@ void CCharu3App::registerAdditionalHotkeys()
     HTREEITEM hTreeItem = m_pTree->GetRootItem();
     for (int i = 0; i < nSize && hTreeItem; hTreeItem = m_pTree->getTrueNextItem(hTreeItem), i++) {
         if (hTreeItem) {
-            data = m_pTree->getData(hTreeItem);
-            strKey = m_pTree->getDataOptionStr(data.m_strMacro, EXMACRO_HOT_KEY);
+            data = m_pTree->getDataPtr(hTreeItem);
+            strKey = m_pTree->getDataOptionStr(data->m_strMacro, EXMACRO_HOT_KEY);
             if (strKey != "") {
                 //ホットキー設定を変換
                 convHotKeyConf(strKey, &keyData.m_uModKey, &keyData.m_uVkCode, &keyData.m_isDoubleClick);
                 keyData.m_strMacroName = EXMACRO_HOT_KEY;
-                keyData.m_nDataID = data.m_nMyID;
+                keyData.m_nDataID = data->m_nMyID;
                 keyData.m_hItem = hTreeItem;
                 keyData.m_dwDoubleKeyTime = 0;
                 m_hotkeyVector.insert(m_hotkeyVector.end(), keyData);//設定アレイに追加
@@ -504,12 +504,12 @@ void CCharu3App::registerAdditionalHotkeys()
                     LOG(_T("registerAdditionalHotkeys hotkey \"%s\" %d"), strKey.GetString(), nret);
                 }
             }
-            strKey = m_pTree->getDataOptionStr(data.m_strMacro, EXMACRO_DIRECT_COPY);
+            strKey = m_pTree->getDataOptionStr(data->m_strMacro, EXMACRO_DIRECT_COPY);
             if (strKey != "") {
                 //ホットキー設定を変換
                 convHotKeyConf(strKey, &keyData.m_uModKey, &keyData.m_uVkCode, &keyData.m_isDoubleClick);
                 keyData.m_strMacroName = EXMACRO_DIRECT_COPY;
-                keyData.m_nDataID = data.m_nMyID;
+                keyData.m_nDataID = data->m_nMyID;
                 keyData.m_hItem = hTreeItem;
                 keyData.m_dwDoubleKeyTime = 0;
                 m_hotkeyVector.insert(m_hotkeyVector.end(), keyData);//設定アレイに追加
@@ -808,9 +808,8 @@ void CCharu3App::closeTreeWindow(int nRet)
                 if (m_pTree->GetItemState(*it, TVIF_HANDLE)) {
                     HTREEITEM hItem = *it;
                     *it = NULL;
-                    data = m_pTree->getData(hItem);
-                    if (data.m_cKind & KIND_ONETIME) {
-                        m_hSelectItemBkup = NULL;
+                    if (m_pTree->getDataPtr(hItem)->m_cKind & KIND_ONETIME) {
+                        //m_hSelectItemBkup = NULL;
                     }
                 }
             }

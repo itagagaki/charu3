@@ -180,7 +180,7 @@ void CCharu3Tree::setImageList(POINT posSize, CString strFileName, CString strPa
 
         m_ImageList->Add(&Bitmap, RGB(0, 255, 0));
         Bitmap.DeleteObject();
-        SetImageList(m_ImageList, TVSIL_NORMAL);
+        CTreeCtrl::SetImageList(m_ImageList, TVSIL_NORMAL);
     }
 }
 
@@ -977,12 +977,9 @@ HTREEITEM CCharu3Tree::addData(HTREEITEM hTreeItem, STRING_DATA data, bool isNew
     data.m_nParentID = dataTree::ROOT;
     //NULLでくると親はROOTになる
     if (hTreeItem) {
-        HTREEITEM hParentItem;
-        if (isChild)	hParentItem = hTreeItem;
-        else		hParentItem = GetParentItem(hTreeItem);
+        HTREEITEM hParentItem = isChild ? hTreeItem : GetParentItem(hTreeItem);
         if (hParentItem) {
-            STRING_DATA* parentDataPtr = getDataPtr(hParentItem);
-            data.m_nParentID = parentDataPtr->m_nMyID;
+            data.m_nParentID = getDataPtr(hParentItem)->m_nMyID;
         }
     }
 
@@ -1702,10 +1699,10 @@ CString CCharu3Tree::getDataOptionStr(CString strData, CString strKind)
 //---------------------------------------------------
 void CCharu3Tree::addDataToRecordFolder(STRING_DATA data, CString strClipBkup)
 {
-    int nSize = m_MyStringList.size(), nRirekiCount, nIsLock, i, nDoDuplication;
+    int nSize = m_MyStringList.size(), nRirekiCount, nIsLock, i;
     int nNumber = *m_pRecNumber;
 
-    STRING_DATA parentData;
+    STRING_DATA* parentData;
     HTREEITEM hTreeItem, hStart = nullptr;
 
     if (theApp.m_ini.m_bDebug) {
@@ -1714,28 +1711,27 @@ void CCharu3Tree::addDataToRecordFolder(STRING_DATA data, CString strClipBkup)
     }
     //	hTreeItem = (HTREEITEM)::SendMessage(m_hWnd, TVM_GETNEXTITEM, TVGN_ROOT, 0);
     for (hTreeItem = GetRootItem(), i = 0; i < nSize && hTreeItem && hTreeItem != hStart; i++, hTreeItem = getTrueNextItem(hTreeItem)) {
-        parentData = getData(hTreeItem);
+        parentData = getDataPtr(hTreeItem);
         hStart = GetRootItem();
         //履歴フォルダか判別
-        if (parentData.m_cKind & KIND_RIREKI) {
-            nDoDuplication = getDataOption(parentData.m_strMacro, _T("duplicationcheck"));
-            if ((nDoDuplication && strClipBkup != data.m_strData) || !nDoDuplication) {
+        if (parentData->m_cKind & KIND_RIREKI) {
+            if ((strClipBkup != data.m_strData) || !(getDataOption(parentData->m_strMacro, _T("duplicationcheck")))) {
                 if (*m_pRecNumber == nNumber)	nNumber++;
 
                 if (theApp.m_ini.m_bDebug) {
-                    LOG(_T("number:%d handle:%p title:%s ID:%d"), i, hTreeItem, parentData.m_strTitle.GetString(), parentData.m_nMyID);
+                    LOG(_T("number:%d handle:%p title:%s ID:%d"), i, hTreeItem, parentData->m_strTitle.GetString(), parentData->m_nMyID);
                 }
 
-                nIsLock = getDataOption(parentData.m_strMacro, _T("lock"));//履歴種別を取得
+                nIsLock = getDataOption(parentData->m_strMacro, _T("lock"));//履歴種別を取得
                 if (!nIsLock)	data.m_cKind = KIND_ONETIME;
                 else			data.m_cKind = KIND_LOCK;
 
-                nRirekiCount = getDataOption(parentData.m_strMacro, _T("count"));//履歴数を取得
+                nRirekiCount = getDataOption(parentData->m_strMacro, _T("count"));//履歴数を取得
                 if (nRirekiCount <= 0) nRirekiCount = 2;
                 int nDeleteCount = nRirekiCount;
                 deleteExcessChildren(GetChildItem(hTreeItem), &nDeleteCount);//余計な子を消す
 
-                int nTitleLength = getDataOption(parentData.m_strMacro, _T("titlelen"));//タイトルの文字数
+                int nTitleLength = getDataOption(parentData->m_strMacro, _T("titlelen"));//タイトルの文字数
                 CString strTitle;
                 if (nTitleLength > 0 && nTitleLength < 256) {
                     strTitle = makeTitle(data.m_strData, nTitleLength);
@@ -1744,7 +1740,7 @@ void CCharu3Tree::addDataToRecordFolder(STRING_DATA data, CString strClipBkup)
                     strTitle = makeTitle(data.m_strData);
                 data.m_strTitle = strTitle;
 
-                if (getDataOption(parentData.m_strMacro, _T("number"))) {//番号をつけるかどうか
+                if (getDataOption(parentData->m_strMacro, _T("number"))) {//番号をつけるかどうか
                     data.m_strTitle.Format(_T("%02d : %s"), *m_pRecNumber, strTitle.GetString());
                     if (nNumber > nRirekiCount) nNumber = 0;
                 }
@@ -1752,11 +1748,11 @@ void CCharu3Tree::addDataToRecordFolder(STRING_DATA data, CString strClipBkup)
                 // archiving
                 {
                     int archiveBy;
-                    if (hasDataOption(parentData.m_strMacro, _T("archiveunit"))) {
-                        archiveBy = getDataOption(parentData.m_strMacro, _T("archiveunit"));
+                    if (hasDataOption(parentData->m_strMacro, _T("archiveunit"))) {
+                        archiveBy = getDataOption(parentData->m_strMacro, _T("archiveunit"));
                     }
                     else {
-                        archiveBy = getDataOption(parentData.m_strMacro, _T("classhistory")); // for historical compatibility
+                        archiveBy = getDataOption(parentData->m_strMacro, _T("classhistory")); // for historical compatibility
                     }
                     if (archiveBy > 0) {
                         archiveHistory(hTreeItem, archiveBy);
@@ -1802,9 +1798,8 @@ void CCharu3Tree::archiveHistory(HTREEITEM hTreeItem, int nRirekiCount)
             HTREEITEM hLastChild = getLastChild(hTreeItem);
 
             //データを取得
-            STRING_DATA data, dataTarget;
-            data = getData(hLastChild);
-            dataTarget = getData(hFirstFolder);
+            STRING_DATA data = getData(hLastChild);
+            STRING_DATA* dataTarget = getDataPtr(hFirstFolder);
 
             //元データを取得
             TV_ITEM TreeCtrlItem;
@@ -1825,7 +1820,7 @@ void CCharu3Tree::archiveHistory(HTREEITEM hTreeItem, int nRirekiCount)
             AddTreeCtrlItem.hInsertAfter = TVI_FIRST;
             AddTreeCtrlItem.hParent = hFirstFolder;
 
-            data.m_nParentID = dataTarget.m_nMyID;
+            data.m_nParentID = dataTarget->m_nMyID;
             editData(hLastChild, data);
             InsertItem(&AddTreeCtrlItem);
             checkOut(hLastChild);
@@ -1922,11 +1917,9 @@ HTREEITEM CCharu3Tree::moveFolderTop(HTREEITEM hTreeItem)
     HTREEITEM hRet = nullptr;
     if (!hTreeItem) return hRet;
 
-    STRING_DATA dataF;
     HTREEITEM hParent = GetParentItem(hTreeItem);
-
     if (!hParent) hParent = GetRootItem();
-    dataF = getData(hTreeItem);
+    STRING_DATA* dataF= getDataPtr(hTreeItem);
 
     //ツリーデータを取得
     TV_ITEM TreeCtrlItemFrom;
@@ -1943,7 +1936,7 @@ HTREEITEM CCharu3Tree::moveFolderTop(HTREEITEM hTreeItem)
     AddTreeCtrlItem.item.mask = TreeCtrlItemFrom.mask;
     AddTreeCtrlItem.item.iImage = TreeCtrlItemFrom.iImage;
     AddTreeCtrlItem.item.iSelectedImage = TreeCtrlItemFrom.iSelectedImage;
-    AddTreeCtrlItem.item.pszText = dataF.m_strTitle.GetBuffer(dataF.m_strTitle.GetLength());
+    AddTreeCtrlItem.item.pszText = dataF->m_strTitle.GetBuffer(dataF->m_strTitle.GetLength());
     AddTreeCtrlItem.item.lParam = TreeCtrlItemFrom.lParam;
     AddTreeCtrlItem.hParent = hParent;//フォルダ
 

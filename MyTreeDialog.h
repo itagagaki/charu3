@@ -124,7 +124,7 @@ protected:
 
 private:
     void popupMenu(CPoint point);
-    void changeTipString(STRING_DATA data);
+    void changeTipString(STRING_DATA* data);
     bool selectByTyping(UINT uKeyCode);
     void GetFindParam();
     void FindNext(bool backward);
