@@ -30,13 +30,13 @@ public:
     // ダイアログ データ
     //{{AFX_DATA(COptStyle)
     enum { IDD = IDD_SETTINGS_02_STYLE };
-    CString	m_strBorderColor;
+    CString m_strBorderColor;
+    CString m_strBackgroundColor;
+    CString m_strTextColor;
     CPaletStatic m_ctrlBorderPal;
-    CString	m_strBackgroundColor;
-    CPaletStatic m_ctrlBackgroundPal;
-    CString	m_strTextColor;
     CPaletStatic m_ctrlTextPal;
-    CComboBox	m_ctrlFontCombo;
+    CPaletStatic m_ctrlBackgroundPal;
+    CComboBox m_ctrlFontCombo;
     //}}AFX_DATA
 
 // オーバーライド

@@ -30,10 +30,10 @@ COptStyle::COptStyle(CWnd* pParent /*=NULL*/)
     //{{AFX_DATA_INIT(COptStyle)
     //}}AFX_DATA_INIT
     m_strBorderColor.Format(_T("%.6x"), theApp.m_ini.m_nBorderColor);
-    m_ctrlBorderPal.setColor(Color::Swap_RGB_BGR(theApp.m_ini.m_nBorderColor));
     m_strBackgroundColor.Format(_T("%.6x"), theApp.m_ini.m_nBackgroundColor);
-    m_ctrlBackgroundPal.setColor(Color::Swap_RGB_BGR(theApp.m_ini.m_nBackgroundColor));
     m_strTextColor.Format(_T("%.6x"), theApp.m_ini.m_nTextColor);
+    m_ctrlBorderPal.setColor(Color::Swap_RGB_BGR(theApp.m_ini.m_nBorderColor));
+    m_ctrlBackgroundPal.setColor(Color::Swap_RGB_BGR(theApp.m_ini.m_nBackgroundColor));
     m_ctrlTextPal.setColor(Color::Swap_RGB_BGR(theApp.m_ini.m_nTextColor));
 }
 
@@ -256,7 +256,6 @@ void COptStyle::OnBnClickedOptLoadStyle()
     CString strRes;
     (void)strRes.LoadString(APP_INF_FILE_FILTER_VISUAL_PREF);
     CFileDialog fileDialog(TRUE, _T("json"), NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, strRes, NULL);
-    CString prevIconResourceName = theApp.m_ini.m_strResourceName;
     fileDialog.m_ofn.lpstrInitialDir = theApp.m_ini.m_strAppPath;
     if (IDOK == fileDialog.DoModal()) {
         if (theApp.m_ini.m_bDebug) {
@@ -282,9 +281,23 @@ void COptStyle::OnBnClickedOptLoadStyle()
             m_strTextColor.Format(_T("%.6x"), Color::Parse(str));
             ((CEdit*)GetDlgItem(IDC_OPT_TEXT_COLOR))->SetWindowText(m_strTextColor);
         }
-        //if (theApp.m_ini.m_strResourceName != prevIconResourceName) {
-        //    theApp.resetTreeDialog();
-        //}
+        CString cstr = jsonHelper::GetStringPropertyAsCString(style, "fontName", "");
+        int number= m_ctrlFontCombo.FindStringExact(0, cstr);
+        if (CB_ERR != number) {
+            m_ctrlFontCombo.SetCurSel(number);
+        }
+        number = static_cast<int>(jsonHelper::GetNumberProperty(style, "fontSize", -1));
+        CWnd* ctrlWin;
+        if (number >= 0) {
+            cstr.Format(_T("%d"), number);
+            ctrlWin = GetDlgItem(IDC_OPT_FONT_SIZE);
+            ctrlWin->SetWindowTextW(cstr);
+        }
+        cstr = jsonHelper::GetStringPropertyAsCString(style, "iconFile", "");
+        if (cstr != "") {
+            ctrlWin = GetDlgItem(IDC_OPT_ICON_FILE_NAME);
+            ctrlWin->SetWindowTextW(cstr);
+        }
     }
 }
 
