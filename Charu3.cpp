@@ -866,7 +866,7 @@ void CCharu3App::SaveData()
     }
 
     CString strRes;
-    (void)strRes.LoadString(APP_MES_FAILURE_DATA_SAVE);
+    (void)strRes.LoadString(APP_MES_SAVE_FAILURE);
     AfxMessageBox(strRes, MB_ICONEXCLAMATION, 0);
 }
 
@@ -1589,7 +1589,7 @@ CString CCharu3App::convertMacro(STRING_DATA* SourceData, CString strSelect, CSt
                         }
                         else {
                             CString strRes;
-                            (void)strRes.LoadString(APP_MES_NO_ENTRY_FUNC);
+                            (void)strRes.LoadString(APP_MES_CANT_GET_FUNCTION_ADDRESS);
                             AfxMessageBox(strRes, MB_ICONEXCLAMATION | MB_SYSTEMMODAL, 0);
                         }
                         FreeLibrary(hDLL);
@@ -2176,7 +2176,7 @@ void CCharu3App::OnExport()
     if (file != _T("")) {
         if (!m_pTree->saveDataToFile(file, DAT_FORMAT, NULL)) {
             CString strRes;
-            (void)strRes.LoadString(APP_MES_FAILURE_DATA_SAVE);
+            (void)strRes.LoadString(APP_MES_EXPORT_FAILURE);
             AfxMessageBox(strRes, MB_ICONEXCLAMATION, 0);
         }
     }

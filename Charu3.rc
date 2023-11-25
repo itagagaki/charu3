@@ -661,84 +661,21 @@ END
 STRINGTABLE
 BEGIN
     AFX_IDS_APP_TITLE       "Charu3 SE"
-    AFX_IDS_IDLEMESSAGE     "ﾚﾃﾞｨ"
 END
 
 STRINGTABLE
 BEGIN
-    ID_INDICATOR_EXT        "EXT"
-    ID_INDICATOR_CAPS       "CAP"
-    ID_INDICATOR_NUM        "NUM"
-    ID_INDICATOR_SCRL       "SCRL"
-    ID_INDICATOR_OVR        "上書"
-    ID_INDICATOR_REC        "記録"
-    ID_INDICATOR_KANA       "ｶﾅ"
-END
-
-STRINGTABLE
-BEGIN
-    ID_APP_ABOUT            "ﾌﾟﾛｸﾞﾗﾑの情報、ﾊﾞｰｼﾞｮﾝそして著作権を表示\nﾊﾞｰｼﾞｮﾝ情報"
-    ID_APP_EXIT             "ｱﾌﾟﾘｹｰｼｮﾝを終了し、ﾌｧｲﾙの保存を指示\n終了"
-END
-
-STRINGTABLE
-BEGIN
-    ID_NEXT_PANE            "次のｳｨﾝﾄﾞｳに切り替える\n次のﾍﾟｲﾝ"
-    ID_PREV_PANE            "前のｳｨﾝﾄﾞｳに切り替える\n前のﾍﾟｲﾝ"
-END
-
-STRINGTABLE
-BEGIN
-    ID_WINDOW_SPLIT         "作業中のｳｨﾝﾄﾞｳを分割\n分割"
-END
-
-STRINGTABLE
-BEGIN
-    ID_EDIT_CLEAR           "選択範囲を消去\n消去"
-    ID_EDIT_CLEAR_ALL       "すべて消去\nすべて消去"
-    ID_EDIT_COPY            "選択範囲をｺﾋﾟｰしてｸﾘｯﾌﾟﾎﾞｰﾄﾞに保存\nｺﾋﾟｰ"
-    ID_EDIT_CUT             "選択範囲を切り取ってｸﾘｯﾌﾟﾎﾞｰﾄﾞに保存\n切り取り"
-    ID_EDIT_FIND            "指定した文字列の検索\n検索"
-    ID_EDIT_PASTE           "ｸﾘｯﾌﾟﾎﾞｰﾄﾞの内容を貼り付け\n貼り付け"
-    ID_EDIT_REPEAT          "直前に行った動作を繰り返す\n繰り返し"
-    ID_EDIT_REPLACE         "指定した文字列を他の文字列で置換\n置換"
-    ID_EDIT_SELECT_ALL      "ﾌｧｲﾙ内のすべてを選択\nすべて選択"
-    ID_EDIT_UNDO            "直前に行った動作を元に戻す\n元に戻す"
-    ID_EDIT_REDO            "直前に行った動作を繰り返す\n繰り返す"
-END
-
-STRINGTABLE
-BEGIN
-    AFX_IDS_SCSIZE          "ｳｨﾝﾄﾞｳのｻｲｽﾞを変更"
-    AFX_IDS_SCMOVE          "ｳｨﾝﾄﾞｳの位置を変更"
-    AFX_IDS_SCMINIMIZE      "ｳｨﾝﾄﾞｳを最小化する"
-    AFX_IDS_SCMAXIMIZE      "ｳｨﾝﾄﾞｳを最大化する"
-    AFX_IDS_SCNEXTWINDOW    "次のｳｨﾝﾄﾞｳに切り替える"
-    AFX_IDS_SCPREVWINDOW    "前のｳｨﾝﾄﾞｳに切り替える"
-    AFX_IDS_SCCLOSE         "作業中のｳｨﾝﾄﾞｳを閉じ、変更したﾌｧｲﾙの保存を指示"
-END
-
-STRINGTABLE
-BEGIN
-    AFX_IDS_SCRESTORE       "ｳｨﾝﾄﾞｳを通常のｻｲｽﾞに戻す"
-    AFX_IDS_SCTASKLIST      "ｱﾌﾟﾘｹｰｼｮﾝの切り替え"
-END
-
-STRINGTABLE
-BEGIN
-    APP_MES_FAILURE_HOTKEY  "ホットキーの設定に失敗"
     APP_MES_DELETE_OK       """%s"" を削除しますか？"
-    APP_MES_NO_ENTRY_FUNC   "関数のエントリがありません。"
+    APP_MES_CANT_GET_FUNCTION_ADDRESS "関数のアドレスを取得できません。"
     APP_MES_NOT_FOUND       "%sが見つかりません。"
-    APP_MES_FAILURE_DATA_SAVE "データの保存に失敗しました。ファイルがリードオンリーか確認してください。"
-    APP_MES_DECIDE_ICONS    "アイコンの自動識別をしますか？"
+    APP_MES_SAVE_FAILURE    "ファイルにデータを保存できませんでした。ファイルやフォルダーが読み取り専用になっていないか確認してください。"
+    APP_MES_DECIDE_ICONS    "すべての項目のアイコンを自動で選びなおしますか？"
     APP_MES_UNKNOWN_FORMAT  "未知のデータ形式です。"
-    APP_MES_ADD_OK          "%sを追加しますか？"
+    APP_MES_EXPORT_FAILURE  "ファイルにデータをエクスポートできませんでした。ファイルやフォルダーが読み取り専用になっていないか確認してください。"
 END
 
 STRINGTABLE
 BEGIN
-    APP_MES_ADD_OK2         "%sを追加しました。"
     APP_MES_ALL_EMPTY       "データと名前が空です"
     APP_MES_NOT_FOUND_WRITEPLUGIN "書き込みに適切なプラグインがありません。"
     APP_MES_NOT_FOUND_READPLUGIN "読み込みに適切なプラグインがありません。"
@@ -802,60 +739,10 @@ BEGIN
     APP_INF_COPY            " - コピー"
     APP_INF_NEW_FOLDER      "新しいフォルダー"
     APP_INF_CLASS_HISTORY   "アーカイブされた履歴"
-    APP_INF_DEF_FONT        "ＭＳ Ｐゴシック"
-    APP_INF_DEF_ICON        "標準リソース"
-    APP_INF_CHECKBOX_IMPORT "ルートにインポートする"
-    APP_INF_CHECKBOX_MACRO  "マクロプラグインを自動切換えする"
 END
 
 STRINGTABLE
 BEGIN
-    APP_INF_MACRO_TEMPLATE01 "西暦4桁@D@<charuMACRO>$Y/$M/$D</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE02 "和暦@D@<charuMACRO>平成$WH年$M月$D日</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE03 "曜日@D@<charuMACRO>$d曜日</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE04 "曜日(英語)@D@<charuMACRO>$ddd</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE05 
-                            "時間(23:59:59)@D@<charuMACRO>$H:$m:$s</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE06 
-                            "時間(PM 11:59:59)@D@<charuMACRO>$AMPM $h:$m:$s</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE07 
-                            "時間(午後 11時 59分)@D@<charuMACRO>$ampm $h時 $m分</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE08 
-                            "シェル実行@D@<charuMACRO>$SHELL<実行ファイル名>$SHELL</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE09 
-                            "関連付け実行@D@<charuMACRO>$RELATE<ファイル名>$RELATE</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE10 "選択文字列@D@<charuMACRO>$SEL</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE11 "クリップボード@D@<charuMACRO>$CLIP</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE12 
-                            "プラグイン@D@<charuMACRO>$PLUG-IN<DLL,文字列>$PLUG-IN</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE13 
-                            "キー入力@D@<charuMACRO_KEY>キー;回数;待ち</charuMACRO_KEY>"
-    APP_INF_MACRO_TEMPLATE14 
-                            "入力プラグイン@D@<charuMACRO>$PLUG-IN<.\\plugin\\input.dll,タイトル>$PLUG-IN</charuMACRO>"
-END
-
-STRINGTABLE
-BEGIN
-    APP_INF_MACRO_TEMPLATE15 "end"
-    APP_INF_EXMACRO_TEMPLATE01 "履歴データ個数@R@Count="
-    APP_INF_EXMACRO_TEMPLATE02 "先頭に移動@F@Move=yes/no"
-    APP_INF_EXMACRO_TEMPLATE03 "履歴に付番する@R@Number=yes/no"
-    APP_INF_EXMACRO_TEMPLATE04 "履歴タイプ@R@Lock=yes/no"
-    APP_INF_EXMACRO_TEMPLATE05 "起動時にクリアする@R@ClearRec=yes/no"
-    APP_INF_EXMACRO_TEMPLATE06 "マクロ@A@Macro=マクロ名"
-    APP_INF_EXMACRO_TEMPLATE07 "貼り付け前キー@A@BeforKey=キー;回数;待ち"
-    APP_INF_EXMACRO_TEMPLATE08 "貼り付け後キー@A@AfterKey=キー;回数;待ち"
-    APP_INF_EXMACRO_TEMPLATE09 "ホットキー@A@HotKey="
-    APP_INF_EXMACRO_TEMPLATE10 "履歴をアーカイブする単位@R@ArchiveUnit="
-END
-
-STRINGTABLE
-BEGIN
-    APP_INF_EXMACRO_TEMPLATE11 "タイトルの長さ@F@TitleLen="
-    APP_INF_EXMACRO_TEMPLATE12 "ダイレクトコピー@A@DirectCopyKey="
-    APP_INF_EXMACRO_TEMPLATE13 "重複チェック@R@DuplicationCheck="
-    APP_INF_EXMACRO_TEMPLATE14 "end"
-    IDS_PREFERENCE_LOAD_VISUAL "スタイル設定ファイルを読み込む"
     APP_INF_DATA_PERMANENT  "恒久データ"
     APP_INF_DATA_ONETIME    "ワンタイムデータ"
     APP_INF_FOLDER_REGULAR  "通常フォルダー"
@@ -927,26 +814,6 @@ IDR_MAINFRAME           ICON                    "res\\Charu3-SE.ico"
 IDI_RUN256              ICON                    "res\\c2p256_16_run.ico"
 
 IDI_STOP256             ICON                    "res\\c2p256_16_stop.ico"
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Accelerator
-//
-
-IDR_MAINFRAME ACCELERATORS
-BEGIN
-    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
-    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
-    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT, NOINVERT
-    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
-    VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
-    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
-    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
-    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
-    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
-    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
-END
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1710,84 +1577,21 @@ END
 STRINGTABLE
 BEGIN
     AFX_IDS_APP_TITLE       "Charu3 SE"
-    AFX_IDS_IDLEMESSAGE     "????"
 END
 
 STRINGTABLE
 BEGIN
-    ID_INDICATOR_EXT        "EXT"
-    ID_INDICATOR_CAPS       "CAP"
-    ID_INDICATOR_NUM        "NUM"
-    ID_INDICATOR_SCRL       "SCRL"
-    ID_INDICATOR_OVR        "??"
-    ID_INDICATOR_REC        "??"
-    ID_INDICATOR_KANA       "??"
-END
-
-STRINGTABLE
-BEGIN
-    ID_APP_ABOUT            "???????????????????????????\n?????????"
-    ID_APP_EXIT             "????????????????????????\n??"
-END
-
-STRINGTABLE
-BEGIN
-    ID_NEXT_PANE            "??????????????\n??????"
-    ID_PREV_PANE            "??????????????\n??????"
-END
-
-STRINGTABLE
-BEGIN
-    ID_WINDOW_SPLIT         "?????????????\n??"
-END
-
-STRINGTABLE
-BEGIN
-    ID_EDIT_CLEAR           "???????\n??"
-    ID_EDIT_CLEAR_ALL       "?????\n?????"
-    ID_EDIT_COPY            "????????????????????????\n????"
-    ID_EDIT_CUT             "???????????????????????\n????"
-    ID_EDIT_FIND            "??????????\n??"
-    ID_EDIT_PASTE           "??????????????????\n????"
-    ID_EDIT_REPEAT          "?????????????\n????"
-    ID_EDIT_REPLACE         "????????????????\n??"
-    ID_EDIT_SELECT_ALL      "????????????\n?????"
-    ID_EDIT_UNDO            "?????????????\n????"
-    ID_EDIT_REDO            "?????????????\n????"
-END
-
-STRINGTABLE
-BEGIN
-    AFX_IDS_SCSIZE          "??????????????"
-    AFX_IDS_SCMOVE          "????????????"
-    AFX_IDS_SCMINIMIZE      "????????????"
-    AFX_IDS_SCMAXIMIZE      "????????????"
-    AFX_IDS_SCNEXTWINDOW    "??????????????"
-    AFX_IDS_SCPREVWINDOW    "??????????????"
-    AFX_IDS_SCCLOSE         "????????????????????????????"
-END
-
-STRINGTABLE
-BEGIN
-    AFX_IDS_SCRESTORE       "?????????????????"
-    AFX_IDS_SCTASKLIST      "??????????????"
-END
-
-STRINGTABLE
-BEGIN
-    APP_MES_FAILURE_HOTKEY  "???????????"
     APP_MES_DELETE_OK       "Delete ""%s"" ?"
-    APP_MES_NO_ENTRY_FUNC   "??????????????"
+    APP_MES_CANT_GET_FUNCTION_ADDRESS "Can't get function address."
     APP_MES_NOT_FOUND       "%s not found."
-    APP_MES_FAILURE_DATA_SAVE "????????????????????????????????????"
-    APP_MES_DECIDE_ICONS    "???????????????"
+    APP_MES_SAVE_FAILURE    "Could not save data to file. Check to see if the file or folder is read-only."
+    APP_MES_DECIDE_ICONS    "Want to automatically select icons for all items?"
     APP_MES_UNKNOWN_FORMAT  "Unknown format."
-    APP_MES_ADD_OK          "%s????????"
+    APP_MES_EXPORT_FAILURE  "Could not export data to file. Check to see if the file or folder is read-only."
 END
 
 STRINGTABLE
 BEGIN
-    APP_MES_ADD_OK2         "%s????????"
     APP_MES_ALL_EMPTY       "Both name and data are empty."
     APP_MES_NOT_FOUND_WRITEPLUGIN "No plugin for writing."
     APP_MES_NOT_FOUND_READPLUGIN "No plugin for reading."
@@ -1851,61 +1655,10 @@ BEGIN
     APP_INF_COPY            " - Copy"
     APP_INF_NEW_FOLDER      "New folder"
     APP_INF_CLASS_HISTORY   "Archived history"
-    APP_INF_DEF_FONT        "MS P????"
-    APP_INF_DEF_ICON        "??????"
-    APP_INF_CHECKBOX_IMPORT "???????????"
-    APP_INF_CHECKBOX_MACRO  "????????????????"
 END
 
 STRINGTABLE
 BEGIN
-    APP_INF_MACRO_TEMPLATE01 "??4?@D@<charuMACRO>$Y/$M/$D</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE02 "??@D@<charuMACRO>??$WH?$M?$D?</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE03 "??@D@<charuMACRO>$d??</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE04 "??(??)@D@<charuMACRO>$ddd</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE05 
-                            "??(23:59:59)@D@<charuMACRO>$H:$m:$s</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE06 
-                            "??(PM 11:59:59)@D@<charuMACRO>$AMPM $h:$m:$s</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE07 
-                            "??(?? 11? 59?)@D@<charuMACRO>$ampm $h? $m?</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE08 
-                            "?????@D@<charuMACRO>$SHELL<???????>$SHELL</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE09 
-                            "??????@D@<charuMACRO>$RELATE<?????>$RELATE</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE10 "?????@D@<charuMACRO>$SEL</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE11 "???????@D@<charuMACRO>$CLIP</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE12 
-                            "?????@D@<charuMACRO>$PLUG-IN<DLL,???>$PLUG-IN</charuMACRO>"
-    APP_INF_MACRO_TEMPLATE13 
-                            "????@D@<charuMACRO_KEY>??;??;??</charuMACRO_KEY>"
-    APP_INF_MACRO_TEMPLATE14 
-                            "???????@D@<charuMACRO>$PLUG-IN<.\\plugin\\input.dll,????>$PLUG-IN</charuMACRO>"
-END
-
-STRINGTABLE
-BEGIN
-    APP_INF_MACRO_TEMPLATE15 "end"
-    APP_INF_EXMACRO_TEMPLATE01 "???@R@Count="
-    APP_INF_EXMACRO_TEMPLATE02 "?????@F@Move=yes/no"
-    APP_INF_EXMACRO_TEMPLATE03 "???????@R@Number=yes/no"
-    APP_INF_EXMACRO_TEMPLATE04 "?????@R@Lock=yes/no"
-    APP_INF_EXMACRO_TEMPLATE05 "????????@R@ClearRec=yes/no"
-    APP_INF_EXMACRO_TEMPLATE06 "???@A@Macro=????"
-    APP_INF_EXMACRO_TEMPLATE07 "???????@A@BeforKey=??;??;??"
-    APP_INF_EXMACRO_TEMPLATE08 "???????@A@AfterKey=??;??;??"
-    APP_INF_EXMACRO_TEMPLATE09 "?????@A@HotKey="
-    APP_INF_EXMACRO_TEMPLATE10 "????@R@ClassHistory=??"
-END
-
-STRINGTABLE
-BEGIN
-    APP_INF_EXMACRO_TEMPLATE11 "???????@F@TitleLen="
-    APP_INF_EXMACRO_TEMPLATE12 "????????@A@DirectCopyKey="
-    APP_INF_EXMACRO_TEMPLATE13 "??????@R@DuplicationCheck="
-    APP_INF_EXMACRO_TEMPLATE14 "end"
-    IDS_PREFERENCE_LOAD_VISUAL "???????????????"
-    APP_INF_DATA_PERMANENT  "Permanent Data"
     APP_INF_DATA_ONETIME    "One-Time Data"
     APP_INF_FOLDER_REGULAR  "Regular Folder"
     APP_INF_FOLDER_HISTORY  "History Folder"

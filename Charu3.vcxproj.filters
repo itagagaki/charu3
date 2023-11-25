@@ -62,7 +62,6 @@
     </ClCompile>
     <ClCompile Include="Init.cpp" />
     <ClCompile Include="clipboard.cpp" />
-    <ClCompile Include="PaletStatic.cpp" />
     <ClCompile Include="Charu3.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="Charu3Tree.cpp" />
@@ -86,6 +85,9 @@
     </ClCompile>
     <ClCompile Include="color.cpp">
       <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="PaletStatic.cpp">
+      <Filter>controls</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -134,7 +136,6 @@
     <ClInclude Include="Init.h" />
     <ClInclude Include="clipboard.h" />
     <ClInclude Include="hotkey.h" />
-    <ClInclude Include="PaletStatic.h" />
     <ClInclude Include="search.h" />
     <ClInclude Include="Charu3.h" />
     <ClInclude Include="MainFrm.h" />
@@ -166,6 +167,9 @@
     </ClInclude>
     <ClInclude Include="color.h">
       <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="PaletStatic.h">
+      <Filter>controls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

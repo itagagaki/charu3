@@ -1227,7 +1227,7 @@ void CMyTreeDialog::OnExport()
         if (file != _T("")) {
             if (!m_pTreeCtrl->saveDataToFile(file, DAT_FORMAT, hTreeItem)) {
                 CString strRes;
-                (void)strRes.LoadString(APP_MES_FAILURE_DATA_SAVE);
+                (void)strRes.LoadString(APP_MES_EXPORT_FAILURE);
                 AfxMessageBox(strRes, MB_ICONEXCLAMATION, 0);
             }
         }
