@@ -1,8 +1,9 @@
 # Charu3 SE
 
 
-Charu3 is a text input support tool for Windows that can be called up with a keystroke and allows you to paste in pre-defined canned text.
-It also has a variety of other functions.
+Charu3 is a text input support tool for Windows that can be called up with a keystroke and allows you to paste canned text previously registered into the active window.
+It also has a variety of other features.
+See [Wiki](https://github.com/itagagaki/charu3-SE/wiki) for more instructions.
 
 The original author is Mr. Matsumoto Keiji. The official page is [here](http://keijiweb.com/software.html)
 
@@ -27,8 +28,9 @@ I'm looking forward to your feedback.
 
 ---
 
-Charu3は、キー1発で呼び出すことができて、予め設定した定型文をペーストすることができる、Windows用テキスト入力支援ツールです。
+Charu3は、キー1発で呼び出すことができて、予め登録した定型文をアクティブなウィンドウにペーストすることができる、Windows用テキスト入力支援ツールです。
 他にも様々な機能を持っています。
+詳しくは [Wiki](https://github.com/itagagaki/charu3-SE/wiki) をご覧ください。
 
 オリジナル作者は松本圭司氏。公式ページは[こちら](http://keijiweb.com/software.html)
 
