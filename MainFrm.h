@@ -29,12 +29,11 @@ public:
 
     // オペレーション
 public:
-    bool checkTrayPos();
-    void changeTrayIcon(bool isStock);
+    void SwitchNotificationAreaIcon(bool stockmode);
 
     // オーバーライド
-        // ClassWizard は仮想関数のオーバーライドを生成します。
-        //{{AFX_VIRTUAL(CMainFrame)
+    // ClassWizard は仮想関数のオーバーライドを生成します。
+    //{{AFX_VIRTUAL(CMainFrame)
 public:
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
     virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
@@ -42,7 +41,7 @@ protected:
     virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
     //}}AFX_VIRTUAL
 
-// インプリメンテーション
+    // インプリメンテーション
 public:
     virtual ~CMainFrame();
 #ifdef _DEBUG
@@ -66,7 +65,9 @@ protected:
     CMenu m_PopupMenu;
     HWND m_hActive;
 
-    void changeClip();
+private:
+    bool CheckTrayPos();
+    void OnClipboardChanged();
 };
 
 //{{AFX_INSERT_LOCATION}}

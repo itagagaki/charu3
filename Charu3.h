@@ -111,7 +111,7 @@ public:
     bool isCloseKey() { return m_isCloseKey; }
     void popupTreeWinMC(HWND hForeground);
 
-    void onClipboardChanged(CString strClipboard);
+    void Record(CString text);
     void toggleStockMode();
     bool getStockSW() { return m_isStockMode; }
     int  getPhase() { return m_nPhase; }

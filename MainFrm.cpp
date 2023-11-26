@@ -95,10 +95,10 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 }
 
 //---------------------------------------------------
-//関数名	checkTrayPos()
+//関数名	CheckTrayPos()
 //機能		カーソルがタスクトレイに重なってるか判定
 //---------------------------------------------------
-bool CMainFrame::checkTrayPos()
+bool CMainFrame::CheckTrayPos()
 {
     HWND hTaskBarWnd;
     HWND hTrayNotifyWnd;
@@ -144,10 +144,10 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 }
 
 //---------------------------------------------------
-//関数名	changeClip()
+//関数名	OnClipboardChanged()
 //機能		クリップボードの変更処理
 //---------------------------------------------------
-void CMainFrame::changeClip()
+void CMainFrame::OnClipboardChanged()
 {
     // Check the program that owns the currently active window if stealth program is registered.
     bool isStealth = false;
@@ -184,8 +184,8 @@ void CMainFrame::changeClip()
         if (theApp.m_ini.m_nClipboardOpenDelay > 0) {
             Sleep(theApp.m_ini.m_nClipboardOpenDelay);
         }
-        theApp.m_clipboard.GetClipboardText(strClipboard, theApp.m_ini.m_nClipboardRetryTimes, theApp.m_ini.m_nClipboardRetryInterval); //クリップボードの内容を取得
-        theApp.onClipboardChanged(strClipboard); //本体にクリップボードの変更を通知
+        theApp.m_clipboard.GetClipboardText(strClipboard, theApp.m_ini.m_nClipboardRetryTimes, theApp.m_ini.m_nClipboardRetryInterval);
+        theApp.Record(strClipboard);
     }
 
     if (theApp.m_ini.m_bShowClipboardInTooltipOfNofifyIcon) {
@@ -205,14 +205,15 @@ void CMainFrame::changeClip()
 }
 
 //---------------------------------------------------
-//関数名	changeTrayIcon(bool isStock)
+//関数名	SwitchNotificationAreaIcon(bool stockmode)
 //機能		トレイアイコン切り替え
 //---------------------------------------------------
-void CMainFrame::changeTrayIcon(bool isStock)
+void CMainFrame::SwitchNotificationAreaIcon(bool stockmode)
 {
-    if (isStock) m_nIcon.hIcon = m_hIcon;
-    else		m_nIcon.hIcon = m_hStopIcon;
-    if (!Shell_NotifyIcon(NIM_MODIFY, &m_nIcon))	Shell_NotifyIcon(NIM_ADD, &m_nIcon);
+    m_nIcon.hIcon = stockmode ? m_hIcon : m_hStopIcon;
+    if (!Shell_NotifyIcon(NIM_MODIFY, &m_nIcon)) {
+        Shell_NotifyIcon(NIM_ADD, &m_nIcon);
+    }
 }
 
 //---------------------------------------------------
@@ -286,7 +287,7 @@ LRESULT CMainFrame::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
                 theApp.toggleStockMode();
             }
         }
-        else if (checkTrayPos()) {
+        else if (CheckTrayPos()) {
             m_hActive = ::GetForegroundWindow();
             if (m_hActive != theApp.m_focusInfo.m_hActiveWnd) {
                 Window::GetFocusInfo(&theApp.m_focusInfo);
@@ -298,7 +299,7 @@ LRESULT CMainFrame::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
         if (theApp.m_ini.m_bDebug) {
             LOG(_T("WM_CLIPBOARDUPDATE wParam:%x lParam:%x"), wParam, lParam);
         }
-        changeClip();
+        OnClipboardChanged();
     }
 
     return CFrameWnd::WindowProc(message, wParam, lParam);

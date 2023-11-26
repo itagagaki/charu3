@@ -1678,20 +1678,18 @@ CString CCharu3App::convertMacro(STRING_DATA* SourceData, CString strSelect, CSt
 }
 
 //---------------------------------------------------
-//関数名	onClipboardChanged()
-//機能		メインフレームでクリップボードの変更を検知、
-//          クリップボードの内容をリストに追加する
+//関数名	Record()
 //---------------------------------------------------
-void CCharu3App::onClipboardChanged(CString strClipboard)
+void CCharu3App::Record(CString text)
 {
     if (m_ini.m_bDebug) {
-        LOG(_T("onClipboardChanged \"%s\""), strClipboard.GetString());
+        LOG(_T("Record \"%s\""), text.GetString());
     }
 
     //連続で空のクリップボード更新イベントが起こるので対策
     //2007/10/27-20:20:19-------------------
     static int nEmptyCnt = 0;
-    if (strClipboard == "") {
+    if (text == "") {
         /*		if(nEmptyCnt > 5) {
                     Sleep(3000);
                     nEmptyCnt = 0;
@@ -1717,35 +1715,31 @@ void CCharu3App::onClipboardChanged(CString strClipboard)
         if (key.m_nMatch >= 0) nLimit = key.m_nHistoryLimit;
     }
     nLimit *= 1024;
-    if (nLimit >= 0 && strClipboard.GetLength() > nLimit) {
+    if (nLimit >= 0 && text.GetLength() > nLimit) {
         return;
     }
 
-    if (m_nPhase == PHASE_IDOL && /*strClipBoard != m_strlClipBackup &&*/ strClipboard != "") {
+    if (m_nPhase == PHASE_IDOL && /*strClipBoard != m_strlClipBackup &&*/ text != "") {
         STRING_DATA data;
         data.m_cKind = KIND_ONETIME;
-        data.m_strData = strClipboard;
+        data.m_strData = text;
         data.m_cIcon = KIND_DEFAULT;
 
         m_nPhase = PHASE_LOCK;
         KillTimer(m_pMainWnd->m_hWnd, TIMER_ACTIVE);
 
-        if (m_ini.m_bDebug) {
-            LOG(_T("clipboard record \"%s\""), strClipboard.GetString());
-        }
-
         if (m_isStockMode) {
-            if (!(m_ini.m_bDontSaveSameDataAsLast && strClipboard == m_strPreviousStocked)) {
+            if (!(m_ini.m_bDontSaveSameDataAsLast && text == m_strPreviousStocked)) {
                 if (m_ini.m_strCopySound != _T("")) {
                     PlaySound(m_ini.m_strCopySound, NULL, SND_ASYNC | SND_FILENAME);
                 }
                 m_pTree->addData(NULL, data);
-                m_strPreviousStocked = strClipboard;
+                m_strPreviousStocked = text;
             }
         }
 
         m_pTree->addDataToRecordFolder(data, m_strPreviousRecordedToHistory);
-        m_strPreviousRecordedToHistory = strClipboard;
+        m_strPreviousRecordedToHistory = text;
 
         if (m_isStockMode && m_ini.m_nWindowCheckInterval > 0) {
             SetTimer(m_pMainWnd->m_hWnd, TIMER_ACTIVE, m_ini.m_nWindowCheckInterval, NULL);
@@ -1754,7 +1748,7 @@ void CCharu3App::onClipboardChanged(CString strClipboard)
         m_nPhase = PHASE_IDOL;
     }
 
-    m_strSavedClipboard = strClipboard;
+    m_strSavedClipboard = text;
 }
 
 //---------------------------------------------------
@@ -1816,7 +1810,7 @@ void CCharu3App::toggleStockMode()
     }
 
     m_isStockMode = !m_isStockMode;
-    m_pMainFrame->changeTrayIcon(m_isStockMode);
+    m_pMainFrame->SwitchNotificationAreaIcon(m_isStockMode);
     if (m_isStockMode) {
         m_strSavedClipboard = _T("");
         setAppendKeyInit(::GetForegroundWindow(), &m_keySet);
