@@ -30,11 +30,9 @@ public:
     // ダイアログ データ
     //{{AFX_DATA(COptKeySet)
     enum { IDD = IDD_SETTINGS_05_KEYS };
-    CEdit	m_ctrlCopyWaitEdit;
-    CEdit	m_ctrlPasteWaitEdit;
+    CMyHotkeyCtrl	m_ctrlCopyKey;
     CMyHotkeyCtrl	m_ctrlPasteKey;
     CListCtrl	m_ctrlIniList;
-    CMyHotkeyCtrl	m_ctrlCopyKey;
     //}}AFX_DATA
 
     // オーバーライド
