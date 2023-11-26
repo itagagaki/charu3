@@ -1070,12 +1070,12 @@ void CCharu3Tree::deleteData(HTREEITEM hTreeItem)
         //フォルダを再帰で削除
         clearFolder(GetChildItem(hTreeItem));//フォルダの子を削除
         m_MyStringList.erase(it);
-        checkOut(hTreeItem);
+        UncheckItem(hTreeItem);
         DeleteItem(hTreeItem);
     }
     else {
         m_MyStringList.erase(it);
-        checkOut(hTreeItem);
+        UncheckItem(hTreeItem);
         this->DeleteItem(hTreeItem);
     }
 }
@@ -1178,7 +1178,7 @@ void CCharu3Tree::clearFolder(HTREEITEM hItem)
         std::list<STRING_DATA>::iterator it = findData(dataPtr);
         m_MyStringList.erase(it);
         HTREEITEM hNextItem = GetNextItem(hItem, TVGN_NEXT);
-        checkOut(hItem);
+        UncheckItem(hItem);
         this->DeleteItem(hItem);
         hItem = hNextItem;
     }
@@ -1258,7 +1258,7 @@ void CCharu3Tree::cleanupOneTimeItems(HTREEITEM hStartItem, int nKind /*KIND_LOC
             }
             else {//クリア処理に場合
                 m_MyStringList.erase(it);
-                checkOut(hPrevItem);
+                UncheckItem(hPrevItem);
                 DeleteItem(hPrevItem);
             }
         }
@@ -1823,7 +1823,7 @@ void CCharu3Tree::archiveHistory(HTREEITEM hTreeItem, int nRirekiCount)
             data.m_nParentID = dataTarget->m_nMyID;
             editData(hLastChild, data);
             InsertItem(&AddTreeCtrlItem);
-            checkOut(hLastChild);
+            UncheckItem(hLastChild);
             DeleteItem(hLastChild);
         }
     }
@@ -1942,7 +1942,7 @@ HTREEITEM CCharu3Tree::moveFolderTop(HTREEITEM hTreeItem)
 
     //同じデータを挿入
     hRet = InsertItem(&AddTreeCtrlItem);
-    checkOut(hTreeItem);
+    UncheckItem(hTreeItem);
     DeleteItem(hTreeItem);
     return hRet;
 }
@@ -1961,10 +1961,10 @@ void CCharu3Tree::ClearChecks()
 }
 
 //---------------------------------------------------
-//関数名	checkItem(HTREEITEM hItem)
+//関数名	CheckItem(HTREEITEM hItem)
 //機能		データをチェックする
 //---------------------------------------------------
-void CCharu3Tree::checkItem(HTREEITEM hItem)
+void CCharu3Tree::CheckItem(HTREEITEM hItem)
 {
     ModifyStyle(NULL, TVS_CHECKBOXES, NULL);
     if (ItemHasChildren(hItem)) {
@@ -1994,10 +1994,10 @@ void CCharu3Tree::checkItem(HTREEITEM hItem)
 }
 
 //---------------------------------------------------
-//関数名	checkOut(HTREEITEM hItem)
+//関数名	UncheckItem(HTREEITEM hItem)
 //機能		チェックを外す
 //---------------------------------------------------
-void CCharu3Tree::checkOut(HTREEITEM hItem)
+void CCharu3Tree::UncheckItem(HTREEITEM hItem)
 {
     if (ItemHasChildren(hItem)) {
         checkFolder(hItem, false, &m_ltCheckItems);
@@ -2230,7 +2230,7 @@ void CCharu3Tree::OnLButtonUp(UINT nFlags, CPoint point)
             // 旧ツリーアイテムの子孫を新ツリーアイテムにコピー
             copyChildren(m_hDragItem, hNewItem);
             // 旧ツリーアイテムとその子孫のチェックを外す
-            checkOut(m_hDragItem);
+            UncheckItem(m_hDragItem);
             // 旧ツリーアイテムの子孫を削除
             clearFolder(GetChildItem(m_hDragItem));
             // 旧ツリーアイテムを削除

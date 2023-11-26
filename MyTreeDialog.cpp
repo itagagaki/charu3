@@ -413,7 +413,7 @@ void CMyTreeDialog::OnClickMyTree(NMHDR* pNMHDR, LRESULT* pResult)
             }
             if (TVHT_ONITEMSTATEICON & Flags) {
                 // Clicked on checkbox
-                m_pTreeCtrl->checkItem(hClickItem);
+                m_pTreeCtrl->CheckItem(hClickItem);
                 m_pTreeCtrl->SetCheck(hClickItem, !m_pTreeCtrl->GetCheck(hClickItem));
             }
         }
@@ -682,7 +682,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
             if (hTreeItem) {
                 if (::GetKeyState(VK_CONTROL) < 0) {//CTRLが押されている
                     HTREEITEM hSelItem = m_pTreeCtrl->GetSelectedItem();
-                    m_pTreeCtrl->checkItem(hSelItem);
+                    m_pTreeCtrl->CheckItem(hSelItem);
                     hSelItem = m_pTreeCtrl->GetNextVisibleItem(hTreeItem);
                     if (hSelItem) hTreeItem = hSelItem;
                 }
@@ -753,7 +753,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
         //TABキーでチェック
         else if (VK_TAB == pMsg->wParam && !m_pTreeCtrl->IsDragging() && !m_isModal) {
             HTREEITEM hSelItem = m_pTreeCtrl->GetSelectedItem();
-            m_pTreeCtrl->checkItem(hSelItem);
+            m_pTreeCtrl->CheckItem(hSelItem);
             return true;
         }
         //上下
@@ -1098,7 +1098,7 @@ void CMyTreeDialog::OnListSearch()
 void CMyTreeDialog::OnCheckItem()
 {
     HTREEITEM hSelItem = m_pTreeCtrl->GetSelectedItem();
-    m_pTreeCtrl->checkItem(hSelItem);
+    m_pTreeCtrl->CheckItem(hSelItem);
     m_bCheckbox = true;
 }
 

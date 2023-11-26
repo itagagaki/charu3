@@ -204,8 +204,8 @@ public:
     void addDataToRecordFolder(STRING_DATA data, CString strClipBkup);
     HTREEITEM moveFolderTop(HTREEITEM hTreeItem);
     void archiveHistory(HTREEITEM hTreeItem, int nRirekiCount);
-    void checkItem(HTREEITEM hItem);
-    void checkOut(HTREEITEM hItem);
+    void CheckItem(HTREEITEM hItem);
+    void UncheckItem(HTREEITEM hItem);
 
     std::list<STRING_DATA> m_MyStringList;//データリスト
     std::vector<RW_PLUGIN>  m_rwPlugin;
