@@ -9,7 +9,6 @@
 #define IDB_ICON_BITMAP                 134
 #define IDR_LISTMENU                    136
 #define IDD_EDIT                        137
-#define IDD_OPT_ADD_KEYSET              139
 #define IDD_SETTINGS_02_STYLE           151
 #define IDD_SEARCH                      155
 #define IDD_SETTINGS                    158
@@ -17,6 +16,7 @@
 #define IDD_SETTINGS_03_DATATREE        161
 #define IDD_SETTINGS_01_GENERAL         162
 #define IDD_SETTINGS_05_KEYS            164
+#define IDD_KEYSET_EXT                  176
 #define IDI_STOP256                     192
 #define IDI_RUN256                      193
 #define IDD_SETTINGS_06_ADVANCED        195
@@ -231,7 +231,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        175
+#define _APS_NEXT_RESOURCE_VALUE        177
 #define _APS_NEXT_COMMAND_VALUE         32822
 #define _APS_NEXT_CONTROL_VALUE         1096
 #define _APS_NEXT_SYMED_VALUE           105

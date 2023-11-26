@@ -22,7 +22,7 @@ public:
 
 // ダイアログ データ
     //{{AFX_DATA(COptKeySetEditDlg)
-    enum { IDD = IDD_OPT_ADD_KEYSET };
+    enum { IDD = IDD_KEYSET_EXT };
     CMyHotkeyCtrl	m_pasteKey;
     CMyHotkeyCtrl	m_copyKey;
     CString	m_pasteMessage;
