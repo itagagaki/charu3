@@ -28,22 +28,22 @@ public:
         if (m_hDLL)	::FreeLibrary(m_hDLL);
         m_PopupMenu.DestroyMenu();
     }
-    void setTree(CCharu3Tree* pTreeCtrl) {
+
+    void SetTree(CCharu3Tree* pTreeCtrl) {
         m_pTreeCtrl = pTreeCtrl;
     }
-    BOOL showWindowPos(POINT pos, POINT size, int nCmdShow, bool isSelect, HTREEITEM hOpenItem = NULL);
-    void enterData(STRING_DATA* dataPtr);
-    void closePopup();
+    BOOL ShowWindowPos(POINT pos, POINT size, int nCmdShow, bool isSelect, HTREEITEM hOpenItem = NULL);
+    void EnterData(STRING_DATA* dataPtr);
 
     STRING_DATA* m_selectDataPtr;
 
     // ダイアログ データ
-        //{{AFX_DATA(CMyTreeDialog)
+    //{{AFX_DATA(CMyTreeDialog)
     enum { IDD = IDD_DATA_TREE_VIEW };
     CCharu3Tree* m_pTreeCtrl;
     //}}AFX_DATA
 
-// オーバーライド
+    // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
     //{{AFX_VIRTUAL(CMyTreeDialog)
 public:
@@ -53,7 +53,7 @@ protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
     //}}AFX_VIRTUAL
 
-// インプリメンテーション
+    // インプリメンテーション
 protected:
     int static m_stKeycode[];
     char static* m_stKeyName[];
@@ -73,10 +73,6 @@ protected:
     CMenu m_PopupMenu;
     HTREEITEM m_hCopyData;
     COLORREF m_colFrame;
-
-    DWORD m_dwStartTime;
-    CString m_strQuickKey;
-    HTREEITEM m_hQuickItem;
 
     // 生成されたメッセージ マップ関数
     //{{AFX_MSG(CMyTreeDialog)
@@ -123,12 +119,17 @@ protected:
     DECLARE_MESSAGE_MAP()
 
 private:
-    void popupMenu(CPoint point);
-    void changeTipString(STRING_DATA* data);
-    bool selectByTyping(UINT uKeyCode);
+    void ClosePopup();
+    void PopupMenu(CPoint point);
+    void ChangeTipString(STRING_DATA* data);
+    bool SelectByTyping(UINT uKeyCode);
     void GetFindParam();
     void FindNext(bool backward);
     STRING_DATA* GetClickedItem();
+
+    DWORD m_dwStartTime;
+    CString m_strQuickKey;
+    HTREEITEM m_hQuickItem;
 
     bool m_bCheckbox;
     bool m_bFind;

@@ -28,7 +28,7 @@ public:
     enum { IDD = IDD_SETTINGS_06_ADVANCED };
     //}}AFX_DATA
 
-// オーバーライド
+    // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
     //{{AFX_VIRTUAL(COptAdvanced)
 public:
@@ -39,9 +39,8 @@ protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
     //}}AFX_VIRTUAL
 
-// インプリメンテーション
+    // インプリメンテーション
 protected:
-
     // 生成されたメッセージ マップ関数
     //{{AFX_MSG(COptAdvanced)
     //}}AFX_MSG

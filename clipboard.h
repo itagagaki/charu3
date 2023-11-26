@@ -36,7 +36,7 @@ public:
 
     virtual ~CClipBoard() {}
 
-    void setParent(HWND hWnd) {
+    void SetParent(HWND hWnd) {
         m_hParentWnd = hWnd;
         StartListener();
     }
@@ -50,10 +50,10 @@ public:
         ::RemoveClipboardFormatListener(m_hParentWnd);
         m_bListening = false;
     }
-    bool getClipboardText(CString& sData);
-    bool setClipboardText(const CString sData);
-    bool getClipboardText(CString& sData, int retryCount, int retryInterval);
-    bool setClipboardText(const CString sData, int retryCount, int retryInterval);
+    bool GetClipboardText(CString& sData);
+    bool SetClipboardText(const CString sData);
+    bool GetClipboardText(CString& sData, int retryCount, int retryInterval);
+    bool SetClipboardText(const CString sData, int retryCount, int retryInterval);
 
 private:
     HWND m_hParentWnd;

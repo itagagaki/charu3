@@ -16,12 +16,12 @@ static char THIS_FILE[] = __FILE__;
 //関数名	setClipboardText(const TCHAR* sData)
 //機能		クリップボードにテキストを設定
 //---------------------------------------------------
-bool CClipBoard::setClipboardText(const CString sData)
+bool CClipBoard::SetClipboardText(const CString sData)
 {
-    return setClipboardText(sData, m_nRetryCount, m_nRetryInterval);
+    return SetClipboardText(sData, m_nRetryCount, m_nRetryInterval);
 }
 
-bool CClipBoard::setClipboardText(const CString sData, int retryCount, int retryInterval)
+bool CClipBoard::SetClipboardText(const CString sData, int retryCount, int retryInterval)
 {
     size_t len = sData.GetLength() + 1;
     TCHAR* newText = new TCHAR[len];
@@ -73,12 +73,12 @@ bool CClipBoard::setClipboardText(const CString sData, int retryCount, int retry
 //関数名	getClipboardText(CString& sData)
 //機能		クリップボードのテキストを取得
 //---------------------------------------------------
-bool CClipBoard::getClipboardText(CString& sData)
+bool CClipBoard::GetClipboardText(CString& sData)
 {
-    return getClipboardText(sData, m_nRetryCount, m_nRetryInterval);
+    return GetClipboardText(sData, m_nRetryCount, m_nRetryInterval);
 }
 
-bool CClipBoard::getClipboardText(CString& sData, int retryCount, int retryInterval)
+bool CClipBoard::GetClipboardText(CString& sData, int retryCount, int retryInterval)
 {
     bool isRet = false;
 

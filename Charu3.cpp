@@ -194,7 +194,7 @@ BOOL CCharu3App::InitInstance()
     HWND hWndTop;
     m_hSelfWnd = CWnd::GetSafeOwner_(NULL, &hWndTop);
 
-    m_pTreeDlg->setTree(m_pTree);
+    m_pTreeDlg->SetTree(m_pTree);
     m_pTreeDlg->Create(IDD_DATA_TREE_VIEW, this->m_pMainWnd);
     //	::SetForegroundWindow(hActiveWnd);
 
@@ -290,8 +290,8 @@ bool CCharu3App::init()
     }
 
     //クリップボードクラスの初期化 変更検知を設定(メインフレームでメッセージ処理をしてます)
-    m_clipboard.getClipboardText(m_strSavedClipboard, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
-    m_clipboard.setParent(this->m_pMainWnd->m_hWnd);
+    m_clipboard.GetClipboardText(m_strSavedClipboard, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
+    m_clipboard.SetParent(this->m_pMainWnd->m_hWnd);
     m_keySet = m_ini.m_defKeySet;
 
     //ホットキーを設定
@@ -679,7 +679,7 @@ void CCharu3App::popupTreeWindow(POINT pos, bool keepSelection, HTREEITEM hOpenI
     }
 
     Window::SetAbsoluteForegroundWindow(m_pMainWnd->m_hWnd);//自分をアクティブに設定
-    m_pTreeDlg->showWindowPos(pos, m_ini.m_DialogSize, SW_SHOW, keepSelection, hOpenItem);
+    m_pTreeDlg->ShowWindowPos(pos, m_ini.m_DialogSize, SW_SHOW, keepSelection, hOpenItem);
 }
 
 //---------------------------------------------------
@@ -772,7 +772,7 @@ void CCharu3App::closeTreeWindow(int nRet)
     //アクティブウィンドウを復帰
     if (nRet == IDOK) {
         CString strClip, strSelect;
-        m_clipboard.getClipboardText(strClip, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);//クリップボードを保存
+        m_clipboard.GetClipboardText(strClip, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);//クリップボードを保存
 
         setAppendKeyInit(m_focusInfo.m_hActiveWnd, &m_keySet);//キー設定を変更
         //キーが離されるのを待つ
@@ -904,7 +904,7 @@ void CCharu3App::playData(STRING_DATA data, CString strClip, CString strSelect, 
         //クリップボード復帰
         if (m_ini.m_bPutBackClipboard && strClip != "") {
             m_strSavedClipboard = strClip;
-            m_clipboard.setClipboardText(strClip.GetString(), m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
+            m_clipboard.SetClipboardText(strClip.GetString(), m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
         }
         if (isChange) {
             //貼り付けデータをフォルダの先頭に移動
@@ -928,7 +928,7 @@ void CCharu3App::playData(STRING_DATA data, CString strClip, CString strSelect, 
         }
     }
     else {
-        m_clipboard.setClipboardText(strPaste, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
+        m_clipboard.SetClipboardText(strPaste, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
     }
 }
 
@@ -1003,7 +1003,7 @@ void CCharu3App::playHotItem(int nTarget)
                 unregisterAdditionalHotkeys();//追加ホットキーを停止
 
                 CString strClip, strPaste;
-                m_clipboard.getClipboardText(strClip, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);//クリップボードを保存
+                m_clipboard.GetClipboardText(strClip, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);//クリップボードを保存
                 strPaste = data.m_strData;
 
                 POINT pos;
@@ -1065,7 +1065,7 @@ void CCharu3App::playHotItem(int nTarget)
                     }
                     //クリップボード復帰
                     if (m_ini.m_bPutBackClipboard && strClip != "") {
-                        m_clipboard.setClipboardText(strClip.GetString(), m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
+                        m_clipboard.SetClipboardText(strClip.GetString(), m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
                     }
                     //一時項目は消す
                     if (m_pTree->getDatakind(keyData.m_hItem) & KIND_ONETIME) {
@@ -1086,7 +1086,7 @@ void CCharu3App::playHotItem(int nTarget)
 //---------------------------------------------------
 CString CCharu3App::getSelectString(COPYPASTE_KEY key, HWND hWnd)
 {
-    m_clipboard.setClipboardText(CString(), m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
+    m_clipboard.SetClipboardText(CString(), m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
     if (!hWnd)	hWnd = m_focusInfo.m_hFocusWnd;
     CString strSelect;
 
@@ -1134,7 +1134,7 @@ CString CCharu3App::getSelectString(COPYPASTE_KEY key, HWND hWnd)
         }
     }
 
-    if (m_clipboard.getClipboardText(strSelect, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval)) {
+    if (m_clipboard.GetClipboardText(strSelect, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval)) {
         return strSelect;
     }
 
@@ -1281,7 +1281,7 @@ void CCharu3App::pasteData(CString strPaste, COPYPASTE_KEY key, HWND hWnd)
     if (m_isStockMode) {
         m_strSavedClipboard = strPaste;
     }
-    m_clipboard.setClipboardText(strPaste, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
+    m_clipboard.SetClipboardText(strPaste, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
 
     if (key.m_nMessage == 0) {//イベント方式
         keyUpDown(key.m_uMod_Paste, key.m_uVK_Paste, KEY_DOWN);
@@ -1781,7 +1781,7 @@ void CCharu3App::fifoClipboard()
             if (m_ini.m_bDebug) {
                 LOG(_T("fifoClipboard text:%s"), text.GetString());
             }
-            if (m_clipboard.setClipboardText(text, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval)) {
+            if (m_clipboard.SetClipboardText(text, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval)) {
                 if (m_ini.m_strPasteSound != _T("")) {
                     PlaySound(m_ini.m_strPasteSound, NULL, SND_ASYNC | SND_FILENAME);
                 }
@@ -1902,7 +1902,7 @@ void  CCharu3App::resetTreeDialog()
     m_pTreeDlg = new CMyTreeDialog;
     m_pTree = new CCharu3Tree;
     if (m_pTree) {
-        m_pTreeDlg->setTree(m_pTree);
+        m_pTreeDlg->SetTree(m_pTree);
         m_pTreeDlg->Create(IDD_DATA_TREE_VIEW, this->m_pMainWnd);
         m_pTree->setImageList(m_ini.m_IconSize, theApp.m_ini.m_strResourceName, m_ini.m_strAppPath);
         m_pTree->setInitInfo(&m_ini.m_nTreeID, &m_ini.m_nSelectID, &m_ini.m_nRecNumber);//ID初期値を設定
@@ -2137,7 +2137,7 @@ void CCharu3App::OnOption()
         }
         if (nPhase == PHASE_POPUP) {
             m_pTreeDlg->ShowWindow(false);
-            m_pTreeDlg->showWindowPos(rect.TopLeft(), m_ini.m_DialogSize, SW_SHOW, true);
+            m_pTreeDlg->ShowWindowPos(rect.TopLeft(), m_ini.m_DialogSize, SW_SHOW, true);
         }
     }
     else {

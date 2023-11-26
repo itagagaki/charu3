@@ -29,8 +29,8 @@ public:
     };
 
     // オーバーライド
-        // ClassWizard は仮想関数のオーバーライドを生成します。
-        //{{AFX_VIRTUAL(CMyHotkeyCtrl)
+    // ClassWizard は仮想関数のオーバーライドを生成します。
+    //{{AFX_VIRTUAL(CMyHotkeyCtrl)
 public:
     virtual BOOL PreTranslateMessage(MSG* pMsg);
     //}}AFX_VIRTUAL
@@ -42,7 +42,7 @@ public:
     // 生成されたメッセージ マップ関数
 protected:
     //{{AFX_MSG(CMyHotkeyCtrl)
-        // メモ - ClassWizard はこの位置にメンバ関数を追加または削除します。
+    // メモ - ClassWizard はこの位置にメンバ関数を追加または削除します。
     //}}AFX_MSG
 
     DECLARE_MESSAGE_MAP()

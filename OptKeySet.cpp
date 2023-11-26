@@ -168,43 +168,6 @@ std::list<CHANGE_KEY>::iterator COptKeySet::findData(CHANGE_KEY* dataPtr)
 }
 
 //---------------------------------------------------
-//関数名	windouToKeyOption()
-//機能		キー設定を読む
-//---------------------------------------------------
-CHANGE_KEY COptKeySet::windouToKeyOption()
-{
-    CHANGE_KEY key;
-    /*	WORD wMod,wVkCode;
-
-        //ペーストキー変換
-        m_ctrlPasteKey2.GetHotKey(wVkCode,wMod);
-        key.m_sCopyPasteKey.m_uMod_Paste = KeyHelper::HotkeyToMod(wMod);
-        key.m_sCopyPasteKey.m_uVK_Paste  = wVkCode;
-
-        //コピーキー変換
-        m_ctrlCopyKey2.GetHotKey(wVkCode,wMod);
-        key.m_sCopyPasteKey.m_uMod_Copy = KeyHelper::HotkeyToMod(wMod);
-        key.m_sCopyPasteKey.m_uVK_Copy  = wVkCode;
-
-        key.m_nMatch = m_ctrlMatchCombo.GetCurSel();		//一致方法
-        m_ctrlCaptionCombo.GetWindowText(key.m_strTitle);	//ウィンドウキャプション
-
-        //待ち時間
-        CString strBuff;
-        m_ctrlCopyWaitEdit.GetWindowText(strBuff);
-        key.m_sCopyPasteKey.m_nCopyWait = _ttoi(strBuff);
-        if(key.m_sCopyPasteKey.m_nCopyWait < 1) key.m_sCopyPasteKey.m_nCopyWait = 100;
-
-        m_ctrlPasteWaitEdit.GetWindowText(strBuff);
-        key.m_sCopyPasteKey.m_nPasteWait = _ttoi(strBuff);
-        if(key.m_sCopyPasteKey.m_nPasteWait < 1) key.m_sCopyPasteKey.m_nPasteWait = 100;
-
-        key.m_sCopyPasteKey.m_nMessage = GetCheckedRadioButton(IDC_OPT_KEY_ACTION2_01,IDC_OPT_KEY_ACTION2_03) - IDC_OPT_KEY_ACTION2_01;
-    */
-    return key;
-}
-
-//---------------------------------------------------
 // COptKeySet メッセージ ハンドラ
 //---------------------------------------------------
 
@@ -311,7 +274,7 @@ void COptKeySet::OnOptKeyEdit()
 
     if (m_nSelItem > -1) {
         CString strBuff;
-        keySetEditDlg.setKeyInfo(*m_dataPtrSelect);
+        keySetEditDlg.SetKeyInfo(*m_dataPtrSelect);
 
         strBuff.Format(_T("%x,%x,%x"), m_dataPtrSelect->m_sCopyPasteKey.m_pasteMessage.Msg,
             m_dataPtrSelect->m_sCopyPasteKey.m_pasteMessage.wParam,
@@ -331,7 +294,7 @@ void COptKeySet::OnOptKeyEdit()
 
         int nRet = keySetEditDlg.DoModal();
         if (nRet == IDOK) {
-            *m_dataPtrSelect = keySetEditDlg.getKeyInfo();
+            *m_dataPtrSelect = keySetEditDlg.GetKeyInfo();
             SetListData(*m_dataPtrSelect, m_dataPtrSelect, true, m_nSelItem);
         }
     }
@@ -347,7 +310,7 @@ void COptKeySet::OnOptKeyAdd()
     COptKeySetEditDlg keySetEditDlg;
 
     deffault.m_sCopyPasteKey = theApp.m_ini.m_defKeySet;
-    keySetEditDlg.setKeyInfo(deffault);
+    keySetEditDlg.SetKeyInfo(deffault);
 
     keySetEditDlg.m_pasteMessage = _T("111,0,0");
     keySetEditDlg.m_copyMessage = _T("111,0,0");
@@ -361,7 +324,7 @@ void COptKeySet::OnOptKeyAdd()
     int nRet = keySetEditDlg.DoModal();
     if (nRet == IDOK) {
         CHANGE_KEY key;
-        key = keySetEditDlg.getKeyInfo();
+        key = keySetEditDlg.GetKeyInfo();
         SetListData(key, &*m_MyKeyList.insert(m_MyKeyList.end(), key), false, m_ctrlIniList.GetItemCount());
     }
 }

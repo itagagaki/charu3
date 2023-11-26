@@ -20,7 +20,7 @@ class COptKeySetEditDlg : public CDialog
 public:
     COptKeySetEditDlg(CWnd* pParent = NULL);   // 標準のコンストラクタ
 
-// ダイアログ データ
+    // ダイアログ データ
     //{{AFX_DATA(COptKeySetEditDlg)
     enum { IDD = IDD_KEYSET_EXT };
     CMyHotkeyCtrl	m_pasteKey;
@@ -36,28 +36,31 @@ public:
     //}}AFX_DATA
     friend BOOL CALLBACK EnumWindowTitle(HWND hwnd, LPARAM lParam);
 
-    void setKeyInfo(CHANGE_KEY keyInfo) {
+    void SetKeyInfo(CHANGE_KEY keyInfo) {
         m_key = keyInfo;
     }
-    CHANGE_KEY getKeyInfo() {
+
+    CHANGE_KEY GetKeyInfo() {
         return m_key;
     };
+
     // オーバーライド
-        // ClassWizard は仮想関数のオーバーライドを生成します。
-        //{{AFX_VIRTUAL(COptKeySetEditDlg)
+    // ClassWizard は仮想関数のオーバーライドを生成します。
+    //{{AFX_VIRTUAL(COptKeySetEditDlg)
 protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
     //}}AFX_VIRTUAL
 
 // インプリメンテーション
 protected:
-    CHANGE_KEY m_key;
-
     // 生成されたメッセージ マップ関数
     //{{AFX_MSG(COptKeySetEditDlg)
     virtual BOOL OnInitDialog();
     //}}AFX_MSG
     DECLARE_MESSAGE_MAP()
+
+private:
+    CHANGE_KEY m_key;
 };
 
 //{{AFX_INSERT_LOCATION}}

@@ -28,13 +28,13 @@ public:
 public:
 
     // オーバーライド
-        // ClassWizard は仮想関数のオーバーライドを生成します。
-        //{{AFX_VIRTUAL(CChildView)
+    // ClassWizard は仮想関数のオーバーライドを生成します。
+    //{{AFX_VIRTUAL(CChildView)
 protected:
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
     //}}AFX_VIRTUAL
 
-// インプリメンテーション
+    // インプリメンテーション
 public:
     virtual ~CChildView();
 

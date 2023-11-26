@@ -26,13 +26,9 @@ class CEditDialog : public CDialog
 {
 public:
     CEditDialog(CWnd* pParent, STRING_DATA* pData, bool newData);
-    STRING_DATA* m_pData;
-    void setMacroTempate(std::vector<MACRO_STRUCT>* pMacro, std::vector<MACRO_STRUCT>* pDataMacro) {
-        m_vctMacro = pMacro;
-        m_vctDataMacro = pDataMacro;
-    }
+
     // ダイアログ データ
-        //{{AFX_DATA(CEditDialog)
+    //{{AFX_DATA(CEditDialog)
     enum { IDD = IDD_EDIT };
     CMyEditCtrl	m_ctrlDataEdit;
     CMyEditCtrl m_ctrlNameEdit;
@@ -45,7 +41,7 @@ public:
     //}}AFX_DATA
 
 
-// オーバーライド
+    // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
     //{{AFX_VIRTUAL(CEditDialog)
 public:
@@ -55,9 +51,6 @@ protected:
     //}}AFX_VIRTUAL
 
 protected:
-    std::vector<MACRO_STRUCT>* m_vctMacro;
-    std::vector<MACRO_STRUCT>* m_vctDataMacro;
-
     // 生成されたメッセージ マップ関数
     //{{AFX_MSG(CEditDialog)
     afx_msg void OnEditPasteFile();
@@ -74,8 +67,11 @@ private:
     void InsertText(CEdit& ctrl, CString strString);
     void ResetExtendedSettingItems();
 
-    bool m_bNewData;
+    STRING_DATA* m_pData;
+    std::vector<MACRO_STRUCT>* m_vctMacro;
+    std::vector<MACRO_STRUCT>* m_vctDataMacro;
     int m_nKind;
+    bool m_bNewData;
 };
 
 //{{AFX_INSERT_LOCATION}}

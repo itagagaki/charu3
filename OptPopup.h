@@ -23,12 +23,12 @@ class COptPopup : public CDialog
 public:
     COptPopup(CWnd* pParent = NULL);   // 標準のコンストラクタ
 
-// ダイアログ データ
+    // ダイアログ データ
     //{{AFX_DATA(COptPopup)
     enum { IDD = IDD_SETTINGS_03_DATATREE };
     //}}AFX_DATA
 
-// オーバーライド
+    // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
     //{{AFX_VIRTUAL(COptPopup)
 public:
@@ -39,7 +39,7 @@ protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
     //}}AFX_VIRTUAL
 
-// インプリメンテーション
+    // インプリメンテーション
     // 生成されたメッセージ マップ関数
     //{{AFX_MSG(COptPopup)
     virtual BOOL OnInitDialog();

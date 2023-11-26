@@ -22,7 +22,7 @@ class CSearchDialog : public CDialog
 public:
     CSearchDialog(CWnd* pParent = NULL);   // 標準のコンストラクタ
 
-// ダイアログ データ
+    // ダイアログ データ
     //{{AFX_DATA(CSearchDialog)
     enum { IDD = IDD_SEARCH };
     CEdit	m_ctrlSearchText;
@@ -39,8 +39,8 @@ public:
     CString GetSearchText();
 
     // オーバーライド
-        // ClassWizard は仮想関数のオーバーライドを生成します。
-        //{{AFX_VIRTUAL(CSearchDialog)
+    // ClassWizard は仮想関数のオーバーライドを生成します。
+    //{{AFX_VIRTUAL(CSearchDialog)
 protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
     //}}AFX_VIRTUAL

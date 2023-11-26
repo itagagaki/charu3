@@ -17,6 +17,7 @@
 #include "resource.h"
 
 #define	MAX_FONT 256
+
 //---------------------------------------------------
 // COptStyle ダイアログ
 //---------------------------------------------------
@@ -39,7 +40,7 @@ public:
     CComboBox m_ctrlFontCombo;
     //}}AFX_DATA
 
-// オーバーライド
+    // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
     //{{AFX_VIRTUAL(COptStyle)
 public:
@@ -49,7 +50,7 @@ protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
     //}}AFX_VIRTUAL
 
-// インプリメンテーション
+    // インプリメンテーション
 protected:
     // 生成されたメッセージ マップ関数
     //{{AFX_MSG(COptStyle)
@@ -69,8 +70,8 @@ public:
     void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 
 private:
-    void updateColor(CEdit* edit, CPaletStatic* stPal);
-    void pickColor(CEdit* edit, CPaletStatic* stPal);
+    void UpdateColor(CEdit* edit, CPaletStatic* stPal);
+    void PickColor(CEdit* edit, CPaletStatic* stPal);
     void SetOpacityText(int value);
 };
 

@@ -188,7 +188,7 @@ BOOL CMyTreeDialog::OnInitDialog()
 //関数名	PopupMenu(CPoint point)
 //機能		ポップアップメニューを出す
 //---------------------------------------------------
-void CMyTreeDialog::popupMenu(CPoint point)
+void CMyTreeDialog::PopupMenu(CPoint point)
 {
     if (m_isModal || !m_isInitOK) return;
 
@@ -231,7 +231,7 @@ void CMyTreeDialog::popupMenu(CPoint point)
 //関数名	showWindowPos(POINT pos,int nCmdShow)
 //機能		ウィンドウを移動して表示
 //---------------------------------------------------
-BOOL CMyTreeDialog::showWindowPos(POINT pos, POINT size, int nCmdShow, bool keepSelection, HTREEITEM hOpenItem)
+BOOL CMyTreeDialog::ShowWindowPos(POINT pos, POINT size, int nCmdShow, bool keepSelection, HTREEITEM hOpenItem)
 {
     m_pTreeCtrl->OnWindowPosChanging(NULL);
     m_toolTip.SetDelayTime(theApp.m_ini.m_nToolTipDelay);
@@ -379,7 +379,7 @@ void CMyTreeDialog::OnRclickMyTree(NMHDR* pNMHDR, LRESULT* pResult)
     if (m_isModal || m_pTreeCtrl->IsDragging()) return;
     POINT point;
     ::GetCursorPos(&point);
-    popupMenu(point);
+    PopupMenu(point);
     *pResult = 0;
 }
 
@@ -422,10 +422,7 @@ void CMyTreeDialog::OnClickMyTree(NMHDR* pNMHDR, LRESULT* pResult)
         // Enter if m_bSingleEnter
         if (theApp.m_ini.m_bSingleEnter && !m_pTreeCtrl->IsDragging() && (TVHT_ONITEMSTATEICON & Flags) == 0) {
             if (theApp.m_ini.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
-            STRING_DATA* data = GetClickedItem();
-            if (data) {
-                enterData(data);
-            }
+            EnterData(GetClickedItem());
         }
     }
     *pResult = 0;
@@ -556,7 +553,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
 
     switch (pMsg->message) {
     case WM_TREE_CLOSE:
-        closePopup();
+        ClosePopup();
         return TRUE;
 
     case WM_LBUTTONDBLCLK:
@@ -569,7 +566,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
     case WM_LBUTTONUP:
         if (!m_pTreeCtrl->IsDragging()) {
             if (m_dataPtrDbClick != nullptr) {
-                enterData(m_dataPtrDbClick);
+                EnterData(m_dataPtrDbClick);
                 return TRUE;
             }
         }
@@ -612,7 +609,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
     {
         HTREEITEM hTarget = (HTREEITEM)pMsg->wParam;
         if (hTarget) {
-            changeTipString(m_pTreeCtrl->getDataPtr(hTarget));
+            ChangeTipString(m_pTreeCtrl->getDataPtr(hTarget));
         }
         else {
             m_toolTip.Activate(FALSE);
@@ -635,7 +632,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
             point.y = rSelItem.bottom - 5;
         }
         ClientToScreen(&point);
-        popupMenu(point);
+        PopupMenu(point);
         //		return true;
     }
 
@@ -652,7 +649,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
         }
         //ESCで閉じる
         if (VK_ESCAPE == pMsg->wParam && !m_isModal && !m_pTreeCtrl->IsDragging()) {
-            closePopup();
+            ClosePopup();
             return TRUE;
         }
         //ラベル編集中なら編集終了
@@ -671,7 +668,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
 
                 //フォルダか確認
                 if (!(dataPtr->m_cKind & KIND_FOLDER_ALL) || (m_pTreeCtrl->GetStyle() & TVS_CHECKBOXES && m_pTreeCtrl->GetCheck(hTreeItem))) {
-                    enterData(dataPtr);//データを決定
+                    EnterData(dataPtr);//データを決定
                 }
                 else
                     m_pTreeCtrl->Expand(hTreeItem, TVE_TOGGLE);
@@ -797,7 +794,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
         }
         // "select by typing"
         else if (!m_isModal && !m_pTreeCtrl->IsDragging()) {
-            if (selectByTyping((UINT)pMsg->wParam)) return TRUE;
+            if (SelectByTyping((UINT)pMsg->wParam)) return TRUE;
         }
     }
     // "select by typing" 確定処理
@@ -807,7 +804,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
             STRING_DATA* dataPtr = m_pTreeCtrl->getDataPtr(m_hQuickItem);
             if (dataPtr->m_cKind & KIND_DATA_ALL) {
                 if (theApp.m_ini.m_bSelectByTypingAutoPaste) {
-                    enterData(dataPtr);
+                    EnterData(dataPtr);
                 }
             }
             else if (dataPtr->m_cKind & KIND_FOLDER_ALL) {
@@ -824,7 +821,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
     return CDialog::PreTranslateMessage(pMsg);
 }
 
-void CMyTreeDialog::closePopup()
+void CMyTreeDialog::ClosePopup()
 {
     if (m_bFind) {
         m_findDialog->DestroyWindow();
@@ -839,16 +836,18 @@ void CMyTreeDialog::closePopup()
 //関数名	enterData(list<STRING_DATA>::iterator it)
 //機能		データを決定してダイアログを隠蔽
 //---------------------------------------------------
-void CMyTreeDialog::enterData(STRING_DATA* dataPtr)
+void CMyTreeDialog::EnterData(STRING_DATA* dataPtr)
 {
-    if (m_bFind) {
-        m_findDialog->DestroyWindow();
-        m_bFind = false;
+    if (dataPtr) {
+        if (m_bFind) {
+            m_findDialog->DestroyWindow();
+            m_bFind = false;
+        }
+        m_selectDataPtr = dataPtr;
+        ::PostMessage(theApp.getAppWnd(), WM_TREE_CLOSE, IDOK, NULL);
+        m_isInitOK = false;
+        this->KillTimer(CHARU_QUICK_TIMER);
     }
-    m_selectDataPtr = dataPtr;
-    ::PostMessage(theApp.getAppWnd(), WM_TREE_CLOSE, IDOK, NULL);
-    m_isInitOK = false;
-    this->KillTimer(CHARU_QUICK_TIMER);
 }
 
 //---------------------------------------------------
@@ -1252,7 +1251,7 @@ void CMyTreeDialog::OnOption()
 //関数名	selectByTyping(UINT uKeyCode)
 //機能		"select by typing" 処理
 //---------------------------------------------------
-bool CMyTreeDialog::selectByTyping(UINT uKeyCode)
+bool CMyTreeDialog::SelectByTyping(UINT uKeyCode)
 {
     bool isRet = false;
     BYTE byteKey[256];
@@ -1297,7 +1296,7 @@ bool CMyTreeDialog::selectByTyping(UINT uKeyCode)
 //関数名	changeTipString(CString strData)
 //機能		引数のテキストをツールチップに設定
 //---------------------------------------------------
-void CMyTreeDialog::changeTipString(STRING_DATA* data)
+void CMyTreeDialog::ChangeTipString(STRING_DATA* data)
 {
     CString strTip = _T("");
     CString strRes;

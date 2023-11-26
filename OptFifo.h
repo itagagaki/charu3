@@ -26,12 +26,12 @@ public:
     virtual BOOL DestroyWindow();
 
     // ダイアログ データ
-        //{{AFX_DATA(COptFifo)
+    //{{AFX_DATA(COptFifo)
     enum { IDD = IDD_SETTINGS_04_STOCKMODE };
     // メモ: ClassWizard はこの位置にデータ メンバを追加します。
-//}}AFX_DATA
+    //}}AFX_DATA
 
-// オーバーライド
+    // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
     //{{AFX_VIRTUAL(COptFifo)
 public:

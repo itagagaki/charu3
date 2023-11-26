@@ -184,7 +184,7 @@ void CMainFrame::changeClip()
         if (theApp.m_ini.m_nClipboardOpenDelay > 0) {
             Sleep(theApp.m_ini.m_nClipboardOpenDelay);
         }
-        theApp.m_clipboard.getClipboardText(strClipboard, theApp.m_ini.m_nClipboardRetryTimes, theApp.m_ini.m_nClipboardRetryInterval); //クリップボードの内容を取得
+        theApp.m_clipboard.GetClipboardText(strClipboard, theApp.m_ini.m_nClipboardRetryTimes, theApp.m_ini.m_nClipboardRetryInterval); //クリップボードの内容を取得
         theApp.onClipboardChanged(strClipboard); //本体にクリップボードの変更を通知
     }
 

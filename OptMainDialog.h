@@ -29,13 +29,12 @@ public:
     COptMainDialog(CWnd* pParent = NULL, int nPage = 0);
 
     // ダイアログ データ
-        //{{AFX_DATA(COptMainDialog)
+    //{{AFX_DATA(COptMainDialog)
     enum { IDD = IDD_SETTINGS };
     CTabCtrl	m_ctrlTab;
     //}}AFX_DATA
 
-
-// オーバーライド
+    // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
     //{{AFX_VIRTUAL(COptMainDialog)
 public:
@@ -45,7 +44,7 @@ protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
     //}}AFX_VIRTUAL
 
-// インプリメンテーション
+    // インプリメンテーション
 protected:
     // 生成されたメッセージ マップ関数
     //{{AFX_MSG(COptMainDialog)

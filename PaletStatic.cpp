@@ -16,9 +16,8 @@ static char THIS_FILE[] = __FILE__;
 //関数名	CPaletStatic
 //機能		コンストラクタ
 //---------------------------------------------------
-CPaletStatic::CPaletStatic()
+CPaletStatic::CPaletStatic() : m_color(0)
 {
-    m_colMyColor = 0;
 }
 
 //---------------------------------------------------
@@ -46,9 +45,8 @@ END_MESSAGE_MAP()
 void CPaletStatic::OnPaint()
 {
     CPaintDC dc(this); // 描画用のデバイス コンテキスト
-
     RECT rect;
     GetClientRect(&rect);
     dc.IntersectClipRect(&rect);
-    dc.FillSolidRect(&rect, m_colMyColor);
+    dc.FillSolidRect(&rect, m_color);
 }

@@ -24,14 +24,14 @@ class COptGeneral : public CDialog
 public:
     COptGeneral(CWnd* pParent = NULL);   // 標準のコンストラクタ
 
-// ダイアログ データ
+    // ダイアログ データ
     //{{AFX_DATA(COptGeneral)
     enum { IDD = IDD_SETTINGS_01_GENERAL };
     CMyHotkeyCtrl	m_ctrlFifoKey;
     CMyHotkeyCtrl	m_ctrlPopupKey;
     //}}AFX_DATA
 
-// オーバーライド
+    // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
     //{{AFX_VIRTUAL(COptGeneral)
 public:
@@ -42,17 +42,17 @@ protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
     //}}AFX_VIRTUAL
 
-// インプリメンテーション
+    // インプリメンテーション
 protected:
 
     // 生成されたメッセージ マップ関数
     //{{AFX_MSG(COptGeneral)
     virtual BOOL OnInitDialog();
     afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-    afx_msg void hotkeyEnablePOP();
-    afx_msg void hotkeyDisablePOP();
-    afx_msg void hotkeyEnableFIFO();
-    afx_msg void hotkeyDisableFIFO();
+    afx_msg void HotkeyEnablePOP();
+    afx_msg void HotkeyDisablePOP();
+    afx_msg void HotkeyEnableFIFO();
+    afx_msg void HotkeyDisableFIFO();
     //}}AFX_MSG
     DECLARE_MESSAGE_MAP()
 

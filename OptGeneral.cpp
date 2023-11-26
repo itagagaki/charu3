@@ -59,14 +59,14 @@ void COptGeneral::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(COptGeneral, CDialog)
     //{{AFX_MSG_MAP(COptGeneral)
-    ON_BN_CLICKED(IDC_OPT_KEYRADIO_POP, hotkeyEnablePOP)
-    ON_BN_CLICKED(IDC_OPT_KEYRADIO_POP2, hotkeyDisablePOP)
-    ON_BN_CLICKED(IDC_OPT_KEYRADIO_POP3, hotkeyDisablePOP)
-    ON_BN_CLICKED(IDC_OPT_KEYRADIO_POP4, hotkeyDisablePOP)
-    ON_BN_CLICKED(IDC_OPT_KEYRADIO_FIFO, hotkeyEnableFIFO)
-    ON_BN_CLICKED(IDC_OPT_KEYRADIO_FIFO2, hotkeyDisableFIFO)
-    ON_BN_CLICKED(IDC_OPT_KEYRADIO_FIFO3, hotkeyDisableFIFO)
-    ON_BN_CLICKED(IDC_OPT_KEYRADIO_FIFO4, hotkeyDisableFIFO)
+    ON_BN_CLICKED(IDC_OPT_KEYRADIO_POP, HotkeyEnablePOP)
+    ON_BN_CLICKED(IDC_OPT_KEYRADIO_POP2, HotkeyDisablePOP)
+    ON_BN_CLICKED(IDC_OPT_KEYRADIO_POP3, HotkeyDisablePOP)
+    ON_BN_CLICKED(IDC_OPT_KEYRADIO_POP4, HotkeyDisablePOP)
+    ON_BN_CLICKED(IDC_OPT_KEYRADIO_FIFO, HotkeyEnableFIFO)
+    ON_BN_CLICKED(IDC_OPT_KEYRADIO_FIFO2, HotkeyDisableFIFO)
+    ON_BN_CLICKED(IDC_OPT_KEYRADIO_FIFO3, HotkeyDisableFIFO)
+    ON_BN_CLICKED(IDC_OPT_KEYRADIO_FIFO4, HotkeyDisableFIFO)
     ON_WM_SHOWWINDOW()
     //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -156,24 +156,24 @@ BOOL COptGeneral::DestroyWindow()
     return CDialog::DestroyWindow();
 }
 
-void COptGeneral::hotkeyEnablePOP()
+void COptGeneral::HotkeyEnablePOP()
 {
     m_ctrlPopupKey.EnableWindow(true);
     m_ctrlPopupKey.SetFocus();
 }
 
-void COptGeneral::hotkeyDisablePOP()
+void COptGeneral::HotkeyDisablePOP()
 {
     m_ctrlPopupKey.EnableWindow(false);
 }
 
-void COptGeneral::hotkeyEnableFIFO()
+void COptGeneral::HotkeyEnableFIFO()
 {
     m_ctrlFifoKey.EnableWindow(true);
     m_ctrlFifoKey.SetFocus();
 }
 
-void COptGeneral::hotkeyDisableFIFO()
+void COptGeneral::HotkeyDisableFIFO()
 {
     m_ctrlFifoKey.EnableWindow(false);
 }

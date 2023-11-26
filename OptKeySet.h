@@ -26,9 +26,9 @@ class COptKeySet : public CDialog
     // コンストラクション
 public:
     COptKeySet(CWnd* pParent = NULL);   // 標準のコンストラクタ
-    CHANGE_KEY windouToKeyOption();
+
     // ダイアログ データ
-        //{{AFX_DATA(COptKeySet)
+    //{{AFX_DATA(COptKeySet)
     enum { IDD = IDD_SETTINGS_05_KEYS };
     CEdit	m_ctrlCopyWaitEdit;
     CEdit	m_ctrlPasteWaitEdit;
@@ -37,7 +37,7 @@ public:
     CMyHotkeyCtrl	m_ctrlCopyKey;
     //}}AFX_DATA
 
-// オーバーライド
+    // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
     //{{AFX_VIRTUAL(COptKeySet)
 public:
@@ -47,7 +47,7 @@ protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
     //}}AFX_VIRTUAL
 
-// インプリメンテーション
+    // インプリメンテーション
 protected:
     void SetListData(CHANGE_KEY sKeyData, CHANGE_KEY* dataPtr, bool isSet, int nLine);
     std::list<CHANGE_KEY>::iterator findData(CHANGE_KEY* dataPtr);

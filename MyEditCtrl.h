@@ -23,8 +23,8 @@ public:
 public:
 
     // オーバーライド
-        // ClassWizard は仮想関数のオーバーライドを生成します。
-        //{{AFX_VIRTUAL(CMyEditCtrl)
+    // ClassWizard は仮想関数のオーバーライドを生成します。
+    //{{AFX_VIRTUAL(CMyEditCtrl)
 public:
     virtual BOOL PreTranslateMessage(MSG* pMsg);
     //}}AFX_VIRTUAL

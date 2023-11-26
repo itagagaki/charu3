@@ -32,9 +32,9 @@ COptStyle::COptStyle(CWnd* pParent /*=NULL*/)
     m_strBorderColor.Format(_T("%.6x"), theApp.m_ini.m_nBorderColor);
     m_strBackgroundColor.Format(_T("%.6x"), theApp.m_ini.m_nBackgroundColor);
     m_strTextColor.Format(_T("%.6x"), theApp.m_ini.m_nTextColor);
-    m_ctrlBorderPal.setColor(Color::Swap_RGB_BGR(theApp.m_ini.m_nBorderColor));
-    m_ctrlBackgroundPal.setColor(Color::Swap_RGB_BGR(theApp.m_ini.m_nBackgroundColor));
-    m_ctrlTextPal.setColor(Color::Swap_RGB_BGR(theApp.m_ini.m_nTextColor));
+    m_ctrlBorderPal.SetColor(Color::Swap_RGB_BGR(theApp.m_ini.m_nBorderColor));
+    m_ctrlBackgroundPal.SetColor(Color::Swap_RGB_BGR(theApp.m_ini.m_nBackgroundColor));
+    m_ctrlTextPal.SetColor(Color::Swap_RGB_BGR(theApp.m_ini.m_nTextColor));
 }
 
 //---------------------------------------------------
@@ -185,50 +185,50 @@ BOOL COptStyle::DestroyWindow()
 
 void COptStyle::OnChangeOptBorderColor()
 {
-    updateColor((CEdit*)GetDlgItem(IDC_OPT_BORDER_COLOR), &m_ctrlBorderPal);
+    UpdateColor((CEdit*)GetDlgItem(IDC_OPT_BORDER_COLOR), &m_ctrlBorderPal);
 }
 
 void COptStyle::OnChangeOptBackColor()
 {
-    updateColor((CEdit*)GetDlgItem(IDC_OPT_BACKGROUND_COLOR), &m_ctrlBackgroundPal);
+    UpdateColor((CEdit*)GetDlgItem(IDC_OPT_BACKGROUND_COLOR), &m_ctrlBackgroundPal);
 }
 
 void COptStyle::OnChangeOptTextColor()
 {
-    updateColor((CEdit*)GetDlgItem(IDC_OPT_TEXT_COLOR), &m_ctrlTextPal);
+    UpdateColor((CEdit*)GetDlgItem(IDC_OPT_TEXT_COLOR), &m_ctrlTextPal);
 }
 
-void COptStyle::updateColor(CEdit* edit, CPaletStatic* stPal)
+void COptStyle::UpdateColor(CEdit* edit, CPaletStatic* stPal)
 {
     CString cstr;
     edit->GetWindowText(cstr);
     int rgb;
     _stscanf_s(cstr, _T("%x"), &rgb);
-    stPal->setColor(Color::Swap_RGB_BGR(rgb));
+    stPal->SetColor(Color::Swap_RGB_BGR(rgb));
     stPal->Invalidate();
 }
 
 void COptStyle::OnOptBorderColorPal()
 {
-    pickColor((CEdit*)GetDlgItem(IDC_OPT_BORDER_COLOR), &m_ctrlBorderPal);
+    PickColor((CEdit*)GetDlgItem(IDC_OPT_BORDER_COLOR), &m_ctrlBorderPal);
 }
 
 void COptStyle::OnOptBackgroundColorPal()
 {
-    pickColor((CEdit*)GetDlgItem(IDC_OPT_BACKGROUND_COLOR), &m_ctrlBackgroundPal);
+    PickColor((CEdit*)GetDlgItem(IDC_OPT_BACKGROUND_COLOR), &m_ctrlBackgroundPal);
 }
 
 void COptStyle::OnOptTextColorPal()
 {
-    pickColor((CEdit*)GetDlgItem(IDC_OPT_TEXT_COLOR), &m_ctrlTextPal);
+    PickColor((CEdit*)GetDlgItem(IDC_OPT_TEXT_COLOR), &m_ctrlTextPal);
 }
 
-void COptStyle::pickColor(CEdit* edit, CPaletStatic* stPal)
+void COptStyle::PickColor(CEdit* edit, CPaletStatic* stPal)
 {
     CColorDialog dlgColor;
     if (dlgColor.DoModal() == IDOK) {
         COLORREF col = dlgColor.GetColor();
-        stPal->setColor(col);
+        stPal->SetColor(col);
         stPal->Invalidate();
         CString strBuff;
         strBuff.Format(_T("%.6x"), Color::Swap_RGB_BGR((int)col));

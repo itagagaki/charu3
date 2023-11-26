@@ -26,13 +26,13 @@ public:
 
     // オペレーション
 public:
-    void setColor(COLORREF colMyColor) {
-        m_colMyColor = colMyColor;
+    void SetColor(COLORREF color) {
+        m_color = color;
     }
     // オーバーライド
-        // ClassWizard は仮想関数のオーバーライドを生成します。
-        //{{AFX_VIRTUAL(CPaletStatic)
-        //}}AFX_VIRTUAL
+    // ClassWizard は仮想関数のオーバーライドを生成します。
+    //{{AFX_VIRTUAL(CPaletStatic)
+    //}}AFX_VIRTUAL
 
     // インプリメンテーション
 public:
@@ -44,7 +44,7 @@ protected:
     afx_msg void OnPaint();
     //}}AFX_MSG
 
-    COLORREF m_colMyColor;
+    COLORREF m_color;
     DECLARE_MESSAGE_MAP()
 };
 
