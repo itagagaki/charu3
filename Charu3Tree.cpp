@@ -1212,35 +1212,67 @@ void CCharu3Tree::closeFolder(HTREEITEM hStartItem)
     } while (hItem);
 }
 
-//---------------------------------------------------
-//関数名	checkFolder(HTREEITEM hStartItem,bool isCheck)
-//機能		指定データ以下にチェックを入れる
-//---------------------------------------------------
-void CCharu3Tree::checkFolder(HTREEITEM hStartItem, bool isCheck, std::list<HTREEITEM>* listItem)
+void CCharu3Tree::SetCheckEx(HTREEITEM hItem, BOOL check)
 {
-    if (!hStartItem) return;
-    std::list<STRING_DATA>::iterator it;
-    SetCheck(hStartItem, isCheck);
-    HTREEITEM hItem = GetChildItem(hStartItem);
-    do {
-        if (ItemHasChildren(hItem)) {
-            checkFolder(hItem, isCheck, listItem);
-        }
-        SetCheck(hItem, isCheck);
-        if (isCheck) {//リストに追加
-            listItem->insert(listItem->end(), hItem);
-        }
-        else {//リストから削除
-            std::list<HTREEITEM>::iterator it;
-            for (it = listItem->begin(); it != listItem->end(); it++) {
-                if (*it == hItem) {
-                    listItem->erase(it);
-                    break;
-                }
+    SetCheck(hItem, check);
+    if (check) {
+        // Add this to listItem
+        m_ltCheckItems.insert(m_ltCheckItems.end(), hItem);
+    }
+    else {
+        // Remove this from listItem
+        std::list<HTREEITEM>::iterator it;
+        for (it = m_ltCheckItems.begin(); it != m_ltCheckItems.end(); it++) {
+            if (*it == hItem) {
+                m_ltCheckItems.erase(it);
+                break;
             }
         }
-        hItem = GetNextItem(hItem, TVGN_NEXT);
-    } while (hItem);
+    }
+}
+
+void CCharu3Tree::SetCheckExRecursive(HTREEITEM hItem, BOOL check)
+{
+    SetCheckEx(hItem, check);
+    for (hItem = GetChildItem(hItem); hItem; hItem = GetNextItem(hItem, TVGN_NEXT)) {
+        SetCheckExRecursive(hItem, check);
+    }
+}
+
+//---------------------------------------------------
+//関数名	ToggleItemCheck(HTREEITEM hItem)
+//機能		項目のチェックを切替える
+//---------------------------------------------------
+void CCharu3Tree::ToggleItemCheck(HTREEITEM hItem)
+{
+    ModifyStyle(NULL, TVS_CHECKBOXES, NULL);
+    if (hItem) {
+        BOOL checked = GetCheck(hItem);
+        if (ItemHasChildren(hItem)) {
+            /* Even if we check a folder, the selected items in the folder
+               have to be removed from the list first (otherwise duplicates
+               will be added), so the process of unchecking the subtree should
+               be done anyway. */
+            SetCheckExRecursive(hItem, FALSE);
+            if (!checked) {
+                SetCheckExRecursive(hItem, TRUE);
+            }
+        }
+        else {
+            SetCheckEx(hItem, !checked);
+        }
+    }
+}
+
+//---------------------------------------------------
+//関数名	UncheckItem(HTREEITEM hItem)
+//機能		項目のチェックを外す
+//---------------------------------------------------
+void CCharu3Tree::UncheckItem(HTREEITEM hItem)
+{
+    if (hItem) {
+        SetCheckExRecursive(hItem, FALSE);
+    }
 }
 
 //---------------------------------------------------
@@ -1954,83 +1986,6 @@ HTREEITEM CCharu3Tree::moveFolderTop(HTREEITEM hTreeItem)
     UncheckItem(hTreeItem);
     DeleteItem(hTreeItem);
     return hRet;
-}
-
-//---------------------------------------------------
-//関数名	ClearChecks()
-//機能		チェックを外す
-//---------------------------------------------------
-void CCharu3Tree::ClearChecks()
-{
-    int nSize = m_MyStringList.size(), i;
-    HTREEITEM hTreeItem;
-    for (hTreeItem = GetRootItem(), i = 0; i < nSize && hTreeItem; i++, hTreeItem = getTrueNextItem(hTreeItem)) {
-        SetCheck(hTreeItem, false);
-    }
-}
-
-//---------------------------------------------------
-//関数名	ToggleItemCheck(HTREEITEM hItem)
-//機能		項目のチェックを切替える
-//---------------------------------------------------
-void CCharu3Tree::ToggleItemCheck(HTREEITEM hItem)
-{
-    // TODO: Should refactor
-
-    if (!hItem) {
-        return;
-    }
-    ModifyStyle(NULL, TVS_CHECKBOXES, NULL);
-    BOOL checked = GetCheck(hItem);
-    if (ItemHasChildren(hItem)) {
-
-        // Even if we check a folder, the selected items in the folder have to
-        // be removed from the list first(otherwise duplicates will be added),
-        // so the process of unchecking the subtree should be done anyway.
-        checkFolder(hItem, false, &m_ltCheckItems);
-
-        if (!checked) {
-            checkFolder(hItem, true, &m_ltCheckItems);
-        }
-    }
-    else {
-        SetCheck(hItem, !checked);
-        if (!checked) {//リストに追加
-            m_ltCheckItems.insert(m_ltCheckItems.end(), hItem);
-        }
-        else {//リストから削除
-            std::list<HTREEITEM>::iterator it;
-            for (it = m_ltCheckItems.begin(); it != m_ltCheckItems.end(); it++) {
-                if (*it == hItem) {
-                    m_ltCheckItems.erase(it);
-                    break;
-                }
-            }
-        }
-    }
-}
-
-//---------------------------------------------------
-//関数名	UncheckItem(HTREEITEM hItem)
-//機能		項目のチェックを外す
-//---------------------------------------------------
-void CCharu3Tree::UncheckItem(HTREEITEM hItem)
-{
-    // TODO: Should refactor
-
-    if (ItemHasChildren(hItem)) {
-        checkFolder(hItem, false, &m_ltCheckItems);
-    }
-    else if (hItem) {
-        SetCheck(hItem, false);
-        std::list<HTREEITEM>::iterator it;
-        for (it = m_ltCheckItems.begin(); it != m_ltCheckItems.end(); it++) {
-            if (*it == hItem) {
-                m_ltCheckItems.erase(it);
-                break;
-            }
-        }
-    }
 }
 
 //---------------------------------------------------

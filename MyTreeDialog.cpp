@@ -404,7 +404,8 @@ void CMyTreeDialog::OnClickMyTree(NMHDR* pNMHDR, LRESULT* pResult)
     if (hClickItem) {
         if (m_pTreeCtrl->GetItemRect(hClickItem, &ItemRect, true)) {
             if (TVHT_ONITEMICON & Flags) {
-                // Clicking on the icon of the one-time data item in the data tree view changes it to permanent data.
+                // Clicking on the icon of the one-time data item in the data
+                // tree view changes it to permanent data.
                 STRING_DATA* pData = m_pTreeCtrl->getDataPtr(hClickItem);
                 if (pData->m_cKind & KIND_ONETIME) {
                     pData->m_cKind = KIND_LOCK;
@@ -414,6 +415,10 @@ void CMyTreeDialog::OnClickMyTree(NMHDR* pNMHDR, LRESULT* pResult)
             if (TVHT_ONITEMSTATEICON & Flags) {
                 // Clicked on checkbox
                 m_pTreeCtrl->ToggleItemCheck(hClickItem);
+
+                // The process above includes toggling the check, but MFC will
+                // also toggle the check for this item, so reverse the toggle
+                // once here.
                 m_pTreeCtrl->SetCheck(hClickItem, !m_pTreeCtrl->GetCheck(hClickItem));
             }
         }
@@ -683,7 +688,23 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
                 bool goBackwards = ::GetKeyState(VK_SHIFT) < 0;
                 if (::GetKeyState(VK_CONTROL) < 0) {
                     m_pTreeCtrl->ToggleItemCheck(m_pTreeCtrl->GetSelectedItem());
-                    hTreeItem = goBackwards ? m_pTreeCtrl->GetPrevSiblingItem(hTreeItem) : m_pTreeCtrl->GetNextSiblingItem(hTreeItem);
+                    if (goBackwards) {
+                        hTreeItem = m_pTreeCtrl->GetPrevVisibleItem(hTreeItem);
+                    }
+                    else {
+                        HTREEITEM currentItem = hTreeItem;
+                        hTreeItem = m_pTreeCtrl->GetNextSiblingItem(currentItem); // Skip children
+                        if (!hTreeItem) {
+                            hTreeItem = m_pTreeCtrl->GetNextVisibleItem(currentItem);
+                        }
+                    }
+                    std::list<HTREEITEM>::iterator it;
+                    for (it = m_pTreeCtrl->m_ltCheckItems.begin(); it != m_pTreeCtrl->m_ltCheckItems.end(); it++) {
+                        if (m_pTreeCtrl->GetItemState(*it, TVIF_HANDLE)) {
+                            STRING_DATA* data = m_pTreeCtrl->getDataPtr(*it);
+                            LOG(_T("[] %s"), data->m_strTitle.GetString());
+                        }
+                    }
                 }
                 else {
                     if (goBackwards) {

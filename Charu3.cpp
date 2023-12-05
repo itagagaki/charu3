@@ -796,11 +796,12 @@ void CCharu3App::closeTreeWindow(int nRet)
             for (it = m_pTree->m_ltCheckItems.begin(); it != m_pTree->m_ltCheckItems.end(); it++) {
                 if (m_pTree->GetItemState(*it, TVIF_HANDLE)) {
                     data = m_pTree->getData(*it);
-
-                    if (m_ini.m_bDebug) {
-                        LOG(_T("closeTreeWindow check paste %s"), data.m_strTitle.GetString());
+                    if (data.m_cKind & KIND_DATA_ALL) {
+                        if (m_ini.m_bDebug) {
+                            LOG(_T("closeTreeWindow check paste %s"), data.m_strTitle.GetString());
+                        }
+                        playData(data, strClip, strSelect, isPaste, false);
                     }
-                    playData(data, strClip, strSelect, isPaste, false);
                 }
             }
             //ˆêŽž€–Ú‚ÍÁ‚·
@@ -848,9 +849,6 @@ void CCharu3App::closeTreeWindow(int nRet)
     if (m_pTree->GetStyle() & TVS_CHECKBOXES) {
         resetTreeDialog();
         Window::SetFocusInfo(&m_focusInfo);
-    }
-    else {
-        m_pTree->ClearChecks();
     }
     ASSERT(m_nPhase == PHASE_POPUP);
     m_nPhase = PHASE_IDOL;

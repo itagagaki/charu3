@@ -129,7 +129,6 @@ public:
     void clearFolder(HTREEITEM hItem);
     void closeFolder(HTREEITEM hStartItem);
     void cleanupOneTimeItems(HTREEITEM hStartItem, int nKind = 0);
-    void ClearChecks();
     void changeIcon(HTREEITEM hTreeItem, int nID);
     void tree2List(HTREEITEM hStartItem, std::list<STRING_DATA>* tmplist, bool isAll = false);
 
@@ -211,7 +210,8 @@ private:
     DWORD getDataOptionHex(CString strData, CString strKind);
     void archiveHistory(HTREEITEM hTreeItem, int nRirekiCount);
 
-    void checkFolder(HTREEITEM hStartItem, bool isCheck, std::list<HTREEITEM>* listItem);
+    void SetCheckEx(HTREEITEM hItem, BOOL check);
+    void SetCheckExRecursive(HTREEITEM hStartItem, BOOL check);
     void UncheckItem(HTREEITEM hItem);
 
     bool getPlugin(CString strName, RW_PLUGIN* pPlugin);
