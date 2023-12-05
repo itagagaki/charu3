@@ -409,7 +409,7 @@ void CMyTreeDialog::OnClickMyTree(NMHDR* pNMHDR, LRESULT* pResult)
                 STRING_DATA* pData = m_pTreeCtrl->getDataPtr(hClickItem);
                 if (pData->m_cKind & KIND_ONETIME) {
                     pData->m_cKind = KIND_LOCK;
-                    m_pTreeCtrl->editData2(hClickItem);
+                    m_pTreeCtrl->UpdateItem(hClickItem);
                 }
             }
             if (TVHT_ONITEMSTATEICON & Flags) {
@@ -528,7 +528,7 @@ void CMyTreeDialog::OnEndlabeleditMyTree(NMHDR* pNMHDR, LRESULT* pResult)
         HTREEITEM hTreeItem = m_pTreeCtrl->GetSelectedItem();
         STRING_DATA* pData = m_pTreeCtrl->getDataPtr(hTreeItem);
         pData->m_strTitle = item->pszText;
-        m_pTreeCtrl->editData2(hTreeItem);
+        m_pTreeCtrl->UpdateItem(hTreeItem);
     }
     m_isModal = false;
 
@@ -886,7 +886,7 @@ void CMyTreeDialog::OnEdit()
     HTREEITEM hTreeItem = m_pTreeCtrl->GetSelectedItem();
     CEditDialog dlgEdit(this, m_pTreeCtrl->getDataPtr(hTreeItem), false);
     if (dlgEdit.DoModal() == IDOK) {
-        m_pTreeCtrl->editData2(hTreeItem);
+        m_pTreeCtrl->UpdateItem(hTreeItem);
     }
     m_isModal = false;
 }
@@ -1000,7 +1000,7 @@ void CMyTreeDialog::OnMakeOnetime()
     if (hTreeItem) {
         STRING_DATA* pData = m_pTreeCtrl->getDataPtr(hTreeItem);
         pData->m_cKind = KIND_ONETIME;
-        m_pTreeCtrl->editData2(hTreeItem);
+        m_pTreeCtrl->UpdateItem(hTreeItem);
     }
 }
 
@@ -1014,7 +1014,7 @@ void CMyTreeDialog::OnMakePermanent()
     if (hTreeItem) {
         STRING_DATA* pData = m_pTreeCtrl->getDataPtr(hTreeItem);
         pData->m_cKind = KIND_LOCK;
-        m_pTreeCtrl->editData2(hTreeItem);
+        m_pTreeCtrl->UpdateItem(hTreeItem);
     }
 }
 

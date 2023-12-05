@@ -118,13 +118,14 @@ public:
 
     // インプリメンテーション
 public:
+    void UpdateItem(HTREEITEM hTreeItem);
+    void SetText(HTREEITEM hTreeItem, CString& strText);
+
     void setPlugin(CString strPath);
     void setImageList(POINT posSize, CString strFileName, CString strPath);
 
     HTREEITEM addNewFolder(HTREEITEM hTreeItem, CString strName);
     HTREEITEM addData(HTREEITEM hTreeItem, STRING_DATA Data, bool isNewID = true, bool isChild = false);
-    void editData(HTREEITEM hTreeItem, STRING_DATA Data);
-    void editData2(HTREEITEM hTreeItem);
     void deleteData(HTREEITEM hTreeItem);
     void clearFolder(HTREEITEM hItem);
     void closeFolder(HTREEITEM hStartItem);

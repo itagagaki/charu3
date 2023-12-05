@@ -1017,9 +1017,8 @@ void CCharu3App::playHotItem(int nTarget)
                 if (keyData.m_strMacroName == EXMACRO_DIRECT_COPY) {
                     Window::GetCaretPos(&pos, &m_focusInfo);//キャレット位置を取得
                     setAppendKeyInit(m_focusInfo.m_hActiveWnd, &m_keySet);//キー設定を変更
-                    strSelect = getSelectString(m_keySet, m_focusInfo.m_hFocusWnd);//選択文字取得
-                    data.m_strData = strSelect;
-                    m_pTree->editData(keyData.m_hItem, data);
+                    CString selectedText = getSelectString(m_keySet, m_focusInfo.m_hFocusWnd);
+                    m_pTree->SetText(keyData.m_hItem, selectedText);
 
                     if (m_ini.m_bDebug) {
                         LOG(_T("Direct copy data %s"), data.m_strTitle.GetString());

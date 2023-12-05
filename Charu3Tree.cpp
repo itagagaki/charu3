@@ -1077,38 +1077,22 @@ HTREEITEM CCharu3Tree::addData(HTREEITEM hTreeItem, STRING_DATA data, bool isNew
     return hTreeItem;
 }
 
-//---------------------------------------------------
-//関数名	editData(HTREEITEM hTreeItem,STRING_DATA Data)
-//機能		データを変更する
-//---------------------------------------------------
-void CCharu3Tree::editData(HTREEITEM hTreeItem, STRING_DATA Data)
-{
-    time(&Data.m_timeEdit);
-    STRING_DATA* dataPtr = getDataPtr(hTreeItem);
-    *dataPtr = Data;
-    int nIcon = getIconNumber(Data.m_cKind, Data.m_cIcon);
-    SetItemImage(hTreeItem, nIcon, nIcon + 1);
-    SetItemText(hTreeItem, Data.m_strTitle);
-
-    if (theApp.m_ini.m_bDebug) {
-        LOG(_T("edit data \"%s\" %d"), dataPtr->m_strTitle.GetString(), dataPtr->m_cKind);
-    }
-}
-
-//---------------------------------------------------
-//関数名	editData(HTREEITEM hTreeItem,STRING_DATA Data)
-//機能		データを変更する
-//---------------------------------------------------
-void CCharu3Tree::editData2(HTREEITEM hTreeItem)
+void CCharu3Tree::SetText(HTREEITEM hTreeItem, CString& strText)
 {
     STRING_DATA* pData = getDataPtr(hTreeItem);
-    time(&pData->m_timeEdit);
+    pData->m_strData = strText;
+}
+
+void CCharu3Tree::UpdateItem(HTREEITEM hTreeItem)
+{
+    STRING_DATA* pData = getDataPtr(hTreeItem);
     int nIcon = getIconNumber(pData->m_cKind, pData->m_cIcon);
     SetItemImage(hTreeItem, nIcon, nIcon + 1);
     SetItemText(hTreeItem, pData->m_strTitle);
+    time(&pData->m_timeEdit);
 
     if (theApp.m_ini.m_bDebug) {
-        LOG(_T("edit data \"%s\" %d"), pData->m_strTitle.GetString(), pData->m_cKind);
+        LOG(_T("UpdateItem \"%s\""), pData->m_strTitle.GetString());
     }
 }
 
@@ -1292,12 +1276,12 @@ void CCharu3Tree::cleanupOneTimeItems(HTREEITEM hStartItem, int nKind /*KIND_LOC
         hPrevItem = hItem;
         hItem = GetNextItem(hItem, TVGN_NEXT);
         if (it->m_cKind & KIND_ONETIME) {
-            if (nKind == KIND_LOCK) {//ロック処理の場合
-                STRING_DATA data = getData(hPrevItem);
-                data.m_cKind = KIND_LOCK;
-                editData(hPrevItem, data);
+            if (nKind == KIND_LOCK) {  //ロック処理
+                STRING_DATA* pData = getDataPtr(hPrevItem);
+                pData->m_cKind = KIND_LOCK;
+                UpdateItem(hPrevItem);
             }
-            else {//クリア処理に場合
+            else {  //クリア処理
                 m_MyStringList.erase(it);
                 UncheckItem(hPrevItem);
                 DeleteItem(hPrevItem);
@@ -1308,9 +1292,9 @@ void CCharu3Tree::cleanupOneTimeItems(HTREEITEM hStartItem, int nKind /*KIND_LOC
 
 void CCharu3Tree::changeIcon(HTREEITEM hTreeItem, int nID)
 {
-    STRING_DATA data = getData(hTreeItem);
-    data.m_cIcon = nID;
-    editData(hTreeItem, data);
+    STRING_DATA* pData = getDataPtr(hTreeItem);
+    pData->m_cIcon = nID;
+    UpdateItem(hTreeItem);
 }
 
 //---------------------------------------------------
@@ -1522,17 +1506,13 @@ HTREEITEM CCharu3Tree::getLastVisibleItem()
 //---------------------------------------------------
 void CCharu3Tree::allIconCheck()
 {
-    HTREEITEM hTreeItem;
-    char cOrg;
-    STRING_DATA data;
-    hTreeItem = GetRootItem();
     int nSize = m_MyStringList.size();
+    HTREEITEM hTreeItem = GetRootItem();
     for (int i = 0; i < nSize; hTreeItem = getTrueNextItem(hTreeItem), i++) {
         if (hTreeItem) {
-            data = getData(hTreeItem);
-            cOrg = data.m_cIcon;
-            data.m_cIcon = decideIcon(data.m_strData);
-            if (cOrg != data.m_cIcon) editData(hTreeItem, data);
+            STRING_DATA* pData = getDataPtr(hTreeItem);
+            pData->m_cIcon = decideIcon(pData->m_strData);
+            UpdateItem(hTreeItem);
         }
     }
 }
@@ -1837,32 +1817,26 @@ void CCharu3Tree::archiveHistory(HTREEITEM hTreeItem, int nRirekiCount)
         }
         if (hFirstFolder) {//あぶれ分を移動
             HTREEITEM hLastChild = getLastChild(hTreeItem);
-
-            //データを取得
-            STRING_DATA data = getData(hLastChild);
-            STRING_DATA* dataTarget = getDataPtr(hFirstFolder);
+            STRING_DATA* pData = getDataPtr(hLastChild);
 
             //元データを取得
             TV_ITEM TreeCtrlItem;
             ZeroMemory(&TreeCtrlItem, sizeof(TreeCtrlItem));
             TreeCtrlItem.hItem = hLastChild;
             TreeCtrlItem.mask = TVIF_PARAM | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_TEXT;
-            this->GetItem(&TreeCtrlItem);
+            GetItem(&TreeCtrlItem);
 
             //追加データを作成
             TV_INSERTSTRUCT AddTreeCtrlItem;
-
             ZeroMemory(&AddTreeCtrlItem, sizeof(AddTreeCtrlItem));
             AddTreeCtrlItem.item.mask = TreeCtrlItem.mask;
             AddTreeCtrlItem.item.iImage = TreeCtrlItem.iImage;
             AddTreeCtrlItem.item.iSelectedImage = TreeCtrlItem.iSelectedImage;
-            AddTreeCtrlItem.item.pszText = data.m_strTitle.GetBuffer(data.m_strTitle.GetLength());
+            AddTreeCtrlItem.item.pszText = pData->m_strTitle.GetBuffer(pData->m_strTitle.GetLength());
             AddTreeCtrlItem.item.lParam = TreeCtrlItem.lParam;
             AddTreeCtrlItem.hInsertAfter = TVI_FIRST;
             AddTreeCtrlItem.hParent = hFirstFolder;
-
-            data.m_nParentID = dataTarget->m_nMyID;
-            editData(hLastChild, data);
+            pData->m_nParentID = getDataPtr(hFirstFolder)->m_nMyID;
             InsertItem(&AddTreeCtrlItem);
             UncheckItem(hLastChild);
             DeleteItem(hLastChild);
