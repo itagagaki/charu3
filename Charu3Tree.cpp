@@ -236,24 +236,6 @@ void CCharu3Tree::setImageList(POINT posSize, CString strFileName, CString strPa
 }
 
 //---------------------------------------------------
-//関数名	checkRedundancyID(int nID)
-//機能		重複IDをチェック
-//---------------------------------------------------
-bool CCharu3Tree::checkRedundancyID(int nID)
-{
-    bool isRet = false;
-    std::list<STRING_DATA>::iterator it;
-
-    for (it = m_MyStringList.begin(); it != m_MyStringList.end(); it++) {
-        if (it->m_nMyID == nID) {
-            isRet = true;
-            break;
-        }
-    }
-    return isRet;
-}
-
-//---------------------------------------------------
 //関数名	checkMyChild(HTREEITEM hChildItem,int nMyID)
 //機能		自分の子孫フォルダか調べる
 //---------------------------------------------------
@@ -751,6 +733,33 @@ bool CCharu3Tree::LoadDataWithPlugin(CString strFileName, CString strPlugin, std
     }
 
     isRet = true;
+    return isRet;
+}
+
+int CCharu3Tree::makeNewID()
+{
+    (*m_pMaxID)++;
+    while (checkRedundancyID(*m_pMaxID)) {
+        *m_pMaxID += 10;
+    }
+    return *m_pMaxID;
+}
+
+//---------------------------------------------------
+//関数名	checkRedundancyID(int nID)
+//機能		重複IDをチェック
+//---------------------------------------------------
+bool CCharu3Tree::checkRedundancyID(int nID)
+{
+    bool isRet = false;
+    std::list<STRING_DATA>::iterator it;
+
+    for (it = m_MyStringList.begin(); it != m_MyStringList.end(); it++) {
+        if (it->m_nMyID == nID) {
+            isRet = true;
+            break;
+        }
+    }
     return isRet;
 }
 

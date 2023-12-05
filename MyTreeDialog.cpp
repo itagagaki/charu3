@@ -680,23 +680,28 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
             if (theApp.m_ini.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
             HTREEITEM hTreeItem = m_pTreeCtrl->GetSelectedItem();
             if (hTreeItem) {
-                if (::GetKeyState(VK_CONTROL) < 0) {//CTRLが押されている
-                    HTREEITEM hSelItem = m_pTreeCtrl->GetSelectedItem();
-                    m_pTreeCtrl->ToggleItemCheck(hSelItem);
-                    hSelItem = m_pTreeCtrl->GetNextVisibleItem(hTreeItem);
-                    if (hSelItem) hTreeItem = hSelItem;
-                }
-                else if (::GetKeyState(VK_SHIFT) < 0) {//シフトが押されている
-                    hTreeItem = m_pTreeCtrl->GetPrevVisibleItem(hTreeItem);//前のアイテムを取得
-                    if (!hTreeItem) {
-                        hTreeItem = m_pTreeCtrl->getLastVisibleItem();//一番上まで行ったら最後にループ
-                    }
+                bool goBackwards = ::GetKeyState(VK_SHIFT) < 0;
+                if (::GetKeyState(VK_CONTROL) < 0) {
+                    m_pTreeCtrl->ToggleItemCheck(m_pTreeCtrl->GetSelectedItem());
+                    hTreeItem = goBackwards ? m_pTreeCtrl->GetPrevSiblingItem(hTreeItem) : m_pTreeCtrl->GetNextSiblingItem(hTreeItem);
                 }
                 else {
-                    hTreeItem = m_pTreeCtrl->GetNextVisibleItem(hTreeItem);
-                    if (!hTreeItem) hTreeItem = m_pTreeCtrl->GetRootItem();
+                    if (goBackwards) {
+                        hTreeItem = m_pTreeCtrl->GetPrevVisibleItem(hTreeItem);
+                        if (!hTreeItem) {
+                            hTreeItem = m_pTreeCtrl->getLastVisibleItem();
+                        }
+                    }
+                    else {
+                        hTreeItem = m_pTreeCtrl->GetNextVisibleItem(hTreeItem);
+                        if (!hTreeItem) {
+                            hTreeItem = m_pTreeCtrl->GetRootItem();
+                        }
+                    }
                 }
-                m_pTreeCtrl->SelectItem(hTreeItem);
+                if (hTreeItem) {
+                    m_pTreeCtrl->SelectItem(hTreeItem);
+                }
             }
             else {//選択されてなかったら0番目を選択
                 m_pTreeCtrl->Select(m_pTreeCtrl->GetRootItem(), TVGN_FIRSTVISIBLE);
@@ -752,8 +757,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
         }
         //TABキーでチェック
         else if (VK_TAB == pMsg->wParam && !m_pTreeCtrl->IsDragging() && !m_isModal) {
-            HTREEITEM hSelItem = m_pTreeCtrl->GetSelectedItem();
-            m_pTreeCtrl->ToggleItemCheck(hSelItem);
+            m_pTreeCtrl->ToggleItemCheck(m_pTreeCtrl->GetSelectedItem());
             return true;
         }
         //上下
@@ -1097,8 +1101,7 @@ void CMyTreeDialog::OnListSearch()
 
 void CMyTreeDialog::OnCheckItem()
 {
-    HTREEITEM hSelItem = m_pTreeCtrl->GetSelectedItem();
-    m_pTreeCtrl->ToggleItemCheck(hSelItem);
+    m_pTreeCtrl->ToggleItemCheck(m_pTreeCtrl->GetSelectedItem());
     m_bCheckbox = true;
 }
 

@@ -158,9 +158,8 @@ public:
 
     bool loadDataFileDef(CString strFileName, CString strPlugin);
     bool loadDataFile(CString strFileName, CString strPlugin, std::list<STRING_DATA>* tmplist);
-    bool convertMacroPlugin(STRING_DATA* SourceData, CString* strRet, CString strSelect, CString strClip, CString strSoftName);
-
     bool saveDataToFile(CString strFileName, CString strPlugin, HTREEITEM hStartItem);
+    bool convertMacroPlugin(STRING_DATA* SourceData, CString* strRet, CString strSelect, CString strClip, CString strSoftName);
 
     void setInitInfo(int* pMaxID, int* pSelectID, int* pRecNumber) {
         m_pMaxID = pMaxID;
@@ -194,18 +193,10 @@ private:
     std::list<STRING_DATA>::iterator findData(STRING_DATA* dataPtr);
     int mergeList(std::list<STRING_DATA>* pMainList, std::list<STRING_DATA>* pList, int nParent);
 
-    int makeNewID() {
-        (*m_pMaxID)++;
-        while (checkRedundancyID(*m_pMaxID)) {
-            *m_pMaxID += 10;
-        }
-        return *m_pMaxID;
-    }
-    void setSelectID(int nID) {
-        *m_pSelectID = nID;
-    }
-    void normalizationID(std::list<STRING_DATA>* pList, int nParentID);
+    int makeNewID();
+    void setSelectID(int nID) { *m_pSelectID = nID; }
     bool checkRedundancyID(int nID);
+    void normalizationID(std::list<STRING_DATA>* pList, int nParentID);
 
     int getChildCount(HTREEITEM hTreeItem, bool isBrotherOnly = false);
     HTREEITEM getFirstFolder(HTREEITEM hStartItem);
