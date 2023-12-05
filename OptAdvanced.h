@@ -24,14 +24,15 @@ public:
     COptAdvanced(CWnd* pParent = NULL) : CDialog(IDD, pParent) {}
 
     // ダイアログ データ
+private:
     //{{AFX_DATA(COptAdvanced)
     enum { IDD = IDD_SETTINGS_06_ADVANCED };
     //}}AFX_DATA
 
     // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
-    //{{AFX_VIRTUAL(COptAdvanced)
 public:
+    //{{AFX_VIRTUAL(COptAdvanced)
     virtual BOOL PreTranslateMessage(MSG* pMsg);
     virtual BOOL DestroyWindow();
 
@@ -40,11 +41,6 @@ protected:
     //}}AFX_VIRTUAL
 
     // インプリメンテーション
-protected:
-    // 生成されたメッセージ マップ関数
-    //{{AFX_MSG(COptAdvanced)
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
 private:
     virtual BOOL OnInitDialog();
     afx_msg void OnLbnSelchangeListStealth();
@@ -58,6 +54,13 @@ private:
     CButton m_ctrlStealthAdd;
     CButton m_ctrlStealthDelete;
     CListBox m_stealthList;
+
+    // 生成されたメッセージ マップ関数
+protected:
+    //{{AFX_MSG(COptAdvanced)
+    //}}AFX_MSG
+
+    DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

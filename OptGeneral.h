@@ -25,16 +25,17 @@ public:
     COptGeneral(CWnd* pParent = NULL);   // 標準のコンストラクタ
 
     // ダイアログ データ
+private:
     //{{AFX_DATA(COptGeneral)
     enum { IDD = IDD_SETTINGS_01_GENERAL };
-    CMyHotkeyCtrl	m_ctrlFifoKey;
-    CMyHotkeyCtrl	m_ctrlPopupKey;
+    CMyHotkeyCtrl m_ctrlPopupKey;
+    CMyHotkeyCtrl m_ctrlFifoKey;
     //}}AFX_DATA
 
     // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
-    //{{AFX_VIRTUAL(COptGeneral)
 public:
+    //{{AFX_VIRTUAL(COptGeneral)
     virtual BOOL PreTranslateMessage(MSG* pMsg);
     virtual BOOL DestroyWindow();
 
@@ -43,9 +44,12 @@ protected:
     //}}AFX_VIRTUAL
 
     // インプリメンテーション
-protected:
+private:
+    int m_nPutBackClipboard;
+    int m_nShowClipboardInNotifyIconTooltip;
 
     // 生成されたメッセージ マップ関数
+protected:
     //{{AFX_MSG(COptGeneral)
     virtual BOOL OnInitDialog();
     afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
@@ -54,11 +58,8 @@ protected:
     afx_msg void HotkeyEnableFIFO();
     afx_msg void HotkeyDisableFIFO();
     //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
 
-private:
-    int m_nPutBackClipboard;
-    int m_nShowClipboardInNotifyIconTooltip;
+    DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

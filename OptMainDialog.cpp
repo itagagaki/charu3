@@ -108,9 +108,7 @@ void COptMainDialog::OnSelchangeOptTab(NMHDR* pNMHDR, LRESULT* pResult)
 //---------------------------------------------------
 BOOL COptMainDialog::DestroyWindow()
 {
-    if (theApp.m_pTreeDlg->IsWindowVisible()) {
-        theApp.m_pTreeDlg->RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
-    }
+    theApp.RedrawDataTreeView();
 
     for (int i = 0; i < NUM_PAGES; i++) {
         m_pages[i]->UpdateData();

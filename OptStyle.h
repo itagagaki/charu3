@@ -26,9 +26,9 @@ class COptStyle : public CDialog
     // コンストラクション
 public:
     COptStyle(CWnd* pParent = NULL);   // 標準のコンストラクタ
-    friend int CALLBACK EnumFontProc(ENUMLOGFONT* lpelf, NEWTEXTMETRIC* lpntm, int FontType, LPARAM _dwDmy);
 
     // ダイアログ データ
+private:
     //{{AFX_DATA(COptStyle)
     enum { IDD = IDD_SETTINGS_02_STYLE };
     CString m_strBorderColor;
@@ -42,17 +42,26 @@ public:
 
     // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
-    //{{AFX_VIRTUAL(COptStyle)
 public:
-    virtual BOOL DestroyWindow();
+    //{{AFX_VIRTUAL(COptStyle)
     virtual BOOL PreTranslateMessage(MSG* pMsg);
+    virtual BOOL DestroyWindow();
+
 protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
     //}}AFX_VIRTUAL
 
     // インプリメンテーション
-protected:
+public:
+    void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+
+private:
+    void UpdateColor(CEdit* edit, CPaletStatic* stPal);
+    void PickColor(CEdit* edit, CPaletStatic* stPal);
+    void SetOpacityText(int value);
+
     // 生成されたメッセージ マップ関数
+protected:
     //{{AFX_MSG(COptStyle)
     afx_msg void OnOptBorderColorPal();
     afx_msg void OnOptBackgroundColorPal();
@@ -63,16 +72,10 @@ protected:
     afx_msg void OnChangeOptBorderColor();
     afx_msg void OnChangeOptBackColor();
     afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
-public:
     afx_msg void OnBnClickedOptLoadStyle();
-    void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+    //}}AFX_MSG
 
-private:
-    void UpdateColor(CEdit* edit, CPaletStatic* stPal);
-    void PickColor(CEdit* edit, CPaletStatic* stPal);
-    void SetOpacityText(int value);
+    DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

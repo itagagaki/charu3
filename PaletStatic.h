@@ -29,6 +29,7 @@ public:
     void SetColor(COLORREF color) {
         m_color = color;
     }
+
     // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
     //{{AFX_VIRTUAL(CPaletStatic)
@@ -38,13 +39,15 @@ public:
 public:
     virtual ~CPaletStatic();
 
+private:
+    COLORREF m_color;
+
     // 生成されたメッセージ マップ関数
 protected:
     //{{AFX_MSG(CPaletStatic)
     afx_msg void OnPaint();
     //}}AFX_MSG
 
-    COLORREF m_color;
     DECLARE_MESSAGE_MAP()
 };
 

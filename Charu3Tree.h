@@ -110,8 +110,15 @@ public:
     CCharu3Tree();
     virtual ~CCharu3Tree();
 
+    // オーバーライド
+    // ClassWizard は仮想関数のオーバーライドを生成します。
+    //{{AFX_VIRTUAL(CCharu3Tree)
+    virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
+    //}}AFX_VIRTUAL
+
+    // インプリメンテーション
+public:
     void setPlugin(CString strPath);
-    bool getPlugin(CString strName, RW_PLUGIN* pPlugin);
     void setImageList(POINT posSize, CString strFileName, CString strPath);
 
     HTREEITEM addNewFolder(HTREEITEM hTreeItem, CString strName);
@@ -121,14 +128,10 @@ public:
     void deleteData(HTREEITEM hTreeItem);
     void clearFolder(HTREEITEM hItem);
     void closeFolder(HTREEITEM hStartItem);
-    void checkFolder(HTREEITEM hStartItem, bool isCheck, std::list<HTREEITEM>* listItem);
     void cleanupOneTimeItems(HTREEITEM hStartItem, int nKind = 0);
     void ClearChecks();
-
     void changeIcon(HTREEITEM hTreeItem, int nID);
     void tree2List(HTREEITEM hStartItem, std::list<STRING_DATA>* tmplist, bool isAll = false);
-    void data2TreeStruct(TV_INSERTSTRUCT* pTreeCtrlItem, std::list<STRING_DATA>::iterator it);
-    std::list<STRING_DATA>::iterator findData(STRING_DATA* dataPtr);
 
     STRING_DATA getData(HTREEITEM hTreeItem);
     STRING_DATA* getDataPtr(HTREEITEM hTreeItem);
@@ -137,17 +140,10 @@ public:
     HTREEITEM searchTitle(HTREEITEM hStartItem, CString strKey, bool makeLower = false);
     HTREEITEM getTrueNextItem(HTREEITEM hTreeItem);
     HTREEITEM getTruePrevItem(HTREEITEM hTreeItem);
-    HTREEITEM getLastSiblingItem(HTREEITEM hTreeItem);
-    HTREEITEM getLastDescendantItem(HTREEITEM hTreeItem);
     HTREEITEM getLastVisibleItem();
-    HTREEITEM getFirstFolder(HTREEITEM hStartItem);
-    HTREEITEM getLastChild(HTREEITEM hStartItem);
 
     void copyChildren(HTREEITEM hFromItem, HTREEITEM hToItem);
-    void moveChildren(HTREEITEM hFromItem, HTREEITEM hToItem);
 
-    int  getIconNumber(char cKind, char cIcon);
-    int  getChildCount(HTREEITEM hTreeItem, bool isBrotherOnly = false);
     char getDatakind(HTREEITEM hTreeItem) {
         char cRet = 0;
         if (hTreeItem) {
@@ -157,37 +153,21 @@ public:
         return cRet;
     }
 
-    void deleteExcessChildren(HTREEITEM hTreeItem, int* nCount);
     void copyData(int nParentID, HTREEITEM hParentTreeItem, std::list<STRING_DATA>* pList);
     HTREEITEM mergeTreeData(HTREEITEM hTreeItem, std::list<STRING_DATA>* pList, bool isRoot);
-    int mergeList(std::list<STRING_DATA>* pMainList, std::list<STRING_DATA>* pList, int nParent);
 
     bool loadDataFileDef(CString strFileName, CString strPlugin);
-    bool LoadDataWithPlugin(CString strFileName, CString strPlugin, std::list<STRING_DATA>* tmplist);
     bool loadDataFile(CString strFileName, CString strPlugin, std::list<STRING_DATA>* tmplist);
-    void normalizationID(std::list<STRING_DATA>* pList, int nParentID);
     bool convertMacroPlugin(STRING_DATA* SourceData, CString* strRet, CString strSelect, CString strClip, CString strSoftName);
 
-    bool SaveDataWithPlugin(CString strFileName, CString strPlugin, std::list<STRING_DATA>* tmplist);
     bool saveDataToFile(CString strFileName, CString strPlugin, HTREEITEM hStartItem);
-    int makeNewID() {
-        (*m_pMaxID)++;
-        while (checkRedundancyID(*m_pMaxID)) {
-            *m_pMaxID += 10;
-        }
-        return *m_pMaxID;
-    }
 
     void setInitInfo(int* pMaxID, int* pSelectID, int* pRecNumber) {
         m_pMaxID = pMaxID;
         m_pSelectID = pSelectID;
         m_pRecNumber = pRecNumber;
     }
-    void setSelectID(int nID) {
-        *m_pSelectID = nID;
-    }
 
-    bool checkRedundancyID(int nID);
     bool checkMyChild(HTREEITEM hMeItem, HTREEITEM hChildItem);
     HTREEITEM searchMyRoots(HTREEITEM hStartItem);
     HTREEITEM searchParentOption(HTREEITEM hStartItem, CString strOption);
@@ -197,29 +177,56 @@ public:
     CString makeTitle(CString strData, int nTitleLength = 32);
     HTREEITEM getOneTimeItem(int nType);
 
-    bool hasDataOption(CString strData, CString strKind);
     int getDataOption(CString strData, CString strKind);
-    DWORD getDataOptionHex(CString strData, CString strKind);
     CString getDataOptionStr(CString strData, CString strKind);
     void addDataToRecordFolder(STRING_DATA data, CString strClipBkup);
     HTREEITEM moveFolderTop(HTREEITEM hTreeItem);
-    void archiveHistory(HTREEITEM hTreeItem, int nRirekiCount);
-    void CheckItem(HTREEITEM hItem);
-    void UncheckItem(HTREEITEM hItem);
+    void ToggleItemCheck(HTREEITEM hItem);
+
+    void setScrollBar();
+    bool IsDragging() { return m_dragState != DragState::NOT_DRAGGING; }
 
     std::list<STRING_DATA> m_MyStringList;//データリスト
     std::vector<RW_PLUGIN>  m_rwPlugin;
     std::list<HTREEITEM> m_ltCheckItems;
-    void setScrollBar();
-    bool IsDragging() { return m_dragState != DragState::NOT_DRAGGING; }
-
-    // オーバーライド
-    // ClassWizard は仮想関数のオーバーライドを生成します。
-    //{{AFX_VIRTUAL(CCharu3Tree)
-    virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
-    //}}AFX_VIRTUAL
 
 private:
+    std::list<STRING_DATA>::iterator findData(STRING_DATA* dataPtr);
+    int mergeList(std::list<STRING_DATA>* pMainList, std::list<STRING_DATA>* pList, int nParent);
+
+    int makeNewID() {
+        (*m_pMaxID)++;
+        while (checkRedundancyID(*m_pMaxID)) {
+            *m_pMaxID += 10;
+        }
+        return *m_pMaxID;
+    }
+    void setSelectID(int nID) {
+        *m_pSelectID = nID;
+    }
+    void normalizationID(std::list<STRING_DATA>* pList, int nParentID);
+    bool checkRedundancyID(int nID);
+
+    int getChildCount(HTREEITEM hTreeItem, bool isBrotherOnly = false);
+    HTREEITEM getFirstFolder(HTREEITEM hStartItem);
+    HTREEITEM getLastChild(HTREEITEM hStartItem);
+    HTREEITEM getLastSiblingItem(HTREEITEM hTreeItem);
+    HTREEITEM getLastDescendantItem(HTREEITEM hTreeItem);
+
+    void moveChildren(HTREEITEM hFromItem, HTREEITEM hToItem);
+    void deleteExcessChildren(HTREEITEM hTreeItem, int* nCount);
+
+    bool hasDataOption(CString strData, CString strKind);
+    DWORD getDataOptionHex(CString strData, CString strKind);
+    void archiveHistory(HTREEITEM hTreeItem, int nRirekiCount);
+
+    void checkFolder(HTREEITEM hStartItem, bool isCheck, std::list<HTREEITEM>* listItem);
+    void UncheckItem(HTREEITEM hItem);
+
+    bool getPlugin(CString strName, RW_PLUGIN* pPlugin);
+    bool LoadDataWithPlugin(CString strFileName, CString strPlugin, std::list<STRING_DATA>* tmplist);
+    bool SaveDataWithPlugin(CString strFileName, CString strPlugin, std::list<STRING_DATA>* tmplist);
+
     enum class DragState {
         NOT_DRAGGING,
         INSERT_BEFORE,
@@ -240,8 +247,10 @@ private:
     CImageList* m_ImageList;//イメージリスト
 
     // 生成されたメッセージ マップ関数
-protected:
+public:
     //{{AFX_MSG(CCharu3Tree)
+    afx_msg void OnWindowPosChanging(WINDOWPOS FAR* lpwndpos);
+protected:
     afx_msg void OnMouseMove(UINT nFlags, CPoint point);
     afx_msg void OnBegindrag(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
@@ -250,8 +259,6 @@ protected:
     afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
     afx_msg void OnItemexpanded(NMHDR* pNMHDR, LRESULT* pResult);
     //}}AFX_MSG
-public:
-    afx_msg void OnWindowPosChanging(WINDOWPOS FAR* lpwndpos);
 
     DECLARE_MESSAGE_MAP()
 };

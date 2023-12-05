@@ -33,6 +33,57 @@ static char THIS_FILE[] = __FILE__;
 
 namespace {
 
+    //---------------------------------------------------
+    //関数名	getIconNumber(char cKind,char cIcon)
+    //機能		アイコン番号を取得
+    //---------------------------------------------------
+    int getIconNumber(char cKind, char cIcon)
+    {
+        int nRet = 0;
+        if (cKind & KIND_FOLDER) {
+            nRet = ICON_FOLDER;
+        }
+        else if (cKind & KIND_RIREKI) {
+            nRet = ICON_RIREKI_FOLDER;
+        }
+        else if (cKind & KIND_LOCK) {//ロック項目の場合
+            if (cIcon > 0) {
+                int nIcon = cIcon * 2;
+                nRet = ICON_KEY + nIcon;
+            }
+            else {
+                nRet = ICON_KEY;
+            }
+        }
+        else {//一時項目の場合
+            nRet = ICON_ONETIME;
+        }
+        return nRet;
+    }
+
+    //---------------------------------------------------
+    //関数名	data2TreeStruct(TV_INSERTSTRUCT& pTreeCtrlItem, list<STRING_DATA>::iterator pit)
+    //機能		ツリー構造体にデータを格納
+    //---------------------------------------------------
+    void data2TreeStruct(TV_INSERTSTRUCT& treeCtrlItem, std::list<STRING_DATA>::iterator it)
+    {
+        //ツリーデータ作成
+        treeCtrlItem.hInsertAfter = TVI_LAST;
+        treeCtrlItem.item.mask = TVIF_TEXT | TVIF_PARAM | TVIF_IMAGE | TVIF_SELECTEDIMAGE;
+        STRING_DATA data;
+        data.m_strTitle = it->m_strTitle;
+
+        //アイコンを設定
+        int nIcon = getIconNumber(it->m_cKind, it->m_cIcon);
+        treeCtrlItem.item.iImage = nIcon;
+        treeCtrlItem.item.iSelectedImage = nIcon + 1;
+
+        //名前を設定
+        treeCtrlItem.item.pszText = (TCHAR*)LPCTSTR(it->m_strTitle);
+        //データのアドレスを設定
+        treeCtrlItem.item.lParam = (LPARAM) & *it;
+    }
+
     bool findKeywords(CString text, std::vector<CString> words)
     {
         if (theApp.m_ini.m_bSearchCaseInsensitive) {
@@ -783,16 +834,16 @@ void CCharu3Tree::copyData(int nParentID, HTREEITEM hParentTreeItem, std::list<S
     std::list<STRING_DATA>::iterator it;
 
     //ツリーデータ
-    TV_INSERTSTRUCT TreeCtrlItem;
+    TV_INSERTSTRUCT treeCtrlItem;
 
     //データを処理
     for (it = pList->begin(); it != pList->end(); it++) {
         //親IDと同じのだけ処理
         if (it->m_nParentID == nParentID) {
-            data2TreeStruct(&TreeCtrlItem, it);//データを写す
-            TreeCtrlItem.hParent = hParentTreeItem;//親を設定
+            data2TreeStruct(treeCtrlItem, it);//データを写す
+            treeCtrlItem.hParent = hParentTreeItem;//親を設定
 
-            hTreeItem = InsertItem(&TreeCtrlItem);//インサート
+            hTreeItem = InsertItem(&treeCtrlItem);
 
             if (*m_pSelectID == it->m_nMyID) SelectItem(hTreeItem);
 
@@ -990,26 +1041,26 @@ HTREEITEM CCharu3Tree::addData(HTREEITEM hTreeItem, STRING_DATA data, bool isNew
     std::list<STRING_DATA>::iterator it = m_MyStringList.insert(m_MyStringList.end(), data);//リストに追加
 
     //ツリーデータ作成
-    TV_INSERTSTRUCT TreeCtrlItem;
-    data2TreeStruct(&TreeCtrlItem, it);
+    TV_INSERTSTRUCT treeCtrlItem;
+    data2TreeStruct(treeCtrlItem, it);
 
     if (hTreeItem) {
         if (isChild) {//子供にする場合はフォルダの先頭に入れる
-            TreeCtrlItem.hParent = hTreeItem;
-            TreeCtrlItem.hInsertAfter = TVI_FIRST;//どこに入れるか指定
+            treeCtrlItem.hParent = hTreeItem;
+            treeCtrlItem.hInsertAfter = TVI_FIRST;//どこに入れるか指定
         }
         else {//兄弟の場合は自分の下に入れる
-            TreeCtrlItem.hInsertAfter = hTreeItem;
-            TreeCtrlItem.hParent = GetParentItem(hTreeItem);
+            treeCtrlItem.hInsertAfter = hTreeItem;
+            treeCtrlItem.hParent = GetParentItem(hTreeItem);
         }
     }
     else {//ルートに入れる場合は先頭に入れる
-        TreeCtrlItem.hInsertAfter = TVI_FIRST;//どこに入れるか指定
-        TreeCtrlItem.hParent = TVI_ROOT;//親を設定
+        treeCtrlItem.hInsertAfter = TVI_FIRST;//どこに入れるか指定
+        treeCtrlItem.hParent = TVI_ROOT;//親を設定
     }
 
     //ツリーに追加
-    hTreeItem = InsertItem(&TreeCtrlItem);
+    hTreeItem = InsertItem(&treeCtrlItem);
 
     if (theApp.m_ini.m_bDebug) {
         LOG(_T("add data %s %s %d"), data.m_strTitle.GetString(), data.m_strData.GetString(), data.m_cKind);
@@ -1099,29 +1150,6 @@ void CCharu3Tree::tree2List(HTREEITEM hStartItem, std::list<STRING_DATA>* tmplis
 }
 
 //---------------------------------------------------
-//関数名	data2TreeStruct(TV_INSERTSTRUCT *pTreeCtrlItem,list<STRING_DATA>::iterator *pit)
-//機能		ツリー構造体にデータを格納
-//---------------------------------------------------
-void CCharu3Tree::data2TreeStruct(TV_INSERTSTRUCT* pTreeCtrlItem, std::list<STRING_DATA>::iterator it)
-{
-    //ツリーデータ作成
-    pTreeCtrlItem->hInsertAfter = TVI_LAST;
-    pTreeCtrlItem->item.mask = TVIF_TEXT | TVIF_PARAM | TVIF_IMAGE | TVIF_SELECTEDIMAGE;
-    STRING_DATA data;
-    data.m_strTitle = it->m_strTitle;
-
-    //アイコンを設定
-    int nIcon = getIconNumber(it->m_cKind, it->m_cIcon);
-    pTreeCtrlItem->item.iImage = nIcon;
-    pTreeCtrlItem->item.iSelectedImage = nIcon + 1;
-
-    //名前を設定
-    pTreeCtrlItem->item.pszText = (TCHAR*)LPCTSTR(it->m_strTitle);
-    //データのアドレスを設定
-    pTreeCtrlItem->item.lParam = (LPARAM) & *it;
-}
-
-//---------------------------------------------------
 //関数名	findData(STRING_DATA *ptr)
 //機能		データリストからptrが指している要素を探す
 //---------------------------------------------------
@@ -1134,34 +1162,6 @@ std::list<STRING_DATA>::iterator CCharu3Tree::findData(STRING_DATA* dataPtr)
         }
     }
     return it;
-}
-
-//---------------------------------------------------
-//関数名	getIconNumber(char cKind,char cIcon)
-//機能		アイコン番号を取得
-//---------------------------------------------------
-int CCharu3Tree::getIconNumber(char cKind, char cIcon)
-{
-    int nRet = 0;
-    if (cKind & KIND_FOLDER) {
-        nRet = ICON_FOLDER;
-    }
-    else if (cKind & KIND_RIREKI) {
-        nRet = ICON_RIREKI_FOLDER;
-    }
-    else if (cKind & KIND_LOCK) {//ロック項目の場合
-        if (cIcon > 0) {
-            int nIcon = cIcon * 2;
-            nRet = ICON_KEY + nIcon;
-        }
-        else {
-            nRet = ICON_KEY;
-        }
-    }
-    else {//一時項目の場合
-        nRet = ICON_ONETIME;
-    }
-    return nRet;
 }
 
 //---------------------------------------------------
@@ -1961,24 +1961,32 @@ void CCharu3Tree::ClearChecks()
 }
 
 //---------------------------------------------------
-//関数名	CheckItem(HTREEITEM hItem)
-//機能		データをチェックする
+//関数名	ToggleItemCheck(HTREEITEM hItem)
+//機能		項目のチェックを切替える
 //---------------------------------------------------
-void CCharu3Tree::CheckItem(HTREEITEM hItem)
+void CCharu3Tree::ToggleItemCheck(HTREEITEM hItem)
 {
+    // TODO: Should refactor
+
+    if (!hItem) {
+        return;
+    }
     ModifyStyle(NULL, TVS_CHECKBOXES, NULL);
+    BOOL checked = GetCheck(hItem);
     if (ItemHasChildren(hItem)) {
-        if (GetCheck(hItem)) {
-            checkFolder(hItem, false, &m_ltCheckItems);
-        }
-        else {
-            checkFolder(hItem, false, &m_ltCheckItems);
+
+        // Even if we check a folder, the selected items in the folder have to
+        // be removed from the list first(otherwise duplicates will be added),
+        // so the process of unchecking the subtree should be done anyway.
+        checkFolder(hItem, false, &m_ltCheckItems);
+
+        if (!checked) {
             checkFolder(hItem, true, &m_ltCheckItems);
         }
     }
-    else if (hItem) {
-        SetCheck(hItem, !GetCheck(hItem));
-        if (GetCheck(hItem)) {//リストに追加
+    else {
+        SetCheck(hItem, !checked);
+        if (!checked) {//リストに追加
             m_ltCheckItems.insert(m_ltCheckItems.end(), hItem);
         }
         else {//リストから削除
@@ -1995,10 +2003,12 @@ void CCharu3Tree::CheckItem(HTREEITEM hItem)
 
 //---------------------------------------------------
 //関数名	UncheckItem(HTREEITEM hItem)
-//機能		チェックを外す
+//機能		項目のチェックを外す
 //---------------------------------------------------
 void CCharu3Tree::UncheckItem(HTREEITEM hItem)
 {
+    // TODO: Should refactor
+
     if (ItemHasChildren(hItem)) {
         checkFolder(hItem, false, &m_ltCheckItems);
     }

@@ -265,7 +265,7 @@ BOOL CMainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO*
 LRESULT CMainFrame::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
     // tasktray messages
-    if (WM_TASKTRAY == message && theApp.getPhase() == PHASE_IDOL) {
+    if (WM_TASKTRAY == message && theApp.GetPhase() == PHASE_IDOL) {
         if (WM_RBUTTONUP == lParam) {
             // menu
             POINT point;
@@ -278,7 +278,7 @@ LRESULT CMainFrame::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
         else if (WM_LBUTTONDOWN == lParam) {
             if (theApp.m_ini.m_nIconClick == 0) {
                 // popup treeview
-                if (theApp.getPhase() == PHASE_IDOL) {
+                if (theApp.GetPhase() == PHASE_IDOL) {
                     theApp.popupTreeWinMC(m_hActive);
                 }
             }

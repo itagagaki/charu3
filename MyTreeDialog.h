@@ -24,20 +24,15 @@ class CMyTreeDialog : public CDialog
     // コンストラクション
 public:
     CMyTreeDialog(CWnd* pParent = NULL);   // 標準のコンストラクタ
-    ~CMyTreeDialog() {
-        if (m_hDLL)	::FreeLibrary(m_hDLL);
-        m_PopupMenu.DestroyMenu();
-    }
 
+    // オペレーション
+public:
     void SetTree(CCharu3Tree* pTreeCtrl) {
         m_pTreeCtrl = pTreeCtrl;
     }
-    BOOL ShowWindowPos(POINT pos, POINT size, int nCmdShow, bool isSelect, HTREEITEM hOpenItem = NULL);
-    void EnterData(STRING_DATA* dataPtr);
-
-    STRING_DATA* m_selectDataPtr;
 
     // ダイアログ データ
+private:
     //{{AFX_DATA(CMyTreeDialog)
     enum { IDD = IDD_DATA_TREE_VIEW };
     CCharu3Tree* m_pTreeCtrl;
@@ -45,19 +40,35 @@ public:
 
     // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
-    //{{AFX_VIRTUAL(CMyTreeDialog)
 public:
+    //{{AFX_VIRTUAL(CMyTreeDialog)
     virtual BOOL DestroyWindow();
     virtual BOOL PreTranslateMessage(MSG* pMsg);
+
 protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
     //}}AFX_VIRTUAL
 
     // インプリメンテーション
-protected:
-    int static m_stKeycode[];
-    char static* m_stKeyName[];
-    char static* m_stKeyNameShift[];
+public:
+    virtual ~CMyTreeDialog() {
+        if (m_hDLL) ::FreeLibrary(m_hDLL);
+        m_PopupMenu.DestroyMenu();
+    }
+
+    BOOL ShowWindowPos(POINT pos, POINT size, int nCmdShow, bool isSelect, HTREEITEM hOpenItem = NULL);
+    void EnterData(STRING_DATA* dataPtr);
+
+    STRING_DATA* m_selectDataPtr;
+
+private:
+    void ClosePopup();
+    void PopupMenu(CPoint point);
+    void ChangeTipString(STRING_DATA* data);
+    bool SelectByTyping(UINT uKeyCode);
+    void GetFindParam();
+    void FindNext(bool backward);
+    STRING_DATA* GetClickedItem();
 
     HMODULE m_hDLL;
     typedef DWORD(WINAPI* PFUNC)(HWND, DWORD, BYTE, DWORD);
@@ -74,7 +85,16 @@ protected:
     HTREEITEM m_hCopyData;
     COLORREF m_colFrame;
 
+    DWORD m_dwStartTime;
+    CString m_strQuickKey;
+    HTREEITEM m_hQuickItem;
+
+    bool m_bCheckbox;
+    bool m_bFind;
+    CSearchDialog* m_findDialog;
+
     // 生成されたメッセージ マップ関数
+protected:
     //{{AFX_MSG(CMyTreeDialog)
     virtual BOOL OnInitDialog();
     afx_msg void OnSize(UINT nType, int cx, int cy);
@@ -116,24 +136,8 @@ protected:
     afx_msg void OnEndlabeleditMyTree(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnCheckItem();
     //}}AFX_MSG
+
     DECLARE_MESSAGE_MAP()
-
-private:
-    void ClosePopup();
-    void PopupMenu(CPoint point);
-    void ChangeTipString(STRING_DATA* data);
-    bool SelectByTyping(UINT uKeyCode);
-    void GetFindParam();
-    void FindNext(bool backward);
-    STRING_DATA* GetClickedItem();
-
-    DWORD m_dwStartTime;
-    CString m_strQuickKey;
-    HTREEITEM m_hQuickItem;
-
-    bool m_bCheckbox;
-    bool m_bFind;
-    CSearchDialog* m_findDialog;
 };
 
 //{{AFX_INSERT_LOCATION}}

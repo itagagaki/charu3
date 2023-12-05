@@ -29,12 +29,11 @@ public:
 
     // オペレーション
 public:
-    void SwitchNotificationAreaIcon(bool stockmode);
 
     // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
-    //{{AFX_VIRTUAL(CMainFrame)
 public:
+    //{{AFX_VIRTUAL(CMainFrame)
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
     virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
 protected:
@@ -44,11 +43,21 @@ protected:
     // インプリメンテーション
 public:
     virtual ~CMainFrame();
+    void SwitchNotificationAreaIcon(bool stockmode);
 #ifdef _DEBUG
     virtual void AssertValid() const;
     virtual void Dump(CDumpContext& dc) const;
 #endif
-    CChildView    m_wndView;
+
+private:
+    bool CheckTrayPos();
+    void OnClipboardChanged();
+
+    HICON m_hIcon, m_hStopIcon;
+    NOTIFYICONDATA m_nIcon;
+    HWND m_hActive;
+    CChildView m_wndView;
+    CMenu m_PopupMenu;
 
     // 生成されたメッセージ マップ関数
 protected:
@@ -58,16 +67,8 @@ protected:
     afx_msg void OnExit();
     afx_msg BOOL OnQueryEndSession();
     //}}AFX_MSG
+
     DECLARE_MESSAGE_MAP()
-
-    HICON		m_hIcon, m_hStopIcon;
-    NOTIFYICONDATA m_nIcon;
-    CMenu m_PopupMenu;
-    HWND m_hActive;
-
-private:
-    bool CheckTrayPos();
-    void OnClipboardChanged();
 };
 
 //{{AFX_INSERT_LOCATION}}

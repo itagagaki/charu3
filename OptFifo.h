@@ -23,9 +23,9 @@ class COptFifo : public CDialog
     // コンストラクション
 public:
     COptFifo(CWnd* pParent = NULL);   // 標準のコンストラクタ
-    virtual BOOL DestroyWindow();
 
     // ダイアログ データ
+private:
     //{{AFX_DATA(COptFifo)
     enum { IDD = IDD_SETTINGS_04_STOCKMODE };
     // メモ: ClassWizard はこの位置にデータ メンバを追加します。
@@ -33,27 +33,16 @@ public:
 
     // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
-    //{{AFX_VIRTUAL(COptFifo)
 public:
+    //{{AFX_VIRTUAL(COptFifo)
     virtual BOOL PreTranslateMessage(MSG* pMsg);
+    virtual BOOL DestroyWindow();
+
 protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
     //}}AFX_VIRTUAL
 
-// インプリメンテーション
-protected:
-    // 生成されたメッセージ マップ関数
-    //{{AFX_MSG(COptFifo)
-    afx_msg void OnPlayCopy();
-    afx_msg void OnPlayPaste();
-    afx_msg void OnFileCopy();
-    afx_msg void OnFilePaste();
-    afx_msg void OnNoSoundCopy();
-    afx_msg void OnNoSoundPaste();
-    afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
-
+    // インプリメンテーション
 private:
     void Play(int id);
     void File(int id);
@@ -63,6 +52,20 @@ private:
     int m_nDontSaveSameDataAsLast;
     CString m_strCopySound;
     CString m_strPasteSound;
+
+    // 生成されたメッセージ マップ関数
+protected:
+    //{{AFX_MSG(COptFifo)
+    afx_msg void OnPlayCopy();
+    afx_msg void OnPlayPaste();
+    afx_msg void OnFileCopy();
+    afx_msg void OnFilePaste();
+    afx_msg void OnNoSoundCopy();
+    afx_msg void OnNoSoundPaste();
+    afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+    //}}AFX_MSG
+
+    DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

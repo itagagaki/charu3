@@ -20,6 +20,31 @@ static char THIS_FILE[] = __FILE__;
 #include "log.h"
 #include "resource.h"
 
+namespace {
+
+    //---------------------------------------------------
+    // フォント列挙コールバック関数
+    //---------------------------------------------------
+    int CALLBACK EnumFontProc(ENUMLOGFONT* lpelf, NEWTEXTMETRIC* lpntm, int fontType, LPARAM lParam)
+    {
+        (void)lpntm;
+        (void)fontType;
+        CComboBox* combo = (CComboBox*)lParam;
+        if (combo) {
+            combo->AddString(lpelf->elfLogFont.lfFaceName);
+            if (_tcscmp(lpelf->elfLogFont.lfFaceName, LPCTSTR(theApp.m_ini.m_strFontName)) == 0) {
+                combo->SetCurSel(combo->GetCount() - 1);
+            }
+            return TRUE;
+        }
+        else {
+            return FALSE;
+        }
+    }
+
+
+} // anonymous namespace
+
 //---------------------------------------------------
 //関数名	COptStyle
 //機能		コンストラクタ
@@ -87,22 +112,6 @@ BEGIN_MESSAGE_MAP(COptStyle, CDialog)
 END_MESSAGE_MAP()
 
 //---------------------------------------------------
-// フォント列挙コールバック関数
-//---------------------------------------------------
-int CALLBACK EnumFontProc(ENUMLOGFONT* lpelf, NEWTEXTMETRIC* lpntm, int FontType, LPARAM lparam)
-{
-    (void)lpntm;
-    (void)FontType;
-    COptStyle* ThisClass = (COptStyle*)lparam;
-
-    ThisClass->m_ctrlFontCombo.AddString(lpelf->elfLogFont.lfFaceName);
-    if (_tcscmp(lpelf->elfLogFont.lfFaceName, LPCTSTR(theApp.m_ini.m_strFontName)) == 0)
-        ThisClass->m_ctrlFontCombo.SetCurSel(ThisClass->m_ctrlFontCombo.GetCount() - 1);
-
-    return TRUE; // 列挙継続
-}
-
-//---------------------------------------------------
 // COptStyle メッセージ ハンドラ
 //---------------------------------------------------
 
@@ -131,7 +140,7 @@ BOOL COptStyle::OnInitDialog()
     m_ctrlFontCombo.ResetContent();
     HDC hDC;
     hDC = ::GetDC(NULL);
-    EnumFontFamilies(hDC, NULL, (FONTENUMPROC)EnumFontProc, (LPARAM)this);
+    ::EnumFontFamilies(hDC, NULL, (FONTENUMPROC)EnumFontProc, (LPARAM)GetDlgItem(IDC_OPT_FONT_NAME));
     ::ReleaseDC(NULL, hDC);
 
     SetOpacityText(theApp.m_ini.m_nOpacity);

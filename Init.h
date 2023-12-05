@@ -159,7 +159,7 @@ class CInit
 {
 public:
     CInit();
-    virtual ~CInit();
+    ~CInit();
     void initialize();
 
     void writeAllInitData();
@@ -275,8 +275,8 @@ public:
     int  m_nFifo{};			//履歴動作中はCtrl+Vで貼り付ける文字列を先入れ先出しにする
     CString m_strCopySound;	// コピー時に再生するサウンドのパス名
     CString m_strPasteSound;	// 貼り付け時に再生するサウンドのパス名
-    bool m_bCleanupAtTurnOff{}; // Remove all one-time items when turned off
-    bool m_bAutoOff{};	// Turn off stock mode when one-time item is gone
+    bool m_bCleanupAtTurnOff{};  // Remove all one-time items when turned off
+    bool m_bAutoOff{};  // Turn off stock mode when one-time item is gone
     bool m_bDontSaveSameDataAsLast{};
 
     // Key
@@ -307,7 +307,6 @@ private:
     bool m_bIsPortableMode{};
 
     void SaveSettings();
-    //void ReadPredefined(std::vector<MACRO_STRUCT>& macro, CString filePath);
 };
 
 #endif // !defined(AFX_INIT_H__EA6EFDDA_9745_4690_B6A9_8B0533E4AB56__INCLUDED_)

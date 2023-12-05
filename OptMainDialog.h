@@ -29,32 +29,24 @@ public:
     COptMainDialog(CWnd* pParent = NULL, int nPage = 0);
 
     // ダイアログ データ
+private:
     //{{AFX_DATA(COptMainDialog)
     enum { IDD = IDD_SETTINGS };
-    CTabCtrl	m_ctrlTab;
+    CTabCtrl m_ctrlTab;
     //}}AFX_DATA
 
     // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
-    //{{AFX_VIRTUAL(COptMainDialog)
 public:
+    //{{AFX_VIRTUAL(COptMainDialog)
     virtual BOOL DestroyWindow();
     virtual BOOL PreTranslateMessage(MSG* pMsg);
+
 protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
     //}}AFX_VIRTUAL
 
     // インプリメンテーション
-protected:
-    // 生成されたメッセージ マップ関数
-    //{{AFX_MSG(COptMainDialog)
-    virtual BOOL OnInitDialog();
-    afx_msg void OnSelchangeOptTab(NMHDR* pNMHDR, LRESULT* pResult);
-    afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-    afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized);
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
-
 private:
     static const int NUM_PAGES = 6;
     CDialog* m_pages[NUM_PAGES];
@@ -66,6 +58,17 @@ private:
     COptFifo m_fifo;
     COptKeySet m_key;
     COptAdvanced m_advanced;
+
+    // 生成されたメッセージ マップ関数
+protected:
+    //{{AFX_MSG(COptMainDialog)
+    virtual BOOL OnInitDialog();
+    afx_msg void OnSelchangeOptTab(NMHDR* pNMHDR, LRESULT* pResult);
+    afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+    afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized);
+    //}}AFX_MSG
+
+    DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

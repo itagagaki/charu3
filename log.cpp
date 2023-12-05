@@ -31,7 +31,7 @@ namespace{
         return strDate;
     }
 
-} // namespace {anonymous}
+} // anonymous namespace
 
 Logger::Logger() : m_logFilePath(nullptr)
 {

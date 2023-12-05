@@ -21,46 +21,44 @@ public:
     COptKeySetEditDlg(CWnd* pParent = NULL);   // 標準のコンストラクタ
 
     // ダイアログ データ
+private:
     //{{AFX_DATA(COptKeySetEditDlg)
     enum { IDD = IDD_KEYSET_EXT };
-    CMyHotkeyCtrl	m_pasteKey;
-    CMyHotkeyCtrl	m_copyKey;
-    CString	m_pasteMessage;
-    CString	m_copyMessage;
-    int		m_keyAction;
-    int		m_matchCombo;
-    CString	m_caption;
-    int m_copyWait;
-    int m_pasteWait;
-    int		m_nHistoryLimit;
+    CMyHotkeyCtrl m_pasteKey;
+    CMyHotkeyCtrl m_copyKey;
     //}}AFX_DATA
-    friend BOOL CALLBACK EnumWindowTitle(HWND hwnd, LPARAM lParam);
-
-    void SetKeyInfo(CHANGE_KEY keyInfo) {
-        m_key = keyInfo;
-    }
-
-    CHANGE_KEY GetKeyInfo() {
-        return m_key;
-    };
 
     // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
-    //{{AFX_VIRTUAL(COptKeySetEditDlg)
 protected:
+    //{{AFX_VIRTUAL(COptKeySetEditDlg)
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
     //}}AFX_VIRTUAL
 
-// インプリメンテーション
-protected:
-    // 生成されたメッセージ マップ関数
-    //{{AFX_MSG(COptKeySetEditDlg)
-    virtual BOOL OnInitDialog();
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
+    // インプリメンテーション
+public:
+    void SetKeyInfo(CHANGE_KEY keyInfo) { m_key = keyInfo; }
+    CHANGE_KEY GetKeyInfo() const { return m_key; };
+
+    CString m_pasteMessage;
+    CString m_copyMessage;
+    int m_keyAction;
+    int m_matchCombo;
+    CString m_caption;
+    int m_copyWait;
+    int m_pasteWait;
+    int m_nHistoryLimit;
 
 private:
     CHANGE_KEY m_key;
+
+    // 生成されたメッセージ マップ関数
+protected:
+    //{{AFX_MSG(COptKeySetEditDlg)
+    virtual BOOL OnInitDialog();
+    //}}AFX_MSG
+
+    DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

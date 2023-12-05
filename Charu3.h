@@ -94,42 +94,28 @@ public:
     CCharu3App();
     ~CCharu3App();
 
-    void popupTreeWindow(POINT pos, bool keepSelection, HTREEITEM hOpenItem = NULL);
-    void closeTreeWindow(int nRet);
-    void pasteData(CString strPaste, COPYPASTE_KEY key, HWND hWnd);
-    void execData(CString strPaste, COPYPASTE_KEY key, HTREEITEM hTargetItem, HWND hWnd);
-    void execKeyMacro(CString strKeyMacro);
+    HWND GetAppWnd() { return m_hSelfWnd; }
+    int GetPhase() { return m_nPhase; }
 
-    CString getSelectString(COPYPASTE_KEY key, HWND hWnd = NULL);
-    void keyUpDown(UINT uMod, UINT uVKCode, int nFlag);
-    void keyUpDownC2(UINT uMod, UINT uVKCode, int nFlag);
-    void keyUpDownMessage(UINT uMod, UINT uVKCode, int nFlag, HWND hWnd);
-
-    CString convertMacro(STRING_DATA* SourceData, CString strSelect, CString strClip, CString strSoftName);
-
-    HWND getAppWnd() { return m_hSelfWnd; }
     bool isCloseKey() { return m_isCloseKey; }
     void popupTreeWinMC(HWND hForeground);
 
     void Record(CString text);
     void toggleStockMode();
-    bool getStockSW() { return m_isStockMode; }
-    int  getPhase() { return m_nPhase; }
-    void fifoClipboard();
-    void resetTreeDialog();
 
-    bool SelectFile();
-    CString NewFile();
-    void SaveData();
+    CString NewFile(); // TODO: Should be a unitlity
 
-    CMyTreeDialog* m_pTreeDlg;
+    void RedrawDataTreeView() {
+        if (m_pTreeDlg->IsWindowVisible()) {
+            m_pTreeDlg->RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
+        }
+    }
+
     CInit m_ini;
     CClipBoard m_clipboard;
     CCharu3Tree* m_pTree;
     CMainFrame* m_pMainFrame;
-    COPYPASTE_KEY m_keySet;
     FOCUS_INFO m_focusInfo;
-    HWND m_hSelfWnd;
 
     // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
@@ -140,32 +126,46 @@ public:
     virtual int ExitInstance();
     //}}AFX_VIRTUAL
 
-// インプリメンテーション
+    // インプリメンテーション
+private:
+    void registerHotkeys();
+    void unregisterHotkeys();
+    void registerAdditionalHotkeys();
+    void unregisterAdditionalHotkeys();
 
-public:
-    //{{AFX_MSG(CCharu3App)
-    afx_msg void OnExit();
-    afx_msg void OnAbout();
-    afx_msg void OnIssues();
-    afx_msg void OnDiscussions();
-    afx_msg void OnWiki();
-    afx_msg void OnOption();
-    afx_msg void OnAddData();
-    afx_msg void OnChangData();
-    afx_msg void OnExport();
-    afx_msg void OnStockStop();
-    afx_msg void OnResetTree();
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
-
-protected:
-    void getPopupPos(POINT* pPos, int nPosType);
-    void adjustLocation(POINT* pos);
     void convHotKeyConf(CString strKey, UINT* pMod, UINT* pVK, bool* isDoubleClick);
     int getKeycode(TCHAR* szKeyName, bool scanLayout);
     bool setAppendKeyInit(HWND hTopWindow, COPYPASTE_KEY* keySet);
+
+    void getPopupPos(POINT* pPos, int nPosType);
+    void adjustLocation(POINT* pos);
+
+    void popupTreeWindow(POINT pos, bool keepSelection, HTREEITEM hOpenItem = NULL);
+    void closeTreeWindow(int nRet);
+
+    void pasteData(CString strPaste, COPYPASTE_KEY key, HWND hWnd);
+    void execData(CString strPaste, COPYPASTE_KEY key, HTREEITEM hTargetItem, HWND hWnd);
+    void execKeyMacro(CString strKeyMacro);
+
     void playHotItem(int nTarget);
     void playData(STRING_DATA data, CString strClip, CString strSelect, bool isPaste, bool isChange = true);
+
+    CString getSelectString(COPYPASTE_KEY key, HWND hWnd = NULL);
+    void keyUpDown(UINT uMod, UINT uVKCode, int nFlag);
+    void keyUpDownC2(UINT uMod, UINT uVKCode, int nFlag);
+    void keyUpDownMessage(UINT uMod, UINT uVKCode, int nFlag, HWND hWnd);
+
+    CString convertMacro(STRING_DATA* SourceData, CString strSelect, CString strClip, CString strSoftName);
+
+    void fifoClipboard();
+    void resetTreeDialog();
+
+    bool SelectFile();
+    void SaveData();
+
+    HWND m_hSelfWnd;
+    CMyTreeDialog* m_pTreeDlg;
+    COPYPASTE_KEY m_keySet;
 
     HTREEITEM m_hSelectItemBkup;
     DWORD m_dwDoubleKeyPopTime, m_dwDoubleKeyFifoTime;
@@ -182,11 +182,24 @@ protected:
     int m_nPhase;
     CString m_strSavedClipboard, m_strPreviousStocked, m_strPreviousRecordedToHistory;
 
-private:
-    void registerHotkeys();
-    void unregisterHotkeys();
-    void registerAdditionalHotkeys();
-    void unregisterAdditionalHotkeys();
+    // 生成されたメッセージ マップ関数
+public:
+    //{{AFX_MSG(CCharu3App)
+    afx_msg void OnOption();
+    afx_msg void OnExit();
+protected:
+    afx_msg void OnAbout();
+    afx_msg void OnIssues();
+    afx_msg void OnDiscussions();
+    afx_msg void OnWiki();
+    afx_msg void OnAddData();
+    afx_msg void OnChangData();
+    afx_msg void OnExport();
+    afx_msg void OnStockStop();
+    afx_msg void OnResetTree();
+    //}}AFX_MSG
+
+    DECLARE_MESSAGE_MAP()
 };
 
 extern CCharu3App theApp;

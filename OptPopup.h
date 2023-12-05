@@ -24,14 +24,15 @@ public:
     COptPopup(CWnd* pParent = NULL);   // 標準のコンストラクタ
 
     // ダイアログ データ
+private:
     //{{AFX_DATA(COptPopup)
     enum { IDD = IDD_SETTINGS_03_DATATREE };
     //}}AFX_DATA
 
     // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
-    //{{AFX_VIRTUAL(COptPopup)
 public:
+    //{{AFX_VIRTUAL(COptPopup)
     virtual BOOL PreTranslateMessage(MSG* pMsg);
     virtual BOOL DestroyWindow();
 
@@ -40,14 +41,6 @@ protected:
     //}}AFX_VIRTUAL
 
     // インプリメンテーション
-    // 生成されたメッセージ マップ関数
-    //{{AFX_MSG(COptPopup)
-    virtual BOOL OnInitDialog();
-    afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-    afx_msg void OnCbnSelchangeOptPopupPos();
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
-
 private:
     int m_nSelectByTypingCaseInsensitive;
     int m_nSelectByTypingAutoPaste;
@@ -58,6 +51,16 @@ private:
     int m_nSingleEnter;
     int m_nKeepSelection;
     int m_nKeepFolders;
+
+    // 生成されたメッセージ マップ関数
+protected:
+    //{{AFX_MSG(COptPopup)
+    virtual BOOL OnInitDialog();
+    afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+    afx_msg void OnCbnSelchangeOptPopupPos();
+    //}}AFX_MSG
+
+    DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

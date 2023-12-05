@@ -24,8 +24,9 @@ public:
 
     // ダイアログ データ
     //{{AFX_DATA(CSearchDialog)
+private:
     enum { IDD = IDD_SEARCH };
-    CEdit	m_ctrlSearchText;
+    CEdit m_ctrlSearchText;
     CButton m_ctrlSearchByName;
     CButton m_ctrlSearchByData;
     CButton m_ctrlSearchAnd;
@@ -33,32 +34,34 @@ public:
     CButton m_ctrlCaseInsensitive;
     //}}AFX_DATA
 
+    // オーバーライド
+    // ClassWizard は仮想関数のオーバーライドを生成します。
+protected:
+    //{{AFX_VIRTUAL(CSearchDialog)
+    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
+    //}}AFX_VIRTUAL
+
+    // インプリメンテーション
+public:
     int GetTarget();
     int GetSearchLogic();
     bool GetCaseInsensitive();
     CString GetSearchText();
 
-    // オーバーライド
-    // ClassWizard は仮想関数のオーバーライドを生成します。
-    //{{AFX_VIRTUAL(CSearchDialog)
-protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
-    //}}AFX_VIRTUAL
+private:
+    void OnFindPrev();
+    void OnFindNext();
 
-// インプリメンテーション
-protected:
     // 生成されたメッセージ マップ関数
+protected:
     //{{AFX_MSG(CSearchDialog)
     virtual BOOL OnInitDialog();
     virtual void OnCancel();
     virtual void OnOK();
     virtual BOOL PreTranslateMessage(MSG* pMsg);
     //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
 
-private:
-    void OnFindPrev();
-    void OnFindNext();
+    DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

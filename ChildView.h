@@ -29,8 +29,8 @@ public:
 
     // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
-    //{{AFX_VIRTUAL(CChildView)
 protected:
+    //{{AFX_VIRTUAL(CChildView)
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
     //}}AFX_VIRTUAL
 
@@ -43,6 +43,7 @@ protected:
     //{{AFX_MSG(CChildView)
     afx_msg void OnPaint();
     //}}AFX_MSG
+
     DECLARE_MESSAGE_MAP()
 };
 

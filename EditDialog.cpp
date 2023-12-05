@@ -271,7 +271,7 @@ void CEditDialog::InsertText(CEdit& ctrl, CString strString)
 
 BOOL CEditDialog::DestroyWindow()
 {
-    theApp.m_pTreeDlg->RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
+    theApp.RedrawDataTreeView();
 
     return CDialog::DestroyWindow();
 }

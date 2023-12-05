@@ -21,23 +21,20 @@ public:
 
     // オペレーション
 public:
-    void SetHotKey(WORD wVirtualKeyCode, WORD wModifiers) {
-        if (wVirtualKeyCode >= 0x60 || wVirtualKeyCode == 0x1d || wVirtualKeyCode == 0x1c || wVirtualKeyCode == 0x20)
-            CHotKeyCtrl::SetHotKey(wVirtualKeyCode, wModifiers);
-        else
-            CHotKeyCtrl::SetHotKey(wVirtualKeyCode, wModifiers | HOTKEYF_EXT);
-    };
 
     // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
-    //{{AFX_VIRTUAL(CMyHotkeyCtrl)
 public:
+    //{{AFX_VIRTUAL(CMyHotkeyCtrl)
     virtual BOOL PreTranslateMessage(MSG* pMsg);
     //}}AFX_VIRTUAL
 
-// インプリメンテーション
+    // インプリメンテーション
 public:
     virtual ~CMyHotkeyCtrl();
+
+private:
+    WORD m_lastKey, m_mod;
 
     // 生成されたメッセージ マップ関数
 protected:
@@ -46,8 +43,6 @@ protected:
     //}}AFX_MSG
 
     DECLARE_MESSAGE_MAP()
-
-    WORD m_lastKey, m_mod;
 };
 
 /////////////////////////////////////////////////////////////////////////////

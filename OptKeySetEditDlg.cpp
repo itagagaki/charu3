@@ -12,6 +12,33 @@ static char THIS_FILE[] = __FILE__;
 #include "key.h"
 #include "resource.h"
 
+namespace {
+
+    //---------------------------------------------------
+    //関数名	EnumWindowTitle
+    //機能		ウィンドウの名前を列挙
+    //---------------------------------------------------
+    BOOL CALLBACK EnumWindowTitle(HWND hwnd, LPARAM lParam)
+    {
+        CComboBox* combo = (CComboBox*)lParam;
+        if (combo) {
+            TCHAR WindowName[1024] = {};
+            *WindowName = (char)NULL;
+            if (IsWindowVisible(hwnd)) {
+                int resalt = GetWindowText(hwnd, WindowName, _countof(WindowName));
+                if (resalt && _tcsclen(WindowName) > 0) {
+                    combo->AddString(WindowName);
+                }
+            }
+            return TRUE;
+        }
+        else {
+            return FALSE;
+        }
+    }
+
+} // anonymous namespace
+
 /////////////////////////////////////////////////////////////////////////////
 // COptKeySetEditDlg ダイアログ
 
@@ -105,26 +132,6 @@ void COptKeySetEditDlg::DoDataExchange(CDataExchange* pDX)
     }
 }
 
-//---------------------------------------------------
-//関数名	EnumWindowTitle				[friend]
-//機能		ウィンドウの名前を列挙
-//---------------------------------------------------
-BOOL CALLBACK EnumWindowTitle(HWND hwnd, LPARAM lParam)
-{
-    CComboBox* combo = (CComboBox*)lParam;
-
-    TCHAR WindowName[1024] = {};
-    *WindowName = (char)NULL;
-    if (IsWindowVisible(hwnd)) {
-        int resalt = GetWindowText(hwnd, WindowName, _countof(WindowName));
-        if (resalt && _tcsclen(WindowName) > 0) {
-            if (combo)	combo->AddString(WindowName);
-        }
-    }
-
-    return TRUE;  /* 列挙を続ける */
-}
-
 BEGIN_MESSAGE_MAP(COptKeySetEditDlg, CDialog)
     //{{AFX_MSG_MAP(COptKeySetEditDlg)
     //}}AFX_MSG_MAP
@@ -136,6 +143,6 @@ END_MESSAGE_MAP()
 BOOL COptKeySetEditDlg::OnInitDialog()
 {
     CDialog::OnInitDialog();
-    EnumWindows(&EnumWindowTitle, (LPARAM)GetDlgItem(IDC_OPT_WINCAP_COMBO));
+    ::EnumWindows(&EnumWindowTitle, (LPARAM)GetDlgItem(IDC_OPT_WINCAP_COMBO));
     return TRUE;
 }

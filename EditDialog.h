@@ -28,41 +28,30 @@ public:
     CEditDialog(CWnd* pParent, STRING_DATA* pData, bool newData);
 
     // ダイアログ データ
+private:
     //{{AFX_DATA(CEditDialog)
     enum { IDD = IDD_EDIT };
-    CMyEditCtrl	m_ctrlDataEdit;
+    CMyEditCtrl m_ctrlDataEdit;
     CMyEditCtrl m_ctrlNameEdit;
-    CMyEditCtrl	m_ctrlMacroEdit;
-    CComboBox	m_ctrlKindCombo;
-    CComboBox	m_ctrlIconCombo;
-    CComboBox	m_ctrlMacro;
-    CComboBox	m_ctrlDataMacro;
+    CMyEditCtrl m_ctrlMacroEdit;
+    CComboBox m_ctrlKindCombo;
+    CComboBox m_ctrlIconCombo;
+    CComboBox m_ctrlMacro;
+    CComboBox m_ctrlDataMacro;
     CButton m_ctrlPasteFile;
     //}}AFX_DATA
 
-
     // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
-    //{{AFX_VIRTUAL(CEditDialog)
 public:
+    //{{AFX_VIRTUAL(CEditDialog)
     virtual BOOL DestroyWindow();
+
 protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
     //}}AFX_VIRTUAL
 
-protected:
-    // 生成されたメッセージ マップ関数
-    //{{AFX_MSG(CEditDialog)
-    afx_msg void OnEditPasteFile();
-    virtual BOOL OnInitDialog();
-    virtual void OnOK();
-    afx_msg void OnSelchangeEditMacroCombo();
-    afx_msg void OnSelchangeEditDataMacroCombo();
-    afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
-    afx_msg void OnKindChanged();
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
-
+    // インプリメンテーション
 private:
     void InsertText(CEdit& ctrl, CString strString);
     void ResetExtendedSettingItems();
@@ -72,6 +61,20 @@ private:
     std::vector<MACRO_STRUCT>* m_vctDataMacro;
     int m_nKind;
     bool m_bNewData;
+
+    // 生成されたメッセージ マップ関数
+protected:
+    //{{AFX_MSG(CEditDialog)
+    afx_msg void OnEditPasteFile();
+    virtual BOOL OnInitDialog();
+    virtual void OnOK();
+    afx_msg void OnSelchangeEditMacroCombo();
+    afx_msg void OnSelchangeEditDataMacroCombo();
+    afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
+    afx_msg void OnKindChanged();
+    //}}AFX_MSG
+
+    DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

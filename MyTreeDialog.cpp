@@ -413,7 +413,7 @@ void CMyTreeDialog::OnClickMyTree(NMHDR* pNMHDR, LRESULT* pResult)
             }
             if (TVHT_ONITEMSTATEICON & Flags) {
                 // Clicked on checkbox
-                m_pTreeCtrl->CheckItem(hClickItem);
+                m_pTreeCtrl->ToggleItemCheck(hClickItem);
                 m_pTreeCtrl->SetCheck(hClickItem, !m_pTreeCtrl->GetCheck(hClickItem));
             }
         }
@@ -437,7 +437,7 @@ void CMyTreeDialog::OnKillFocusMyTree(NMHDR* pNMHDR, LRESULT* pResult)
     RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
 
     if (m_isInitOK && !m_isModal && !m_bFind) {
-        ::PostMessage(theApp.getAppWnd(), WM_TREE_CLOSE, IDCANCEL, NULL);
+        ::PostMessage(theApp.GetAppWnd(), WM_TREE_CLOSE, IDCANCEL, NULL);
         KillTimer(CHARU_QUICK_TIMER);
         m_isInitOK = false;
     }
@@ -682,7 +682,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
             if (hTreeItem) {
                 if (::GetKeyState(VK_CONTROL) < 0) {//CTRLが押されている
                     HTREEITEM hSelItem = m_pTreeCtrl->GetSelectedItem();
-                    m_pTreeCtrl->CheckItem(hSelItem);
+                    m_pTreeCtrl->ToggleItemCheck(hSelItem);
                     hSelItem = m_pTreeCtrl->GetNextVisibleItem(hTreeItem);
                     if (hSelItem) hTreeItem = hSelItem;
                 }
@@ -753,7 +753,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
         //TABキーでチェック
         else if (VK_TAB == pMsg->wParam && !m_pTreeCtrl->IsDragging() && !m_isModal) {
             HTREEITEM hSelItem = m_pTreeCtrl->GetSelectedItem();
-            m_pTreeCtrl->CheckItem(hSelItem);
+            m_pTreeCtrl->ToggleItemCheck(hSelItem);
             return true;
         }
         //上下
@@ -827,7 +827,7 @@ void CMyTreeDialog::ClosePopup()
         m_findDialog->DestroyWindow();
         m_bFind = false;
     }
-    ::PostMessage(theApp.getAppWnd(), WM_TREE_CLOSE, IDCANCEL, NULL);
+    ::PostMessage(theApp.GetAppWnd(), WM_TREE_CLOSE, IDCANCEL, NULL);
     m_isInitOK = false;
     KillTimer(CHARU_QUICK_TIMER);
 }
@@ -844,7 +844,7 @@ void CMyTreeDialog::EnterData(STRING_DATA* dataPtr)
             m_bFind = false;
         }
         m_selectDataPtr = dataPtr;
-        ::PostMessage(theApp.getAppWnd(), WM_TREE_CLOSE, IDOK, NULL);
+        ::PostMessage(theApp.GetAppWnd(), WM_TREE_CLOSE, IDOK, NULL);
         m_isInitOK = false;
         this->KillTimer(CHARU_QUICK_TIMER);
     }
@@ -1098,7 +1098,7 @@ void CMyTreeDialog::OnListSearch()
 void CMyTreeDialog::OnCheckItem()
 {
     HTREEITEM hSelItem = m_pTreeCtrl->GetSelectedItem();
-    m_pTreeCtrl->CheckItem(hSelItem);
+    m_pTreeCtrl->ToggleItemCheck(hSelItem);
     m_bCheckbox = true;
 }
 
@@ -1176,7 +1176,7 @@ void CMyTreeDialog::OnImport()
     ZeroMemory(&param, sizeof param);
     TCHAR tcPath[MAX_PATH] = _T("");
     param.lStructSize = sizeof param;
-    param.hwndOwner = theApp.m_hSelfWnd;
+    param.hwndOwner = theApp.GetAppWnd();
     param.lpstrFilter = strFilter.GetBuffer();
     param.lpstrCustomFilter = NULL;
     param.nFilterIndex = 1;
