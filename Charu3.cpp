@@ -296,8 +296,8 @@ bool CCharu3App::init()
     m_keySet = m_ini.m_defKeySet;
 
     //ホットキーを設定
-    registerHotkeys();
-    registerAdditionalHotkeys();
+    RegisterHotkeys();
+    RegisterAdditionalHotkeys();
 
     return true;
 }
@@ -350,7 +350,7 @@ void CCharu3App::popupTreeWindow(POINT pos, bool keepSelection, HTREEITEM hOpenI
     if (m_nPhase != PHASE_IDOL) return;
     m_nPhase = PHASE_POPUP;
     m_ini.unHookKey();
-    unregisterAdditionalHotkeys();//追加ホットキーを停止
+    UnregisterAdditionalHotkeys();//追加ホットキーを停止
 
     // Window::GetFocusInfo(&m_focusInfo);
 
@@ -516,7 +516,7 @@ void CCharu3App::closeTreeWindow(int nRet)
         SetTimer(m_pMainWnd->m_hWnd, TIMER_ACTIVE, m_ini.m_nWindowCheckInterval, NULL);
     }
 
-    registerAdditionalHotkeys();//追加ホットキーを設定
+    RegisterAdditionalHotkeys();//追加ホットキーを設定
     m_ini.setHookKey(m_hSelfWnd);
 
     if (m_pTree->GetStyle() & TVS_CHECKBOXES) {
@@ -608,7 +608,7 @@ void CCharu3App::SaveData()
 //関数名	registerHotkeys()
 //機能		ホットキーを設定する
 //---------------------------------------------------
-void CCharu3App::registerHotkeys()
+void CCharu3App::RegisterHotkeys()
 {
     if (m_ini.m_bDebug) {
         LOG(_T("registerHotkeys"));
@@ -653,7 +653,7 @@ void CCharu3App::registerHotkeys()
 //関数名	unregisterHotkeys()
 //機能		ホットキーを止める
 //---------------------------------------------------
-void CCharu3App::unregisterHotkeys()
+void CCharu3App::UnregisterHotkeys()
 {
     if (m_ini.m_bDebug) {
         LOG(_T("unregisterHotkeys"));
@@ -667,7 +667,7 @@ void CCharu3App::unregisterHotkeys()
 //関数名	registerdditionalHotkeys()
 //機能		追加ホットキーを設定
 //---------------------------------------------------
-void CCharu3App::registerAdditionalHotkeys()
+void CCharu3App::RegisterAdditionalHotkeys()
 {
     HOT_KEY_CODE keyData;
     std::list<STRING_DATA>::iterator it;
@@ -688,8 +688,7 @@ void CCharu3App::registerAdditionalHotkeys()
             data = m_pTree->getDataPtr(hTreeItem);
             strKey = m_pTree->getDataOptionStr(data->m_strMacro, EXMACRO_HOT_KEY);
             if (strKey != "") {
-                //ホットキー設定を変換
-                convHotKeyConf(strKey, &keyData.m_uModKey, &keyData.m_uVkCode, &keyData.m_isDoubleClick);
+                ParseHotkeyDescriptor(strKey, &keyData.m_uModKey, &keyData.m_uVkCode, &keyData.m_bDoubleStroke);
                 keyData.m_strMacroName = EXMACRO_HOT_KEY;
                 keyData.m_nDataID = data->m_nMyID;
                 keyData.m_hItem = hTreeItem;
@@ -703,8 +702,7 @@ void CCharu3App::registerAdditionalHotkeys()
             }
             strKey = m_pTree->getDataOptionStr(data->m_strMacro, EXMACRO_DIRECT_COPY);
             if (strKey != "") {
-                //ホットキー設定を変換
-                convHotKeyConf(strKey, &keyData.m_uModKey, &keyData.m_uVkCode, &keyData.m_isDoubleClick);
+                ParseHotkeyDescriptor(strKey, &keyData.m_uModKey, &keyData.m_uVkCode, &keyData.m_bDoubleStroke);
                 keyData.m_strMacroName = EXMACRO_DIRECT_COPY;
                 keyData.m_nDataID = data->m_nMyID;
                 keyData.m_hItem = hTreeItem;
@@ -724,7 +722,7 @@ void CCharu3App::registerAdditionalHotkeys()
 //関数名	unregisterAdditionalHotkeys()
 //機能		追加ホットキーをすべて止める
 //---------------------------------------------------
-void CCharu3App::unregisterAdditionalHotkeys()
+void CCharu3App::UnregisterAdditionalHotkeys()
 {
     UnregisterHotKey(NULL, HOTKEY_PASTE);
     int nSize = m_hotkeyVector.size();
@@ -738,22 +736,18 @@ void CCharu3App::unregisterAdditionalHotkeys()
 }
 
 //---------------------------------------------------
-//関数名	convHotKeyConf()
+//関数名	ParseHotkeyDescriptor()
 //機能		文字列からホットキーの設定を解読
 //---------------------------------------------------
-void CCharu3App::convHotKeyConf(CString strKey, UINT* pMod, UINT* pVK, bool* isDoubleClick)
+void CCharu3App::ParseHotkeyDescriptor(CString strKey, UINT* pMod, UINT* pVK, bool* pDoubleStroke)
 {
-    int nFound;
     CString strVK, strMod;
     strKey.MakeUpper();
-    nFound = strKey.ReverseFind('+');
-    *isDoubleClick = false;
-
-    if (nFound < 0) {//+で区切られてない場合
-        *pMod = NULL;
-        strVK = strKey;
-        strVK.TrimLeft();
-        strVK.TrimRight();
+    *pMod = 0;
+    *pDoubleStroke = false;
+    int indexPlus = strKey.ReverseFind('+');
+    if (indexPlus < 0) { // strkey does not have a '+'.
+        strVK = strKey.Trim();
         if (strVK == "SHIFT*2") {
             *pMod = MOD_SHIFT;
         }
@@ -764,17 +758,13 @@ void CCharu3App::convHotKeyConf(CString strKey, UINT* pMod, UINT* pVK, bool* isD
             *pMod = MOD_ALT;
         }
         if (*pMod) {
-            *isDoubleClick = true;
-            *pVK = NULL;
+            *pDoubleStroke = true;
+            *pVK = 0;
             return;
         }
     }
-    else {//+で区切られてる場合
-        strVK = strKey.Right(strKey.GetLength() - nFound - 1);
-        strVK.TrimLeft();
-        strVK.TrimRight();
-
-        *pMod = 0;
+    else { // strKey has '+'.
+        strVK = strKey.Mid(indexPlus + 1).Trim();
         if (strKey.Find(_T("SHIFT")) >= 0) {
             *pMod = *pMod | MOD_SHIFT;
         }
@@ -941,7 +931,7 @@ void CCharu3App::playHotItem(int nTarget)
                 //ダイレクトコピー
                 if (keyData.m_strMacroName == EXMACRO_DIRECT_COPY) {
                     m_nPhase = PHASE_LOCK;
-                    unregisterAdditionalHotkeys();//追加ホットキーを停止
+                    UnregisterAdditionalHotkeys();//追加ホットキーを停止
                     STRING_DATA dataChild;
                     Window::GetCaretPos(&pos, &m_focusInfo);//キャレット位置を取得(ハンドルを取るため)
 
@@ -966,7 +956,7 @@ void CCharu3App::playHotItem(int nTarget)
 
                         m_pTree->addData(keyData.m_hItem, dataChild, true, true);
                     }
-                    registerAdditionalHotkeys();//追加ホットキーを設定
+                    RegisterAdditionalHotkeys();//追加ホットキーを設定
                     m_nPhase = PHASE_IDOL;
                 }
                 //ホットキー
@@ -981,7 +971,7 @@ void CCharu3App::playHotItem(int nTarget)
             }
             else {//定形文は一発貼り付け
                 m_nPhase = PHASE_LOCK;
-                unregisterAdditionalHotkeys();//追加ホットキーを停止
+                UnregisterAdditionalHotkeys();//追加ホットキーを停止
 
                 CString strClip, strPaste;
                 m_clipboard.GetClipboardText(strClip, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);//クリップボードを保存
@@ -1052,7 +1042,7 @@ void CCharu3App::playHotItem(int nTarget)
                         m_pTree->deleteData(keyData.m_hItem);
                     }
                 }
-                registerAdditionalHotkeys();//追加ホットキーを設定
+                RegisterAdditionalHotkeys();//追加ホットキーを設定
                 m_nPhase = PHASE_IDOL;
             }
         }
@@ -1882,7 +1872,7 @@ void  CCharu3App::resetTreeDialog()
         m_pTree->CWnd::LockWindowUpdate();
         m_pTree->copyData(dataTree::ROOT, TVI_ROOT, &m_pTree->m_MyStringList);//ツリーにデータをセット
         m_pTree->CWnd::UnlockWindowUpdate();
-        registerAdditionalHotkeys();
+        RegisterAdditionalHotkeys();
     }
 }
 
@@ -1928,7 +1918,7 @@ BOOL CCharu3App::PreTranslateMessage(MSG* pMsg)
         //フォルダホットキー処理
         int nSize = m_hotkeyVector.size();
         for (int i = 0; i < nSize; i++) {
-            if (m_hotkeyVector[i].m_isDoubleClick) {
+            if (m_hotkeyVector[i].m_bDoubleStroke) {
                 if (KeyHelper::ModToVK(m_hotkeyVector[i].m_uModKey) == pMsg->wParam) {
                     pMsg->message = WM_HOTKEY;
                     pMsg->wParam = HOT_ITEM_KEY + i;
@@ -2036,8 +2026,8 @@ BOOL CCharu3App::PreTranslateMessage(MSG* pMsg)
 //---------------------------------------------------
 void CCharu3App::OnExit()
 {
-    unregisterAdditionalHotkeys();
-    unregisterHotkeys();
+    UnregisterAdditionalHotkeys();
+    UnregisterHotkeys();
     KillTimer(m_pMainWnd->m_hWnd, TIMER_ACTIVE);
     KillTimer(m_pMainWnd->m_hWnd, TIMER_MOUSE);
     if (m_hLangDll) {
@@ -2091,8 +2081,8 @@ void CCharu3App::OnOption()
     KillTimer(m_pMainWnd->m_hWnd, TIMER_MOUSE);
 
     if (nPhase == PHASE_IDOL)	m_ini.unHookKey();
-    unregisterAdditionalHotkeys();
-    unregisterHotkeys();
+    UnregisterAdditionalHotkeys();
+    UnregisterHotkeys();
 
     if (m_ini.m_bDebug) {
         LOG(_T("OnOption"));
@@ -2115,8 +2105,8 @@ void CCharu3App::OnOption()
         m_ini = iniBackup;
     }
 
-    registerHotkeys();
-    registerAdditionalHotkeys();
+    RegisterHotkeys();
+    RegisterAdditionalHotkeys();
     if (nPhase == PHASE_IDOL)	m_ini.setHookKey(m_hSelfWnd);
 
     //監視タイマーセット アイドル状態でストックモード中なら

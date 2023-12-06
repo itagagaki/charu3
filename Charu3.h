@@ -73,7 +73,7 @@ struct HOT_KEY_CODE
 {
     UINT m_uModKey{};
     UINT m_uVkCode{};
-    bool m_isDoubleClick{};
+    bool m_bDoubleStroke{};
     HTREEITEM m_hItem{};
     int  m_nDataID{};
     DWORD m_dwDoubleKeyTime{};
@@ -123,6 +123,9 @@ private:
     // インプリメンテーション
 private:
     bool init();
+    void resetTreeDialog();
+    bool SelectFile();
+    void SaveData();
 
     void popupTreeWindow(POINT pos, bool keepSelection, HTREEITEM hOpenItem = NULL);
     void closeTreeWindow(int nRet);
@@ -145,19 +148,13 @@ private:
     void keyUpDownC2(UINT uMod, UINT uVKCode, int nFlag);
     void keyUpDownMessage(UINT uMod, UINT uVKCode, int nFlag, HWND hWnd);
 
-    void registerHotkeys();
-    void unregisterHotkeys();
-    void registerAdditionalHotkeys();
-    void unregisterAdditionalHotkeys();
-
-    void convHotKeyConf(CString strKey, UINT* pMod, UINT* pVK, bool* isDoubleClick);
+    void ParseHotkeyDescriptor(CString strKey, UINT* pMod, UINT* pVK, bool* pDoubleStroke);
     int getKeycode(TCHAR* szKeyName, bool scanLayout);
+    void RegisterHotkeys();
+    void UnregisterHotkeys();
+    void RegisterAdditionalHotkeys();
+    void UnregisterAdditionalHotkeys();
     bool setAppendKeyInit(HWND hTopWindow, COPYPASTE_KEY* keySet);
-
-    void resetTreeDialog();
-
-    bool SelectFile();
-    void SaveData();
 
     HANDLE m_hMutex;				//重複起動判別ハンドル
     HINSTANCE m_hLangDll;
