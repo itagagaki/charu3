@@ -330,7 +330,7 @@ void CCharu3App::OnClick(HWND hActiveWnd)
     }
     else {
         // Toggle Stock Mode
-        toggleStockMode();
+        ToggleStockMode();
     }
 }
 
@@ -459,7 +459,7 @@ void CCharu3App::closeTreeWindow(int nRet)
 
         //貼り付け処理
         if (m_pTree->m_ltCheckItems.size() > 0) {//複数選択データがある
-            strSelect = getSelectString(m_keySet, m_focusInfo.m_hFocusWnd); // TODO: Doing unconditional copy action. Does not consider the necessity.
+            strSelect = GetSelectedText(m_keySet, m_focusInfo.m_hFocusWnd); // TODO: Doing unconditional copy action. Does not consider the necessity.
 
             if (m_ini.m_bDebug) {
                 LOG(_T("closeTreeWindow sel:%s clip:%s"), strSelect.GetString(), strClip.GetString());
@@ -490,7 +490,7 @@ void CCharu3App::closeTreeWindow(int nRet)
         }
         else if (m_pTreeDlg->m_selectDataPtr != nullptr) {//通常選択データ
             bool requiresSelectionText = (m_pTreeDlg->m_selectDataPtr->m_strData.Find(_T("$SEL")) != -1); // TODO: This test is true even if $SEL is outside <charu3MACRO>
-            strSelect = requiresSelectionText ? getSelectString(m_keySet, m_focusInfo.m_hFocusWnd) : "";
+            strSelect = requiresSelectionText ? GetSelectedText(m_keySet, m_focusInfo.m_hFocusWnd) : "";
             data = *(m_pTreeDlg->m_selectDataPtr);
 
             if (m_ini.m_bDebug) {
@@ -951,7 +951,7 @@ void CCharu3App::playHotItem(int nTarget)
                     keyUpDown(keyData.m_uModKey, keyData.m_uVkCode, KEY_UP);//キーを離す処理（これが無いと選択テキスト取得で失敗）
 
                     setAppendKeyInit(m_focusInfo.m_hActiveWnd, &m_keySet);//キー設定を変更
-                    strSelect = getSelectString(m_keySet, m_focusInfo.m_hFocusWnd);//選択文字取得
+                    strSelect = GetSelectedText(m_keySet, m_focusInfo.m_hFocusWnd);//選択文字取得
                     if (strSelect != "") {
                         dataChild.m_cKind = KIND_LOCK;
                         dataChild.m_nParentID = data.m_nMyID;
@@ -1000,7 +1000,7 @@ void CCharu3App::playHotItem(int nTarget)
                 if (keyData.m_strMacroName == EXMACRO_DIRECT_COPY) {
                     Window::GetCaretPos(&pos, &m_focusInfo);//キャレット位置を取得
                     setAppendKeyInit(m_focusInfo.m_hActiveWnd, &m_keySet);//キー設定を変更
-                    CString selectedText = getSelectString(m_keySet, m_focusInfo.m_hFocusWnd);
+                    CString selectedText = GetSelectedText(m_keySet, m_focusInfo.m_hFocusWnd);
                     m_pTree->SetText(keyData.m_hItem, selectedText);
 
                     if (m_ini.m_bDebug) {
@@ -1022,7 +1022,7 @@ void CCharu3App::playHotItem(int nTarget)
                     Window::GetCaretPos(&pos, &m_focusInfo);//キャレット位置を取得
                     setAppendKeyInit(m_focusInfo.m_hActiveWnd, &m_keySet);//キー設定を変更
 
-                    strSelect = getSelectString(m_keySet, m_focusInfo.m_hFocusWnd);//選択文字取得
+                    strSelect = GetSelectedText(m_keySet, m_focusInfo.m_hFocusWnd);//選択文字取得
                     strPaste = convertMacro(&data, strSelect, strClip, strMacro);//マクロ変換
 
                     if (m_ini.m_bDebug) {
@@ -1064,7 +1064,7 @@ void CCharu3App::playHotItem(int nTarget)
 //関数名	getSelectString()
 //機能		選択文字列を取る
 //---------------------------------------------------
-CString CCharu3App::getSelectString(COPYPASTE_KEY key, HWND hWnd)
+CString CCharu3App::GetSelectedText(COPYPASTE_KEY key, HWND hWnd)
 {
     m_clipboard.SetClipboardText(CString(), m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
     if (!hWnd)	hWnd = m_focusInfo.m_hFocusWnd;
@@ -1108,7 +1108,7 @@ CString CCharu3App::getSelectString(COPYPASTE_KEY key, HWND hWnd)
                 }
 
                 if (m_ini.m_bDebug) {
-                    LOG(_T("getSelectString %d %s"), keySet.m_nMessage, strSelect.GetString());
+                    LOG(_T("GetSelectedText %d %s"), keySet.m_nMessage, strSelect.GetString());
                 }
             }
         }
@@ -1735,21 +1735,18 @@ void CCharu3App::Record(CString text)
 //関数名	fifoClipboard()
 //機能		ストックモード処理
 //---------------------------------------------------
-void CCharu3App::fifoClipboard()
+void CCharu3App::PullOneTimeData()
 {
     if (!m_isStockMode) {
         return;
     }
 
     if (m_ini.m_nFifo) {
-        CString text;
+        CString text(_T(""));
         HTREEITEM hItem = m_pTree->getOneTimeItem(m_ini.m_nFifo);
         if (hItem) {
             text = m_pTree->getDataPtr(hItem)->m_strData;
             m_pTree->deleteData(hItem);
-        }
-        else {
-            text = _T("");
         }
         if (text != _T("")) {
             if (m_ini.m_bDebug) {
@@ -1764,18 +1761,18 @@ void CCharu3App::fifoClipboard()
         }
     }
 
-    // It comes in here by pressing the paste key, which is registered as a
-    // hotkey. So this key combination should be currently held down.
-    // Thus, if we leave the modifier key as it isand send events that
-    // release the main keyand press it again, the target window will
-    // recognize that the paste key is pressed.
+    /* It comes in here by pressing the paste key, which is registered as a
+       hotkey. So this key combination should be currently held down.
+       Thus, if we leave the modifier key as it isand send events that release
+       the main keyand press it again, the target window will recognize that
+       the paste key is pressed. */
     UnregisterHotKey(NULL, HOTKEY_PASTE);
     keybd_event(m_keySet.m_uVK_Paste, 0, KEYEVENTF_KEYUP, 0);
     keybd_event(m_keySet.m_uVK_Paste, 0, 0, 0);
     RegisterHotKey(NULL, HOTKEY_PASTE, m_keySet.m_uMod_Paste, m_keySet.m_uVK_Paste);
 
     if (m_ini.m_bAutoOff && !m_pTree->getOneTimeItem(m_ini.m_nFifo)) {
-        toggleStockMode(); // Turn off stock mode due to one-time item is gone
+        ToggleStockMode(); // Turn off stock mode due to one-time item is gone
     }
 }
 
@@ -1783,7 +1780,7 @@ void CCharu3App::fifoClipboard()
 //関数名	toggleStockMode()
 //機能		ストックモード切替
 //---------------------------------------------------
-void CCharu3App::toggleStockMode()
+void CCharu3App::ToggleStockMode()
 {
     if (m_ini.m_bDebug) {
         LOG(_T("toggleStockMode %d"), !m_isStockMode);
@@ -1994,7 +1991,7 @@ BOOL CCharu3App::PreTranslateMessage(MSG* pMsg)
                     return FALSE;
                 }
             }
-            toggleStockMode(); // Toggle stock mode by hotkey
+            ToggleStockMode(); // Toggle stock mode by hotkey
             return FALSE;
             break;
 
@@ -2002,7 +1999,7 @@ BOOL CCharu3App::PreTranslateMessage(MSG* pMsg)
             if (m_ini.m_bDebug) {
                 LOG(_T("HOTKEY_PASTE"));
             }
-            fifoClipboard();
+            PullOneTimeData();
             return FALSE;
             break;
 
@@ -2176,7 +2173,7 @@ void CCharu3App::OnAddData()
 //---------------------------------------------------
 void CCharu3App::OnStockStop()
 {
-    toggleStockMode(); // Toggle stock mode by main menu
+    ToggleStockMode(); // Toggle stock mode by main menu
 }
 
 //---------------------------------------------------

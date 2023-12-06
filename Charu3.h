@@ -126,7 +126,22 @@ private:
     void closeTreeWindow(int nRet);
     void getPopupPos(POINT* pPos, int nPosType);
     void adjustLocation(POINT* pos);
-    void toggleStockMode();
+
+    void ToggleStockMode();
+    void PullOneTimeData();
+
+    void pasteData(CString strPaste, COPYPASTE_KEY key, HWND hWnd);
+    void execData(CString strPaste, COPYPASTE_KEY key, HTREEITEM hTargetItem, HWND hWnd);
+    void execKeyMacro(CString strKeyMacro);
+    void playHotItem(int nTarget);
+    void playData(STRING_DATA data, CString strClip, CString strSelect, bool isPaste, bool isChange = true);
+    CString convertMacro(STRING_DATA* SourceData, CString strSelect, CString strClip, CString strSoftName);
+
+    CString GetSelectedText(COPYPASTE_KEY key, HWND hWnd = NULL);
+
+    void keyUpDown(UINT uMod, UINT uVKCode, int nFlag);
+    void keyUpDownC2(UINT uMod, UINT uVKCode, int nFlag);
+    void keyUpDownMessage(UINT uMod, UINT uVKCode, int nFlag, HWND hWnd);
 
     void registerHotkeys();
     void unregisterHotkeys();
@@ -137,21 +152,6 @@ private:
     int getKeycode(TCHAR* szKeyName, bool scanLayout);
     bool setAppendKeyInit(HWND hTopWindow, COPYPASTE_KEY* keySet);
 
-    void pasteData(CString strPaste, COPYPASTE_KEY key, HWND hWnd);
-    void execData(CString strPaste, COPYPASTE_KEY key, HTREEITEM hTargetItem, HWND hWnd);
-    void execKeyMacro(CString strKeyMacro);
-
-    void playHotItem(int nTarget);
-    void playData(STRING_DATA data, CString strClip, CString strSelect, bool isPaste, bool isChange = true);
-
-    CString getSelectString(COPYPASTE_KEY key, HWND hWnd = NULL);
-    void keyUpDown(UINT uMod, UINT uVKCode, int nFlag);
-    void keyUpDownC2(UINT uMod, UINT uVKCode, int nFlag);
-    void keyUpDownMessage(UINT uMod, UINT uVKCode, int nFlag, HWND hWnd);
-
-    CString convertMacro(STRING_DATA* SourceData, CString strSelect, CString strClip, CString strSoftName);
-
-    void fifoClipboard();
     void resetTreeDialog();
 
     bool SelectFile();
