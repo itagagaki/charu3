@@ -14,7 +14,6 @@ static char THIS_FILE[] = __FILE__;
 
 #include "MainFrm.h"
 #include "Charu3.h"
-#include "clipboard.h"
 #include "log.h"
 #include "resource.h"
 
@@ -183,7 +182,7 @@ void CMainFrame::OnClipboardChanged()
         if (theApp.m_ini.m_nClipboardOpenDelay > 0) {
             Sleep(theApp.m_ini.m_nClipboardOpenDelay);
         }
-        theApp.m_clipboard.GetClipboardText(strClipboard, theApp.m_ini.m_nClipboardRetryTimes, theApp.m_ini.m_nClipboardRetryInterval);
+        theApp.GetClipboardText(strClipboard);
         theApp.Record(strClipboard);
     }
 

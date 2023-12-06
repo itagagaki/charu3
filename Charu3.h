@@ -103,10 +103,12 @@ public:
     void BeForeground();
     void RedrawDataTreeView();
 
+    bool GetClipboardText(CString& sData) {
+        return m_clipboard.GetClipboardText(sData, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
+    }
     void Record(CString text);
 
     CInit m_ini;
-    CClipBoard m_clipboard;
     CCharu3Tree* m_pTree;
 
     // オーバーライド
@@ -166,6 +168,8 @@ private:
     bool m_isCloseKey, m_isStockMode;
     BOOL m_isImeStatus;
     int m_nPhase;
+
+    CClipBoard m_clipboard;
 
     CMyTreeDialog* m_pTreeDlg;
     HTREEITEM m_hSelectItemBkup;
