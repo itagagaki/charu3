@@ -103,8 +103,6 @@ public:
     void Record(CString text);
     void toggleStockMode();
 
-    CString NewFile(); // TODO: Should be a unitlity
-
     void RedrawDataTreeView() {
         if (m_pTreeDlg->IsWindowVisible()) {
             m_pTreeDlg->RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
@@ -119,8 +117,8 @@ public:
 
     // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
+private:
     //{{AFX_VIRTUAL(CCharu3App)
-public:
     virtual BOOL InitInstance();
     virtual BOOL PreTranslateMessage(MSG* pMsg);
     virtual int ExitInstance();

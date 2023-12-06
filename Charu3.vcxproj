@@ -86,6 +86,7 @@
     <ClCompile Include="Charu3Tree.cpp" />
     <ClCompile Include="ChildView.cpp" />
     <ClCompile Include="clipboard.cpp" />
+    <ClCompile Include="commonDialog.cpp" />
     <ClCompile Include="InitialDialog.cpp" />
     <ClCompile Include="EditDialog.cpp" />
     <ClCompile Include="Init.cpp" />
@@ -118,6 +119,7 @@
     <ClInclude Include="ChildView.h" />
     <ClInclude Include="clipboard.h" />
     <ClInclude Include="color.h" />
+    <ClInclude Include="commonDialog.h" />
     <ClInclude Include="hotkey.h" />
     <ClInclude Include="InitialDialog.h" />
     <ClInclude Include="EditDialog.h" />

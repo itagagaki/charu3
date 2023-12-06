@@ -24,6 +24,7 @@ static char THIS_FILE[] = __FILE__;
 #include "EditDialog.h"
 #include "OptMainDialog.h"
 #include "AboutDialog.h"
+#include "commonDialog.h"
 #include "window.h"
 #include "hotkey.h"
 #include "key.h"
@@ -255,7 +256,7 @@ bool CCharu3App::init()
             switch (ret) {
             case IDC_NEW:
             {
-                CString file = NewFile();
+                CString file = CommonDialog::NewFilePath(_T(DAT_EXT));
                 if (file != _T("")) {
                     m_ini.m_strDataPath = file;
                     m_ini.m_strDataFormat = DAT_FORMAT;
@@ -361,49 +362,6 @@ bool CCharu3App::SelectFile()
             LOG(_T("SelectFile failed"));
         }
         return false;
-    }
-}
-
-CString CCharu3App::NewFile()
-{
-    CString strTitle, strDisplay, strPattern;
-    (void)strTitle.LoadString(APP_INF_EXPORT_CAPTION);
-    (void)strDisplay.LoadString(APP_INF_FILE_FILTER_C3D_DISPLAY);
-    (void)strPattern.LoadString(APP_INF_FILE_FILTER_C3D_PATTERN);
-    CString strFilter = strDisplay + _T('\0') + strPattern + _T('\0') + _T('\0') + _T('\0');
-
-    OPENFILENAME param;
-    ZeroMemory(&param, sizeof param);
-    TCHAR tcPath[MAX_PATH] = _T("");
-    param.lStructSize = sizeof param;
-    param.hwndOwner = m_hSelfWnd;
-    param.lpstrTitle = strTitle.GetBuffer();
-    param.lpstrFilter = strFilter.GetBuffer();
-    param.lpstrDefExt = _T(DAT_EXT);
-    param.lpstrCustomFilter = NULL;
-    param.nFilterIndex = 1;
-    param.lpstrFile = tcPath;
-    param.nMaxFile = MAX_PATH;
-    param.lpstrFileTitle = NULL;
-    param.lpstrInitialDir = NULL;
-    param.Flags = OFN_OVERWRITEPROMPT;
-    param.nFileOffset = 0;
-    param.nFileExtension = 0;
-    if (GetSaveFileName(&param)) {
-        //if (param.Flags & OFN_EXTENSIONDIFFERENT) {
-        //	_tcscat_s(tcPath, MAX_PATH, _T("."));
-        //	_tcscat_s(tcPath, MAX_PATH, _T(DAT_EXT));
-        //}
-        if (m_ini.m_bDebug) {
-            LOG(_T("NewFile \"%s\""), tcPath);
-        }
-        return CString(tcPath);
-    }
-    else {
-        if (m_ini.m_bDebug) {
-            LOG(_T("NewFile failed"));
-        }
-        return CString(_T(""));
     }
 }
 
@@ -2163,7 +2121,7 @@ void CCharu3App::OnChangData()
 //---------------------------------------------------
 void CCharu3App::OnExport()
 {
-    CString file = NewFile();
+    CString file = CommonDialog::NewFilePath(_T(DAT_EXT));
     if (file != _T("")) {
         if (!m_pTree->saveDataToFile(file, DAT_FORMAT, NULL)) {
             CString strRes;

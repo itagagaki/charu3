@@ -16,6 +16,7 @@ static char THIS_FILE[] = __FILE__;
 #include "MyTreeDialog.h"
 #include "EditDialog.h"
 #include "SearchDialog.h"
+#include "commonDialog.h"
 #include "Charu3.h"
 #include "color.h"
 #include "window.h"
@@ -1246,7 +1247,7 @@ void CMyTreeDialog::OnExport()
     m_isModal = true;
     HTREEITEM hTreeItem = m_pTreeCtrl->GetSelectedItem();
     if (hTreeItem) {
-        CString file = theApp.NewFile();
+        CString file = CommonDialog::NewFilePath(_T(DAT_EXT));
         if (file != _T("")) {
             if (!m_pTreeCtrl->saveDataToFile(file, DAT_FORMAT, hTreeItem)) {
                 CString strRes;

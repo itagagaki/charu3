@@ -89,6 +89,9 @@
     <ClCompile Include="PaletStatic.cpp">
       <Filter>controls</Filter>
     </ClCompile>
+    <ClCompile Include="commonDialog.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyEditCtrl.h">
@@ -170,6 +173,9 @@
     </ClInclude>
     <ClInclude Include="PaletStatic.h">
       <Filter>controls</Filter>
+    </ClInclude>
+    <ClInclude Include="commonDialog.h">
+      <Filter>util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
