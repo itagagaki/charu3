@@ -14,7 +14,6 @@ static char THIS_FILE[] = __FILE__;
 
 #include "MainFrm.h"
 #include "Charu3.h"
-#include "window.h"
 #include "clipboard.h"
 #include "log.h"
 #include "resource.h"
@@ -276,22 +275,11 @@ LRESULT CMainFrame::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
             return FALSE; // to suppress notification area menu
         }
         else if (WM_LBUTTONDOWN == lParam) {
-            if (theApp.m_ini.m_nIconClick == 0) {
-                // popup treeview
-                if (theApp.GetPhase() == PHASE_IDOL) {
-                    theApp.popupTreeWinMC(m_hActive);
-                }
-            }
-            else {
-                // toggle stock mode
-                theApp.toggleStockMode();
-            }
+            theApp.OnClick(m_hActive);
         }
         else if (CheckTrayPos()) {
             m_hActive = ::GetForegroundWindow();
-            if (m_hActive != theApp.m_focusInfo.m_hActiveWnd) {
-                Window::GetFocusInfo(&theApp.m_focusInfo);
-            }
+            theApp.CheckFocusInfo(m_hActive);
         }
     }
     // clipboard update notification

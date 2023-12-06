@@ -302,6 +302,231 @@ bool CCharu3App::init()
     return true;
 }
 
+void CCharu3App::BeForeground()
+{
+    Window::SetAbsoluteForegroundWindow(m_pMainFrame->m_hWnd);
+}
+
+void CCharu3App::CheckFocusInfo(HWND hActiveWnd)
+{
+    if (hActiveWnd != m_focusInfo.m_hActiveWnd) {
+        Window::GetFocusInfo(&m_focusInfo);
+    }
+}
+
+void CCharu3App::OnClick(HWND hActiveWnd)
+{
+    if (m_ini.m_nIconClick == 0) {
+        if (GetPhase() == PHASE_IDOL) {
+            // Pop-up Data Tree View Window at the mouse pointer.
+            POINT pos;
+            GetCursorPos(&pos);
+            pos.x -= m_ini.m_DialogSize.x;
+            pos.y -= m_ini.m_DialogSize.y;
+            adjustLocation(&pos);
+            // Window::GetFocusInfo(&theApp.m_focusInfo,hForeground);
+            popupTreeWindow(pos, m_ini.m_bKeepSelection);
+        }
+    }
+    else {
+        // Toggle Stock Mode
+        toggleStockMode();
+    }
+}
+
+void CCharu3App::RedrawDataTreeView()
+{
+    if (m_pTreeDlg->IsWindowVisible()) {
+        m_pTreeDlg->RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
+    }
+}
+
+//---------------------------------------------------
+//関数名	popupTreeWindow
+//機能		ポップアップを表示
+//---------------------------------------------------
+void CCharu3App::popupTreeWindow(POINT pos, bool keepSelection, HTREEITEM hOpenItem)
+{
+    if (m_nPhase != PHASE_IDOL) return;
+    m_nPhase = PHASE_POPUP;
+    m_ini.unHookKey();
+    unregisterAdditionalHotkeys();//追加ホットキーを停止
+
+    // Window::GetFocusInfo(&m_focusInfo);
+
+    if (m_focusInfo.m_hActiveWnd == this->m_pMainFrame->m_hWnd) {
+        m_nPhase = PHASE_IDOL;
+        return;
+    }
+
+    if (m_isStockMode)	KillTimer(m_pMainWnd->m_hWnd, TIMER_ACTIVE);//監視タイマー停止
+
+    if (m_ini.m_bDebug) {
+        LOG(_T("popupTreeWindow x=%d y=%d keep=%s"), pos.x, pos.y, keepSelection ? _T("true") : _T("false"));
+    }
+
+    Window::SetAbsoluteForegroundWindow(m_pMainWnd->m_hWnd);//自分をアクティブに設定
+    m_pTreeDlg->ShowWindowPos(pos, m_ini.m_DialogSize, SW_SHOW, keepSelection, hOpenItem);
+}
+
+//---------------------------------------------------
+//関数名	adjustLocation(POINT pos)
+//機能		ポップアップ位置を必ずデスクトップ内にする
+//---------------------------------------------------
+void CCharu3App::adjustLocation(POINT* pos)
+{
+    RECT DeskTopSize;
+    int nMonCount = GetSystemMetrics(SM_CMONITORS);
+
+    if (nMonCount <= 1) {
+        //デスクトップのサイズを取得
+        int nDektopWidth = GetSystemMetrics(SM_CXSCREEN);
+        int nDesktopHeight = GetSystemMetrics(SM_CYFULLSCREEN);
+        //解像度の取得
+        int nScreenWidth = GetSystemMetrics(SM_CXSCREEN);
+        int nScreenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+        if (m_ini.m_bDebug) {
+            LOG(_T("reviseWindowPos %d %d %d %d"), nDektopWidth, nDesktopHeight, nScreenWidth, nScreenHeight);
+        }
+
+        HWND hDeskTop = GetDesktopWindow();
+        if (hDeskTop) ::GetWindowRect(hDeskTop, &DeskTopSize);
+        else return;
+    }
+    else {
+        CArray<RECT, RECT> arrayRect;
+        arrayRect.RemoveAll();
+        EnumDisplayMonitors(NULL, NULL, (MONITORENUMPROC)MonitorEnumFunc, (LPARAM)&arrayRect);
+
+        int nSize = arrayRect.GetSize(), nCurrentMon = 0, nWidth, nHeight;
+        CString strBuff;
+        double dDistance, dMinDistance = -1.0f;
+        for (int i = 0; i < nSize; i++) {
+            strBuff.Format(_T("left:%d top:%d right:%d bottom:%d"), arrayRect[i].left, arrayRect[i].top, arrayRect[i].right, arrayRect[i].bottom);
+            nWidth = abs((arrayRect[i].left + arrayRect[i].right) / 2 - pos->x);
+            nHeight = abs((arrayRect[i].top + arrayRect[i].bottom) / 2 - pos->y);
+
+            dDistance = sqrt((nWidth * nWidth) + (nHeight * nHeight));
+            if (dDistance < dMinDistance || i == 0) {
+                dMinDistance = dDistance;
+                nCurrentMon = i;
+            }
+        }
+        DeskTopSize = arrayRect[nCurrentMon];
+    }
+    //ウィンドウ位置を補正
+    if (pos->y + m_ini.m_DialogSize.y > DeskTopSize.bottom)
+        pos->y -= (pos->y + m_ini.m_DialogSize.y) - DeskTopSize.bottom;
+    if (pos->x + m_ini.m_DialogSize.x > DeskTopSize.right)
+        pos->x -= (pos->x + m_ini.m_DialogSize.x) - DeskTopSize.right;
+
+    if (pos->y < DeskTopSize.top)
+        pos->y = DeskTopSize.top;
+    if (pos->x < DeskTopSize.left)
+        pos->x = DeskTopSize.left;
+}
+
+//---------------------------------------------------
+//関数名	closeTreeWindow(int nRet)
+//機能		ポップアップ隠蔽処理
+//---------------------------------------------------
+void CCharu3App::closeTreeWindow(int nRet)
+{
+    m_pTreeDlg->ShowWindow(SW_HIDE);
+    STRING_DATA data;
+    bool isPaste = true;
+    if (::GetAsyncKeyState(VK_SHIFT) < 0) isPaste = false;
+
+    if (m_ini.m_bDebug) {
+        LOG(_T("closeTreeWindow %d"), nRet);
+    }
+
+    //アクティブウィンドウを復帰
+    if (nRet == IDOK) {
+        CString strClip, strSelect;
+        m_clipboard.GetClipboardText(strClip, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);//クリップボードを保存
+
+        setAppendKeyInit(m_focusInfo.m_hActiveWnd, &m_keySet);//キー設定を変更
+        //キーが離されるのを待つ
+        while (::GetAsyncKeyState(VK_MENU) < 0 || ::GetAsyncKeyState(VK_CONTROL) < 0 ||
+            ::GetAsyncKeyState(VK_SHIFT) < 0 || ::GetAsyncKeyState(VK_RETURN) < 0) Sleep(50);
+        Window::SetFocusInfo(&m_focusInfo);//ターゲットをフォーカス
+
+        if (m_ini.m_bDebug) {
+            LOG(_T("setFocusInfo active:%p focus:%p"), m_focusInfo.m_hActiveWnd, m_focusInfo.m_hFocusWnd);
+        }
+
+        //貼り付け処理
+        if (m_pTree->m_ltCheckItems.size() > 0) {//複数選択データがある
+            strSelect = getSelectString(m_keySet, m_focusInfo.m_hFocusWnd); // TODO: Doing unconditional copy action. Does not consider the necessity.
+
+            if (m_ini.m_bDebug) {
+                LOG(_T("closeTreeWindow sel:%s clip:%s"), strSelect.GetString(), strClip.GetString());
+            }
+
+            std::list<HTREEITEM>::iterator it;
+            for (it = m_pTree->m_ltCheckItems.begin(); it != m_pTree->m_ltCheckItems.end(); it++) {
+                if (m_pTree->GetItemState(*it, TVIF_HANDLE)) {
+                    data = m_pTree->getData(*it);
+                    if (data.m_cKind & KIND_DATA_ALL) {
+                        if (m_ini.m_bDebug) {
+                            LOG(_T("closeTreeWindow check paste %s"), data.m_strTitle.GetString());
+                        }
+                        playData(data, strClip, strSelect, isPaste, false);
+                    }
+                }
+            }
+            //一時項目は消す
+            for (it = m_pTree->m_ltCheckItems.begin(); it != m_pTree->m_ltCheckItems.end(); it++) {
+                if (m_pTree->GetItemState(*it, TVIF_HANDLE)) {
+                    HTREEITEM hItem = *it;
+                    *it = NULL;
+                    if (m_pTree->getDataPtr(hItem)->m_cKind & KIND_ONETIME) {
+                        //m_hSelectItemBkup = NULL;
+                    }
+                }
+            }
+        }
+        else if (m_pTreeDlg->m_selectDataPtr != nullptr) {//通常選択データ
+            bool requiresSelectionText = (m_pTreeDlg->m_selectDataPtr->m_strData.Find(_T("$SEL")) != -1); // TODO: This test is true even if $SEL is outside <charu3MACRO>
+            strSelect = requiresSelectionText ? getSelectString(m_keySet, m_focusInfo.m_hFocusWnd) : "";
+            data = *(m_pTreeDlg->m_selectDataPtr);
+
+            if (m_ini.m_bDebug) {
+                LOG(_T("closeTreeWindow sel:%s clip:%s title:%s"), strSelect.GetString(), strClip.GetString(), data.m_strTitle.GetString());
+            }
+            playData(data, strClip, strSelect, isPaste);
+        }
+    }
+    else if (::GetForegroundWindow() == m_focusInfo.m_hActiveWnd) {
+        Window::SetFocusInfo(&m_focusInfo);
+    }
+    if (m_hSelectItemBkup) {
+        m_pTree->SelectItem(m_hSelectItemBkup);
+        m_hSelectItemBkup = NULL;
+    }
+
+    //データを保存
+    SaveData();
+    m_ini.writeEnvInitData();//環境設定を保存
+
+    //監視タイマーセット
+    if (m_isStockMode && m_ini.m_nWindowCheckInterval > 0) {
+        SetTimer(m_pMainWnd->m_hWnd, TIMER_ACTIVE, m_ini.m_nWindowCheckInterval, NULL);
+    }
+
+    registerAdditionalHotkeys();//追加ホットキーを設定
+    m_ini.setHookKey(m_hSelfWnd);
+
+    if (m_pTree->GetStyle() & TVS_CHECKBOXES) {
+        resetTreeDialog();
+        Window::SetFocusInfo(&m_focusInfo);
+    }
+    ASSERT(m_nPhase == PHASE_POPUP);
+    m_nPhase = PHASE_IDOL;
+}
+
 bool CCharu3App::SelectFile()
 {
     CString strDisplay, strPattern;
@@ -363,6 +588,20 @@ bool CCharu3App::SelectFile()
         }
         return false;
     }
+}
+
+void CCharu3App::SaveData()
+{
+    if (m_ini.m_bReadOnly) {
+        return;
+    }
+    if (m_pTree->saveDataToFile(m_ini.m_strDataPath, m_ini.m_strDataFormat, NULL)) {
+        return;
+    }
+
+    CString strRes;
+    (void)strRes.LoadString(APP_MES_SAVE_FAILURE);
+    AfxMessageBox(strRes, MB_ICONEXCLAMATION, 0);
 }
 
 //---------------------------------------------------
@@ -610,220 +849,6 @@ bool CCharu3App::setAppendKeyInit(HWND hTopWindow, COPYPASTE_KEY* keySet)
 
     isRet = true;
     return isRet;
-}
-
-//---------------------------------------------------
-//関数名	popupTreeWindow
-//機能		ポップアップを表示
-//---------------------------------------------------
-void CCharu3App::popupTreeWindow(POINT pos, bool keepSelection, HTREEITEM hOpenItem)
-{
-    if (m_nPhase != PHASE_IDOL) return;
-    m_nPhase = PHASE_POPUP;
-    m_ini.unHookKey();
-    unregisterAdditionalHotkeys();//追加ホットキーを停止
-
-	// Window::GetFocusInfo(&m_focusInfo);
-
-    if (m_focusInfo.m_hActiveWnd == this->m_pMainFrame->m_hWnd) {
-        m_nPhase = PHASE_IDOL;
-        return;
-    }
-
-    if (m_isStockMode)	KillTimer(m_pMainWnd->m_hWnd, TIMER_ACTIVE);//監視タイマー停止
-
-    if (m_ini.m_bDebug) {
-        LOG(_T("popupTreeWindow x=%d y=%d keep=%s"), pos.x, pos.y, keepSelection ? _T("true") : _T("false"));
-    }
-
-    Window::SetAbsoluteForegroundWindow(m_pMainWnd->m_hWnd);//自分をアクティブに設定
-    m_pTreeDlg->ShowWindowPos(pos, m_ini.m_DialogSize, SW_SHOW, keepSelection, hOpenItem);
-}
-
-//---------------------------------------------------
-//関数名	popupTreeWinMC(HWND hForeground)
-//機能		ポップアップをマウスカーソル位置に表示
-//---------------------------------------------------
-void CCharu3App::popupTreeWinMC(HWND hForeground)
-{
-    POINT pos;
-    GetCursorPos(&pos);
-    pos.x -= m_ini.m_DialogSize.x;
-    pos.y -= m_ini.m_DialogSize.y;
-    adjustLocation(&pos);
-    // Window::GetFocusInfo(&theApp.m_focusInfo,hForeground);
-    popupTreeWindow(pos, m_ini.m_bKeepSelection);
-}
-//---------------------------------------------------
-//関数名	adjustLocation(POINT pos)
-//機能		ポップアップ位置を必ずデスクトップ内にする
-//---------------------------------------------------
-void CCharu3App::adjustLocation(POINT* pos)
-{
-    RECT DeskTopSize;
-    int nMonCount = GetSystemMetrics(SM_CMONITORS);
-
-    if (nMonCount <= 1) {
-        //デスクトップのサイズを取得
-        int nDektopWidth = GetSystemMetrics(SM_CXSCREEN);
-        int nDesktopHeight = GetSystemMetrics(SM_CYFULLSCREEN);
-        //解像度の取得
-        int nScreenWidth = GetSystemMetrics(SM_CXSCREEN);
-        int nScreenHeight = GetSystemMetrics(SM_CYSCREEN);
-
-        if (m_ini.m_bDebug) {
-            LOG(_T("reviseWindowPos %d %d %d %d"), nDektopWidth, nDesktopHeight, nScreenWidth, nScreenHeight);
-        }
-
-        HWND hDeskTop = GetDesktopWindow();
-        if (hDeskTop) ::GetWindowRect(hDeskTop, &DeskTopSize);
-        else return;
-    }
-    else {
-        CArray<RECT, RECT> arrayRect;
-        arrayRect.RemoveAll();
-        EnumDisplayMonitors(NULL, NULL, (MONITORENUMPROC)MonitorEnumFunc, (LPARAM)&arrayRect);
-
-        int nSize = arrayRect.GetSize(), nCurrentMon = 0, nWidth, nHeight;
-        CString strBuff;
-        double dDistance, dMinDistance = -1.0f;
-        for (int i = 0; i < nSize; i++) {
-            strBuff.Format(_T("left:%d top:%d right:%d bottom:%d"), arrayRect[i].left, arrayRect[i].top, arrayRect[i].right, arrayRect[i].bottom);
-            nWidth = abs((arrayRect[i].left + arrayRect[i].right) / 2 - pos->x);
-            nHeight = abs((arrayRect[i].top + arrayRect[i].bottom) / 2 - pos->y);
-
-            dDistance = sqrt((nWidth * nWidth) + (nHeight * nHeight));
-            if (dDistance < dMinDistance || i == 0) {
-                dMinDistance = dDistance;
-                nCurrentMon = i;
-            }
-        }
-        DeskTopSize = arrayRect[nCurrentMon];
-    }
-    //ウィンドウ位置を補正
-    if (pos->y + m_ini.m_DialogSize.y > DeskTopSize.bottom)
-        pos->y -= (pos->y + m_ini.m_DialogSize.y) - DeskTopSize.bottom;
-    if (pos->x + m_ini.m_DialogSize.x > DeskTopSize.right)
-        pos->x -= (pos->x + m_ini.m_DialogSize.x) - DeskTopSize.right;
-
-    if (pos->y < DeskTopSize.top)
-        pos->y = DeskTopSize.top;
-    if (pos->x < DeskTopSize.left)
-        pos->x = DeskTopSize.left;
-}
-
-//---------------------------------------------------
-//関数名	closeTreeWindow(int nRet)
-//機能		ポップアップ隠蔽処理
-//---------------------------------------------------
-void CCharu3App::closeTreeWindow(int nRet)
-{
-    m_pTreeDlg->ShowWindow(SW_HIDE);
-    STRING_DATA data;
-    bool isPaste = true;
-    if (::GetAsyncKeyState(VK_SHIFT) < 0) isPaste = false;
-
-    if (m_ini.m_bDebug) {
-        LOG(_T("closeTreeWindow %d"), nRet);
-    }
-
-    //アクティブウィンドウを復帰
-    if (nRet == IDOK) {
-        CString strClip, strSelect;
-        m_clipboard.GetClipboardText(strClip, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);//クリップボードを保存
-
-        setAppendKeyInit(m_focusInfo.m_hActiveWnd, &m_keySet);//キー設定を変更
-        //キーが離されるのを待つ
-        while (::GetAsyncKeyState(VK_MENU) < 0 || ::GetAsyncKeyState(VK_CONTROL) < 0 ||
-            ::GetAsyncKeyState(VK_SHIFT) < 0 || ::GetAsyncKeyState(VK_RETURN) < 0) Sleep(50);
-        Window::SetFocusInfo(&m_focusInfo);//ターゲットをフォーカス
-
-        if (m_ini.m_bDebug) {
-            LOG(_T("setFocusInfo active:%p focus:%p"), m_focusInfo.m_hActiveWnd, m_focusInfo.m_hFocusWnd);
-        }
-
-        //貼り付け処理
-        if (m_pTree->m_ltCheckItems.size() > 0) {//複数選択データがある
-            strSelect = getSelectString(m_keySet, m_focusInfo.m_hFocusWnd); // TODO: Doing unconditional copy action. Does not consider the necessity.
-
-            if (m_ini.m_bDebug) {
-                LOG(_T("closeTreeWindow sel:%s clip:%s"), strSelect.GetString(), strClip.GetString());
-            }
-
-            std::list<HTREEITEM>::iterator it;
-            for (it = m_pTree->m_ltCheckItems.begin(); it != m_pTree->m_ltCheckItems.end(); it++) {
-                if (m_pTree->GetItemState(*it, TVIF_HANDLE)) {
-                    data = m_pTree->getData(*it);
-                    if (data.m_cKind & KIND_DATA_ALL) {
-                        if (m_ini.m_bDebug) {
-                            LOG(_T("closeTreeWindow check paste %s"), data.m_strTitle.GetString());
-                        }
-                        playData(data, strClip, strSelect, isPaste, false);
-                    }
-                }
-            }
-            //一時項目は消す
-            for (it = m_pTree->m_ltCheckItems.begin(); it != m_pTree->m_ltCheckItems.end(); it++) {
-                if (m_pTree->GetItemState(*it, TVIF_HANDLE)) {
-                    HTREEITEM hItem = *it;
-                    *it = NULL;
-                    if (m_pTree->getDataPtr(hItem)->m_cKind & KIND_ONETIME) {
-                        //m_hSelectItemBkup = NULL;
-                    }
-                }
-            }
-        }
-        else if (m_pTreeDlg->m_selectDataPtr != nullptr) {//通常選択データ
-            bool requiresSelectionText = (m_pTreeDlg->m_selectDataPtr->m_strData.Find(_T("$SEL")) != -1); // TODO: This test is true even if $SEL is outside <charu3MACRO>
-            strSelect = requiresSelectionText ? getSelectString(m_keySet, m_focusInfo.m_hFocusWnd) : "";
-            data = *(m_pTreeDlg->m_selectDataPtr);
-
-            if (m_ini.m_bDebug) {
-                LOG(_T("closeTreeWindow sel:%s clip:%s title:%s"), strSelect.GetString(), strClip.GetString(), data.m_strTitle.GetString());
-            }
-            playData(data, strClip, strSelect, isPaste);
-        }
-    }
-    else if (::GetForegroundWindow() == m_focusInfo.m_hActiveWnd) {
-        Window::SetFocusInfo(&m_focusInfo);
-    }
-    if (m_hSelectItemBkup) {
-        m_pTree->SelectItem(m_hSelectItemBkup);
-        m_hSelectItemBkup = NULL;
-    }
-
-    //データを保存
-    SaveData();
-    m_ini.writeEnvInitData();//環境設定を保存
-
-    //監視タイマーセット
-    if (m_isStockMode && m_ini.m_nWindowCheckInterval > 0) {
-        SetTimer(m_pMainWnd->m_hWnd, TIMER_ACTIVE, m_ini.m_nWindowCheckInterval, NULL);
-    }
-
-    registerAdditionalHotkeys();//追加ホットキーを設定
-    m_ini.setHookKey(m_hSelfWnd);
-
-    if (m_pTree->GetStyle() & TVS_CHECKBOXES) {
-        resetTreeDialog();
-        Window::SetFocusInfo(&m_focusInfo);
-    }
-    ASSERT(m_nPhase == PHASE_POPUP);
-    m_nPhase = PHASE_IDOL;
-}
-
-void CCharu3App::SaveData()
-{
-    if (m_ini.m_bReadOnly) {
-        return;
-    }
-    if (m_pTree->saveDataToFile(m_ini.m_strDataPath, m_ini.m_strDataFormat, NULL)) {
-        return;
-    }
-
-    CString strRes;
-    (void)strRes.LoadString(APP_MES_SAVE_FAILURE);
-    AfxMessageBox(strRes, MB_ICONEXCLAMATION, 0);
 }
 
 //---------------------------------------------------

@@ -19,7 +19,6 @@ static char THIS_FILE[] = __FILE__;
 #include "commonDialog.h"
 #include "Charu3.h"
 #include "color.h"
-#include "window.h"
 #include "log.h"
 
 namespace {
@@ -287,7 +286,7 @@ BOOL CMyTreeDialog::ShowWindowPos(POINT pos, POINT size, int nCmdShow, bool keep
     if (m_brBack.m_hObject == NULL)
         m_brBack.CreateSolidBrush(COLORREF(Color::Swap_RGB_BGR(theApp.m_ini.m_nBackgroundColor)));
 
-    Window::SetAbsoluteForegroundWindow(theApp.m_pMainFrame->m_hWnd);
+    theApp.BeForeground();
     m_pTreeCtrl->SetFocus();
 
     m_selectDataPtr = nullptr;

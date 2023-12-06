@@ -95,25 +95,19 @@ public:
     ~CCharu3App();
 
     HWND GetAppWnd() { return m_hSelfWnd; }
+    void CheckFocusInfo(HWND hActiveWnd);
+    void OnClick(HWND hActiveWnd);
     int GetPhase() { return m_nPhase; }
-
     bool isCloseKey() { return m_isCloseKey; }
-    void popupTreeWinMC(HWND hForeground);
+
+    void BeForeground();
+    void RedrawDataTreeView();
 
     void Record(CString text);
-    void toggleStockMode();
-
-    void RedrawDataTreeView() {
-        if (m_pTreeDlg->IsWindowVisible()) {
-            m_pTreeDlg->RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
-        }
-    }
 
     CInit m_ini;
     CClipBoard m_clipboard;
     CCharu3Tree* m_pTree;
-    CMainFrame* m_pMainFrame;
-    FOCUS_INFO m_focusInfo;
 
     // オーバーライド
     // ClassWizard は仮想関数のオーバーライドを生成します。
@@ -126,6 +120,14 @@ private:
 
     // インプリメンテーション
 private:
+    bool init();
+
+    void popupTreeWindow(POINT pos, bool keepSelection, HTREEITEM hOpenItem = NULL);
+    void closeTreeWindow(int nRet);
+    void getPopupPos(POINT* pPos, int nPosType);
+    void adjustLocation(POINT* pos);
+    void toggleStockMode();
+
     void registerHotkeys();
     void unregisterHotkeys();
     void registerAdditionalHotkeys();
@@ -134,12 +136,6 @@ private:
     void convHotKeyConf(CString strKey, UINT* pMod, UINT* pVK, bool* isDoubleClick);
     int getKeycode(TCHAR* szKeyName, bool scanLayout);
     bool setAppendKeyInit(HWND hTopWindow, COPYPASTE_KEY* keySet);
-
-    void getPopupPos(POINT* pPos, int nPosType);
-    void adjustLocation(POINT* pos);
-
-    void popupTreeWindow(POINT pos, bool keepSelection, HTREEITEM hOpenItem = NULL);
-    void closeTreeWindow(int nRet);
 
     void pasteData(CString strPaste, COPYPASTE_KEY key, HWND hWnd);
     void execData(CString strPaste, COPYPASTE_KEY key, HTREEITEM hTargetItem, HWND hWnd);
@@ -161,24 +157,25 @@ private:
     bool SelectFile();
     void SaveData();
 
-    HWND m_hSelfWnd;
-    CMyTreeDialog* m_pTreeDlg;
-    COPYPASTE_KEY m_keySet;
-
-    HTREEITEM m_hSelectItemBkup;
-    DWORD m_dwDoubleKeyPopTime, m_dwDoubleKeyFifoTime;
-
-    std::vector<HOT_KEY_CODE> m_hotkeyVector;
-    KEY_CODE_NAME m_keyStruct[256];
-    bool init();
     HANDLE m_hMutex;				//重複起動判別ハンドル
-    HWND m_hActiveKeyWnd;
     HINSTANCE m_hLangDll;
+    HWND m_hSelfWnd;
+    FOCUS_INFO m_focusInfo;
+    CMainFrame* m_pMainFrame;
 
     bool m_isCloseKey, m_isStockMode;
     BOOL m_isImeStatus;
     int m_nPhase;
+
+    CMyTreeDialog* m_pTreeDlg;
+    HTREEITEM m_hSelectItemBkup;
+    DWORD m_dwDoubleKeyPopTime, m_dwDoubleKeyFifoTime;
     CString m_strSavedClipboard, m_strPreviousStocked, m_strPreviousRecordedToHistory;
+
+    COPYPASTE_KEY m_keySet;
+    std::vector<HOT_KEY_CODE> m_hotkeyVector;
+    KEY_CODE_NAME m_keyStruct[256];
+    HWND m_hActiveKeyWnd;
 
     // 生成されたメッセージ マップ関数
 public:
