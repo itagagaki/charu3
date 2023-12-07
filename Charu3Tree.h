@@ -118,14 +118,20 @@ public:
 
     // インプリメンテーション
 public:
+    HTREEITEM AddFolder(HTREEITEM hTreeItem, CString strName);
+    HTREEITEM AddData(HTREEITEM hTreeItem, STRING_DATA Data, bool isChild = false);
+    HTREEITEM GetTrueNextItem(HTREEITEM hTreeItem);
+    HTREEITEM GetTruePrevItem(HTREEITEM hTreeItem);
+    HTREEITEM GetLastVisibleItem();
+    HTREEITEM GetLastSiblingItem(HTREEITEM hTreeItem);
+    HTREEITEM GetLastDescendantItem(HTREEITEM hTreeItem);
+
     void UpdateItem(HTREEITEM hTreeItem);
     void SetText(HTREEITEM hTreeItem, CString& strText);
 
     void setPlugin(CString strPath);
     void setImageList(POINT posSize, CString strFileName, CString strPath);
 
-    HTREEITEM addNewFolder(HTREEITEM hTreeItem, CString strName);
-    HTREEITEM addData(HTREEITEM hTreeItem, STRING_DATA Data, bool isNewID = true, bool isChild = false);
     void deleteData(HTREEITEM hTreeItem);
     void clearFolder(HTREEITEM hItem);
     void closeFolder(HTREEITEM hStartItem);
@@ -138,9 +144,6 @@ public:
 
     HTREEITEM searchItem(HTREEITEM hStartItem, bool backward = false);
     HTREEITEM searchTitle(HTREEITEM hStartItem, CString strKey, bool makeLower = false);
-    HTREEITEM getTrueNextItem(HTREEITEM hTreeItem);
-    HTREEITEM getTruePrevItem(HTREEITEM hTreeItem);
-    HTREEITEM getLastVisibleItem();
 
     void copyChildren(HTREEITEM hFromItem, HTREEITEM hToItem);
 
@@ -201,8 +204,6 @@ private:
     int getChildCount(HTREEITEM hTreeItem, bool isBrotherOnly = false);
     HTREEITEM getFirstFolder(HTREEITEM hStartItem);
     HTREEITEM getLastChild(HTREEITEM hStartItem);
-    HTREEITEM getLastSiblingItem(HTREEITEM hTreeItem);
-    HTREEITEM getLastDescendantItem(HTREEITEM hTreeItem);
 
     void moveChildren(HTREEITEM hFromItem, HTREEITEM hToItem);
     void deleteExcessChildren(HTREEITEM hTreeItem, int* nCount);

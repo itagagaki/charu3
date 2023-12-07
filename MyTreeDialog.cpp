@@ -710,7 +710,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
                     if (goBackwards) {
                         hTreeItem = m_pTreeCtrl->GetPrevVisibleItem(hTreeItem);
                         if (!hTreeItem) {
-                            hTreeItem = m_pTreeCtrl->getLastVisibleItem();
+                            hTreeItem = m_pTreeCtrl->GetLastVisibleItem();
                         }
                     }
                     else {
@@ -1058,7 +1058,7 @@ void CMyTreeDialog::OnNewData()
     CEditDialog editDialog(this, &data, true);
     if (editDialog.DoModal() == IDOK) {
         HTREEITEM hTreeItem = m_pTreeCtrl->GetSelectedItem();
-        m_pTreeCtrl->SelectItem(theApp.m_pTree->addData(hTreeItem, data));
+        m_pTreeCtrl->SelectItem(theApp.m_pTree->AddData(hTreeItem, data));
     }
     m_isModal = false;
 }
@@ -1072,7 +1072,7 @@ void CMyTreeDialog::OnNewFolder()
     HTREEITEM hTreeItem = m_pTreeCtrl->GetSelectedItem();
     CString strRes;
     (void)strRes.LoadString(APP_INF_NEW_FOLDER);
-    m_pTreeCtrl->EditLabel(m_pTreeCtrl->addNewFolder(hTreeItem, strRes));
+    m_pTreeCtrl->EditLabel(m_pTreeCtrl->AddFolder(hTreeItem, strRes));
 }
 
 void CMyTreeDialog::OnReselectIcons()
@@ -1153,7 +1153,7 @@ void CMyTreeDialog::OnDataPaste()
         data.m_strTitle = data.m_strTitle + strRes;
         if (m_pTreeCtrl->ItemHasChildren(m_hCopyData)) {
             if (!m_pTreeCtrl->checkMyChild(m_hCopyData, hTreeItem)) {
-                hTreeItem = m_pTreeCtrl->addData(hTreeItem, data);
+                hTreeItem = m_pTreeCtrl->AddData(hTreeItem, data);
                 m_pTreeCtrl->copyChildren(m_hCopyData, hTreeItem);
             }
             else {
@@ -1166,7 +1166,7 @@ void CMyTreeDialog::OnDataPaste()
             }
         }
         else {
-            m_pTreeCtrl->addData(hTreeItem, data);
+            m_pTreeCtrl->AddData(hTreeItem, data);
         }
     }
 }
@@ -1290,7 +1290,7 @@ bool CMyTreeDialog::SelectByTyping(UINT uKeyCode)
             // Reset findkey, find from the next item onward, and reset timer
             m_strQuickKey = "";
             if (m_hQuickItem) {
-                m_hQuickItem = m_pTreeCtrl->getTrueNextItem(m_hQuickItem);
+                m_hQuickItem = m_pTreeCtrl->GetTrueNextItem(m_hQuickItem);
             }
             if (theApp.m_ini.m_bSelectByTypingAutoPaste || theApp.m_ini.m_bSelectByTypingAutoExpand) {
                 this->KillTimer(CHARU_QUICK_TIMER);

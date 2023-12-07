@@ -160,6 +160,213 @@ BEGIN_MESSAGE_MAP(CCharu3Tree, CTreeCtrl)
 END_MESSAGE_MAP()
 
 //---------------------------------------------------
+//関数名	AddFolder(HTREEITEM hTreeItem)
+//機能		フォルダを追加する
+//---------------------------------------------------
+HTREEITEM CCharu3Tree::AddFolder(HTREEITEM hTreeItem, CString strName)
+{
+    STRING_DATA Data;
+    Data.m_cKind = KIND_FOLDER;
+    Data.m_strTitle = strName;
+    HTREEITEM hAddItem = AddData(hTreeItem, Data);
+    SelectItem(hAddItem);
+
+    if (theApp.m_ini.m_bDebug) {
+        LOG(_T("add new folder \"%s\""), strName.GetString());
+    }
+
+    return hAddItem;
+}
+
+//---------------------------------------------------
+//関数名	AddData(HTREEITEM hTreeItem, STRING_DATA Data)
+//機能		データを追加する
+//---------------------------------------------------
+HTREEITEM CCharu3Tree::AddData(HTREEITEM hTreeItem, STRING_DATA data, bool isChild /*fasle*/)
+{
+    data.m_nMyID = makeNewID();
+    data.m_nParentID = dataTree::ROOT;
+    //NULLでくると親はROOTになる
+    if (hTreeItem) {
+        HTREEITEM hParentItem = isChild ? hTreeItem : GetParentItem(hTreeItem);
+        if (hParentItem) {
+            data.m_nParentID = getDataPtr(hParentItem)->m_nMyID;
+        }
+    }
+
+    if (data.m_strTitle == "") data.m_strTitle = makeTitle(data.m_strData);
+
+    time(&data.m_timeCreate);
+    time(&data.m_timeEdit);
+    std::list<STRING_DATA>::iterator it = m_MyStringList.insert(m_MyStringList.end(), data);//リストに追加
+
+    //ツリーデータ作成
+    TV_INSERTSTRUCT treeCtrlItem;
+    data2TreeStruct(treeCtrlItem, it);
+
+    if (hTreeItem) {
+        if (isChild) {//子供にする場合はフォルダの先頭に入れる
+            treeCtrlItem.hParent = hTreeItem;
+            treeCtrlItem.hInsertAfter = TVI_FIRST;//どこに入れるか指定
+        }
+        else {//兄弟の場合は自分の下に入れる
+            treeCtrlItem.hInsertAfter = hTreeItem;
+            treeCtrlItem.hParent = GetParentItem(hTreeItem);
+        }
+    }
+    else {//ルートに入れる場合は先頭に入れる
+        treeCtrlItem.hInsertAfter = TVI_FIRST;//どこに入れるか指定
+        treeCtrlItem.hParent = TVI_ROOT;//親を設定
+    }
+
+    //ツリーに追加
+    hTreeItem = InsertItem(&treeCtrlItem);
+
+    if (theApp.m_ini.m_bDebug) {
+        LOG(_T("add data %s %s %d"), data.m_strTitle.GetString(), data.m_strData.GetString(), data.m_cKind);
+    }
+    return hTreeItem;
+}
+
+//---------------------------------------------------
+//関数名	GetTrueNextItem(HTREEITEM hTreeItem)
+//機能		次のアイテムを取得(色々処理してます)
+//---------------------------------------------------
+HTREEITEM CCharu3Tree::GetTrueNextItem(HTREEITEM hTreeItem)
+{
+    HTREEITEM hRetTreeItem, hParentItem;
+
+    if (!hTreeItem) {		//ルートを設定
+        hRetTreeItem = GetRootItem();
+    }
+    else if (!GetChildItem(hTreeItem)) {//子供がいるか調べる
+        hRetTreeItem = GetNextSiblingItem(hTreeItem);//兄弟ハンドルを取得
+        if (!hRetTreeItem) {//兄弟がもういない時は親の兄弟
+            hParentItem = hTreeItem;
+            do {
+                hParentItem = GetParentItem(hParentItem);
+                if (!hParentItem) {
+                    hRetTreeItem = nullptr;
+                    break;
+                }
+                hRetTreeItem = GetNextSiblingItem(hParentItem);//兄弟ハンドルを取得
+            } while (hParentItem != GetRootItem() && !hRetTreeItem);
+        }
+    }
+    else {
+        hRetTreeItem = GetChildItem(hTreeItem);//子供のハンドルを取得
+    }
+    if (!hRetTreeItem) {
+        hRetTreeItem = GetRootItem();//再ループで必要なので戻る
+    }
+    return hRetTreeItem;
+}
+
+HTREEITEM CCharu3Tree::GetTruePrevItem(HTREEITEM hTreeItem)
+{
+    HTREEITEM hRetTreeItem = nullptr;
+    if (hTreeItem) {
+        hRetTreeItem = GetPrevSiblingItem(hTreeItem);
+        if (!hRetTreeItem) {
+            HTREEITEM hParentItem = hTreeItem;
+            do {
+                hParentItem = GetParentItem(hParentItem);
+                if (!hParentItem) {
+                    break;
+                }
+                hRetTreeItem = GetPrevSiblingItem(hParentItem);
+            } while (hParentItem != GetRootItem() && !hRetTreeItem);
+        }
+    }
+    if (!hRetTreeItem) {
+        hRetTreeItem = GetLastSiblingItem(GetRootItem());
+    }
+    if (hRetTreeItem) {
+        if (GetChildItem(hRetTreeItem)) {
+            hRetTreeItem = GetLastDescendantItem(hRetTreeItem);
+        }
+    }
+    return hRetTreeItem;
+}
+
+//---------------------------------------------------
+//関数名	GetLastVisibleItem()
+//機能		最後の可視アイテムを取得
+//---------------------------------------------------
+HTREEITEM CCharu3Tree::GetLastVisibleItem()
+{
+    HTREEITEM hRetTreeItem;
+    HTREEITEM hTreeItemTmp = nullptr;
+    hRetTreeItem = GetRootItem();
+    while (hRetTreeItem) {
+        hTreeItemTmp = hRetTreeItem;
+        hRetTreeItem = GetNextVisibleItem(hRetTreeItem);//最後の可視アイテムを取得
+    }
+    if (hTreeItemTmp)	hRetTreeItem = hTreeItemTmp;
+    return hRetTreeItem;
+}
+
+HTREEITEM CCharu3Tree::GetLastSiblingItem(HTREEITEM hTreeItem)
+{
+    HTREEITEM next;
+
+    if (!hTreeItem) {
+        return nullptr;
+    }
+    while (next = GetNextSiblingItem(hTreeItem)) {
+        hTreeItem = next;
+    }
+    return hTreeItem;
+}
+
+HTREEITEM CCharu3Tree::GetLastDescendantItem(HTREEITEM hTreeItem)
+{
+    HTREEITEM next;
+
+    if (!hTreeItem) {
+        return nullptr;
+    }
+    while (next = GetChildItem(hTreeItem)) {
+        hTreeItem = GetLastSiblingItem(next);
+    }
+    return hTreeItem;
+}
+
+//---------------------------------------------------
+//関数名	HTREEITEM getFirstFolder(HTREEITEM hStartItem)
+//機能		最初のフォルダを探す
+//---------------------------------------------------
+HTREEITEM CCharu3Tree::getFirstFolder(HTREEITEM hStartItem)
+{
+    if (!hStartItem) return nullptr;
+    HTREEITEM hItem = hStartItem;
+    hItem = GetChildItem(hItem);
+    do { // TODO: Is it safe to use 'do'?
+        STRING_DATA* dataPtr = getDataPtr(hItem);
+        if (dataPtr->m_cKind & KIND_FOLDER_ALL) 	break;
+        hItem = GetNextItem(hItem, TVGN_NEXT);
+    } while (hItem);
+    return hItem;
+}
+
+//---------------------------------------------------
+//関数名	HTREEITEM getLastChild(HTREEITEM hStartItem)
+//機能		子アイテムの最後を探す
+//---------------------------------------------------
+HTREEITEM CCharu3Tree::getLastChild(HTREEITEM hStartItem)
+{
+    if (!hStartItem) return nullptr;
+    HTREEITEM hItem = hStartItem, hPrevItem = nullptr;
+    hItem = GetChildItem(hItem);
+    do { // TODO: Is it safe to use 'do'?
+        STRING_DATA* dataPtr = getDataPtr(hItem);
+        if (dataPtr->m_cKind & KIND_DATA_ALL) hPrevItem = hItem;
+        hItem = GetNextItem(hItem, TVGN_NEXT);
+    } while (hItem);
+    return hPrevItem;
+}
+
+//---------------------------------------------------
 //関数名	setPlugin(CString strPath)
 //機能		プラグイン情報を設定する
 //---------------------------------------------------
@@ -927,9 +1134,9 @@ void CCharu3Tree::copyChildren(HTREEITEM hFromItem, HTREEITEM hToItem)
 
         //同じデータを挿入
         if (hAddtItem)
-            hAddtItem = addData(hAddtItem, dataF);
+            hAddtItem = AddData(hAddtItem, dataF);
         else
-            hAddtItem = addData(hToItem, dataF, true, true);
+            hAddtItem = AddData(hToItem, dataF, true);
         // 子もコピー（もしあれば）
         copyChildren(hFromItem, hAddtItem);
         hFromItem = GetNextItem(hFromItem, TVGN_NEXT);
@@ -949,7 +1156,7 @@ HTREEITEM CCharu3Tree::mergeTreeData(HTREEITEM hTreeItem, std::list<STRING_DATA>
         CString strRes;
         if (!isRoot) {//インポートフォルダを作る
             (void)strRes.LoadString(APP_INF_IMPORT_FOLDERNAME);
-            hTreeItem = addNewFolder(hTreeItem, strRes);//親フォルダを作る
+            hTreeItem = AddFolder(hTreeItem, strRes);//親フォルダを作る
             if (!hTreeItem) return nullptr;
             folder = getData(hTreeItem);
             nParentID = folder.m_nMyID;
@@ -1006,75 +1213,6 @@ int CCharu3Tree::mergeList(std::list<STRING_DATA>* pMainList, std::list<STRING_D
     }
 
     return nRet;
-}
-
-//---------------------------------------------------
-//関数名	addNewFolder(HTREEITEM hTreeItem)
-//機能		新しいフォルダを追加する
-//---------------------------------------------------
-HTREEITEM CCharu3Tree::addNewFolder(HTREEITEM hTreeItem, CString strName)
-{
-    STRING_DATA Data;
-    Data.m_cKind = KIND_FOLDER;
-    Data.m_strTitle = strName;
-    HTREEITEM hAddItem = addData(hTreeItem, Data);
-    SelectItem(hAddItem);
-
-    if (theApp.m_ini.m_bDebug) {
-        LOG(_T("add new folder \"%s\""), strName.GetString());
-    }
-
-    return hAddItem;
-}
-
-//---------------------------------------------------
-//関数名	addData(HTREEITEM hTreeItem,STRING_DATA Data)
-//機能		データを追加する
-//---------------------------------------------------
-HTREEITEM CCharu3Tree::addData(HTREEITEM hTreeItem, STRING_DATA data, bool isNewID/* = true*/, bool isChild /*fasle*/)
-{
-    if (isNewID)	data.m_nMyID = makeNewID();
-    data.m_nParentID = dataTree::ROOT;
-    //NULLでくると親はROOTになる
-    if (hTreeItem) {
-        HTREEITEM hParentItem = isChild ? hTreeItem : GetParentItem(hTreeItem);
-        if (hParentItem) {
-            data.m_nParentID = getDataPtr(hParentItem)->m_nMyID;
-        }
-    }
-
-    if (data.m_strTitle == "") data.m_strTitle = makeTitle(data.m_strData);
-
-    time(&data.m_timeCreate);
-    time(&data.m_timeEdit);
-    std::list<STRING_DATA>::iterator it = m_MyStringList.insert(m_MyStringList.end(), data);//リストに追加
-
-    //ツリーデータ作成
-    TV_INSERTSTRUCT treeCtrlItem;
-    data2TreeStruct(treeCtrlItem, it);
-
-    if (hTreeItem) {
-        if (isChild) {//子供にする場合はフォルダの先頭に入れる
-            treeCtrlItem.hParent = hTreeItem;
-            treeCtrlItem.hInsertAfter = TVI_FIRST;//どこに入れるか指定
-        }
-        else {//兄弟の場合は自分の下に入れる
-            treeCtrlItem.hInsertAfter = hTreeItem;
-            treeCtrlItem.hParent = GetParentItem(hTreeItem);
-        }
-    }
-    else {//ルートに入れる場合は先頭に入れる
-        treeCtrlItem.hInsertAfter = TVI_FIRST;//どこに入れるか指定
-        treeCtrlItem.hParent = TVI_ROOT;//親を設定
-    }
-
-    //ツリーに追加
-    hTreeItem = InsertItem(&treeCtrlItem);
-
-    if (theApp.m_ini.m_bDebug) {
-        LOG(_T("add data %s %s %d"), data.m_strTitle.GetString(), data.m_strData.GetString(), data.m_cKind);
-    }
-    return hTreeItem;
 }
 
 void CCharu3Tree::SetText(HTREEITEM hTreeItem, CString& strText)
@@ -1337,7 +1475,7 @@ HTREEITEM CCharu3Tree::searchItem(HTREEITEM hStartItem, bool backward)
     }
 
     // Find
-    HTREEITEM hTreeItem = hStartItem ? (backward ? getTruePrevItem(hStartItem) : getTrueNextItem(hStartItem)) : GetRootItem();
+    HTREEITEM hTreeItem = hStartItem ? (backward ? GetTruePrevItem(hStartItem) : GetTrueNextItem(hStartItem)) : GetRootItem();
     HTREEITEM hEndItem = hTreeItem;
     bool found = false;
     while (hTreeItem) {
@@ -1354,7 +1492,7 @@ HTREEITEM CCharu3Tree::searchItem(HTREEITEM hStartItem, bool backward)
                 break;
             }
         }
-        hTreeItem = backward ? getTruePrevItem(hTreeItem) : getTrueNextItem(hTreeItem);
+        hTreeItem = backward ? GetTruePrevItem(hTreeItem) : GetTrueNextItem(hTreeItem);
         if (hTreeItem == hEndItem) {
             break;
         }
@@ -1389,115 +1527,11 @@ HTREEITEM CCharu3Tree::searchTitle(HTREEITEM hStartItem, CString strKey, bool ma
             return hItem; // matched
         }
         // try next
-        hItem = getTrueNextItem(hItem);
+        hItem = GetTrueNextItem(hItem);
     } while (hItem && hItem != hStartItem);
 
     // not found
     return nullptr;
-}
-
-//---------------------------------------------------
-//関数名	getTrueNextItem(HTREEITEM hTreeItem)
-//機能		次のアイテムを取得(色々処理してます)
-//---------------------------------------------------
-HTREEITEM CCharu3Tree::getTrueNextItem(HTREEITEM hTreeItem)
-{
-    HTREEITEM hRetTreeItem, hParentItem;
-
-    if (!hTreeItem) {		//ルートを設定
-        hRetTreeItem = GetRootItem();
-    }
-    else if (!GetChildItem(hTreeItem)) {//子供がいるか調べる
-        hRetTreeItem = GetNextSiblingItem(hTreeItem);//兄弟ハンドルを取得
-        if (!hRetTreeItem) {//兄弟がもういない時は親の兄弟
-            hParentItem = hTreeItem;
-            do {
-                hParentItem = GetParentItem(hParentItem);
-                if (!hParentItem) {
-                    hRetTreeItem = nullptr;
-                    break;
-                }
-                hRetTreeItem = GetNextSiblingItem(hParentItem);//兄弟ハンドルを取得
-            } while (hParentItem != GetRootItem() && !hRetTreeItem);
-        }
-    }
-    else {
-        hRetTreeItem = GetChildItem(hTreeItem);//子供のハンドルを取得
-    }
-    if (!hRetTreeItem) {
-        hRetTreeItem = GetRootItem();//再ループで必要なので戻る
-    }
-    return hRetTreeItem;
-}
-
-HTREEITEM CCharu3Tree::getTruePrevItem(HTREEITEM hTreeItem)
-{
-    HTREEITEM hRetTreeItem = nullptr;
-    if (hTreeItem) {
-        hRetTreeItem = GetPrevSiblingItem(hTreeItem);
-        if (!hRetTreeItem) {
-            HTREEITEM hParentItem = hTreeItem;
-            do {
-                hParentItem = GetParentItem(hParentItem);
-                if (!hParentItem) {
-                    break;
-                }
-                hRetTreeItem = GetPrevSiblingItem(hParentItem);
-            } while (hParentItem != GetRootItem() && !hRetTreeItem);
-        }
-    }
-    if (!hRetTreeItem) {
-        hRetTreeItem = getLastSiblingItem(GetRootItem());
-    }
-    if (hRetTreeItem) {
-        if (GetChildItem(hRetTreeItem)) {
-            hRetTreeItem = getLastDescendantItem(hRetTreeItem);
-        }
-    }
-    return hRetTreeItem;
-}
-
-HTREEITEM CCharu3Tree::getLastSiblingItem(HTREEITEM hTreeItem)
-{
-    HTREEITEM next;
-
-    if (!hTreeItem) {
-        return nullptr;
-    }
-    while (next = GetNextSiblingItem(hTreeItem)) {
-        hTreeItem = next;
-    }
-    return hTreeItem;
-}
-
-HTREEITEM CCharu3Tree::getLastDescendantItem(HTREEITEM hTreeItem)
-{
-    HTREEITEM next;
-
-    if (!hTreeItem) {
-        return nullptr;
-    }
-    while (next = GetChildItem(hTreeItem)) {
-        hTreeItem = getLastSiblingItem(next);
-    }
-    return hTreeItem;
-}
-
-//---------------------------------------------------
-//関数名	getLastVisibleItem()
-//機能		最後の可視アイテムを取得
-//---------------------------------------------------
-HTREEITEM CCharu3Tree::getLastVisibleItem()
-{
-    HTREEITEM hRetTreeItem;
-    HTREEITEM hTreeItemTmp = nullptr;
-    hRetTreeItem = GetRootItem();
-    while (hRetTreeItem) {
-        hTreeItemTmp = hRetTreeItem;
-        hRetTreeItem = GetNextVisibleItem(hRetTreeItem);//最後の可視アイテムを取得
-    }
-    if (hTreeItemTmp)	hRetTreeItem = hTreeItemTmp;
-    return hRetTreeItem;
 }
 
 //---------------------------------------------------
@@ -1508,7 +1542,7 @@ void CCharu3Tree::allIconCheck()
 {
     int nSize = m_MyStringList.size();
     HTREEITEM hTreeItem = GetRootItem();
-    for (int i = 0; i < nSize; hTreeItem = getTrueNextItem(hTreeItem), i++) {
+    for (int i = 0; i < nSize; hTreeItem = GetTrueNextItem(hTreeItem), i++) {
         if (hTreeItem) {
             STRING_DATA* pData = getDataPtr(hTreeItem);
             pData->m_cIcon = decideIcon(pData->m_strData);
@@ -1731,7 +1765,7 @@ void CCharu3Tree::addDataToRecordFolder(STRING_DATA data, CString strClipBkup)
         LOG(_T("hRootItem:%p TreeSize:%d"), GetRootItem(), nSize);
     }
     //	hTreeItem = (HTREEITEM)::SendMessage(m_hWnd, TVM_GETNEXTITEM, TVGN_ROOT, 0);
-    for (hTreeItem = GetRootItem(), i = 0; i < nSize && hTreeItem && hTreeItem != hStart; i++, hTreeItem = getTrueNextItem(hTreeItem)) {
+    for (hTreeItem = GetRootItem(), i = 0; i < nSize && hTreeItem && hTreeItem != hStart; i++, hTreeItem = GetTrueNextItem(hTreeItem)) {
         parentData = getDataPtr(hTreeItem);
         hStart = GetRootItem();
         //履歴フォルダか判別
@@ -1784,7 +1818,7 @@ void CCharu3Tree::addDataToRecordFolder(STRING_DATA data, CString strClipBkup)
                     LOG(_T("addDataToRecordFolder \"%s\" %s %d"), data.m_strTitle.GetString(), data.m_strData.GetString(), nNumber);
                 }
 
-                addData(hTreeItem, data, true, true);//追加
+                AddData(hTreeItem, data, true);//追加
                 nSize = m_MyStringList.size();
             }
         }
@@ -1812,7 +1846,7 @@ void CCharu3Tree::archiveHistory(HTREEITEM hTreeItem, int nRirekiCount)
             STRING_DATA data;
             data.m_cKind = KIND_FOLDER;
             (void)data.m_strTitle.LoadString(APP_INF_CLASS_HISTORY);
-            addData(hFirstFolder, data);//階層履歴フォルダを作成
+            AddData(hFirstFolder, data);//階層履歴フォルダを作成
             hFirstFolder = getFirstFolder(hTreeItem);//改めてフォルダ位置を取得
         }
         if (hFirstFolder) {//あぶれ分を移動
@@ -1842,40 +1876,6 @@ void CCharu3Tree::archiveHistory(HTREEITEM hTreeItem, int nRirekiCount)
             DeleteItem(hLastChild);
         }
     }
-}
-
-//---------------------------------------------------
-//関数名	HTREEITEM getFirstFolder(HTREEITEM hStartItem)
-//機能		最初のフォルダを探す
-//---------------------------------------------------
-HTREEITEM CCharu3Tree::getFirstFolder(HTREEITEM hStartItem)
-{
-    if (!hStartItem) return nullptr;
-    HTREEITEM hItem = hStartItem;
-    hItem = GetChildItem(hItem);
-    do {
-        STRING_DATA* dataPtr = getDataPtr(hItem);
-        if (dataPtr->m_cKind & KIND_FOLDER_ALL) 	break;
-        hItem = GetNextItem(hItem, TVGN_NEXT);
-    } while (hItem);
-    return hItem;
-}
-
-//---------------------------------------------------
-//関数名	HTREEITEM getLastChild(HTREEITEM hStartItem)
-//機能		子アイテムの最後を探す
-//---------------------------------------------------
-HTREEITEM CCharu3Tree::getLastChild(HTREEITEM hStartItem)
-{
-    if (!hStartItem) return nullptr;
-    HTREEITEM hItem = hStartItem, hPrevItem = nullptr;
-    hItem = GetChildItem(hItem);
-    do {
-        STRING_DATA* dataPtr = getDataPtr(hItem);
-        if (dataPtr->m_cKind & KIND_DATA_ALL) hPrevItem = hItem;
-        hItem = GetNextItem(hItem, TVGN_NEXT);
-    } while (hItem);
-    return hPrevItem;
 }
 
 //---------------------------------------------------

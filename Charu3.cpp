@@ -683,7 +683,7 @@ void CCharu3App::RegisterAdditionalHotkeys()
 
     int nSize = m_pTree->m_MyStringList.size();
     HTREEITEM hTreeItem = m_pTree->GetRootItem();
-    for (int i = 0; i < nSize && hTreeItem; hTreeItem = m_pTree->getTrueNextItem(hTreeItem), i++) {
+    for (int i = 0; i < nSize && hTreeItem; hTreeItem = m_pTree->GetTrueNextItem(hTreeItem), i++) {
         if (hTreeItem) {
             data = m_pTree->getDataPtr(hTreeItem);
             strKey = m_pTree->getDataOptionStr(data->m_strMacro, EXMACRO_HOT_KEY);
@@ -954,7 +954,7 @@ void CCharu3App::playHotItem(int nTarget)
                             LOG(_T("Direct copy folder %s"), dataChild.m_strTitle.GetString());
                         }
 
-                        m_pTree->addData(keyData.m_hItem, dataChild, true, true);
+                        m_pTree->AddData(keyData.m_hItem, dataChild, true);
                     }
                     RegisterAdditionalHotkeys();//追加ホットキーを設定
                     m_nPhase = PHASE_IDOL;
@@ -1703,7 +1703,7 @@ void CCharu3App::Record(CString text)
                 if (m_ini.m_strCopySound != _T("")) {
                     PlaySound(m_ini.m_strCopySound, NULL, SND_ASYNC | SND_FILENAME);
                 }
-                m_pTree->addData(NULL, data);
+                m_pTree->AddData(NULL, data);
                 m_strPreviousStocked = text;
             }
         }
@@ -2153,7 +2153,7 @@ void CCharu3App::OnAddData()
     CEditDialog editDialog(NULL, &data, true);
     int nRet = editDialog.DoModal();
     if (IDOK == nRet) {
-        theApp.m_pTree->addData(NULL, data);
+        theApp.m_pTree->AddData(NULL, data);
     }
 }
 
