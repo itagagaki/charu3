@@ -439,12 +439,11 @@ void CMyTreeDialog::OnClickMyTree(NMHDR* pNMHDR, LRESULT* pResult)
 //---------------------------------------------------
 void CMyTreeDialog::OnKillFocusMyTree(NMHDR* pNMHDR, LRESULT* pResult)
 {
-    RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
-
     if (m_isInitOK && !m_isModal && !m_bFind) {
-        ::PostMessage(theApp.GetAppWnd(), WM_TREE_CLOSE, IDCANCEL, NULL);
-        KillTimer(CHARU_QUICK_TIMER);
-        m_isInitOK = false;
+        Cancel();
+    }
+    else {
+        RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
     }
     *pResult = 0;
 }
@@ -853,8 +852,8 @@ void CMyTreeDialog::Close(WPARAM wparam)
         m_bFind = false;
     }
     ::PostMessage(theApp.GetAppWnd(), WM_TREE_CLOSE, wparam, NULL);
-    m_isInitOK = false;
     KillTimer(CHARU_QUICK_TIMER);
+    m_isInitOK = false;
 }
 
 void CMyTreeDialog::Determine(STRING_DATA* dataPtr)
