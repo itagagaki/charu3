@@ -27,9 +27,8 @@ public:
 
     // オペレーション
 public:
-    void SetTree(CCharu3Tree* pTreeCtrl) {
-        m_pTreeCtrl = pTreeCtrl;
-    }
+    void SetTree(CCharu3Tree* pTreeCtrl) { m_pTreeCtrl = pTreeCtrl; }
+    STRING_DATA* GetSelectedDataPtr() { return m_selectedDataPtr; }
 
     // ダイアログ データ
 private:
@@ -57,18 +56,19 @@ public:
     }
 
     BOOL ShowWindowPos(POINT pos, POINT size, int nCmdShow, bool isSelect, HTREEITEM hOpenItem = NULL);
-    void EnterData(STRING_DATA* dataPtr);
-
-    STRING_DATA* m_selectDataPtr;
 
 private:
-    void ClosePopup();
+    void Close(WPARAM wparam);
+    inline void Cancel() { Close(IDCANCEL); }
+    void Determine(STRING_DATA* dataPtr);
     void PopupMenu(CPoint point);
     void ChangeTipString(STRING_DATA* data);
     bool SelectByTyping(UINT uKeyCode);
     void GetFindParam();
     void FindNext(bool backward);
     STRING_DATA* GetClickedItem();
+
+    STRING_DATA* m_selectedDataPtr;
 
     HMODULE m_hDLL;
     typedef DWORD(WINAPI* PFUNC)(HWND, DWORD, BYTE, DWORD);

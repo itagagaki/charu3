@@ -434,7 +434,6 @@ void CCharu3App::adjustLocation(POINT* pos)
 void CCharu3App::closeTreeWindow(int nRet)
 {
     m_pTreeDlg->ShowWindow(SW_HIDE);
-    STRING_DATA data;
     bool isPaste = true;
     if (::GetAsyncKeyState(VK_SHIFT) < 0) isPaste = false;
 
@@ -458,7 +457,7 @@ void CCharu3App::closeTreeWindow(int nRet)
         }
 
         //貼り付け処理
-        if (m_pTree->m_ltCheckItems.size() > 0) {//複数選択データがある
+        if (m_pTree->m_ltCheckItems.size() > 0) {  //複数選択データがある
             strSelect = GetSelectedText(m_keySet, m_focusInfo.m_hFocusWnd); // TODO: Doing unconditional copy action. Does not consider the necessity.
 
             if (m_ini.m_bDebug) {
@@ -468,12 +467,12 @@ void CCharu3App::closeTreeWindow(int nRet)
             std::list<HTREEITEM>::iterator it;
             for (it = m_pTree->m_ltCheckItems.begin(); it != m_pTree->m_ltCheckItems.end(); it++) {
                 if (m_pTree->GetItemState(*it, TVIF_HANDLE)) {
-                    data = m_pTree->getData(*it);
-                    if (data.m_cKind & KIND_DATA_ALL) {
+                    const STRING_DATA* dataPtr = m_pTree->getDataPtr(*it);
+                    if (dataPtr->m_cKind & KIND_DATA_ALL) {
                         if (m_ini.m_bDebug) {
-                            LOG(_T("closeTreeWindow check paste %s"), data.m_strTitle.GetString());
+                            LOG(_T("closeTreeWindow check paste %s"), dataPtr->m_strTitle.GetString());
                         }
-                        playData(data, strClip, strSelect, isPaste, false);
+                        playData(dataPtr, strClip, strSelect, isPaste, false);
                     }
                 }
             }
@@ -488,15 +487,17 @@ void CCharu3App::closeTreeWindow(int nRet)
                 }
             }
         }
-        else if (m_pTreeDlg->m_selectDataPtr != nullptr) {//通常選択データ
-            bool requiresSelectionText = (m_pTreeDlg->m_selectDataPtr->m_strData.Find(_T("$SEL")) != -1); // TODO: This test is true even if $SEL is outside <charu3MACRO>
-            strSelect = requiresSelectionText ? GetSelectedText(m_keySet, m_focusInfo.m_hFocusWnd) : "";
-            data = *(m_pTreeDlg->m_selectDataPtr);
+        else {
+            const STRING_DATA* dataPtr = m_pTreeDlg->GetSelectedDataPtr();
+            if (nullptr != dataPtr) {
+                bool requiresSelectionText = (dataPtr->m_strData.Find(_T("$SEL")) != -1); // TODO: This test is true even if $SEL is outside <charu3MACRO>
+                strSelect = requiresSelectionText ? GetSelectedText(m_keySet, m_focusInfo.m_hFocusWnd) : "";
 
-            if (m_ini.m_bDebug) {
-                LOG(_T("closeTreeWindow sel:%s clip:%s title:%s"), strSelect.GetString(), strClip.GetString(), data.m_strTitle.GetString());
+                if (m_ini.m_bDebug) {
+                    LOG(_T("closeTreeWindow sel:%s clip:%s title:%s"), strSelect.GetString(), strClip.GetString(), dataPtr->m_strTitle.GetString());
+                }
+                playData(dataPtr, strClip, strSelect, isPaste);
             }
-            playData(data, strClip, strSelect, isPaste);
         }
     }
     else if (::GetForegroundWindow() == m_focusInfo.m_hActiveWnd) {
@@ -845,7 +846,7 @@ bool CCharu3App::setAppendKeyInit(HWND hTopWindow, COPYPASTE_KEY* keySet)
 //関数名	playData(STRING_DATA data,CString strClip)
 //機能		データの展開処理をする
 //---------------------------------------------------
-void CCharu3App::playData(STRING_DATA data, CString strClip, CString strSelect, bool isPaste, bool isChange)
+void CCharu3App::playData(const STRING_DATA* dataPtr, CString strClip, CString strSelect, bool isPaste, bool isChange)
 {
     HTREEITEM hSelectItem = m_pTree->GetSelectedItem();
     CString strPaste;
@@ -861,7 +862,7 @@ void CCharu3App::playData(STRING_DATA data, CString strClip, CString strSelect, 
             STRING_DATA* macroDataPtr = m_pTree->getDataPtr(hMacroItem);
             strMacro = m_pTree->getDataOptionStr(macroDataPtr->m_strMacro, _T("macro"));
         }
-        strPaste = convertMacro(&data, strSelect, strClip, strMacro);
+        strPaste = convertMacro(dataPtr, strSelect, strClip, strMacro);
     }
 
     //テキストを貼り付け処理
@@ -1354,15 +1355,15 @@ void CCharu3App::keyUpDownMessage(UINT uMod, UINT uVKCode, int nFlag, HWND hWnd)
 //関数名	convertMacro(CString strSourceData)
 //機能		マクロ文字列を置換
 //---------------------------------------------------
-CString CCharu3App::convertMacro(STRING_DATA* SourceData, CString strSelect, CString strClip, CString strSoftName)
+CString CCharu3App::convertMacro(const STRING_DATA* sourceDataPtr, CString strSelect, CString strClip, CString strSoftName)
 {
     SetCurrentDirectory(m_ini.m_strAppPath);
 
-    if (strSoftName == _T("no")) return SourceData->m_strData;
+    if (strSoftName == _T("no")) return sourceDataPtr->m_strData;
 
     CString strSourceData;
     if (strSoftName != DAT_FORMAT) {
-        if (m_pTree->convertMacroPlugin(SourceData, &strSourceData, strSelect, strClip, strSoftName))
+        if (m_pTree->convertMacroPlugin(sourceDataPtr, &strSourceData, strSelect, strClip, strSoftName))
             return strSourceData;
     }
 
@@ -1386,7 +1387,7 @@ CString CCharu3App::convertMacro(STRING_DATA* SourceData, CString strSelect, CSt
     strRepBuff4 = _T(">@c3m$@PLUG-IN");
     strRepBuff5 = _T("@c3m$@CLIP");
 
-    if (SourceData->m_strData.Find(_T("$SEL")) != -1) {
+    if (sourceDataPtr->m_strData.Find(_T("$SEL")) != -1) {
         strSelect.Replace(MACRO_START, strRepBuff1);
         strSelect.Replace(MACRO_END, strRepBuff2);
         strSelect.Replace(strPlugStart, strRepBuff3);
@@ -1394,7 +1395,7 @@ CString CCharu3App::convertMacro(STRING_DATA* SourceData, CString strSelect, CSt
         strSelect.Replace(_T("$CLIP"), strRepBuff5);
         isSelect = true;
     }
-    if (SourceData->m_strData.Find(_T("$CLIP")) != -1) {
+    if (sourceDataPtr->m_strData.Find(_T("$CLIP")) != -1) {
         strClip.Replace(MACRO_START, strRepBuff1);
         strClip.Replace(MACRO_END, strRepBuff2);
         strClip.Replace(strPlugStart, strRepBuff3);
@@ -1403,7 +1404,7 @@ CString CCharu3App::convertMacro(STRING_DATA* SourceData, CString strSelect, CSt
     }
 
     CTime cTime = CTime::GetCurrentTime();
-    strSourceData = SourceData->m_strData;
+    strSourceData = sourceDataPtr->m_strData;
 
     strSourceData.Replace(_T("<charu2MACRO>"), MACRO_START);
     strSourceData.Replace(_T("</charu2MACRO>"), MACRO_END);
@@ -1545,7 +1546,7 @@ CString CCharu3App::convertMacro(STRING_DATA* SourceData, CString strSelect, CSt
                                 }
                                 //								int nBuffSize = nSize * sizeof(TCHAR);
 
-                                pPlugIn(strTmp.GetBuffer(strTmp.GetLength() + 1), strRet, nSize, SourceData, (void*)&m_focusInfo);
+                                pPlugIn(strTmp.GetBuffer(strTmp.GetLength() + 1), strRet, nSize, sourceDataPtr, (void*)&m_focusInfo);
                                 strPluginRet = strRet;
                                 strPluginRet.Replace(MACRO_START, strRepBuff1);
                                 strPluginRet.Replace(MACRO_END, strRepBuff2);

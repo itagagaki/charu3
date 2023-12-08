@@ -486,18 +486,13 @@ HTREEITEM CCharu3Tree::searchMyRoots(HTREEITEM hStartItem)
 //---------------------------------------------------
 HTREEITEM CCharu3Tree::searchParentOption(HTREEITEM hStartItem, CString strOption)
 {
-    HTREEITEM hRet = nullptr;
-    STRING_DATA data;
-    int nFound;
-
     strOption.MakeLower();
-    hRet = hStartItem;
+    HTREEITEM hRet = hStartItem;
     while (hRet) {
         if (hRet) {
-            data = getData(hRet);
-
+            STRING_DATA data = getData(hRet);
             data.m_strMacro.MakeLower();
-            nFound = data.m_strMacro.Find(strOption);
+            int nFound = data.m_strMacro.Find(strOption);
             if (nFound >= 0) {
                 nFound = data.m_strMacro.Find(_T("="), nFound);
                 if (nFound >= 0) {
@@ -517,7 +512,6 @@ HTREEITEM CCharu3Tree::searchParentOption(HTREEITEM hStartItem, CString strOptio
 bool CCharu3Tree::saveDataToFile(CString strFileName, CString strPlugin, HTREEITEM hStartItem)
 {
     std::list<STRING_DATA> tmplist;
-    STRING_DATA Data;
 
     //全データを出力
     if (!hStartItem) {
@@ -527,9 +521,9 @@ bool CCharu3Tree::saveDataToFile(CString strFileName, CString strPlugin, HTREEIT
     }
     //エクスポートの場合
     else {
-        Data = getData(hStartItem);
-        Data.m_nParentID = dataTree::ROOT;
-        tmplist.insert(tmplist.end(), Data);
+        STRING_DATA data = getData(hStartItem);
+        data.m_nParentID = dataTree::ROOT;
+        tmplist.insert(tmplist.end(), data);
         if (ItemHasChildren(hStartItem)) tree2List(GetChildItem(hStartItem), &tmplist);
     }
 
@@ -999,7 +993,7 @@ void CCharu3Tree::normalizationID(std::list<STRING_DATA>* pList, int nParentID)
 //関数名	convertMacroPlugin(CString strSourceData)
 //機能		マクロ文字列を置換
 //---------------------------------------------------
-bool CCharu3Tree::convertMacroPlugin(STRING_DATA* SourceData, CString* strRet, CString strSelect, CString strClip, CString strSoftName)
+bool CCharu3Tree::convertMacroPlugin(const STRING_DATA* sourceDataPtr, CString* strRet, CString strSelect, CString strClip, CString strSoftName)
 {
     RW_PLUGIN plugin;
     TCHAR* szRet;
@@ -1023,10 +1017,10 @@ bool CCharu3Tree::convertMacroPlugin(STRING_DATA* SourceData, CString* strRet, C
         pConvertMacro = (convertMacro)GetProcAddress(hDLL, "convertMacro");
 
         if (pConvertMacro) {
-            int nSize = SourceData->m_strData.GetLength() * 10 + 10240;
+            int nSize = sourceDataPtr->m_strData.GetLength() * 10 + 10240;
             szRet = new TCHAR[nSize];
             if (szRet) {
-                isRet = pConvertMacro((TCHAR*)LPCTSTR(SourceData->m_strData), szRet, nSize,
+                isRet = pConvertMacro((TCHAR*)LPCTSTR(sourceDataPtr->m_strData), szRet, nSize,
                     (TCHAR*)LPCTSTR(strSelect), (TCHAR*)LPCTSTR(strClip));
                 *strRet = CString(szRet);
                 delete[] szRet;
@@ -1084,8 +1078,7 @@ void CCharu3Tree::moveChildren(HTREEITEM hFromItem, HTREEITEM hToItem)
     hFromItem = GetChildItem(hFromItem);
     do {
         //データを取得
-        STRING_DATA dataF;
-        dataF = getData(hFromItem);
+        STRING_DATA dataF = getData(hFromItem);
 
         //ツリーデータを取得
         TV_ITEM TreeCtrlItemFrom;
@@ -1129,8 +1122,7 @@ void CCharu3Tree::copyChildren(HTREEITEM hFromItem, HTREEITEM hToItem)
     HTREEITEM hAddtItem = nullptr;
     while (hFromItem) {
         //データを取得
-        STRING_DATA dataF;
-        dataF = getData(hFromItem);
+        STRING_DATA dataF = getData(hFromItem);
 
         //同じデータを挿入
         if (hAddtItem)
@@ -1151,15 +1143,13 @@ void CCharu3Tree::copyChildren(HTREEITEM hFromItem, HTREEITEM hToItem)
 HTREEITEM CCharu3Tree::mergeTreeData(HTREEITEM hTreeItem, std::list<STRING_DATA>* pList, bool isRoot)
 {
     if (pList->size() > 0) {
-        STRING_DATA folder;
         int nParentID;
-        CString strRes;
         if (!isRoot) {//インポートフォルダを作る
+            CString strRes;
             (void)strRes.LoadString(APP_INF_IMPORT_FOLDERNAME);
             hTreeItem = AddFolder(hTreeItem, strRes);//親フォルダを作る
             if (!hTreeItem) return nullptr;
-            folder = getData(hTreeItem);
-            nParentID = folder.m_nMyID;
+            nParentID = getDataPtr(hTreeItem)->m_nMyID;
         }
         else {//ルートに展開する
             nParentID = dataTree::ROOT;
@@ -1269,11 +1259,9 @@ void CCharu3Tree::deleteData(HTREEITEM hTreeItem)
 void CCharu3Tree::tree2List(HTREEITEM hStartItem, std::list<STRING_DATA>* tmplist, bool isAll /* = false */)
 {
     if (!hStartItem) return;
-    STRING_DATA data;
     HTREEITEM hItem = hStartItem;
     do {
-        data = getData(hItem);
-
+        STRING_DATA data = getData(hItem);
         tmplist->insert(tmplist->end(), data);
         if (ItemHasChildren(hItem) && (getDataOption(data.m_strMacro, "clearrec") != 1 || isAll)) tree2List(GetChildItem(hItem), tmplist);
         hItem = GetNextItem(hItem, TVGN_NEXT);

@@ -142,18 +142,15 @@ public:
     STRING_DATA getData(HTREEITEM hTreeItem);
     STRING_DATA* getDataPtr(HTREEITEM hTreeItem);
 
+    bool convertMacroPlugin(const STRING_DATA* sourceDataPtr, CString* strRet, CString strSelect, CString strClip, CString strSoftName);
+
     HTREEITEM searchItem(HTREEITEM hStartItem, bool backward = false);
     HTREEITEM searchTitle(HTREEITEM hStartItem, CString strKey, bool makeLower = false);
 
     void copyChildren(HTREEITEM hFromItem, HTREEITEM hToItem);
 
     char getDatakind(HTREEITEM hTreeItem) {
-        char cRet = 0;
-        if (hTreeItem) {
-            STRING_DATA data = getData(hTreeItem);
-            cRet = data.m_cKind;
-        }
-        return cRet;
+        return hTreeItem ? getDataPtr(hTreeItem)->m_cKind : 0;
     }
 
     void copyData(int nParentID, HTREEITEM hParentTreeItem, std::list<STRING_DATA>* pList);
@@ -162,7 +159,6 @@ public:
     bool loadDataFileDef(CString strFileName, CString strPlugin);
     bool loadDataFile(CString strFileName, CString strPlugin, std::list<STRING_DATA>* tmplist);
     bool saveDataToFile(CString strFileName, CString strPlugin, HTREEITEM hStartItem);
-    bool convertMacroPlugin(STRING_DATA* SourceData, CString* strRet, CString strSelect, CString strClip, CString strSoftName);
 
     void setInitInfo(int* pMaxID, int* pSelectID, int* pRecNumber) {
         m_pMaxID = pMaxID;

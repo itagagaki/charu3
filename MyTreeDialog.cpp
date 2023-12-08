@@ -79,7 +79,7 @@ namespace {
 CMyTreeDialog::CMyTreeDialog(CWnd* pParent /*=NULL*/)
     : CDialog(CMyTreeDialog::IDD, pParent)
     , m_pTreeCtrl(nullptr)
-    , m_selectDataPtr(nullptr)
+    , m_selectedDataPtr(nullptr)
     , m_isInitOK(false)
     , m_isModal(true)
     , m_isAltDown(false)
@@ -289,7 +289,7 @@ BOOL CMyTreeDialog::ShowWindowPos(POINT pos, POINT size, int nCmdShow, bool keep
     theApp.BeForeground();
     m_pTreeCtrl->SetFocus();
 
-    m_selectDataPtr = nullptr;
+    m_selectedDataPtr = nullptr;
     m_isInitOK = true;
     m_isModal = false;
     m_isAltDown = false;
@@ -427,7 +427,7 @@ void CMyTreeDialog::OnClickMyTree(NMHDR* pNMHDR, LRESULT* pResult)
         // Enter if m_bSingleEnter
         if (theApp.m_ini.m_bSingleEnter && !m_pTreeCtrl->IsDragging() && (TVHT_ONITEMSTATEICON & Flags) == 0) {
             if (theApp.m_ini.m_bSelectByTypingAutoPaste) KillTimer(CHARU_QUICK_TIMER);
-            EnterData(GetClickedItem());
+            Determine(GetClickedItem());
         }
     }
     *pResult = 0;
@@ -558,7 +558,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
 
     switch (pMsg->message) {
     case WM_TREE_CLOSE:
-        ClosePopup();
+        Cancel();
         return TRUE;
 
     case WM_LBUTTONDBLCLK:
@@ -571,7 +571,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
     case WM_LBUTTONUP:
         if (!m_pTreeCtrl->IsDragging()) {
             if (m_dataPtrDbClick != nullptr) {
-                EnterData(m_dataPtrDbClick);
+                Determine(m_dataPtrDbClick);
                 return TRUE;
             }
         }
@@ -654,7 +654,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
         }
         //ESCで閉じる
         if (VK_ESCAPE == pMsg->wParam && !m_isModal && !m_pTreeCtrl->IsDragging()) {
-            ClosePopup();
+            Cancel();
             return TRUE;
         }
         //ラベル編集中なら編集終了
@@ -673,7 +673,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
 
                 //フォルダか確認
                 if (!(dataPtr->m_cKind & KIND_FOLDER_ALL) || (m_pTreeCtrl->GetStyle() & TVS_CHECKBOXES && m_pTreeCtrl->GetCheck(hTreeItem))) {
-                    EnterData(dataPtr);//データを決定
+                    Determine(dataPtr);//データを決定
                 }
                 else
                     m_pTreeCtrl->Expand(hTreeItem, TVE_TOGGLE);
@@ -829,7 +829,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
             STRING_DATA* dataPtr = m_pTreeCtrl->getDataPtr(m_hQuickItem);
             if (dataPtr->m_cKind & KIND_DATA_ALL) {
                 if (theApp.m_ini.m_bSelectByTypingAutoPaste) {
-                    EnterData(dataPtr);
+                    Determine(dataPtr);
                 }
             }
             else if (dataPtr->m_cKind & KIND_FOLDER_ALL) {
@@ -846,32 +846,22 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
     return CDialog::PreTranslateMessage(pMsg);
 }
 
-void CMyTreeDialog::ClosePopup()
+void CMyTreeDialog::Close(WPARAM wparam)
 {
     if (m_bFind) {
         m_findDialog->DestroyWindow();
         m_bFind = false;
     }
-    ::PostMessage(theApp.GetAppWnd(), WM_TREE_CLOSE, IDCANCEL, NULL);
+    ::PostMessage(theApp.GetAppWnd(), WM_TREE_CLOSE, wparam, NULL);
     m_isInitOK = false;
     KillTimer(CHARU_QUICK_TIMER);
 }
 
-//---------------------------------------------------
-//関数名	enterData(list<STRING_DATA>::iterator it)
-//機能		データを決定してダイアログを隠蔽
-//---------------------------------------------------
-void CMyTreeDialog::EnterData(STRING_DATA* dataPtr)
+void CMyTreeDialog::Determine(STRING_DATA* dataPtr)
 {
     if (dataPtr) {
-        if (m_bFind) {
-            m_findDialog->DestroyWindow();
-            m_bFind = false;
-        }
-        m_selectDataPtr = dataPtr;
-        ::PostMessage(theApp.GetAppWnd(), WM_TREE_CLOSE, IDOK, NULL);
-        m_isInitOK = false;
-        this->KillTimer(CHARU_QUICK_TIMER);
+        m_selectedDataPtr = dataPtr;
+        Close(IDOK);
     }
 }
 

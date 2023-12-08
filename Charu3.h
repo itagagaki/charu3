@@ -61,7 +61,7 @@ enum {
 #define PHASE_LOCK		0x08
 
 //ÉvÉâÉOÉCÉìä÷êîêÈåæ
-typedef bool(*CharuPlugIn)(TCHAR*, TCHAR*, int, STRING_DATA*, void*);
+typedef bool(*CharuPlugIn)(TCHAR*, TCHAR*, int, const STRING_DATA*, void*);
 
 typedef bool (*setHook)(const HWND hWnd, const int msg);
 typedef void (*unHook)(void);
@@ -139,8 +139,8 @@ private:
     void execData(CString strPaste, COPYPASTE_KEY key, HTREEITEM hTargetItem, HWND hWnd);
     void execKeyMacro(CString strKeyMacro);
     void playHotItem(int nTarget);
-    void playData(STRING_DATA data, CString strClip, CString strSelect, bool isPaste, bool isChange = true);
-    CString convertMacro(STRING_DATA* SourceData, CString strSelect, CString strClip, CString strSoftName);
+    void playData(const STRING_DATA* dataPtr, CString strClip, CString strSelect, bool isPaste, bool isChange = true);
+    CString convertMacro(const STRING_DATA* sourceDataPtr, CString strSelect, CString strClip, CString strSoftName);
 
     CString GetSelectedText(COPYPASTE_KEY key, HWND hWnd = NULL);
 
