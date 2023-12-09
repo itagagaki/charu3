@@ -62,36 +62,35 @@ private:
     inline void Cancel() { Close(IDCANCEL); }
     void Determine(STRING_DATA* dataPtr);
     void PopupMenu(CPoint point);
-    void ChangeTipString(STRING_DATA* data);
+    void SetTipText(STRING_DATA* data);
     bool SelectByTyping(UINT uKeyCode);
     void GetFindParam();
     void FindNext(bool backward);
     STRING_DATA* GetClickedItem();
 
+    bool m_isInitOK, m_bCheckbox, m_isModal;
+    bool m_isAltDown;
+
     STRING_DATA* m_selectedDataPtr;
+    STRING_DATA* m_dataPtrDbClick;
+    HTREEITEM m_hBookedItemToCopy;
 
     HMODULE m_hDLL;
     typedef DWORD(WINAPI* PFUNC)(HWND, DWORD, BYTE, DWORD);
     PFUNC m_pExStyle;
-    CFont* m_cFont, * m_cOlgFont;
-
-    CToolTipCtrl m_toolTip;//ツールチップ
-    bool m_isInitOK, m_isModal;
-    bool m_isAltDown;
-    STRING_DATA* m_dataPtrDbClick;
-
-    CBrush m_brBack;
-    CMenu m_PopupMenu;
-    HTREEITEM m_hCopyData;
+    CFont* m_cFont;
     COLORREF m_colFrame;
+
+    bool m_bFind;
+    CSearchDialog* m_findDialog;
 
     DWORD m_dwStartTime;
     CString m_strQuickKey;
     HTREEITEM m_hQuickItem;
 
-    bool m_bCheckbox;
-    bool m_bFind;
-    CSearchDialog* m_findDialog;
+    CBrush m_brBack;
+    CMenu m_PopupMenu;
+    CToolTipCtrl m_toolTip;
 
     // 生成されたメッセージ マップ関数
 protected:

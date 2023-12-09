@@ -79,23 +79,22 @@ namespace {
 CMyTreeDialog::CMyTreeDialog(CWnd* pParent /*=NULL*/)
     : CDialog(CMyTreeDialog::IDD, pParent)
     , m_pTreeCtrl(nullptr)
-    , m_selectedDataPtr(nullptr)
     , m_isInitOK(false)
+    , m_bCheckbox(false)
     , m_isModal(true)
     , m_isAltDown(false)
+    , m_selectedDataPtr(nullptr)
     , m_dataPtrDbClick(nullptr)
-    , m_hCopyData(nullptr)
-    , m_dwStartTime(0)
-    , m_hDLL(NULL)
-    , m_pExStyle(NULL)
+    , m_hBookedItemToCopy(nullptr)
+    , m_hDLL(nullptr)
+    , m_pExStyle(nullptr)
     , m_cFont(nullptr)
-    , m_cOlgFont(nullptr)
     , m_colFrame(0xff9900)
-    , m_strQuickKey("")
-    , m_hQuickItem(nullptr)
-    , m_bCheckbox(false)
     , m_bFind(false)
     , m_findDialog(nullptr)
+    , m_dwStartTime(0)
+    , m_strQuickKey("")
+    , m_hQuickItem(nullptr)
 {
     //{{AFX_DATA_INIT(CMyTreeDialog)
     //}}AFX_DATA_INIT
@@ -200,7 +199,7 @@ void CMyTreeDialog::PopupMenu(CPoint point)
     m_PopupMenu.EnableMenuItem(IDML_RENAME, hTreeItem ? MF_ENABLED : MF_GRAYED);
     m_PopupMenu.EnableMenuItem(IDML_CHECK_ITEM, m_bCheckbox ? MF_GRAYED : MF_ENABLED);
     m_PopupMenu.EnableMenuItem(IDML_COPY_DATA, hTreeItem ? MF_ENABLED : MF_GRAYED);
-    m_PopupMenu.EnableMenuItem(IDML_DATA_PASTE, m_hCopyData ? MF_ENABLED : MF_GRAYED);
+    m_PopupMenu.EnableMenuItem(IDML_DATA_PASTE, m_hBookedItemToCopy ? MF_ENABLED : MF_GRAYED);
     bool isData = false;
     bool isFolder = false;
     if (hTreeItem) {
@@ -471,20 +470,21 @@ void CMyTreeDialog::OnShowWindow(BOOL bShow, UINT nStatus)
         else {
             SetWindowLong(this->m_hWnd, GWL_EXSTYLE, lExStyle & 0xfff7ffff);
         }
-        m_cOlgFont = m_pTreeCtrl->GetFont();
         m_cFont = new CFont;
         if (m_cFont) {
             m_cFont->CreatePointFont(theApp.m_ini.m_nFontSize, theApp.m_ini.m_strFontName);
             m_pTreeCtrl->SetFont(m_cFont, TRUE);
         }
     }
-    else if (m_cFont) {
-        RECT rect;
-        GetWindowRect(&rect);
-        theApp.m_ini.m_DialogSize.x = rect.right - rect.left;
-        theApp.m_ini.m_DialogSize.y = rect.bottom - rect.top;
-        //		if(m_cOlgFont) m_pTreeCtrl->SetFont(m_cOlgFont,FALSE);
-        delete m_cFont;
+    else {
+        if (m_cFont) {
+            RECT rect;
+            GetWindowRect(&rect);
+            theApp.m_ini.m_DialogSize.x = rect.right - rect.left;
+            theApp.m_ini.m_DialogSize.y = rect.bottom - rect.top;
+            delete m_cFont;
+            m_cFont = nullptr;
+        }
     }
     CDialog::OnShowWindow(bShow, nStatus);
 }
@@ -613,7 +613,7 @@ BOOL CMyTreeDialog::PreTranslateMessage(MSG* pMsg)
     {
         HTREEITEM hTarget = (HTREEITEM)pMsg->wParam;
         if (hTarget) {
-            ChangeTipString(m_pTreeCtrl->getDataPtr(hTarget));
+            SetTipText(m_pTreeCtrl->getDataPtr(hTarget));
         }
         else {
             m_toolTip.Activate(FALSE);
@@ -1117,33 +1117,33 @@ void CMyTreeDialog::OnCheckItem()
 
 //---------------------------------------------------
 //関数名	OnCopyData()
-//機能		選択データをコピー
+//機能		選択項目をコピー予約
 //---------------------------------------------------
 void CMyTreeDialog::OnCopyData()
 {
     HTREEITEM hTreeItem;
     hTreeItem = m_pTreeCtrl->GetSelectedItem();
     if (hTreeItem) {
-        m_hCopyData = hTreeItem;
+        m_hBookedItemToCopy = hTreeItem;
     }
 }
 
 //---------------------------------------------------
 //関数名	OnDataPaste()
-//機能		コピーデータを貼り付け
+//機能		コピー予約された項目をコピーして貼り付け
 //---------------------------------------------------
 void CMyTreeDialog::OnDataPaste()
 {
-    if (m_hCopyData && !m_isModal) {
+    if (m_hBookedItemToCopy && !m_isModal) {
         HTREEITEM hTreeItem = m_pTreeCtrl->GetSelectedItem();
-        STRING_DATA data = m_pTreeCtrl->getData(m_hCopyData);
+        STRING_DATA data = m_pTreeCtrl->getData(m_hBookedItemToCopy);
         CString strRes;
         (void)strRes.LoadString(APP_INF_COPY);
         data.m_strTitle = data.m_strTitle + strRes;
-        if (m_pTreeCtrl->ItemHasChildren(m_hCopyData)) {
-            if (!m_pTreeCtrl->checkMyChild(m_hCopyData, hTreeItem)) {
+        if (m_pTreeCtrl->ItemHasChildren(m_hBookedItemToCopy)) {
+            if (!m_pTreeCtrl->checkMyChild(m_hBookedItemToCopy, hTreeItem)) {
                 hTreeItem = m_pTreeCtrl->AddData(hTreeItem, data);
-                m_pTreeCtrl->copyChildren(m_hCopyData, hTreeItem);
+                m_pTreeCtrl->copyChildren(m_hBookedItemToCopy, hTreeItem);
             }
             else {
                 m_isModal = true;
@@ -1306,10 +1306,10 @@ bool CMyTreeDialog::SelectByTyping(UINT uKeyCode)
 }
 
 //---------------------------------------------------
-//関数名	changeTipString(CString strData)
+//関数名	SetTipText(CString strData)
 //機能		引数のテキストをツールチップに設定
 //---------------------------------------------------
-void CMyTreeDialog::ChangeTipString(STRING_DATA* data)
+void CMyTreeDialog::SetTipText(STRING_DATA* data)
 {
     CString strTip = _T("");
     CString strRes;
