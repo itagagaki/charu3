@@ -1709,8 +1709,7 @@ void CCharu3App::Record(CString text)
             }
         }
 
-        m_pTree->addDataToRecordFolder(data, m_strPreviousRecordedToHistory);
-        m_strPreviousRecordedToHistory = text;
+        m_pTree->AddDataToHistoryFolders(data);
 
         if (m_isStockMode && m_ini.m_nWindowCheckInterval > 0) {
             SetTimer(m_pMainWnd->m_hWnd, TIMER_ACTIVE, m_ini.m_nWindowCheckInterval, NULL);

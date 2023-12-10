@@ -138,6 +138,12 @@ public:
     HTREEITEM AddData(HTREEITEM hTreeItem, STRING_DATA data, bool asChild = false);
 
     /**
+     * @brief Add a specified data to the history folders.
+     * @param data The data to add.
+     */
+    void AddDataToHistoryFolders(STRING_DATA data);
+
+    /**
      * @brief Delete a specified data.
      * @param hTreeItem The tree item to delete.
      */
@@ -210,7 +216,6 @@ public:
 
     int getDataOption(CString strData, CString strKind);
     CString getDataOptionStr(CString strData, CString strKind);
-    void addDataToRecordFolder(STRING_DATA data, CString strClipBkup);
     HTREEITEM moveFolderTop(HTREEITEM hTreeItem);
     void ToggleItemCheck(HTREEITEM hItem);
 
@@ -265,6 +270,7 @@ private:
     int* m_pMaxID;
     int* m_pSelectID;
     int* m_pRecNumber;
+    CString m_strPreviousRecordedToHistory;
 
     CImageList* m_ImageList;//イメージリスト
 

@@ -217,6 +217,83 @@ HTREEITEM CCharu3Tree::AddData(HTREEITEM hTreeItem, STRING_DATA data, bool asChi
     return InsertItem(&treeCtrlItem);
 }
 
+void CCharu3Tree::AddDataToHistoryFolders(STRING_DATA data)
+{
+    int nSize = m_MyStringList.size(), nRirekiCount, nIsLock, i;
+    int nNumber = *m_pRecNumber;
+
+    STRING_DATA* parentData;
+    HTREEITEM hTreeItem, hStart = nullptr;
+
+    if (theApp.m_ini.m_bDebug) {
+        LOG(_T("addDataToRecordFolder"));
+        LOG(_T("hRootItem:%p TreeSize:%d"), GetRootItem(), nSize);
+    }
+    //	hTreeItem = (HTREEITEM)::SendMessage(m_hWnd, TVM_GETNEXTITEM, TVGN_ROOT, 0);
+    for (hTreeItem = GetRootItem(), i = 0; i < nSize && hTreeItem && hTreeItem != hStart; i++, hTreeItem = GetTrueNextItem(hTreeItem)) {
+        parentData = getDataPtr(hTreeItem);
+        hStart = GetRootItem();
+        if ((parentData->m_cKind & KIND_RIREKI)
+            && (
+                (data.m_strData != m_strPreviousRecordedToHistory)
+                || !(getDataOption(parentData->m_strMacro, _T("duplicationcheck")))
+                )
+            ) {
+            if (*m_pRecNumber == nNumber)	nNumber++;
+
+            if (theApp.m_ini.m_bDebug) {
+                LOG(_T("number:%d handle:%p title:%s ID:%d"), i, hTreeItem, parentData->m_strTitle.GetString(), parentData->m_nMyID);
+            }
+
+            nIsLock = getDataOption(parentData->m_strMacro, _T("lock"));//履歴種別を取得
+            if (!nIsLock)	data.m_cKind = KIND_ONETIME;
+            else			data.m_cKind = KIND_LOCK;
+
+            nRirekiCount = getDataOption(parentData->m_strMacro, _T("count"));//履歴数を取得
+            if (nRirekiCount <= 0) nRirekiCount = 2;
+            int nDeleteCount = nRirekiCount;
+            deleteExcessChildren(GetChildItem(hTreeItem), &nDeleteCount);//余計な子を消す
+
+            int nTitleLength = getDataOption(parentData->m_strMacro, _T("titlelen"));//タイトルの文字数
+            CString strTitle;
+            if (nTitleLength > 0 && nTitleLength < 256) {
+                strTitle = makeTitle(data.m_strData, nTitleLength);
+            }
+            else
+                strTitle = makeTitle(data.m_strData);
+            data.m_strTitle = strTitle;
+
+            if (getDataOption(parentData->m_strMacro, _T("number"))) {//番号をつけるかどうか
+                data.m_strTitle.Format(_T("%02d : %s"), *m_pRecNumber, strTitle.GetString());
+                if (nNumber > nRirekiCount) nNumber = 0;
+            }
+
+            // archiving
+            {
+                int archiveBy;
+                if (hasDataOption(parentData->m_strMacro, _T("archiveunit"))) {
+                    archiveBy = getDataOption(parentData->m_strMacro, _T("archiveunit"));
+                }
+                else {
+                    archiveBy = getDataOption(parentData->m_strMacro, _T("classhistory")); // for historical compatibility
+                }
+                if (archiveBy > 0) {
+                    archiveHistory(hTreeItem, archiveBy);
+                }
+            }
+
+            if (theApp.m_ini.m_bDebug) {
+                LOG(_T("AddDataToHistoryFolders %s %s %d"), data.m_strTitle.GetString(), data.m_strData.GetString(), nNumber);
+            }
+
+            AddData(hTreeItem, data, true);//追加
+            nSize = m_MyStringList.size();
+        }
+    }
+    *m_pRecNumber = nNumber;
+    m_strPreviousRecordedToHistory = data.m_strData;
+}
+
 void CCharu3Tree::DeleteData(HTREEITEM hTreeItem)
 {
     STRING_DATA* dataPtr = getDataPtr(hTreeItem);
@@ -1704,84 +1781,6 @@ CString CCharu3Tree::getDataOptionStr(CString strData, CString strKind)
         }
     }
     return strRet;
-}
-
-//---------------------------------------------------
-//関数名	addDataToRecordFolder(STRING_DATA data)
-//機能		履歴処理をする
-//---------------------------------------------------
-void CCharu3Tree::addDataToRecordFolder(STRING_DATA data, CString strClipBkup)
-{
-    int nSize = m_MyStringList.size(), nRirekiCount, nIsLock, i;
-    int nNumber = *m_pRecNumber;
-
-    STRING_DATA* parentData;
-    HTREEITEM hTreeItem, hStart = nullptr;
-
-    if (theApp.m_ini.m_bDebug) {
-        LOG(_T("addDataToRecordFolder"));
-        LOG(_T("hRootItem:%p TreeSize:%d"), GetRootItem(), nSize);
-    }
-    //	hTreeItem = (HTREEITEM)::SendMessage(m_hWnd, TVM_GETNEXTITEM, TVGN_ROOT, 0);
-    for (hTreeItem = GetRootItem(), i = 0; i < nSize && hTreeItem && hTreeItem != hStart; i++, hTreeItem = GetTrueNextItem(hTreeItem)) {
-        parentData = getDataPtr(hTreeItem);
-        hStart = GetRootItem();
-        //履歴フォルダか判別
-        if (parentData->m_cKind & KIND_RIREKI) {
-            if ((strClipBkup != data.m_strData) || !(getDataOption(parentData->m_strMacro, _T("duplicationcheck")))) {
-                if (*m_pRecNumber == nNumber)	nNumber++;
-
-                if (theApp.m_ini.m_bDebug) {
-                    LOG(_T("number:%d handle:%p title:%s ID:%d"), i, hTreeItem, parentData->m_strTitle.GetString(), parentData->m_nMyID);
-                }
-
-                nIsLock = getDataOption(parentData->m_strMacro, _T("lock"));//履歴種別を取得
-                if (!nIsLock)	data.m_cKind = KIND_ONETIME;
-                else			data.m_cKind = KIND_LOCK;
-
-                nRirekiCount = getDataOption(parentData->m_strMacro, _T("count"));//履歴数を取得
-                if (nRirekiCount <= 0) nRirekiCount = 2;
-                int nDeleteCount = nRirekiCount;
-                deleteExcessChildren(GetChildItem(hTreeItem), &nDeleteCount);//余計な子を消す
-
-                int nTitleLength = getDataOption(parentData->m_strMacro, _T("titlelen"));//タイトルの文字数
-                CString strTitle;
-                if (nTitleLength > 0 && nTitleLength < 256) {
-                    strTitle = makeTitle(data.m_strData, nTitleLength);
-                }
-                else
-                    strTitle = makeTitle(data.m_strData);
-                data.m_strTitle = strTitle;
-
-                if (getDataOption(parentData->m_strMacro, _T("number"))) {//番号をつけるかどうか
-                    data.m_strTitle.Format(_T("%02d : %s"), *m_pRecNumber, strTitle.GetString());
-                    if (nNumber > nRirekiCount) nNumber = 0;
-                }
-
-                // archiving
-                {
-                    int archiveBy;
-                    if (hasDataOption(parentData->m_strMacro, _T("archiveunit"))) {
-                        archiveBy = getDataOption(parentData->m_strMacro, _T("archiveunit"));
-                    }
-                    else {
-                        archiveBy = getDataOption(parentData->m_strMacro, _T("classhistory")); // for historical compatibility
-                    }
-                    if (archiveBy > 0) {
-                        archiveHistory(hTreeItem, archiveBy);
-                    }
-                }
-
-                if (theApp.m_ini.m_bDebug) {
-                    LOG(_T("addDataToRecordFolder \"%s\" %s %d"), data.m_strTitle.GetString(), data.m_strData.GetString(), nNumber);
-                }
-
-                AddData(hTreeItem, data, true);//追加
-                nSize = m_MyStringList.size();
-            }
-        }
-    }
-    *m_pRecNumber = nNumber;
 }
 
 //---------------------------------------------------

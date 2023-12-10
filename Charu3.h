@@ -173,7 +173,7 @@ private:
     CMyTreeDialog* m_pTreeDlg;
     HTREEITEM m_hSelectItemBkup;
     DWORD m_dwDoubleKeyPopTime, m_dwDoubleKeyFifoTime;
-    CString m_strSavedClipboard, m_strPreviousStocked, m_strPreviousRecordedToHistory;
+    CString m_strSavedClipboard, m_strPreviousStocked;
 
     COPYPASTE_KEY m_keySet;
     std::vector<HOT_KEY_CODE> m_hotkeyVector;
