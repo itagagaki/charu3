@@ -907,7 +907,7 @@ void CMyTreeDialog::OnDelete()
         }
     }
     if (nRet == IDYES) {
-        m_pTreeCtrl->deleteData(hTreeItem);
+        m_pTreeCtrl->DeleteData(hTreeItem);
     }
     m_pTreeCtrl->SetFocus();
     m_isModal = false;
@@ -1025,8 +1025,7 @@ void CMyTreeDialog::OnFolderClear()
         int nRet = AfxMessageBox(strRes, MB_YESNO | MB_ICONEXCLAMATION | MB_APPLMODAL);
         RedrawWindow(NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
         if (nRet == IDYES) {
-            HTREEITEM hChildItem = m_pTreeCtrl->GetChildItem(hTreeItem);
-            m_pTreeCtrl->clearFolder(hChildItem);
+            m_pTreeCtrl->DeleteChildren(hTreeItem);
         }
     }
     m_pTreeCtrl->SetFocus();

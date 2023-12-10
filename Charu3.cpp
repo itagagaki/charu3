@@ -894,7 +894,7 @@ void CCharu3App::playData(const STRING_DATA* dataPtr, CString strClip, CString s
             }
             //一時項目は消す
             if (m_pTree->getDatakind(hSelectItem) & KIND_ONETIME) {
-                m_pTree->deleteData(hSelectItem);
+                m_pTree->DeleteData(hSelectItem);
                 m_hSelectItemBkup = NULL;
             }
         }
@@ -1040,7 +1040,7 @@ void CCharu3App::playHotItem(int nTarget)
                     }
                     //一時項目は消す
                     if (m_pTree->getDatakind(keyData.m_hItem) & KIND_ONETIME) {
-                        m_pTree->deleteData(keyData.m_hItem);
+                        m_pTree->DeleteData(keyData.m_hItem);
                     }
                 }
                 RegisterAdditionalHotkeys();//追加ホットキーを設定
@@ -1737,7 +1737,7 @@ void CCharu3App::PullOneTimeData()
         HTREEITEM hItem = m_pTree->getOneTimeItem(m_ini.m_nFifo);
         if (hItem) {
             text = m_pTree->getDataPtr(hItem)->m_strData;
-            m_pTree->deleteData(hItem);
+            m_pTree->DeleteData(hItem);
         }
         if (text != _T("")) {
             if (m_ini.m_bDebug) {

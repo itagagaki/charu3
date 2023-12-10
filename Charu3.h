@@ -6,6 +6,8 @@
 #if !defined(AFX_CHARU3_H__05C003AF_297C_4BFB_AFB3_822EAE3D3787__INCLUDED_)
 #define AFX_CHARU3_H__05C003AF_297C_4BFB_AFB3_822EAE3D3787__INCLUDED_
 
+// TODO: Consistent naming
+
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000

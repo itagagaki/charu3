@@ -6,6 +6,8 @@
 #if !defined(AFX_INIT_H__EA6EFDDA_9745_4690_B6A9_8B0533E4AB56__INCLUDED_)
 #define AFX_INIT_H__EA6EFDDA_9745_4690_B6A9_8B0533E4AB56__INCLUDED_
 
+// TODO: Consistent naming
+
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000

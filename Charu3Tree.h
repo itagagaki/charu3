@@ -6,6 +6,8 @@
 #if !defined(AFX_CHARU3TREE_H__246081ED_82BD_4EFE_AA98_067AC36E58E6__INCLUDED_)
 #define AFX_CHARU3TREE_H__246081ED_82BD_4EFE_AA98_067AC36E58E6__INCLUDED_
 
+// TODO: Consistent naming
+
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
@@ -118,8 +120,41 @@ public:
 
     // インプリメンテーション
 public:
+    /**
+     * @brief Add a folder with the specified name.
+     * @param hTreeItem The insert position (inserted after this). If nullptr, it will be added to the top of the tree.
+     * @param strName The folder name.
+     * @return The added tree item.
+     */
     HTREEITEM AddFolder(HTREEITEM hTreeItem, CString strName);
-    HTREEITEM AddData(HTREEITEM hTreeItem, STRING_DATA Data, bool isChild = false);
+ 
+    /**
+     * @brief Add a specified data.
+     * @param hTreeItem The insert position. If nullptr, it will be added to the top of the tree.
+     * @param data The data to add.
+     * @param asChild If true, insert as the first child of hTreeItem, if false, insert after hTreeItem.
+     * @return The added tree item.
+     */
+    HTREEITEM AddData(HTREEITEM hTreeItem, STRING_DATA data, bool asChild = false);
+
+    /**
+     * @brief Delete a specified data.
+     * @param hTreeItem The tree item to delete.
+     */
+    void DeleteData(HTREEITEM hTreeItem);
+
+    /**
+     * @brief Delete children of a specified item (clear contents of folder).
+     * @param hTreeItem The parent tree item (folder).
+     */
+    void DeleteChildren(HTREEITEM hTreeItem);
+
+    /**
+     * @brief Remove an specified item from the tree control.
+     * @param hTreeItem The tree item to delete.
+     */
+    void DeleteItem(HTREEITEM hTreeItem);
+
     HTREEITEM GetTrueNextItem(HTREEITEM hTreeItem);
     HTREEITEM GetTruePrevItem(HTREEITEM hTreeItem);
     HTREEITEM GetLastVisibleItem();
@@ -132,8 +167,6 @@ public:
     void setPlugin(CString strPath);
     void setImageList(POINT posSize, CString strFileName, CString strPath);
 
-    void deleteData(HTREEITEM hTreeItem);
-    void clearFolder(HTREEITEM hItem);
     void closeFolder(HTREEITEM hStartItem);
     void cleanupOneTimeItems(HTREEITEM hStartItem, int nKind = 0);
     void changeIcon(HTREEITEM hTreeItem, int nID);
