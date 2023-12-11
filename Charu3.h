@@ -105,12 +105,28 @@ public:
     void BeForeground();
     void RedrawDataTreeView();
 
+    /**
+     * @brief Set text to the clipboard.
+     * @param sData Text to set.
+     * @return True on success.
+     */
     bool SetClipboardText(const CString sData) {
         return m_clipboard.SetClipboardText(sData, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval); 
     }
+
+    /**
+     * @brief Get text from the clipboard.
+     * @param sData Where to store the retrieved text.
+     * @return True on success.
+     */
     bool GetClipboardText(CString& sData) {
         return m_clipboard.GetClipboardText(sData, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
     }
+
+    /**
+     * @brief Record text as an entry in Stock Mode and as items in the history folders.
+     * @param text The text to record.
+     */
     void Record(CString text);
 
     CInit m_ini;
@@ -149,6 +165,7 @@ private:
 
     /**
      * @brief Get selected text from the window that has the keyboard focus.
+     * @note The retrieved text also remains on the clipboard that was passed through.
      */
     CString GetSelectedText();
 

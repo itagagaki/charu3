@@ -1645,9 +1645,6 @@ CString CCharu3App::convertMacro(const STRING_DATA* sourceDataPtr, CString strSe
     return strSourceData;
 }
 
-//---------------------------------------------------
-//ä÷êîñº	Record()
-//---------------------------------------------------
 void CCharu3App::Record(CString text)
 {
     if (m_ini.m_bDebug) {
