@@ -18,34 +18,26 @@
 class CClipBoard
 {
 public:
-    CClipBoard()
-        : m_hParentWnd(nullptr)
-        , m_bListening(false)
-    {
-    }
-
-    CClipBoard(int retryTimes, int retryInterval)
-        : m_hParentWnd(nullptr)
-        , m_bListening(false)
-    {
-    }
-
+    CClipBoard() : m_hParentWnd(nullptr), m_bListening(false) {}
     virtual ~CClipBoard() {}
 
     void SetParent(HWND hWnd) {
         m_hParentWnd = hWnd;
         StartListener();
     }
+
     void StartListener() {
         if (!m_bListening) {
             ::AddClipboardFormatListener(m_hParentWnd);
             m_bListening = true;
         }
     }
+
     void StopListener() {
         ::RemoveClipboardFormatListener(m_hParentWnd);
         m_bListening = false;
     }
+
     bool SetClipboardText(const CString sData, int retryCount, int retryInterval);
     bool GetClipboardText(CString& sData, int retryCount, int retryInterval);
 
