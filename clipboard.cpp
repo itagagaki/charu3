@@ -12,15 +12,6 @@ static char THIS_FILE[] = __FILE__;
 
 #include "clipboard.h"
 
-//---------------------------------------------------
-//関数名	setClipboardText(const TCHAR* sData)
-//機能		クリップボードにテキストを設定
-//---------------------------------------------------
-bool CClipBoard::SetClipboardText(const CString sData)
-{
-    return SetClipboardText(sData, m_nRetryCount, m_nRetryInterval);
-}
-
 bool CClipBoard::SetClipboardText(const CString sData, int retryCount, int retryInterval)
 {
     size_t len = sData.GetLength() + 1;
@@ -67,15 +58,6 @@ bool CClipBoard::SetClipboardText(const CString sData, int retryCount, int retry
 
     delete[] newText;
     return isRet;
-}
-
-//---------------------------------------------------
-//関数名	getClipboardText(CString& sData)
-//機能		クリップボードのテキストを取得
-//---------------------------------------------------
-bool CClipBoard::GetClipboardText(CString& sData)
-{
-    return GetClipboardText(sData, m_nRetryCount, m_nRetryInterval);
 }
 
 bool CClipBoard::GetClipboardText(CString& sData, int retryCount, int retryInterval)

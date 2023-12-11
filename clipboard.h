@@ -21,16 +21,12 @@ public:
     CClipBoard()
         : m_hParentWnd(nullptr)
         , m_bListening(false)
-        , m_nRetryCount(0)
-        , m_nRetryInterval(0)
     {
     }
 
-    CClipBoard(int retryCount, int retryInterval)
+    CClipBoard(int retryTimes, int retryInterval)
         : m_hParentWnd(nullptr)
         , m_bListening(false)
-        , m_nRetryCount(retryCount)
-        , m_nRetryInterval(retryInterval)
     {
     }
 
@@ -50,16 +46,12 @@ public:
         ::RemoveClipboardFormatListener(m_hParentWnd);
         m_bListening = false;
     }
-    bool GetClipboardText(CString& sData);
-    bool SetClipboardText(const CString sData);
-    bool GetClipboardText(CString& sData, int retryCount, int retryInterval);
     bool SetClipboardText(const CString sData, int retryCount, int retryInterval);
+    bool GetClipboardText(CString& sData, int retryCount, int retryInterval);
 
 private:
     HWND m_hParentWnd;
     bool m_bListening;
-    int m_nRetryCount;
-    int m_nRetryInterval;
 };
 
 #endif // !defined(AFX_CLIPBOARD_H__582AEB30_7E55_42E1_8D77_A28FAD0F7294__INCLUDED_)

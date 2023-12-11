@@ -105,6 +105,9 @@ public:
     void BeForeground();
     void RedrawDataTreeView();
 
+    bool SetClipboardText(const CString sData) {
+        return m_clipboard.SetClipboardText(sData, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval); 
+    }
     bool GetClipboardText(CString& sData) {
         return m_clipboard.GetClipboardText(sData, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
     }

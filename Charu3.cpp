@@ -291,7 +291,7 @@ bool CCharu3App::init()
     }
 
     //クリップボードクラスの初期化 変更検知を設定(メインフレームでメッセージ処理をしてます)
-    m_clipboard.GetClipboardText(m_strSavedClipboard, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
+    GetClipboardText(m_strSavedClipboard);
     m_clipboard.SetParent(this->m_pMainWnd->m_hWnd);
     m_keySet = m_ini.m_defKeySet;
 
@@ -444,7 +444,7 @@ void CCharu3App::closeTreeWindow(int nRet)
     //アクティブウィンドウを復帰
     if (nRet == IDOK) {
         CString strClip, strSelect;
-        m_clipboard.GetClipboardText(strClip, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);//クリップボードを保存
+        GetClipboardText(strClip);
 
         setAppendKeyInit(m_focusInfo.m_hActiveWnd, &m_keySet);//キー設定を変更
         //キーが離されるのを待つ
@@ -876,7 +876,7 @@ void CCharu3App::playData(const STRING_DATA* dataPtr, CString strClip, CString s
         //クリップボード復帰
         if (m_ini.m_bPutBackClipboard && strClip != "") {
             m_strSavedClipboard = strClip;
-            m_clipboard.SetClipboardText(strClip.GetString(), m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
+            SetClipboardText(strClip.GetString());
         }
         if (isChange) {
             //貼り付けデータをフォルダの先頭に移動
@@ -900,7 +900,7 @@ void CCharu3App::playData(const STRING_DATA* dataPtr, CString strClip, CString s
         }
     }
     else {
-        m_clipboard.SetClipboardText(strPaste, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
+        SetClipboardText(strPaste);
     }
 }
 
@@ -975,7 +975,7 @@ void CCharu3App::playHotItem(int nTarget)
                 UnregisterAdditionalHotkeys();//追加ホットキーを停止
 
                 CString strClip, strPaste;
-                m_clipboard.GetClipboardText(strClip, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);//クリップボードを保存
+                GetClipboardText(strClip);
                 strPaste = data.m_strData;
 
                 POINT pos;
@@ -1036,7 +1036,7 @@ void CCharu3App::playHotItem(int nTarget)
                     }
                     //クリップボード復帰
                     if (m_ini.m_bPutBackClipboard && strClip != "") {
-                        m_clipboard.SetClipboardText(strClip.GetString(), m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
+                        SetClipboardText(strClip.GetString());
                     }
                     //一時項目は消す
                     if (m_pTree->getDatakind(keyData.m_hItem) & KIND_ONETIME) {
@@ -1053,7 +1053,7 @@ void CCharu3App::playHotItem(int nTarget)
 
 CString CCharu3App::GetSelectedText()
 {
-    m_clipboard.SetClipboardText(CString(), m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
+    SetClipboardText(CString());
 
     // Instructs the window that has the keyboard focus to copy the selected text to the clipboard.
     TCHAR windowName[1024] = _T("");
@@ -1096,7 +1096,7 @@ CString CCharu3App::GetSelectedText()
 
     // Get from the clipboard.
     CString strSelect;
-    if (m_clipboard.GetClipboardText(strSelect, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval)) {
+    if (GetClipboardText(strSelect)) {
         if (m_ini.m_bDebug) {
             LOG(_T("GetSelectedText \"%s\""), strSelect.GetString());
         }
@@ -1249,7 +1249,7 @@ void CCharu3App::pasteData(CString strPaste, COPYPASTE_KEY key, HWND hWnd)
     if (m_isStockMode) {
         m_strSavedClipboard = strPaste;
     }
-    m_clipboard.SetClipboardText(strPaste, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
+    SetClipboardText(strPaste);
 
     if (key.m_nMessage == 0) {//イベント方式
         keyUpDown(key.m_uMod_Paste, key.m_uVK_Paste, KEY_DOWN);
@@ -1739,7 +1739,7 @@ void CCharu3App::PullOneTimeData()
             if (m_ini.m_bDebug) {
                 LOG(_T("fifoClipboard text:%s"), text.GetString());
             }
-            if (m_clipboard.SetClipboardText(text, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval)) {
+            if (SetClipboardText(text)) {
                 if (m_ini.m_strPasteSound != _T("")) {
                     PlaySound(m_ini.m_strPasteSound, NULL, SND_ASYNC | SND_FILENAME);
                 }
