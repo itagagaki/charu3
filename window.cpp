@@ -80,20 +80,19 @@ void Window::SetFocusInfo(const FOCUS_INFO* focusInfo)
 //---------------------------------------------------
 void Window::GetFocusInfo(FOCUS_INFO* focusInfo, HWND hForeground)
 {
-    //フォーカスを持つウィンドウの取得
-    if (!hForeground)
-        focusInfo->m_hActiveWnd = GetForegroundWindow();
-    else
-        focusInfo->m_hActiveWnd = hForeground;
-
+    focusInfo->m_hActiveWnd = hForeground ? hForeground : focusInfo->m_hActiveWnd = GetForegroundWindow();
     DWORD dwID = GetWindowThreadProcessId(focusInfo->m_hActiveWnd, NULL);
     if (dwID) {
         AttachThreadInput(dwID, GetCurrentThreadId(), TRUE);
         focusInfo->m_hFocusWnd = GetFocus();
         dwID = GetWindowThreadProcessId(focusInfo->m_hActiveWnd, NULL);
-        if (dwID)	AttachThreadInput(dwID, GetCurrentThreadId(), FALSE);
+        if (dwID) {
+            AttachThreadInput(dwID, GetCurrentThreadId(), FALSE);
+        }
     }
-    if (focusInfo->m_hFocusWnd == NULL) focusInfo->m_hFocusWnd = focusInfo->m_hActiveWnd;
+    if (nullptr == focusInfo->m_hFocusWnd) {
+        focusInfo->m_hFocusWnd = focusInfo->m_hActiveWnd;
+    }
 }
 
 //---------------------------------------------------

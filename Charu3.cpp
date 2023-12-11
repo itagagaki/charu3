@@ -457,8 +457,8 @@ void CCharu3App::closeTreeWindow(int nRet)
         }
 
         //貼り付け処理
-        if (m_pTree->m_ltCheckItems.size() > 0) {  //複数選択データがある
-            strSelect = GetSelectedText(m_keySet, m_focusInfo.m_hFocusWnd); // TODO: Doing unconditional copy action. Does not consider the necessity.
+        if (m_pTree->m_ltCheckItems.size() > 0) {  // Selected multiple items.
+            strSelect = GetSelectedText();  // TODO: Poor performance because it is always done without considering the need.
 
             if (m_ini.m_bDebug) {
                 LOG(_T("closeTreeWindow sel:%s clip:%s"), strSelect.GetString(), strClip.GetString());
@@ -490,8 +490,8 @@ void CCharu3App::closeTreeWindow(int nRet)
         else {
             const STRING_DATA* dataPtr = m_pTreeDlg->GetSelectedDataPtr();
             if (nullptr != dataPtr) {
-                bool requiresSelectionText = (dataPtr->m_strData.Find(_T("$SEL")) != -1); // TODO: This test is true even if $SEL is outside <charu3MACRO>
-                strSelect = requiresSelectionText ? GetSelectedText(m_keySet, m_focusInfo.m_hFocusWnd) : "";
+                bool requiresSelectionText = (dataPtr->m_strData.Find(_T("$SEL")) != -1);  // TODO: This test is true even if $SEL is outside <charu3MACRO>
+                strSelect = requiresSelectionText ? GetSelectedText() : _T("");
 
                 if (m_ini.m_bDebug) {
                     LOG(_T("closeTreeWindow sel:%s clip:%s title:%s"), strSelect.GetString(), strClip.GetString(), dataPtr->m_strTitle.GetString());
@@ -942,7 +942,7 @@ void CCharu3App::playHotItem(int nTarget)
                     keyUpDown(keyData.m_uModKey, keyData.m_uVkCode, KEY_UP);//キーを離す処理（これが無いと選択テキスト取得で失敗）
 
                     setAppendKeyInit(m_focusInfo.m_hActiveWnd, &m_keySet);//キー設定を変更
-                    strSelect = GetSelectedText(m_keySet, m_focusInfo.m_hFocusWnd);//選択文字取得
+                    strSelect = GetSelectedText();
                     if (strSelect != "") {
                         dataChild.m_cKind = KIND_LOCK;
                         dataChild.m_nParentID = data.m_nMyID;
@@ -991,7 +991,7 @@ void CCharu3App::playHotItem(int nTarget)
                 if (keyData.m_strMacroName == EXMACRO_DIRECT_COPY) {
                     Window::GetCaretPos(&pos, &m_focusInfo);//キャレット位置を取得
                     setAppendKeyInit(m_focusInfo.m_hActiveWnd, &m_keySet);//キー設定を変更
-                    CString selectedText = GetSelectedText(m_keySet, m_focusInfo.m_hFocusWnd);
+                    CString selectedText = GetSelectedText();
                     m_pTree->SetText(keyData.m_hItem, selectedText);
 
                     if (m_ini.m_bDebug) {
@@ -1013,7 +1013,7 @@ void CCharu3App::playHotItem(int nTarget)
                     Window::GetCaretPos(&pos, &m_focusInfo);//キャレット位置を取得
                     setAppendKeyInit(m_focusInfo.m_hActiveWnd, &m_keySet);//キー設定を変更
 
-                    strSelect = GetSelectedText(m_keySet, m_focusInfo.m_hFocusWnd);//選択文字取得
+                    strSelect = GetSelectedText();
                     strPaste = convertMacro(&data, strSelect, strClip, strMacro);//マクロ変換
 
                     if (m_ini.m_bDebug) {
@@ -1051,64 +1051,61 @@ void CCharu3App::playHotItem(int nTarget)
     return;
 }
 
-//---------------------------------------------------
-//関数名	getSelectString()
-//機能		選択文字列を取る
-//---------------------------------------------------
-CString CCharu3App::GetSelectedText(COPYPASTE_KEY key, HWND hWnd)
+CString CCharu3App::GetSelectedText()
 {
     m_clipboard.SetClipboardText(CString(), m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval);
-    if (!hWnd)	hWnd = m_focusInfo.m_hFocusWnd;
-    CString strSelect;
 
-    TCHAR strWindowName[1024] = {};
-    *strWindowName = (TCHAR)NULL;
-    CString strWinName;
-    int i;
+    // Instructs the window that has the keyboard focus to copy the selected text to the clipboard.
+    TCHAR windowName[1024] = _T("");
+    GetWindowText(m_focusInfo.m_hFocusWnd, windowName, _countof(windowName));
+    CString csWindowName(windowName);
+
     COPYPASTE_KEY keySet;
-
-    GetWindowText(m_focusInfo.m_hActiveWnd, strWindowName, _countof(strWindowName));
-    strWinName = strWindowName;
-
     keySet.m_nMessage = 0;
 
-    for (i = 0; keySet.m_nMessage > -1; i++) {
-        keySet = m_ini.getAppendKeyInit(strWinName, i);
-        if (keySet.m_nMessage <= -1 && i == 0)	keySet = key;
+    for (int i = 0; keySet.m_nMessage > -1; i++) { 
+        keySet = m_ini.getAppendKeyInit(csWindowName, i);
+        if (keySet.m_nMessage <= -1 && i == 0) {
+            keySet = m_keySet;
+        }
         if (keySet.m_uVK_Copy) {
             if (keySet.m_nMessage > -1) {
-                if (keySet.m_nMessage == 0) {//イベント方式
+                if (keySet.m_nMessage == 0) {  //イベント方式
                     keyUpDown(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_DOWN);
                     keyUpDown(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_UP);
-                    Sleep(keySet.m_nCopyWait);//ウェイト
-                    keyUpDownMessage(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_UP, hWnd);
+                    Sleep(keySet.m_nCopyWait);
+                    keyUpDownMessage(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_UP, m_focusInfo.m_hFocusWnd);
                 }
-                else if (keySet.m_nMessage == 1) {//Charu2Pro方式
+                else if (keySet.m_nMessage == 1) {  //Charu2Pro方式
                     keyUpDownC2(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_DOWN);
                     keyUpDownC2(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_UP);
-                    Sleep(keySet.m_nCopyWait);//ウェイト
-                    keyUpDownMessage(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_DOWN, hWnd);
-                    Sleep(keySet.m_nCopyWait / 4);//ウェイト
-                    keyUpDownMessage(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_DOWN, hWnd);
-                    keyUpDownMessage(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_UP, hWnd);
-                    Sleep(keySet.m_nCopyWait);//ウェイト
+                    Sleep(keySet.m_nCopyWait);
+                    keyUpDownMessage(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_DOWN, m_focusInfo.m_hFocusWnd);
+                    Sleep(keySet.m_nCopyWait / 4);
+                    keyUpDownMessage(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_DOWN, m_focusInfo.m_hFocusWnd);
+                    keyUpDownMessage(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_UP, m_focusInfo.m_hFocusWnd);
+                    Sleep(keySet.m_nCopyWait);
                 }
-                else if (keySet.m_nMessage == 2) {
-                    ::PostMessage(hWnd, key.m_copyMessage.Msg, key.m_copyMessage.wParam, key.m_copyMessage.lParam);//メッセージ方式
-    //				::SendMessage(hWnd,WM_COPY,NULL,NULL);//メッセージ方式
-                }
-
-                if (m_ini.m_bDebug) {
-                    LOG(_T("GetSelectedText %d %s"), keySet.m_nMessage, strSelect.GetString());
+                else if (keySet.m_nMessage == 2) {  //メッセージ方式
+                    ::PostMessage(m_focusInfo.m_hFocusWnd, m_keySet.m_copyMessage.Msg, m_keySet.m_copyMessage.wParam, m_keySet.m_copyMessage.lParam);
+                    // ::SendMessage(m_focusInfo.m_hFocusWnd,WM_COPY,NULL,NULL);
                 }
             }
         }
     }
 
+    // Get from the clipboard.
+    CString strSelect;
     if (m_clipboard.GetClipboardText(strSelect, m_ini.m_nClipboardRetryTimes, m_ini.m_nClipboardRetryInterval)) {
+        if (m_ini.m_bDebug) {
+            LOG(_T("GetSelectedText \"%s\""), strSelect.GetString());
+        }
         return strSelect;
     }
 
+    if (m_ini.m_bDebug) {
+        LOG(_T("GetSelectedText failed"));
+    }
     return CString();
 }
 

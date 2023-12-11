@@ -144,7 +144,10 @@ private:
     void playData(const STRING_DATA* dataPtr, CString strClip, CString strSelect, bool isPaste, bool isChange = true);
     CString convertMacro(const STRING_DATA* sourceDataPtr, CString strSelect, CString strClip, CString strSoftName);
 
-    CString GetSelectedText(COPYPASTE_KEY key, HWND hWnd = NULL);
+    /**
+     * @brief Get selected text from the window that has the keyboard focus.
+     */
+    CString GetSelectedText();
 
     void keyUpDown(UINT uMod, UINT uVKCode, int nFlag);
     void keyUpDownC2(UINT uMod, UINT uVKCode, int nFlag);
