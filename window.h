@@ -10,7 +10,7 @@ struct FOCUS_INFO {
 namespace Window {
 
     BOOL SetAbsoluteForegroundWindow(HWND hWnd);
-    void GetFocusInfo(FOCUS_INFO* focusInfo, HWND hForeground = NULL);
+    void GetFocusInfo(FOCUS_INFO* focusInfo);
     void SetFocusInfo(const FOCUS_INFO* focusInfo);
     void SetFocus(const HWND hActiveWnd, const HWND hFocusWnd);
     CString GetWindowTitle(HWND hWnd);

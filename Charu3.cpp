@@ -1055,14 +1055,14 @@ CString CCharu3App::GetSelectedText()
 {
     SetClipboardText(CString());
 
-    // Instructs the window that has the keyboard focus to copy the selected text to the clipboard.
+    // Get the active window name.
     TCHAR windowName[1024] = _T("");
-    GetWindowText(m_focusInfo.m_hFocusWnd, windowName, _countof(windowName));
+    GetWindowText(m_focusInfo.m_hActiveWnd, windowName, _countof(windowName));
     CString csWindowName(windowName);
 
+    // Instructs the active window to copy the selected text to the clipboard.
     COPYPASTE_KEY keySet;
     keySet.m_nMessage = 0;
-
     for (int i = 0; keySet.m_nMessage > -1; i++) { 
         keySet = m_ini.getAppendKeyInit(csWindowName, i);
         if (keySet.m_nMessage <= -1 && i == 0) {
@@ -1074,16 +1074,16 @@ CString CCharu3App::GetSelectedText()
                     keyUpDown(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_DOWN);
                     keyUpDown(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_UP);
                     Sleep(keySet.m_nCopyWait);
-                    keyUpDownMessage(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_UP, m_focusInfo.m_hFocusWnd);
+                    keyUpDownMessage(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_UP, m_focusInfo.m_hActiveWnd);
                 }
                 else if (keySet.m_nMessage == 1) {  //Charu2Pro方式
                     keyUpDownC2(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_DOWN);
                     keyUpDownC2(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_UP);
                     Sleep(keySet.m_nCopyWait);
-                    keyUpDownMessage(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_DOWN, m_focusInfo.m_hFocusWnd);
+                    keyUpDownMessage(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_DOWN, m_focusInfo.m_hActiveWnd);
                     Sleep(keySet.m_nCopyWait / 4);
-                    keyUpDownMessage(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_DOWN, m_focusInfo.m_hFocusWnd);
-                    keyUpDownMessage(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_UP, m_focusInfo.m_hFocusWnd);
+                    keyUpDownMessage(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_DOWN, m_focusInfo.m_hActiveWnd);
+                    keyUpDownMessage(keySet.m_uMod_Copy, keySet.m_uVK_Copy, KEY_UP, m_focusInfo.m_hActiveWnd);
                     Sleep(keySet.m_nCopyWait);
                 }
                 else if (keySet.m_nMessage == 2) {  //メッセージ方式

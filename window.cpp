@@ -78,9 +78,9 @@ void Window::SetFocusInfo(const FOCUS_INFO* focusInfo)
 //関数名	getFocusInfo(FOCUS_INFO *focusInfo)
 //機能		フォーカス情報取得
 //---------------------------------------------------
-void Window::GetFocusInfo(FOCUS_INFO* focusInfo, HWND hForeground)
+void Window::GetFocusInfo(FOCUS_INFO* focusInfo)
 {
-    focusInfo->m_hActiveWnd = hForeground ? hForeground : focusInfo->m_hActiveWnd = GetForegroundWindow();
+    focusInfo->m_hActiveWnd = GetForegroundWindow();
     DWORD dwID = GetWindowThreadProcessId(focusInfo->m_hActiveWnd, NULL);
     if (dwID) {
         AttachThreadInput(dwID, GetCurrentThreadId(), TRUE);
