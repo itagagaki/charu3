@@ -63,7 +63,7 @@ BEGIN
     CONTROL         "Charu3 SE",IDC_VERSION_NAME,"Static",SS_LEFTNOWORDWRAP | SS_NOPREFIX | WS_GROUP,29,15,167,8
     LTEXT           "Copyright (C) 2000-2004 C+ Factory",IDC_STATIC,16,33,160,8
     DEFPUSHBUTTON   "OK(&O)",IDOK,153,61,50,14,WS_GROUP
-    LTEXT           "Successor Edition: 2021-2023 Itagaki Fumihiko",IDC_STATIC,16,45,160,8
+    LTEXT           "Successor Edition: 2021-2024 Itagaki Fumihiko",IDC_STATIC,16,45,160,8
 END
 
 IDD_EDIT DIALOGEX 0, 0, 199, 242
@@ -822,8 +822,8 @@ IDI_STOP256             ICON                    "res\\c2p256_16_stop.ico"
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,9,0,0
- PRODUCTVERSION 3,9,0,0
+ FILEVERSION 3,10,0,0
+ PRODUCTVERSION 3,10,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -840,13 +840,13 @@ BEGIN
         BEGIN
             VALUE "Comments", "Text input assistant"
             VALUE "CompanyName", "C+ Factory / Itagaki Fumihiko"
-            VALUE "FileDescription", "Charu3 (Clipboard and High Amenity Routine for Utility 3) Successor Edition"
-            VALUE "FileVersion", "3.9.0.0 + WIP"
+            VALUE "FileDescription", "Charu3 Successor Edition"
+            VALUE "FileVersion", "3.10.0.0"
             VALUE "InternalName", "Charu3 SE"
-            VALUE "LegalCopyright", "Copyright (C) 1998-2003 matsumoto keizi, 2021-2023 Itagaki Fumihiko"
+            VALUE "LegalCopyright", "Copyright (C) 1998-2003 matsumoto keizi, 2021-2024 Itagaki Fumihiko"
             VALUE "OriginalFilename", "Charu3.EXE"
             VALUE "ProductName", "Charu3 SE"
-            VALUE "ProductVersion", "3.9.0.0 + WIP"
+            VALUE "ProductVersion", "3.10.0.0"
         END
     END
     BLOCK "VarFileInfo"
@@ -1149,7 +1149,7 @@ BEGIN
     CONTROL         "Charu3 SE",IDC_VERSION_NAME,"Static",SS_LEFTNOWORDWRAP | SS_NOPREFIX | WS_GROUP,29,15,167,8
     LTEXT           "Copyright (C) 2000-2004 C+ Factory",IDC_STATIC,16,33,160,8
     DEFPUSHBUTTON   "OK(&O)",IDOK,153,61,50,14,WS_GROUP
-    LTEXT           "Successor Edition: 2021-2023 Itagaki Fumihiko",IDC_STATIC,16,45,160,8
+    LTEXT           "Successor Edition: 2021-2024 Itagaki Fumihiko",IDC_STATIC,16,45,160,8
 END
 
 IDD_INITIAL_DIALOG DIALOGEX 0, 0, 167, 120
