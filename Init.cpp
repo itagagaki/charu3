@@ -198,6 +198,7 @@ void CInit::initialize()
     m_bSelectByTypingCaseInsensitive = jsonHelper::GetBoolProperty(m_settings, "treeview.selectByTyping.caseInsensitive", true);
     m_bSelectByTypingAutoPaste = jsonHelper::GetBoolProperty(m_settings, "treeview.selectByTyping.autoPaste", false);
     m_bSelectByTypingAutoExpand = jsonHelper::GetBoolProperty(m_settings, "treeview.selectByTyping.autoExpand", false);
+    m_nWheelBehavior = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.wheelBehavior", 0));
     m_nToolTip = static_cast<int>(jsonHelper::GetNumberProperty(m_settings, "treeview.tooltip", 0));
     m_bScrollbarVertical = jsonHelper::GetBoolProperty(m_settings, "treeview.scrollbar.vertical", true);
     m_bScrollbarHorizontal = jsonHelper::GetBoolProperty(m_settings, "treeview.scrollbar.horizontal", true);
@@ -291,6 +292,7 @@ void CInit::SaveSettings()
     m_settings["treeview.selectByTyping.caseInsensitive"] = m_bSelectByTypingCaseInsensitive;
     m_settings["treeview.selectByTyping.autoPaste"] = m_bSelectByTypingAutoPaste;
     m_settings["treeview.selectByTyping.autoExpand"] = m_bSelectByTypingAutoExpand;
+    m_settings["treeview.wheelBehavior"] = m_nWheelBehavior;
     m_settings["treeview.tooltip"] = m_nToolTip;
     m_settings["treeview.scrollbar.vertical"] = m_bScrollbarVertical;
     m_settings["treeview.scrollbar.horizontal"] = m_bScrollbarHorizontal;

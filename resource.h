@@ -127,6 +127,9 @@
 #define IDC_STEALTH_DELETE              1093
 #define IDC_STEALTH_SELECT              1094
 #define IDC_STEALTH_INPUT               1095
+#define IDC_OPT_WHEEL_SCROLL            1096
+#define IDC_OPT_WHEEL_CHANGE_ITEM       1097
+#define IDC_OPT_WHEEL_NOTHING           1098
 #define IDM_EXIT                        32771
 #define IDM_OPTION                      32772
 #define IDM_ABOUT                       32773
@@ -233,7 +236,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        177
 #define _APS_NEXT_COMMAND_VALUE         32822
-#define _APS_NEXT_CONTROL_VALUE         1096
+#define _APS_NEXT_CONTROL_VALUE         1099
 #define _APS_NEXT_SYMED_VALUE           105
 #endif
 #endif

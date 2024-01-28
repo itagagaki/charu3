@@ -45,9 +45,6 @@ void COptPopup::DoDataExchange(CDataExchange* pDX)
     //{{AFX_DATA_MAP(COptPopup)
     if (GetDlgItem(IDC_OPT_POPUP_POS))
         DDX_CBIndex(pDX, IDC_OPT_POPUP_POS, theApp.m_ini.m_nPopupPos);
-
-    if (GetDlgItem(IDC_OPT_TOOLTIP_01))
-        DDX_Radio(pDX, IDC_OPT_TOOLTIP_01, theApp.m_ini.m_nToolTip);
     if (GetDlgItem(IDC_OPT_HoseiX))
         DDX_Text(pDX, IDC_OPT_HoseiX, theApp.m_ini.m_posCaretHosei.x);
     if (GetDlgItem(IDC_OPT_HoseiY))
@@ -61,6 +58,12 @@ void COptPopup::DoDataExchange(CDataExchange* pDX)
         DDX_Check(pDX, IDC_OPT_SELECT_BY_TYPING_AUTO_PASTE, m_nSelectByTypingAutoPaste);
     if (GetDlgItem(IDC_OPT_SELECT_BY_TYPING_AUTO_EXPAND))
         DDX_Check(pDX, IDC_OPT_SELECT_BY_TYPING_AUTO_EXPAND, m_nSelectByTypingAutoExpand);
+
+    if (GetDlgItem(IDC_OPT_WHEEL_SCROLL))
+        DDX_Radio(pDX, IDC_OPT_WHEEL_SCROLL, theApp.m_ini.m_nWheelBehavior);
+
+    if (GetDlgItem(IDC_OPT_TOOLTIP_01))
+        DDX_Radio(pDX, IDC_OPT_TOOLTIP_01, theApp.m_ini.m_nToolTip);
 
     if (GetDlgItem(IDC_OPT_SCROLLBAR_VERTICAL))
         DDX_Check(pDX, IDC_OPT_SCROLLBAR_VERTICAL, m_nScrollVertical);

@@ -2222,10 +2222,17 @@ void CCharu3Tree::setScrollBar()
 //---------------------------------------------------
 BOOL CCharu3Tree::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
-    if (zDelta < 0)
-        SendMessage(WM_KEYDOWN, VK_DOWN, 0);
-    else
-        SendMessage(WM_KEYDOWN, VK_UP, 0);
+    switch (theApp.m_ini.m_nWheelBehavior) {
+    case 0: // Scroll
+        SendMessage(WM_VSCROLL, zDelta < 0 ? SB_LINEDOWN : SB_LINEUP, 0);
+        break;
+    case 1: // Change selection
+        SendMessage(WM_KEYDOWN, zDelta < 0 ? VK_DOWN : VK_UP, 0);
+        break;
+    case 2:  // Nothing
+    default:
+        break;
+    }
     return CTreeCtrl::OnMouseWheel(nFlags, zDelta, pt);
 }
 

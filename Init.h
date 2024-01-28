@@ -265,6 +265,7 @@ public:
     bool m_bSelectByTypingCaseInsensitive{};
     bool m_bSelectByTypingAutoPaste{};
     bool m_bSelectByTypingAutoExpand{};
+    int m_nWheelBehavior;
     int m_nToolTip{};
     bool m_bScrollbarVertical{};
     bool m_bScrollbarHorizontal{};
