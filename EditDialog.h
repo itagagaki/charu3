@@ -19,6 +19,9 @@
 #include "Init.h"
 #include "resource.h"
 
+#define EDIT_WINDOW_WIDTH_MIN 368
+#define EDIT_WINDOW_HEIGHT_MIN 460
+
 //---------------------------------------------------
 // CEditDialog ダイアログ
 //---------------------------------------------------
@@ -61,12 +64,14 @@ private:
     std::vector<MACRO_STRUCT>* m_vctDataMacro;
     int m_nKind;
     bool m_bNewData;
+    bool m_bInitialized;
 
     // 生成されたメッセージ マップ関数
 protected:
     //{{AFX_MSG(CEditDialog)
     afx_msg void OnEditPasteFile();
     virtual BOOL OnInitDialog();
+    virtual void OnSize(UINT nType, int cx, int cy);
     virtual void OnOK();
     afx_msg void OnSelchangeEditMacroCombo();
     afx_msg void OnSelchangeEditDataMacroCombo();

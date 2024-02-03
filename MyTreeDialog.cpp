@@ -116,7 +116,6 @@ void CMyTreeDialog::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CMyTreeDialog, CDialog)
     //{{AFX_MSG_MAP(CMyTreeDialog)
-    ON_WM_SIZE()
     ON_COMMAND(IDML_EDIT, OnEdit)
     ON_COMMAND(IDML_DELETE, OnDelete)
     ON_COMMAND(IDML_RENAME, OnRename)
@@ -151,6 +150,7 @@ BEGIN_MESSAGE_MAP(CMyTreeDialog, CDialog)
     ON_NOTIFY(TVN_KEYDOWN, IDC_MY_TREE, OnKeydownMyTree)
     ON_NOTIFY(TVN_BEGINLABELEDIT, IDC_MY_TREE, OnBeginlabeleditMyTree)
     ON_NOTIFY(TVN_ENDLABELEDIT, IDC_MY_TREE, OnEndlabeleditMyTree)
+    ON_WM_SIZE()
     ON_WM_SHOWWINDOW()
     ON_WM_NCPAINT()
     ON_WM_CTLCOLOR()
@@ -480,8 +480,8 @@ void CMyTreeDialog::OnShowWindow(BOOL bShow, UINT nStatus)
         if (m_cFont) {
             RECT rect;
             GetWindowRect(&rect);
-            theApp.m_ini.m_DialogSize.x = rect.right - rect.left;
-            theApp.m_ini.m_DialogSize.y = rect.bottom - rect.top;
+            theApp.m_ini.m_treeviewSize.x = rect.right - rect.left;
+            theApp.m_ini.m_treeviewSize.y = rect.bottom - rect.top;
             delete m_cFont;
             m_cFont = nullptr;
         }

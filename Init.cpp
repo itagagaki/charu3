@@ -18,6 +18,7 @@ static char THIS_FILE[] = __FILE__;
 
 #include "Init.h"
 #include "Charu3.h"
+#include "EditDialog.h"
 #include "search.h"
 #include "text.h"
 #include "color.h"
@@ -147,8 +148,10 @@ void CInit::initialize()
     m_strDataPath = jsonHelper::GetStringPropertyAsCString(m_state, "data.path", _T(""));
     m_strDataFormat = jsonHelper ::GetStringPropertyAsCString(m_state, "data.format", DAT_FORMAT);
     m_bReadOnly = jsonHelper::GetBoolProperty(m_state, "data.readOnly", false);
-    m_DialogSize.x = static_cast<LONG>(jsonHelper::GetNumberProperty(m_state, "treeview.width", 250));
-    m_DialogSize.y = static_cast<LONG>(jsonHelper::GetNumberProperty(m_state, "treeview.height", 350));
+    m_treeviewSize.x = static_cast<LONG>(jsonHelper::GetNumberProperty(m_state, "treeview.width", 250));
+    m_treeviewSize.y = static_cast<LONG>(jsonHelper::GetNumberProperty(m_state, "treeview.height", 350));
+    m_editWindowSize.x = static_cast<LONG>(jsonHelper::GetNumberProperty(m_state, "edit.width", EDIT_WINDOW_WIDTH_MIN));
+    m_editWindowSize.y = static_cast<LONG>(jsonHelper::GetNumberProperty(m_state, "edit.height", EDIT_WINDOW_HEIGHT_MIN));
     m_nSearchTarget = static_cast<int>(jsonHelper::GetNumberProperty(m_state, "find.target", SEARCH_TARGET_NAME));
     m_nSearchLogic = static_cast<int>(jsonHelper::GetNumberProperty(m_state, "find.logic", SEARCH_TARGET_DATA));
     m_bSearchCaseInsensitive = jsonHelper::GetBoolProperty(m_state, "find.caseInsensitive", true);
@@ -358,8 +361,10 @@ void CInit::writeEnvInitData()
     m_state["data.path"] = Text::ConvertUnicodeToUTF8(m_strDataPath);
     m_state["data.format"] = Text::ConvertUnicodeToUTF8(m_strDataFormat);
     m_state["data.readOnly"] = m_bReadOnly;
-    m_state["treeview.width"] = m_DialogSize.x;
-    m_state["treeview.height"] = m_DialogSize.y;
+    m_state["treeview.width"] = m_treeviewSize.x;
+    m_state["treeview.height"] = m_treeviewSize.y;
+    m_state["edit.width"] = m_editWindowSize.x;
+    m_state["edit.height"] = m_editWindowSize.y;
     m_state["find.target"] = m_nSearchTarget;
     m_state["find.logic"] = m_nSearchLogic;
     m_state["find.caseInsensitive"] = m_bSearchCaseInsensitive;

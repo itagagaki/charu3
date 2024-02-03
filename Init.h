@@ -217,7 +217,8 @@ public:
     CString m_strDataPath;  // data file path
     CString m_strDataFormat;  // data format
     bool m_bReadOnly{};  // whether access to data files should be read-only
-    POINT m_DialogSize{};
+    POINT m_treeviewSize{};
+    POINT m_editWindowSize{};
     int m_nSearchTarget{};
     int m_nSearchLogic{};
     bool m_bSearchCaseInsensitive{};

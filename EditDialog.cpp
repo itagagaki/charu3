@@ -25,6 +25,7 @@ CEditDialog::CEditDialog(CWnd* pParent, STRING_DATA* pData, bool newData)
     : CDialog(CEditDialog::IDD, pParent)
     , m_pData(pData)
     , m_bNewData(newData)
+    , m_bInitialized(false)
 {
     //{{AFX_DATA_INIT(CEditDialog)
     //}}AFX_DATA_INIT
@@ -68,6 +69,7 @@ BEGIN_MESSAGE_MAP(CEditDialog, CDialog)
     ON_CBN_SELCHANGE(IDC_EDIT_MACRO_COMBO, OnSelchangeEditMacroCombo)
     ON_CBN_SELCHANGE(IDC_EDIT_DATA_MACRO_COMBO, OnSelchangeEditDataMacroCombo)
     ON_CBN_SELCHANGE(IDC_KIND_COMBO, OnKindChanged)
+    ON_WM_SIZE()
     ON_WM_GETMINMAXINFO()
     //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -105,6 +107,8 @@ BOOL CEditDialog::OnInitDialog()
     CString strRes;
 
     CDialog::OnInitDialog();
+
+    SetWindowPos(NULL, 0, 0, theApp.m_ini.m_editWindowSize.x, theApp.m_ini.m_editWindowSize.y, SWP_NOMOVE | SWP_NOZORDER);
 
     (void)strRes.LoadString(m_bNewData ? APP_INF_CAPTION_NEWITEM : APP_INF_CAPTION_EDITITEM);
     SetWindowText(strRes);
@@ -152,14 +156,30 @@ BOOL CEditDialog::OnInitDialog()
         m_ctrlDataEdit.SetFocus();
     }
     ResetExtendedSettingItems();
+    m_bInitialized = true;
     return FALSE;
 }
 
 void CEditDialog::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 {
     CDialog::OnGetMinMaxInfo(lpMMI);
-    lpMMI->ptMinTrackSize.x = 368;
-    lpMMI->ptMinTrackSize.y = 460;
+    lpMMI->ptMinTrackSize.x = EDIT_WINDOW_WIDTH_MIN;
+    lpMMI->ptMinTrackSize.y = EDIT_WINDOW_HEIGHT_MIN;
+}
+
+//---------------------------------------------------
+//関数名	OnSize(UINT nType, int cx, int cy)
+//機能		リサイズ
+//---------------------------------------------------
+void CEditDialog::OnSize(UINT nType, int cx, int cy)
+{
+    CDialog::OnSize(nType, cx, cy);
+    if (m_bInitialized) {
+        RECT rect;
+        GetWindowRect(&rect);
+        theApp.m_ini.m_editWindowSize.x = rect.right - rect.left;
+        theApp.m_ini.m_editWindowSize.y = rect.bottom - rect.top;
+    }
 }
 
 //---------------------------------------------------

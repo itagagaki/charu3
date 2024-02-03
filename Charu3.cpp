@@ -321,8 +321,8 @@ void CCharu3App::OnClick(HWND hActiveWnd)
             // Pop-up Data Tree View Window at the mouse pointer.
             POINT pos;
             GetCursorPos(&pos);
-            pos.x -= m_ini.m_DialogSize.x;
-            pos.y -= m_ini.m_DialogSize.y;
+            pos.x -= m_ini.m_treeviewSize.x;
+            pos.y -= m_ini.m_treeviewSize.y;
             adjustLocation(&pos);
             // Window::GetFocusInfo(&theApp.m_focusInfo,hForeground);
             popupTreeWindow(pos, m_ini.m_bKeepSelection);
@@ -366,7 +366,7 @@ void CCharu3App::popupTreeWindow(POINT pos, bool keepSelection, HTREEITEM hOpenI
     }
 
     Window::SetAbsoluteForegroundWindow(m_pMainWnd->m_hWnd);//自分をアクティブに設定
-    m_pTreeDlg->ShowWindowPos(pos, m_ini.m_DialogSize, SW_SHOW, keepSelection, hOpenItem);
+    m_pTreeDlg->ShowWindowPos(pos, m_ini.m_treeviewSize, SW_SHOW, keepSelection, hOpenItem);
 }
 
 //---------------------------------------------------
@@ -416,10 +416,10 @@ void CCharu3App::adjustLocation(POINT* pos)
         DeskTopSize = arrayRect[nCurrentMon];
     }
     //ウィンドウ位置を補正
-    if (pos->y + m_ini.m_DialogSize.y > DeskTopSize.bottom)
-        pos->y -= (pos->y + m_ini.m_DialogSize.y) - DeskTopSize.bottom;
-    if (pos->x + m_ini.m_DialogSize.x > DeskTopSize.right)
-        pos->x -= (pos->x + m_ini.m_DialogSize.x) - DeskTopSize.right;
+    if (pos->y + m_ini.m_treeviewSize.y > DeskTopSize.bottom)
+        pos->y -= (pos->y + m_ini.m_treeviewSize.y) - DeskTopSize.bottom;
+    if (pos->x + m_ini.m_treeviewSize.x > DeskTopSize.right)
+        pos->x -= (pos->x + m_ini.m_treeviewSize.x) - DeskTopSize.right;
 
     if (pos->y < DeskTopSize.top)
         pos->y = DeskTopSize.top;
@@ -1814,20 +1814,20 @@ void CCharu3App::getPopupPos(POINT* pPos, int nPosType)
         pPos->y = 0;
         break;
     case POPUP_POS_RIGHT_U:
-        pPos->x = rectDeskTop.right - m_ini.m_DialogSize.x;
+        pPos->x = rectDeskTop.right - m_ini.m_treeviewSize.x;
         pPos->y = 0;
         break;
     case POPUP_POS_CENTOR:
-        pPos->x = rectDeskTop.right / 2 - m_ini.m_DialogSize.x / 2;
-        pPos->y = rectDeskTop.bottom / 2 - m_ini.m_DialogSize.y / 2;
+        pPos->x = rectDeskTop.right / 2 - m_ini.m_treeviewSize.x / 2;
+        pPos->y = rectDeskTop.bottom / 2 - m_ini.m_treeviewSize.y / 2;
         break;
     case POPUP_POS_LEFT_D:
         pPos->x = 0;
-        pPos->y = rectDeskTop.bottom - m_ini.m_DialogSize.y;
+        pPos->y = rectDeskTop.bottom - m_ini.m_treeviewSize.y;
         break;
     case POPUP_POS_RIGHT_D:
-        pPos->x = rectDeskTop.right - m_ini.m_DialogSize.x;
-        pPos->y = rectDeskTop.bottom - m_ini.m_DialogSize.y;
+        pPos->x = rectDeskTop.right - m_ini.m_treeviewSize.x;
+        pPos->y = rectDeskTop.bottom - m_ini.m_treeviewSize.y;
         break;
     case POPUP_POS_CARET:
         pPos->x += m_ini.m_posCaretHosei.x;
@@ -2092,7 +2092,7 @@ void CCharu3App::OnOption()
         }
         if (nPhase == PHASE_POPUP) {
             m_pTreeDlg->ShowWindow(false);
-            m_pTreeDlg->ShowWindowPos(rect.TopLeft(), m_ini.m_DialogSize, SW_SHOW, true);
+            m_pTreeDlg->ShowWindowPos(rect.TopLeft(), m_ini.m_treeviewSize, SW_SHOW, true);
         }
     }
     else {
